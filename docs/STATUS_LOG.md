@@ -127,6 +127,22 @@ provider allowlist +2 files; commandHandlers pinned to exactly one env read.
 `snap_20260704T162413397Z_000298_milestone`. Suite at pass close: 153 test
 files / 2,833 tests green; typecheck and build clean. V1 catalog 12; Hollowcut 9.
 
+### 2026-07-04 — Pass M2 — First Live Call Acceptance
+
+Caleb AI's first live model invocation: one bounded call to `claude-haiku-4-5`
+via `run-one-provider-adapter-live`, all gates exercised for real. Provider
+response `msg_0191Nnz9uYGtuT9yYTHWefiB`, `response_schema_valid`, `end_turn`,
+14/5/19 tokens, 1,120 ms, ≈$0.000039. Ledger chain intact (dry-run evidence →
+invocation, parent-linked); ledger scans confirm no key material and no raw
+prompt/output. `digest_match: false` — the model replied `Acknowledged`
+(capital A), identified by offline candidate-digest comparison; recorded as a
+successful test and the project's first documented reality-corrects-assumption
+finding. Honest finding: ledger-ID per-process counter collisions surfaced
+(295 entries / 255 unique IDs) — recommended integrity pass before M3. Full
+report: `docs/FIRST_LIVE_CALL_ACCEPTANCE_REPORT.md`. Pre-change snapshot:
+`snap_20260704T231711622Z_000303_milestone`. No source changes; suite remains
+153 files / 2,833 green.
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its
