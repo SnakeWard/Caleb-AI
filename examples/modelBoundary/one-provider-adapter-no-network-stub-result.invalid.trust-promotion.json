@@ -1,0 +1,140 @@
+{
+  "schema_version": "0.1.0",
+  "result_id": "one_provider_no_network_invocation_example_no_network_refusal",
+  "invocation_id": "one_provider_no_network_invocation_example",
+  "stub_id": "one_provider_no_network_stub",
+  "adapter_id": "first_provider_adapter_no_network_stub",
+  "provider_slot_id": "first_provider_slot",
+  "provider_id": "first_provider_placeholder",
+  "provider_kind": "placeholder",
+  "ok": false,
+  "status": "missing_opt_in",
+  "failure_kind": "missing_opt_in",
+  "capabilities": {
+    "schema_version": "0.1.0",
+    "stub_id": "one_provider_no_network_stub",
+    "adapter_id": "first_provider_adapter_no_network_stub",
+    "adapter_version": "0.1.0",
+    "provider_slot_id": "first_provider_slot",
+    "provider_id": "first_provider_placeholder",
+    "provider_kind": "placeholder",
+    "consumes_config_contract": true,
+    "supports_no_network_invocation": true,
+    "supports_live_network": false,
+    "supports_provider_sdk": false,
+    "requires_api_key_value": false,
+    "reads_process_env": false,
+    "reads_api_key_value": false,
+    "performs_network_call": false,
+    "writes_ledger": false,
+    "writes_files": false,
+    "returns_provider_output": false,
+    "returns_fake_success": false,
+    "max_output_trust_tier": "T1",
+    "created_at": "2026-07-03T00:00:00.000Z",
+    "notes": [
+      "Offline config-consuming stub only."
+    ]
+  },
+  "health": {
+    "schema_version": "0.1.0",
+    "stub_id": "one_provider_no_network_stub",
+    "adapter_id": "first_provider_adapter_no_network_stub",
+    "provider_slot_id": "first_provider_slot",
+    "status": "future_live_not_enabled",
+    "config_contract_available": true,
+    "config_valid": true,
+    "live_provider_enabled": false,
+    "network_available": false,
+    "provider_sdk_available": false,
+    "api_key_value_available": false,
+    "process_env_read": false,
+    "provider_selected": false,
+    "provider_allowlisted": false,
+    "opt_in_present": false,
+    "checked_at": "2026-07-03T00:00:00.000Z",
+    "warnings": [],
+    "errors": [],
+    "notes": [
+      "Health is derived from supplied config only."
+    ]
+  },
+  "config_summary": {
+    "config_id": "one_provider_adapter_config_contract_example",
+    "config_version": "0.1.0",
+    "config_status": "config_valid_opt_in_required",
+    "provider_slot_id": "first_provider_slot",
+    "real_provider_selected": false,
+    "provider_specific_behavior_enabled": false,
+    "opt_in_required": true,
+    "opt_in_present": false,
+    "default_runtime_enabled": false,
+    "api_key_value_read": false,
+    "network_call_performed_in_config": false,
+    "live_tests_created_in_config": false,
+    "ledger_write_allowed_in_config_contract": false,
+    "storage_write_allowed_in_config_contract": false,
+    "notes": [
+      "Summary derived from supplied R24 config data."
+    ]
+  },
+  "trust_summary": {
+    "config_validity_promotes_trust": true,
+    "config_presence_enables_opt_in": false,
+    "stub_execution_promotes_trust": true,
+    "stub_refusal_is_model_evidence": false,
+    "provider_slot_selection_promotes_trust": false,
+    "explicit_opt_in_promotes_trust": false,
+    "api_key_env_var_name_promotes_trust": false,
+    "api_key_presence_promotes_trust": true,
+    "network_success_promotes_trust": false,
+    "provider_identity_promotes_trust": false,
+    "successful_provider_response_promotes_trust": false,
+    "provider_output_is_deterministic_evidence": false,
+    "raw_provider_output_trust_tier": "T0",
+    "schema_valid_provider_output_trust_tier": "T1",
+    "max_provider_output_trust_tier": "T2",
+    "verified_final_truth_claimed": false,
+    "requires_hollow_verification_for_t2": true,
+    "notes": [
+      "No trust promotion occurs in the no-network stub."
+    ]
+  },
+  "safety_summary": {
+    "raw_prompt_blocked": true,
+    "raw_output_blocked": true,
+    "api_key_value_blocked": true,
+    "secrets_blocked": true,
+    "env_values_blocked": true,
+    "credentials_blocked": true,
+    "auth_tokens_blocked": true,
+    "private_keys_blocked": true,
+    "process_env_read_blocked": true,
+    "network_call_blocked": true,
+    "provider_sdk_blocked": true,
+    "ledger_write_blocked": true,
+    "file_write_blocked": true,
+    "fake_success_blocked": true,
+    "provider_output_blocked": true,
+    "notes": [
+      "All live-provider and sensitive-content paths are blocked."
+    ]
+  },
+  "provider_call_attempted": false,
+  "network_call_attempted": false,
+  "provider_sdk_used": false,
+  "process_env_read": false,
+  "api_key_value_read": false,
+  "ledger_write_attempted": false,
+  "file_write_attempted": false,
+  "fake_success_returned": false,
+  "provider_output_returned": false,
+  "warnings": [],
+  "errors": [
+    "missing_opt_in"
+  ],
+  "created_at": "2026-07-03T00:00:00.000Z",
+  "notes": [
+    "No-network stub refused live execution deterministically."
+  ]
+}

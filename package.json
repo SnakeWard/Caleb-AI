@@ -1,0 +1,26 @@
+{
+  "name": "caleb-ai",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Caleb AI Hollow-first orchestration foundation.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "start": "node dist/index.js",
+    "cli": "tsx src/cli/index.ts",
+    "cli:built": "node dist/cli/index.js",
+    "demo:v1:character-count": "tsx src/cli/index.ts run-hollow --id hollow.text.character_count --input-file examples/v1-demo/character-count-input.json --json",
+    "demo:v1:prompt-limit": "tsx src/cli/index.ts run-hollow --id hollow.text.prompt_limit --input-file examples/v1-demo/prompt-limit-input.json --json",
+    "demo:v1:code-safety": "tsx src/cli/index.ts run-hollow --id hollow.code.safety_scan --input-file examples/v1-demo/code-safety-input.json --json",
+    "acceptance:v1": "vitest run tests/acceptance"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.8"
+  }
+}

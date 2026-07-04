@@ -1,0 +1,31 @@
+{
+  "title": "PIMP Activation",
+  "concept_summary": "Built as upbeat heartland rock / light country rock, it stays with a workday joker keeping strain tucked behind the grin. The pressure comes from holding a light public face over pressure he will not show. It leaves the release in the smile put back on while the pressure stays underneath.",
+  "signal_stack": {
+    "identity": "workday joker holding strain behind the smile",
+    "emotional_arc": "Public ease -> private squeeze -> mask stays on",
+    "genre_framework": "upbeat heartland rock or light country rock, something that could almost pass as feel-good if you don’t listen closely",
+    "production_layer": "guitar-led bed, close dry lead vocal, close-held lead vocal, bright surface with pressure underneath",
+    "structure": [
+      "Intro",
+      "Verse 1",
+      "Pre-Chorus",
+      "Chorus",
+      "Bridge",
+      "Outro"
+    ]
+  },
+  "lyrics": "[Intro]\nvending machine light buzzing\nhe laughs a second too long\n\n[Verse 1]\nclocking in\ngot a line for everybody waitin'\nhe keeps the whole place easy\n\n[Pre-Chorus]\nbreak room laughter\nhe laughs a second too long\nthen puts the same good face back on\n\n[Chorus]\nhe laughs a second too long\nthen clocks back in\n\n[Bridge]\nain't askin' anybody to see it\njust pull the grin back up again\n\n[Outro]\nbreak room laughter\nhe laughs a second too long",
+  "style_prompt": "upbeat heartland rock or light country rock, something that could almost pass as feel-good if you don’t listen closely, male lead vocal, easy on the surface, strain underneath, public ease, private squeeze, mask stays on, close-held lead vocal, bright surface with pressure underneath",
+  "style_prompt_char_count": 284,
+  "validation_notes": {
+    "formatting_pass": true,
+    "style_limit_pass": true,
+    "anti_trope_pass": true,
+    "warnings": [
+      "parser_recovery: rawUserIntent=inferred, desiredDirection=normalized, possibleGenreFramework=normalized, vocalDirection=missing, instrumentationHints=missing, specialConstraints=normalized",
+      "parser_overall: recovered",
+      "production_layer=inferred"
+    ]
+  }
+}

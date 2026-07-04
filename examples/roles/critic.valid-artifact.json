@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_id": "role_artifact_fixture_critic_001",
+  "artifact_type": "critique",
+  "role_id": "critic",
+  "task_id": "task_role_fixture_001",
+  "run_id": "run_role_fixture_001",
+  "trace_id": "trace_role_fixture_001",
+  "context_id": "context_role_fixture_001",
+  "summary": "Critic fixture artifact identifying no blocking defect in the static fixture set.",
+  "claims": [
+    {
+      "claim_id": "claim_critic_001",
+      "text": "No blocking issue is represented in this valid fixture.",
+      "evidence_ref_ids": ["evidence_critic_001"]
+    }
+  ],
+  "assumptions": ["All referenced fixture IDs are static and local."],
+  "constraints": ["No critique loop is executed."],
+  "open_questions": [],
+  "recommendations": ["Forward accepted critique to synthesizer in a future phase."],
+  "evidence_refs": [
+    {
+      "ref_id": "evidence_critic_001",
+      "ref_type": "artifact",
+      "description": "Static critic fixture artifact."
+    }
+  ],
+  "confidence": 0.84,
+  "handoff_notes": ["Fixture may be handed to synthesizer in a future authorized phase."],
+  "required_next_role": "synthesizer",
+  "acceptance_status": "accepted",
+  "created_at": "2026-06-13T00:00:00.000Z",
+  "telemetry_trace_ref": {
+    "trace_id": "trace_role_fixture_001",
+    "context_id": "context_role_fixture_001"
+  },
+  "execution_context_ref": {
+    "context_id": "context_role_fixture_001"
+  },
+  "warnings": []
+}

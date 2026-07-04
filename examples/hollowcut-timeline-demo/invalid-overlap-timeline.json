@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "invalid_overlap_timeline",
+  "project_root": ".",
+  "assets": [
+    {
+      "asset_id": "asset_visual_a",
+      "asset_type": "image",
+      "relative_path": "assets/images/a.png",
+      "display_name": "Visual A",
+      "expected_media_type": "image",
+      "metadata_hint": {
+        "width": 1920,
+        "height": 1080
+      },
+      "verified_metadata": null,
+      "evidence_refs": [],
+      "warnings": []
+    },
+    {
+      "asset_id": "asset_visual_b",
+      "asset_type": "image",
+      "relative_path": "assets/images/b.png",
+      "display_name": "Visual B",
+      "expected_media_type": "image",
+      "metadata_hint": {
+        "width": 1920,
+        "height": 1080
+      },
+      "verified_metadata": null,
+      "evidence_refs": [],
+      "warnings": []
+    }
+  ],
+  "tracks": [
+    {
+      "track_id": "track_visual_main",
+      "track_type": "visual",
+      "name": "Main Visuals",
+      "locked": false,
+      "muted": false,
+      "visible": true,
+      "items": ["item_visual_a", "item_visual_b"]
+    }
+  ],
+  "timeline": {
+    "timeline_id": "timeline_invalid_overlap",
+    "duration_ms": 5000,
+    "fps": 30,
+    "width": 1920,
+    "height": 1080,
+    "aspect_ratio": "16:9",
+    "timebase": "milliseconds",
+    "items": [
+      {
+        "item_id": "item_visual_a",
+        "asset_id": "asset_visual_a",
+        "track_id": "track_visual_main",
+        "item_type": "visual",
+        "start_ms": 0,
+        "duration_ms": 4000,
+        "end_ms": 4000,
+        "layer": 0,
+        "enabled": true,
+        "transition_in": null,
+        "transition_out": null,
+        "effects": [],
+        "metadata": {},
+        "warnings": []
+      },
+      {
+        "item_id": "item_visual_b",
+        "asset_id": "asset_visual_b",
+        "track_id": "track_visual_main",
+        "item_type": "visual",
+        "start_ms": 2000,
+        "duration_ms": 3000,
+        "end_ms": 5000,
+        "layer": 0,
+        "enabled": true,
+        "transition_in": null,
+        "transition_out": null,
+        "effects": [],
+        "metadata": {},
+        "warnings": []
+      }
+    ],
+    "markers": [],
+    "warnings": ["same visual track overlap should be rejected or warned by future validator"]
+  }
+}

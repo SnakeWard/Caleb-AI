@@ -1,0 +1,68 @@
+{
+  "schema_version": "0.1.0",
+  "task_id": "task_live_adapter_001",
+  "run_id": "run_live_adapter_001",
+  "request_id": "request_live_adapter_001",
+  "response_id": "response_live_adapter_001",
+  "route_mode": "single_pass",
+  "provider_id": "provider.neutral.example",
+  "provider_kind": "custom_compatible",
+  "adapter_id": "adapter.neutral.example",
+  "adapter_version": "0.1.0",
+  "provider_response_id": "provider_response_ref_001",
+  "output_ref": {
+    "output_ref_id": "output_ref_live_adapter_001",
+    "output_digest": "sha256:output_digest",
+    "output_storage_kind": "digest_only",
+    "raw_output_included": false
+  },
+  "redacted_output_digest": "sha256:redacted_output_digest",
+  "finish_reason": "completed",
+  "token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "usage_available": false
+  },
+  "timing": {
+    "started_at": "2026-07-03T05:13:00.000Z",
+    "completed_at": "2026-07-03T05:13:01.000Z",
+    "latency_ms": 1000,
+    "timed_out": false
+  },
+  "retry_summary": {
+    "attempts": 1,
+    "max_attempts": 1,
+    "retryable": false,
+    "retry_notes": []
+  },
+  "redaction_summary": {
+    "input_redacted": true,
+    "output_redacted": true,
+    "redaction_profile_id": "safety.r18.default",
+    "raw_prompt_removed": true,
+    "raw_output_removed": true,
+    "sensitive_fields_removed": true,
+    "redaction_notes": []
+  },
+  "warnings": [],
+  "errors": [],
+  "trust_summary": {
+    "raw_provider_output_trust_tier": "T0",
+    "schema_valid_provider_output_trust_tier": "T1",
+    "max_allowed_trust_tier": "T1",
+    "provider_identity_promotes_trust": false,
+    "successful_response_promotes_trust": false,
+    "provider_output_is_deterministic_evidence": false,
+    "storage_promotes_trust": false,
+    "retrieval_promotes_trust": false,
+    "ledger_presence_promotes_trust": false,
+    "verified_final_truth_claimed": false,
+    "requires_hollow_verification_for_t2": true,
+    "notes": [
+      "Provider-neutral response shape only; no live provider call occurred."
+    ]
+  },
+  "validation_status": "schema_valid",
+  "created_at": "2026-07-03T05:13:01.000Z"
+}

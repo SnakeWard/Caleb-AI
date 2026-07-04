@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "simple_slideshow_timeline",
+  "project_root": ".",
+  "assets": [
+    {
+      "asset_id": "asset_slide_01",
+      "asset_type": "image",
+      "relative_path": "assets/images/slide-01.png",
+      "display_name": "Slide 01",
+      "expected_media_type": "image",
+      "metadata_hint": {
+        "width": 1920,
+        "height": 1080,
+        "format_hint": "png"
+      },
+      "verified_metadata": null,
+      "evidence_refs": [],
+      "warnings": []
+    },
+    {
+      "asset_id": "asset_slide_02",
+      "asset_type": "image",
+      "relative_path": "assets/images/slide-02.png",
+      "display_name": "Slide 02",
+      "expected_media_type": "image",
+      "metadata_hint": {
+        "width": 1920,
+        "height": 1080,
+        "format_hint": "png"
+      },
+      "verified_metadata": null,
+      "evidence_refs": [],
+      "warnings": []
+    }
+  ],
+  "tracks": [
+    {
+      "track_id": "track_visual_main",
+      "track_type": "visual",
+      "name": "Main Visuals",
+      "locked": false,
+      "muted": false,
+      "visible": true,
+      "items": ["item_slide_01", "item_slide_02"]
+    }
+  ],
+  "timeline": {
+    "timeline_id": "timeline_simple_slideshow",
+    "duration_ms": 8000,
+    "fps": 30,
+    "width": 1920,
+    "height": 1080,
+    "aspect_ratio": "16:9",
+    "timebase": "milliseconds",
+    "items": [
+      {
+        "item_id": "item_slide_01",
+        "asset_id": "asset_slide_01",
+        "track_id": "track_visual_main",
+        "item_type": "visual",
+        "start_ms": 0,
+        "duration_ms": 4000,
+        "end_ms": 4000,
+        "layer": 0,
+        "enabled": true,
+        "transition_in": null,
+        "transition_out": {
+          "transition_type": "crossfade",
+          "duration_ms": 500,
+          "settings": {}
+        },
+        "effects": [],
+        "metadata": {},
+        "warnings": []
+      },
+      {
+        "item_id": "item_slide_02",
+        "asset_id": "asset_slide_02",
+        "track_id": "track_visual_main",
+        "item_type": "visual",
+        "start_ms": 4000,
+        "duration_ms": 4000,
+        "end_ms": 8000,
+        "layer": 0,
+        "enabled": true,
+        "transition_in": {
+          "transition_type": "crossfade",
+          "duration_ms": 500,
+          "settings": {}
+        },
+        "transition_out": null,
+        "effects": [],
+        "metadata": {},
+        "warnings": []
+      }
+    ],
+    "markers": [
+      {
+        "marker_id": "marker_midpoint",
+        "time_ms": 4000,
+        "label": "Slide change",
+        "marker_type": "scene",
+        "notes": null
+      }
+    ],
+    "warnings": []
+  }
+}

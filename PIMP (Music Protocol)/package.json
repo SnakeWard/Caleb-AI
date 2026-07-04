@@ -1,0 +1,11 @@
+{
+  "name": "pimp-music-protocol",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local-first P.I.M.P v1 engine",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node 05-engine/tests/run-tests.js",
+    "pimp": "node 05-engine/run-pimp.js"
+  }
+}

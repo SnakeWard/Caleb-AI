@@ -1,0 +1,95 @@
+{
+  "schema_version": "0.1.0",
+  "report_id": "role_artifact_bundle_consistency_report_matrix_invalid_state_001",
+  "bundle_id": "role_artifact_bundle_fixture_001",
+  "task_id": "task_role_fixture_001",
+  "run_id": "run_role_fixture_001",
+  "trace_id": "trace_role_fixture_001",
+  "context_id": "context_role_fixture_001",
+  "report_status": "invalid",
+  "bundle_status": "invalid",
+  "validation_status": "invalid",
+  "artifact_ref_summary": {
+    "total_artifact_refs": 2,
+    "by_role": [
+      {
+        "role_id": "planner",
+        "count": 1
+      },
+      {
+        "role_id": "reporter",
+        "count": 1
+      }
+    ],
+    "by_artifact_type": [
+      {
+        "artifact_type": "plan",
+        "count": 1
+      },
+      {
+        "artifact_type": "report",
+        "count": 1
+      }
+    ],
+    "by_acceptance_status": [
+      {
+        "acceptance_status": "accepted",
+        "count": 1
+      },
+      {
+        "acceptance_status": "rejected",
+        "count": 1
+      }
+    ]
+  },
+  "handoff_gate_summary": {
+    "total_handoff_gate_refs": 2,
+    "allowed_count": 0,
+    "blocked_count": 1,
+    "invalid_count": 1,
+    "by_status": [
+      {
+        "status": "blocked",
+        "count": 1
+      },
+      {
+        "status": "invalid",
+        "count": 1
+      }
+    ]
+  },
+  "consistency_checks": [
+    {
+      "check_id": "matrix_invalid_state_failed",
+      "status": "fail",
+      "summary": "Invalid-state fixture demonstrates a report object that represents invalid bundle state.",
+      "related_artifact_ids": [
+        "role_artifact_fixture_reporter_001"
+      ],
+      "related_roles": [
+        "reporter"
+      ],
+      "related_handoff_refs": [
+        "reporter->human_operator:role_artifact_fixture_reporter_001"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "matrix_invalid_state_critical",
+      "severity": "critical",
+      "code": "invalid_bundle_state",
+      "summary": "Invalid-state fixture demonstrates a critical invalid-state summary while remaining a valid report object.",
+      "related_artifact_ids": [
+        "role_artifact_fixture_reporter_001"
+      ],
+      "related_roles": [
+        "reporter"
+      ]
+    }
+  ],
+  "warnings": [
+    "Static invalid-state fixture: this valid report object represents invalid bundle state."
+  ],
+  "created_at": "2026-06-13T00:00:00.000Z"
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": "0.1.0",
+  "report_id": "role_artifact_bundle_consistency_report_matrix_blocked_001",
+  "bundle_id": "role_artifact_bundle_fixture_001",
+  "task_id": "task_role_fixture_001",
+  "run_id": "run_role_fixture_001",
+  "trace_id": "trace_role_fixture_001",
+  "context_id": "context_role_fixture_001",
+  "report_status": "blocked",
+  "bundle_status": "blocked",
+  "validation_status": "valid",
+  "artifact_ref_summary": {
+    "total_artifact_refs": 3,
+    "by_role": [
+      {
+        "role_id": "planner",
+        "count": 1
+      },
+      {
+        "role_id": "implementer",
+        "count": 1
+      },
+      {
+        "role_id": "critic",
+        "count": 1
+      }
+    ],
+    "by_artifact_type": [
+      {
+        "artifact_type": "plan",
+        "count": 1
+      },
+      {
+        "artifact_type": "implementation_notes",
+        "count": 1
+      },
+      {
+        "artifact_type": "critique",
+        "count": 1
+      }
+    ],
+    "by_acceptance_status": [
+      {
+        "acceptance_status": "accepted",
+        "count": 2
+      },
+      {
+        "acceptance_status": "blocked",
+        "count": 1
+      }
+    ]
+  },
+  "handoff_gate_summary": {
+    "total_handoff_gate_refs": 2,
+    "allowed_count": 1,
+    "blocked_count": 1,
+    "invalid_count": 0,
+    "by_status": [
+      {
+        "status": "allowed",
+        "count": 1
+      },
+      {
+        "status": "blocked",
+        "count": 1
+      }
+    ]
+  },
+  "consistency_checks": [
+    {
+      "check_id": "matrix_blocked_handoff",
+      "status": "fail",
+      "summary": "Blocked fixture demonstrates a handoff gate blocker.",
+      "related_artifact_ids": [
+        "role_artifact_fixture_critic_001"
+      ],
+      "related_roles": [
+        "critic",
+        "recovery"
+      ],
+      "related_handoff_refs": [
+        "critic->recovery:role_artifact_fixture_critic_001"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "matrix_blocked_handoff",
+      "severity": "error",
+      "code": "handoff_blocked",
+      "summary": "Blocked fixture demonstrates an error-level handoff blocker.",
+      "related_artifact_ids": [
+        "role_artifact_fixture_critic_001"
+      ],
+      "related_roles": [
+        "critic",
+        "recovery"
+      ]
+    }
+  ],
+  "warnings": [
+    "Static blocked fixture: one handoff gate reference is blocked."
+  ],
+  "created_at": "2026-06-13T00:00:00.000Z"
+}

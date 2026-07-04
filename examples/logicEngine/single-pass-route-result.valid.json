@@ -1,0 +1,42 @@
+{
+  "ok": true,
+  "status": "completed_t1",
+  "task_id": "task_single_pass_route_001",
+  "run_id": "run_single_pass_route_001",
+  "route_mode": "single_pass",
+  "request_id": "request_single_pass_route_001",
+  "response_id": "request_single_pass_route_001.mock_response",
+  "boundary_result": {
+    "ok": true,
+    "status": "accepted_t1",
+    "request_id": "request_single_pass_route_001",
+    "response_id": "request_single_pass_route_001.mock_response",
+    "raw_response_record_id": "model_boundary.request_single_pass_route_001.mock_response.raw",
+    "validated_response_record_id": "model_boundary.request_single_pass_route_001.mock_response.schema_valid"
+  },
+  "model_invocation_record": {
+    "record_kind": "mocked_single_pass_invocation",
+    "route_mode": "single_pass",
+    "adapter_kind": "mock"
+  },
+  "storage_summary": {
+    "raw_response_record_id": "model_boundary.request_single_pass_route_001.mock_response.raw",
+    "validated_response_record_id": "model_boundary.request_single_pass_route_001.mock_response.schema_valid",
+    "total_records_after_route": 2,
+    "usable_final_evidence_count": 0,
+    "store_kind": "in_memory"
+  },
+  "trust_summary": {
+    "raw_model_output_trust_tier": "T0",
+    "schema_valid_model_output_trust_tier": "T1",
+    "max_model_output_trust_tier": "T1",
+    "model_output_is_deterministic_evidence": false,
+    "route_completion_promotes_trust": false,
+    "storage_promotes_trust": false,
+    "retrieval_promotes_trust": false,
+    "notes": [
+      "single_pass route MVP is orchestration proof, not verified final truth."
+    ]
+  },
+  "issues": []
+}

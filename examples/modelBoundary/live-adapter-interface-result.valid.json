@@ -1,0 +1,105 @@
+{
+  "schema_version": "0.1.0",
+  "result_id": "interface_result_r20_example",
+  "invocation_id": "invocation_r20_example",
+  "interface_id": "live_adapter_interface_r20_mock_compatible",
+  "adapter_id": "adapter_r20_mock_compatible",
+  "ok": true,
+  "status": "mock_interface_ready",
+  "context": {
+    "schema_version": "0.1.0",
+    "task_id": "task_r20_example",
+    "run_id": "run_r20_example",
+    "request_id": "request_r20_example",
+    "route_mode": "single_pass",
+    "interface_id": "live_adapter_interface_r20_mock_compatible",
+    "adapter_id": "adapter_r20_mock_compatible",
+    "safety_profile_id": "live_adapter_safety_profile_r19",
+    "redaction_policy_id": "redaction_policy_r19_default",
+    "redaction_manifest_id": "redaction_manifest_r19_example",
+    "created_at": "2026-07-03T12:40:01.000Z",
+    "context_refs": [],
+    "evidence_refs": [],
+    "notes": []
+  },
+  "input_ref": "invocation_input_ref_r20_example",
+  "output_ref": "invocation_output_ref_r20_example",
+  "health_status": {
+    "schema_version": "0.1.0",
+    "interface_id": "live_adapter_interface_r20_mock_compatible",
+    "adapter_id": "adapter_r20_mock_compatible",
+    "status": "available_mock_only",
+    "live_network_available": false,
+    "api_key_available": false,
+    "provider_sdk_available": false,
+    "mock_invocation_available": true,
+    "checked_at": "2026-07-03T12:40:02.000Z",
+    "warnings": [],
+    "errors": []
+  },
+  "safety_requirements": {
+    "redaction_required": true,
+    "safety_profile_required": true,
+    "raw_prompt_forbidden": true,
+    "raw_output_forbidden": true,
+    "api_key_forbidden_in_payload": true,
+    "secrets_forbidden_in_payload": true,
+    "env_values_forbidden_in_payload": true,
+    "ledger_raw_prompt_forbidden": true,
+    "ledger_raw_output_forbidden": true,
+    "network_disabled_for_r20": true,
+    "notes": []
+  },
+  "redaction_requirements": {
+    "redaction_policy_required": true,
+    "redaction_manifest_required": true,
+    "redaction_result_required": true,
+    "redaction_does_not_verify_truth": true,
+    "redaction_does_not_promote_trust": true,
+    "refs_digests_summaries_preferred": true,
+    "notes": []
+  },
+  "trust_cap_requirements": {
+    "raw_provider_output_trust_tier": "T0",
+    "schema_valid_provider_output_trust_tier": "T1",
+    "max_allowed_output_trust_tier": "T1",
+    "interface_validation_promotes_trust": false,
+    "adapter_availability_promotes_trust": false,
+    "mock_compatibility_promotes_trust": false,
+    "provider_identity_promotes_trust": false,
+    "successful_provider_response_promotes_trust": false,
+    "provider_output_is_deterministic_evidence": false,
+    "requires_hollow_verification_for_t2": true,
+    "notes": [
+      "Interface readiness is not truth verification."
+    ]
+  },
+  "test_isolation_requirements": {
+    "unit_tests_offline": true,
+    "unit_tests_no_api_keys": true,
+    "unit_tests_no_provider_sdk": true,
+    "unit_tests_no_network": true,
+    "live_tests_opt_in_only": true,
+    "live_tests_skipped_by_default": true,
+    "test_fixtures_no_secrets": true,
+    "test_fixtures_no_raw_prompt": true,
+    "test_fixtures_no_raw_output": true,
+    "notes": []
+  },
+  "mock_compatibility": {
+    "compatible_with_mock_boundary": true,
+    "compatible_with_live_adapter_types": true,
+    "compatible_with_redaction_contract": true,
+    "uses_provider_neutral_shape": true,
+    "no_network_required": true,
+    "no_api_key_required": true,
+    "no_provider_sdk_required": true,
+    "notes": []
+  },
+  "warnings": [],
+  "errors": [],
+  "created_at": "2026-07-03T12:40:03.000Z",
+  "notes": [
+    "Valid R20 mock-compatible interface result."
+  ]
+}

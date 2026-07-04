@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "stub_id": "provider_adapter_no_network_stub_r21",
+  "adapter_id": "adapter_r21_no_network_stub",
+  "provider_id": "provider_neutral_no_network_stub",
+  "status": "future_live_not_enabled",
+  "live_network_available": false,
+  "provider_sdk_available": false,
+  "api_key_available": false,
+  "mock_compatible_interface_available": true,
+  "checked_at": "2026-07-03T13:09:30.000Z",
+  "warnings": [
+    "Live provider behavior is not enabled in R21."
+  ],
+  "errors": []
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_id": "role_artifact_fixture_implementer_001",
+  "artifact_type": "implementation_notes",
+  "role_id": "implementer",
+  "task_id": "task_role_fixture_001",
+  "run_id": "run_role_fixture_001",
+  "trace_id": "trace_role_fixture_001",
+  "context_id": "context_role_fixture_001",
+  "summary": "Implementer fixture artifact containing static implementation notes only.",
+  "claims": [
+    {
+      "claim_id": "claim_implementer_001",
+      "text": "Implementation notes can be represented without executing code.",
+      "evidence_ref_ids": ["evidence_implementer_001"]
+    }
+  ],
+  "assumptions": ["The fixture is not connected to runtime execution."],
+  "constraints": ["No workspace mutation is performed."],
+  "open_questions": [],
+  "recommendations": ["Verify the notes with a verifier artifact in a future pass."],
+  "evidence_refs": [
+    {
+      "ref_id": "evidence_implementer_001",
+      "ref_type": "artifact",
+      "description": "Static R2 fixture artifact."
+    }
+  ],
+  "confidence": 0.86,
+  "handoff_notes": ["Fixture may be handed to verifier in a future authorized phase."],
+  "required_next_role": "verifier",
+  "acceptance_status": "accepted",
+  "created_at": "2026-06-13T00:00:00.000Z",
+  "telemetry_trace_ref": {
+    "trace_id": "trace_role_fixture_001",
+    "context_id": "context_role_fixture_001"
+  },
+  "execution_context_ref": {
+    "context_id": "context_role_fixture_001"
+  },
+  "warnings": []
+}

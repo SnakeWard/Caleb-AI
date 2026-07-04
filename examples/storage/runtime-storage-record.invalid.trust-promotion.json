@@ -1,0 +1,22 @@
+{
+  "storage_record_id": "storage_record_invalid_trust_001",
+  "record_kind": "evidence_packet",
+  "schema_version": "0.1.0",
+  "task_id": "task_runtime_storage_contract_001",
+  "run_id": "run_runtime_storage_contract_001",
+  "created_at": "2026-07-02T18:00:00.000Z",
+  "source_kind": "model",
+  "trust_tier": "T2",
+  "validation_status": "raw",
+  "ledger_refs": [],
+  "input_refs": [],
+  "output_refs": [],
+  "artifact_refs": [],
+  "notes": ["Invalid example: storage alone must never promote trust."],
+  "evidence_id": "evidence_invalid_trust_001",
+  "evidence_source": "model",
+  "claim_keys": ["unverified_claim"],
+  "units": "unknown",
+  "verification_refs": [],
+  "can_be_used_for_final": true
+}

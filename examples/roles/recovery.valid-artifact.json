@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_id": "role_artifact_fixture_recovery_001",
+  "artifact_type": "recovery_plan",
+  "role_id": "recovery",
+  "task_id": "task_role_fixture_001",
+  "run_id": "run_role_fixture_001",
+  "trace_id": "trace_role_fixture_001",
+  "context_id": "context_role_fixture_001",
+  "summary": "Recovery fixture artifact describing a static recovery plan shape.",
+  "claims": [
+    {
+      "claim_id": "claim_recovery_001",
+      "text": "Recovery plans can be represented as artifacts without executing rollback or repair.",
+      "evidence_ref_ids": ["evidence_recovery_001"]
+    }
+  ],
+  "assumptions": ["Recovery is descriptive only in R2."],
+  "constraints": ["No rollback, repair, or runtime recovery is executed."],
+  "open_questions": [],
+  "recommendations": ["Return to planner or human operator in a future phase."],
+  "evidence_refs": [
+    {
+      "ref_id": "evidence_recovery_001",
+      "ref_type": "artifact",
+      "description": "Static recovery fixture artifact."
+    }
+  ],
+  "confidence": 0.82,
+  "handoff_notes": ["Fixture may be handed to planner in a future authorized phase."],
+  "required_next_role": "planner",
+  "acceptance_status": "accepted",
+  "created_at": "2026-06-13T00:00:00.000Z",
+  "telemetry_trace_ref": {
+    "trace_id": "trace_role_fixture_001",
+    "context_id": "context_role_fixture_001"
+  },
+  "execution_context_ref": {
+    "context_id": "context_role_fixture_001"
+  },
+  "warnings": []
+}

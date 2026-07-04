@@ -1,0 +1,31 @@
+{
+  "title": "PIMP Activation",
+  "concept_summary": "Built as heartland rock, it stays with a man still trying to make his own excuse sound clean. The pressure comes from keeping the decent version alive while the compromise keeps showing through. It leaves the release in the excuse still hanging there instead of confession.",
+  "signal_stack": {
+    "identity": "man talking himself back into the decent version of what he did",
+    "emotional_arc": "Self-justification -> cracks show -> no clean admission",
+    "genre_framework": "heartland rock, maybe a little Springsteen-esque storytelling but stripped down",
+    "production_layer": "guitar-led bed, close-held lead vocal",
+    "structure": [
+      "Intro",
+      "Verse 1",
+      "Pre-Chorus",
+      "Chorus",
+      "Bridge",
+      "Outro"
+    ]
+  },
+  "lyrics": "[Intro]\nI did what I had to\nstill going around the same thing\n\n[Verse 1]\nlate paychecks, missed calls, little things I can explain away\nno big crime in it, just corners worn smooth\nstill talkin' like a good man mostly\n\n[Pre-Chorus]\nI did what I had to\nlate paychecks, missed calls, stuff like that\nkeeps the clean version out front\n\n[Chorus]\nI did what I had to\nthat's what I keep callin' it\n\n[Bridge]\nain't sayin' I was right\njust keep sayin' I had to\n\n[Outro]\nI did what I had to\nstill call it that",
+  "style_prompt": "heartland rock, maybe a little Springsteen-esque storytelling but stripped down, male lead vocal, conversational and self-justifying, self-justification, cracks showing, no clean admission, guitar-led bed, close-held lead vocal",
+  "style_prompt_char_count": 227,
+  "validation_notes": {
+    "formatting_pass": true,
+    "style_limit_pass": true,
+    "anti_trope_pass": true,
+    "warnings": [
+      "parser_recovery: rawUserIntent=inferred, desiredDirection=normalized, possibleGenreFramework=normalized, vocalDirection=inferred, instrumentationHints=missing, specialConstraints=normalized",
+      "parser_overall: recovered",
+      "production_layer=inferred"
+    ]
+  }
+}

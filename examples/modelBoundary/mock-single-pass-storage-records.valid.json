@@ -1,0 +1,76 @@
+[
+  {
+    "storage_record_id": "model_boundary.response_mock_single_pass_001.raw",
+    "record_kind": "role_artifact",
+    "schema_version": "0.1.0",
+    "task_id": "task_mock_single_pass_001",
+    "run_id": "run_mock_single_pass_001",
+    "created_at": "2026-07-02T19:00:00.000Z",
+    "source_kind": "model",
+    "trust_tier": "T0",
+    "validation_status": "raw",
+    "ledger_refs": [],
+    "input_refs": [
+      {
+        "ref_id": "request_mock_single_pass_001",
+        "ref_kind": "external",
+        "description": "SinglePassModelRequest reference."
+      }
+    ],
+    "output_refs": [],
+    "artifact_refs": [],
+    "notes": ["Mocked model output; raw T0; not trusted; not deterministic Hollow evidence."],
+    "role_id": "single_pass_mock_model",
+    "role_version": "0.1.0",
+    "artifact_id": "response_mock_single_pass_001.raw",
+    "artifact_type": "mock_single_pass_response",
+    "evidence_refs": [
+      {
+        "ref_id": "evidence_mock_001",
+        "ref_kind": "external",
+        "description": "Existing verified evidence reference."
+      }
+    ],
+    "assumptions": ["Mocked model behavior is not real model integration."],
+    "contradictions": [],
+    "defects": [],
+    "open_questions": []
+  },
+  {
+    "storage_record_id": "model_boundary.response_mock_single_pass_001.schema_valid",
+    "record_kind": "role_artifact",
+    "schema_version": "0.1.0",
+    "task_id": "task_mock_single_pass_001",
+    "run_id": "run_mock_single_pass_001",
+    "created_at": "2026-07-02T19:00:00.000Z",
+    "source_kind": "model",
+    "trust_tier": "T1",
+    "validation_status": "schema_valid",
+    "ledger_refs": [],
+    "input_refs": [
+      {
+        "ref_id": "request_mock_single_pass_001",
+        "ref_kind": "external",
+        "description": "SinglePassModelRequest reference."
+      }
+    ],
+    "output_refs": [],
+    "artifact_refs": [],
+    "notes": ["Schema-valid mocked model output only; T1 maximum; not verified evidence."],
+    "role_id": "single_pass_mock_model",
+    "role_version": "0.1.0",
+    "artifact_id": "response_mock_single_pass_001.schema_valid",
+    "artifact_type": "mock_single_pass_response",
+    "evidence_refs": [
+      {
+        "ref_id": "evidence_mock_001",
+        "ref_kind": "external",
+        "description": "Existing verified evidence reference."
+      }
+    ],
+    "assumptions": ["Mocked model behavior is not real model integration."],
+    "contradictions": [],
+    "defects": [],
+    "open_questions": []
+  }
+]

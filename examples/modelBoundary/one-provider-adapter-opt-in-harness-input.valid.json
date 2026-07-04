@@ -1,0 +1,40 @@
+{
+  "schema_version": "0.1.0",
+  "evaluation_id": "eval_one_provider_opt_in_ready_disabled",
+  "harness_id": "one_provider_adapter_opt_in_harness",
+  "adapter_id": "first_provider_adapter_explicit_opt_in",
+  "provider_id": "first_provider_placeholder",
+  "provider_kind": "placeholder",
+  "config": {
+    "config_present": true,
+    "config_valid": true,
+    "config_ref": "one-provider-adapter-config-contract.valid.json",
+    "config_promotes_trust": false,
+    "notes": ["Config is supplied as explicit data."]
+  },
+  "opt_in_evidence": {
+    "opt_in_present": true,
+    "env_flag_present": true,
+    "command_flag_present": true,
+    "provider_allowlist_present": true,
+    "provider_allowlisted": true,
+    "adapter_id_present": true,
+    "adapter_id_allowed": true,
+    "human_approval_recorded": true,
+    "api_key_available_by_reference": true,
+    "redaction_ready": true,
+    "safety_profile_ready": true,
+    "cost_guard_ready": true,
+    "live_tests_enabled_for_explicit_opt_in": true,
+    "evidence_promotes_trust": false,
+    "notes": ["Evidence is data only; no values are read."]
+  },
+  "kill_switch": {
+    "kill_switch_present": true,
+    "kill_switch_blocks_live_execution": false,
+    "kill_switch_promotes_trust": false,
+    "notes": ["Kill switch data is supplied without reading environment values."]
+  },
+  "created_at": "2026-07-03T00:00:00.000Z",
+  "notes": ["Valid R27 offline harness input."]
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_id": "role_artifact_fixture_planner_001",
+  "artifact_type": "plan",
+  "role_id": "planner",
+  "task_id": "task_role_fixture_001",
+  "run_id": "run_role_fixture_001",
+  "trace_id": "trace_role_fixture_001",
+  "context_id": "context_role_fixture_001",
+  "summary": "Planner fixture artifact for a bounded contract-only role pass.",
+  "claims": [
+    {
+      "claim_id": "claim_planner_001",
+      "text": "A static role artifact fixture can validate without role execution.",
+      "evidence_ref_ids": ["evidence_planner_001"]
+    }
+  ],
+  "assumptions": ["Logic Engine V0 remains locked."],
+  "constraints": ["No model calls or role execution are allowed in R2."],
+  "open_questions": [],
+  "recommendations": ["Continue with contract-only fixture validation."],
+  "evidence_refs": [
+    {
+      "ref_id": "evidence_planner_001",
+      "ref_type": "context",
+      "description": "R2 fixture lock diagnostic approval."
+    }
+  ],
+  "confidence": 0.9,
+  "handoff_notes": ["Fixture may be handed to implementer in a future authorized phase."],
+  "required_next_role": "implementer",
+  "acceptance_status": "accepted",
+  "created_at": "2026-06-13T00:00:00.000Z",
+  "telemetry_trace_ref": {
+    "trace_id": "trace_role_fixture_001",
+    "context_id": "context_role_fixture_001"
+  },
+  "execution_context_ref": {
+    "context_id": "context_role_fixture_001"
+  },
+  "warnings": []
+}

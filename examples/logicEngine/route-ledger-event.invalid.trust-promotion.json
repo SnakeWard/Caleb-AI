@@ -1,0 +1,61 @@
+{
+  "schema_version": "0.1.0",
+  "event_id": "route_event.invalid_trust_promotion",
+  "event_kind": "mocked_single_pass_route_completed",
+  "task_id": "task_route_ledger_001",
+  "run_id": "run_route_ledger_001",
+  "route_mode": "single_pass",
+  "route_status": "completed_t1",
+  "actor_type": "logic_engine",
+  "actor_id": "logic_engine.route_ledger_event_writer",
+  "created_at": "2026-07-02T19:50:00.000Z",
+  "route_result_ref": "route_result.single_pass.ledger.001",
+  "final_assembly_packet_ref": "final_assembly.packet.ledger.001",
+  "request_id": "request_route_ledger_001",
+  "response_id": "request_route_ledger_001.mock_response",
+  "model_invocation_record_id": "model_invocation.request_route_ledger_001",
+  "raw_response_record_id": "model_boundary.request_route_ledger_001.mock_response.raw",
+  "validated_response_record_id": "model_boundary.request_route_ledger_001.mock_response.schema_valid",
+  "final_packet_id": "final_assembly.assembly_route_ledger_001",
+  "route_result_digest": "sha256:route_result_digest",
+  "final_packet_digest": "sha256:final_packet_digest",
+  "trust_summary": {
+    "raw_model_output_trust_tier": "T0",
+    "schema_valid_model_output_trust_tier": "T1",
+    "final_packet_trust_tier": "T1",
+    "max_model_output_trust_tier": "T2",
+    "verified_final_truth_claimed": true,
+    "model_output_is_deterministic_evidence": false,
+    "route_completion_promotes_trust": false,
+    "final_assembly_promotes_trust": false,
+    "ledger_write_promotes_trust": true,
+    "ledger_presence_promotes_trust": true,
+    "storage_promotes_trust": false,
+    "retrieval_promotes_trust": false,
+    "notes": []
+  },
+  "write_intent": {
+    "target": "ledger",
+    "append_only": true,
+    "writes_in_this_pass": true,
+    "trust_effect": "none",
+    "allowed_content": [
+      "IDs",
+      "refs",
+      "digests",
+      "statuses",
+      "trust summary"
+    ],
+    "blocked_content": [
+      "raw prompt text",
+      "raw model output text",
+      "API keys",
+      "secrets",
+      "env values"
+    ],
+    "notes": []
+  },
+  "warnings": [],
+  "issues": [],
+  "notes": []
+}

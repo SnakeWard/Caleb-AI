@@ -1,0 +1,237 @@
+{
+  "schema_version": "0.1.0",
+  "decision_id": "one_provider_adapter_harness_decision_example",
+  "harness_id": "one_provider_adapter_opt_in_harness",
+  "status": "opt_in_missing",
+  "decision_kind": "refuse_live_execution",
+  "refusal_kind": "missing_opt_in",
+  "opt_in_evidence": {
+    "schema_version": "0.1.0",
+    "evidence_id": "one_provider_adapter_opt_in_evidence_example",
+    "harness_id": "one_provider_adapter_opt_in_harness",
+    "env_flag_ref": {
+      "env_var_name": "CALEB_ENABLE_LIVE_PROVIDER",
+      "env_var_value_required": "true",
+      "env_var_value_present": false,
+      "env_var_value_read": false,
+      "env_var_value_stored": false,
+      "env_var_value_logged": false,
+      "env_var_value_written_to_ledger": false,
+      "env_var_value_written_to_storage": false,
+      "env_var_name_promotes_trust": false,
+      "notes": [
+        "Name only; value not read."
+      ]
+    },
+    "command_flag": {
+      "command_flag_required": true,
+      "command_flag_name": "--enable-live-provider",
+      "command_flag_present": false,
+      "command_flag_source": "static_fixture",
+      "command_flag_promotes_trust": false,
+      "notes": [
+        "Command flag absent by default."
+      ]
+    },
+    "allowlist": {
+      "provider_allowlist_required": true,
+      "provider_id": "first_provider_placeholder",
+      "provider_kind": "placeholder",
+      "provider_allowlist_present": false,
+      "provider_allowlisted": false,
+      "provider_allowlist_source": "static_fixture",
+      "provider_allowlist_promotes_trust": false,
+      "provider_not_allowlisted_failure_kind": "provider_not_allowlisted",
+      "notes": [
+        "Allowlist does not promote trust."
+      ]
+    },
+    "adapter_id": {
+      "adapter_id_required": true,
+      "adapter_id": "first_provider_adapter_no_network_stub",
+      "adapter_id_present": true,
+      "adapter_id_allowed": false,
+      "adapter_id_promotes_trust": false,
+      "adapter_id_missing_failure_kind": "adapter_id_missing",
+      "notes": [
+        "Adapter id data does not enable live execution."
+      ]
+    },
+    "api_key_availability": {
+      "api_key_required_for_live": true,
+      "api_key_env_var_name": "CALEB_ONE_PROVIDER_API_KEY",
+      "api_key_env_var_name_is_secret": false,
+      "api_key_value_present": false,
+      "api_key_value_read": false,
+      "api_key_value_stored": false,
+      "api_key_value_logged": false,
+      "api_key_value_written_to_ledger": false,
+      "api_key_value_written_to_storage": false,
+      "api_key_value_available_for_r26": false,
+      "api_key_presence_promotes_trust": false,
+      "missing_api_key_failure_kind": "missing_api_key",
+      "notes": [
+        "API key value is unavailable and unread."
+      ]
+    },
+    "created_at": "2026-07-03T00:00:00.000Z",
+    "notes": [
+      "Static R26 opt-in evidence only."
+    ]
+  },
+  "human_approval": {
+    "human_approval_required": true,
+    "human_approval_recorded": false,
+    "approval_id": "",
+    "approver_ref": "",
+    "approval_scope": "",
+    "approval_timestamp": "",
+    "approval_expires_at": "",
+    "approval_source": "static_fixture",
+    "approval_promotes_trust": false,
+    "approval_allows_live_execution_in_r26": false,
+    "notes": [
+      "No human approval recorded in default R26 fixture."
+    ]
+  },
+  "kill_switch": {
+    "kill_switch_required": true,
+    "kill_switch_env_var_name": "CALEB_DISABLE_LIVE_PROVIDER",
+    "kill_switch_value_required_for_live": "false",
+    "kill_switch_value_present": false,
+    "kill_switch_value_read": false,
+    "kill_switch_enabled_by_default": false,
+    "kill_switch_allows_live_execution": false,
+    "kill_switch_blocks_live_execution": true,
+    "kill_switch_promotes_trust": false,
+    "notes": [
+      "Kill switch value is not read."
+    ]
+  },
+  "redaction": {
+    "redaction_policy_required": true,
+    "redaction_manifest_required": true,
+    "redaction_result_required": true,
+    "redaction_policy_present": false,
+    "redaction_manifest_present": false,
+    "redaction_result_present": false,
+    "redaction_ready": false,
+    "redaction_promotes_trust": false,
+    "redaction_metadata_promotes_trust": false,
+    "raw_prompt_allowed": false,
+    "raw_output_allowed": false,
+    "notes": [
+      "Redaction readiness is data only."
+    ]
+  },
+  "safety_profile": {
+    "safety_profile_required": true,
+    "safety_profile_id": "one_provider_adapter_default_safety_profile",
+    "safety_profile_present": false,
+    "safety_profile_ready": false,
+    "safety_profile_promotes_trust": false,
+    "missing_safety_profile_failure_kind": "safety_profile_required",
+    "notes": [
+      "Safety profile not ready by default."
+    ]
+  },
+  "cost_guard": {
+    "cost_guard_required": true,
+    "cost_guard_present": true,
+    "cost_guard_ready": false,
+    "max_live_requests_per_test": 1,
+    "max_output_tokens": 1024,
+    "max_cost_units_per_run": 1,
+    "background_live_calls_allowed": false,
+    "cost_guard_promotes_trust": false,
+    "cost_limit_exceeded_failure_kind": "cost_limit_exceeded",
+    "notes": [
+      "Cost guard does not promote trust."
+    ]
+  },
+  "live_test_gate": {
+    "live_tests_created_in_r26": false,
+    "live_tests_allowed_in_default_run": false,
+    "live_tests_opt_in_only": true,
+    "live_tests_skipped_by_default": true,
+    "live_tests_can_run_in_ci_by_default": false,
+    "live_tests_require_api_key": true,
+    "live_tests_require_provider_allowlist": true,
+    "test_fixtures_contain_secrets": false,
+    "test_fixtures_contain_api_keys": false,
+    "test_fixtures_contain_raw_prompt": false,
+    "test_fixtures_contain_raw_output": false,
+    "live_test_gate_promotes_trust": false,
+    "notes": [
+      "No live tests in R26."
+    ]
+  },
+  "refusal": {
+    "schema_version": "0.1.0",
+    "refusal_id": "one_provider_adapter_harness_refusal_example",
+    "ok": false,
+    "status": "opt_in_missing",
+    "refusal_kind": "missing_opt_in",
+    "provider_call_attempted": false,
+    "network_call_attempted": false,
+    "api_key_value_read": false,
+    "process_env_read": false,
+    "fake_success_returned": false,
+    "provider_output_returned": false,
+    "warnings": [],
+    "errors": [
+      "missing_opt_in"
+    ],
+    "notes": [
+      "Structured refusal only."
+    ]
+  },
+  "audit_summary": {
+    "harness_id": "one_provider_adapter_opt_in_harness",
+    "config_ref": "examples/modelBoundary/one-provider-adapter-config-contract.valid.json",
+    "opt_in_evidence_ref": "one_provider_adapter_opt_in_evidence_example",
+    "decision_id": "one_provider_adapter_harness_decision_example",
+    "decision_kind": "refuse_live_execution",
+    "refusal_kind": "missing_opt_in",
+    "live_execution_attempted": false,
+    "provider_call_attempted": false,
+    "network_call_attempted": false,
+    "api_key_value_read": false,
+    "process_env_read": false,
+    "provider_sdk_used": false,
+    "ledger_write_attempted": false,
+    "file_write_attempted": false,
+    "fake_success_returned": false,
+    "provider_output_returned": false,
+    "audit_notes": [
+      "No live execution attempted."
+    ]
+  },
+  "trust_summary": {
+    "opt_in_evidence_promotes_trust": true,
+    "command_flag_promotes_trust": false,
+    "env_flag_name_promotes_trust": false,
+    "human_approval_promotes_trust": false,
+    "kill_switch_state_promotes_trust": false,
+    "api_key_presence_promotes_trust": true,
+    "provider_allowlist_promotes_trust": false,
+    "network_permission_promotes_trust": false,
+    "harness_decision_promotes_trust": true,
+    "live_execution_allowed_in_r26": false,
+    "provider_identity_promotes_trust": false,
+    "successful_provider_response_promotes_trust": false,
+    "provider_output_is_deterministic_evidence": false,
+    "raw_provider_output_trust_tier": "T0",
+    "schema_valid_provider_output_trust_tier": "T1",
+    "max_provider_output_trust_tier": "T2",
+    "verified_final_truth_claimed": false,
+    "requires_hollow_verification_for_t2": true,
+    "notes": [
+      "Harness evidence does not promote trust."
+    ]
+  },
+  "created_at": "2026-07-03T00:00:00.000Z",
+  "notes": [
+    "R26 decision cannot enable live execution."
+  ]
+}

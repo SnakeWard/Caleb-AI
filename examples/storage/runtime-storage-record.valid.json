@@ -1,0 +1,34 @@
+{
+  "storage_record_id": "storage_record_evidence_001",
+  "record_kind": "evidence_packet",
+  "schema_version": "0.1.0",
+  "task_id": "task_runtime_storage_contract_001",
+  "run_id": "run_runtime_storage_contract_001",
+  "created_at": "2026-07-02T18:00:00.000Z",
+  "source_kind": "verified_return_path",
+  "trust_tier": "T2",
+  "validation_status": "verified",
+  "ledger_refs": ["ledger_runtime_storage_contract_001"],
+  "input_refs": [
+    {
+      "ref_id": "hollow_invocation_001",
+      "ref_kind": "external",
+      "description": "Raw Hollow invocation stored outside this contract example."
+    }
+  ],
+  "output_refs": [],
+  "artifact_refs": [],
+  "notes": ["Verified deterministic Hollow evidence may reach T2 through VRP."],
+  "evidence_id": "evidence_runtime_storage_contract_001",
+  "evidence_source": "hollow.text.character_count",
+  "claim_keys": ["character_count"],
+  "units": "characters",
+  "verification_refs": [
+    {
+      "ref_id": "verification_result_001",
+      "ref_kind": "external",
+      "description": "Verified Return Path result."
+    }
+  ],
+  "can_be_used_for_final": true
+}

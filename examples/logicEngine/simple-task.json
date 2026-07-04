@@ -1,0 +1,19 @@
+{
+  "task_id": "task_demo_001",
+  "run_id": "run_demo_001",
+  "trace_id": "trace_demo_001",
+  "task_type": "hollow_execution",
+  "description": "Count characters in a supplied text string.",
+  "input_summary": "Short text string, deterministic Hollow operation only.",
+  "requested_by": "cli-demo",
+  "requires_code_mutation": false,
+  "signal_hints": {
+    "deterministic_only": 2,
+    "requires_judgment": 0,
+    "ambiguity": 0,
+    "stakes": 0,
+    "side_effect_risk": 0,
+    "prior_failure": 0
+  },
+  "created_at": "2026-06-12T00:00:00.000Z"
+}

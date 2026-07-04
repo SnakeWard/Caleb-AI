@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1.0",
+  "task_id": "task_r20_example",
+  "run_id": "run_r20_example",
+  "request_id": "request_r20_example",
+  "route_mode": "single_pass",
+  "interface_id": "live_adapter_interface_r20_mock_compatible",
+  "adapter_id": "adapter_r20_mock_compatible",
+  "safety_profile_id": "live_adapter_safety_profile_r19",
+  "redaction_policy_id": "redaction_policy_r19_default",
+  "redaction_manifest_id": "redaction_manifest_r19_example",
+  "created_at": "2026-07-03T12:40:01.000Z",
+  "context_refs": [
+    {
+      "ref_id": "context_ref_r20_example",
+      "ref_kind": "digest_only"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "ref_id": "evidence_ref_r20_example",
+      "trust_tier": "T0"
+    }
+  ],
+  "notes": [
+    "Context carries refs and IDs only."
+  ]
+}

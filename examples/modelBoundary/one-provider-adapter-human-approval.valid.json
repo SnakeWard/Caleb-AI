@@ -1,0 +1,15 @@
+{
+  "human_approval_required": true,
+  "human_approval_recorded": false,
+  "approval_id": "",
+  "approver_ref": "",
+  "approval_scope": "",
+  "approval_timestamp": "",
+  "approval_expires_at": "",
+  "approval_source": "static_fixture",
+  "approval_promotes_trust": false,
+  "approval_allows_live_execution_in_r26": false,
+  "notes": [
+    "No human approval recorded in default R26 fixture."
+  ]
+}

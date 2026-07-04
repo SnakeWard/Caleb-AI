@@ -1,0 +1,62 @@
+{
+  "schema_version": "0.1.0",
+  "policy_id": "redaction_policy_r19_default",
+  "policy_version": "1.0.0",
+  "scope": [
+    "live_adapter_request",
+    "live_adapter_response",
+    "ledger_event",
+    "runtime_storage_record",
+    "final_output_record"
+  ],
+  "safety_profile_id": "live_adapter_safety_profile_r19",
+  "redaction_required": true,
+  "raw_prompt_allowed": false,
+  "raw_output_allowed": false,
+  "ledger_raw_prompt_allowed": false,
+  "ledger_raw_output_allowed": false,
+  "runtime_storage_raw_prompt_allowed": false,
+  "runtime_storage_raw_output_allowed": false,
+  "allowed_content": {
+    "ids_allowed": true,
+    "refs_allowed": true,
+    "digests_allowed": true,
+    "statuses_allowed": true,
+    "trust_summaries_allowed": true,
+    "usage_summaries_allowed": true,
+    "timing_summaries_allowed": true,
+    "warning_summaries_allowed": true,
+    "error_summaries_allowed": true,
+    "raw_text_allowed": false
+  },
+  "blocked_content": {
+    "raw_prompt_text_blocked": true,
+    "raw_model_output_text_blocked": true,
+    "api_keys_blocked": true,
+    "secrets_blocked": true,
+    "env_values_blocked": true,
+    "credentials_blocked": true,
+    "auth_tokens_blocked": true,
+    "private_keys_blocked": true,
+    "unredacted_user_content_blocked": true,
+    "unredacted_provider_response_blocked": true
+  },
+  "sensitive_categories": [
+    "api_key",
+    "secret",
+    "env_value",
+    "credential",
+    "auth_token",
+    "private_key",
+    "raw_prompt_text",
+    "raw_model_output_text",
+    "unredacted_user_content",
+    "unredacted_provider_response"
+  ],
+  "default_action": "replace_with_digest",
+  "created_at": "2026-07-03T08:10:00.000Z",
+  "notes": [
+    "R19 static redaction policy example.",
+    "Refs, digests, statuses, summaries, warnings, and errors are allowed; raw text is not."
+  ]
+}

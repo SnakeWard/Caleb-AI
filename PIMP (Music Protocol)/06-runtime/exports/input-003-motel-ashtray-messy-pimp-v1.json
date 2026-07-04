@@ -1,0 +1,31 @@
+{
+  "title": "Motel Ashtray",
+  "concept_summary": "Built as heartland rock / Americana with 90s country storytelling, it stays with a man trying to sound normal while he keeps doubling back. The pressure comes from acting functional while still circling a life that has already moved on. It leaves the release in restless observation rather than closure.",
+  "signal_stack": {
+    "identity": "Male narrator point of view; late-20s / early-30s voice; trying to sound normal while clearly coming apart",
+    "emotional_arc": "Held-together surface -> restless repetition -> motel ashtray as the thing he can't shake",
+    "genre_framework": "Heartland rock / Americana with 90s country storytelling",
+    "production_layer": "guitar-led bed, close dry lead vocal, steady late-entry drums, low night-drive ambience",
+    "structure": [
+      "Intro",
+      "Verse 1",
+      "Pre-Chorus",
+      "Chorus",
+      "Bridge",
+      "Outro"
+    ]
+  },
+  "lyrics": "[Intro]\nbuzzing VACANCY sign\none of those little motel ice machines rattling all night\n\n[Verse 1]\nstale smoke in a jacket\nkeeps sayin' he's fine with smoke on his breath\nshe's gone on with her life and he still circles the block\n\n[Pre-Chorus]\ngas station coffee\nparking lot glow still up\ngets as far as her street, then kills the call\n\n[Chorus]\nMotel ashtray\ntaps it twice and says he's fine\n\n[Bridge]\nShe ain't made the villain here\ngets as far as her street, then kills the call\n\n[Outro]\nbuzzing VACANCY sign\ngets as far as her street, then kills the call",
+  "style_prompt": "heartland rock / americana with 90s-country storytelling, male lead vocal, worn but controlled, held-together surface, restless repetition, guitar-led bed, close dry lead vocal, steady late-entry drums, motel ashtray as recurring hook image, no vague \"midnight shadows\" type stuff",
+  "style_prompt_char_count": 280,
+  "validation_notes": {
+    "formatting_pass": true,
+    "style_limit_pass": true,
+    "anti_trope_pass": true,
+    "warnings": [
+      "parser_recovery: rawUserIntent=normalized, desiredDirection=normalized, possibleGenreFramework=normalized, vocalDirection=inferred, instrumentationHints=missing, specialConstraints=normalized",
+      "parser_overall: recovered",
+      "production_layer=inferred"
+    ]
+  }
+}

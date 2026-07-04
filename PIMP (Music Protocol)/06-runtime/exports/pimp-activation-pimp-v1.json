@@ -1,0 +1,39 @@
+{
+  "title": "PIMP Activation",
+  "concept_summary": "Musically, it lives in slow americana, maybe a little southern gothic feel but subtle and stays with narrator identity partially specified; preserve a grounded human point of view. The pressure comes from unresolved pressure that remains only partially specified. It leaves the release in intentional restraint while the source detail stays limited.",
+  "signal_stack": {
+    "identity": "Narrator identity partially specified; preserve a grounded human point of view",
+    "emotional_arc": "almost no movement -> tension comes from absence, not action -> repetition but not boring",
+    "genre_framework": "slow americana, maybe a little southern gothic feel but subtle",
+    "production_layer": "guitar-led bed",
+    "structure": [
+      "Intro",
+      "Verse 1",
+      "Pre-Chorus",
+      "Chorus",
+      "Bridge",
+      "Outro"
+    ]
+  },
+  "lyrics": "[Intro]\nporch light buzzing\ntruck that never pulls in\n\n[Verse 1]\nbugs hitting the bulb\n- almost no movement\n- tension comes from absence, not action\n- repetition but not boring\nNarrator identity partially specified; preserve a grounded human point of view\n\n[Pre-Chorus]\nempty chair\nbugs hitting the bulb\nkeeps holdin' onto what should've gone quiet\n\n[Chorus]\nporch light buzzing\nporch light buzzing under that same bad light\nkeeps sayin' he's fine plain and low\n\n[Bridge]\nAin't nobody left to blame in it\nstill does the one thing he said he'd quit\n\n[Outro]\nporch light buzzing\nempty chair",
+  "style_prompt": "slow americana, maybe a little southern gothic feel but subtle, Narrator identity partially specified; preserve a grounded human point of view, guitar-led bed",
+  "style_prompt_char_count": 158,
+  "validation_notes": {
+    "formatting_pass": true,
+    "style_limit_pass": true,
+    "anti_trope_pass": true,
+    "warnings": [
+      "parser_recovery: rawUserIntent=inferred, desiredDirection=normalized, possibleGenreFramework=normalized, vocalDirection=missing, instrumentationHints=missing, specialConstraints=normalized",
+      "parser_overall: recovered",
+      "production_layer=inferred"
+    ]
+  }
+}
+    "anti_trope_pass": true,
+    "warnings": [
+      "parser_recovery: rawUserIntent=inferred, desiredDirection=normalized, possibleGenreFramework=normalized, vocalDirection=missing, instrumentationHints=missing, specialConstraints=normalized",
+      "parser_overall: recovered",
+      "production_layer=inferred"
+    ]
+  }
+}

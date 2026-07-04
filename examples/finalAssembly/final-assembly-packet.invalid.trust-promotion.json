@@ -1,0 +1,48 @@
+{
+  "schema_version": "0.1.0",
+  "packet_id": "final_assembly.invalid_trust_promotion",
+  "task_id": "task_final_assembly_001",
+  "run_id": "run_final_assembly_001",
+  "assembly_id": "assembly_invalid_001",
+  "route_mode": "single_pass",
+  "status": "assembled_unverified",
+  "user_facing_text": "This invalid packet claims too much trust.",
+  "source_refs": {
+    "route_result_ref": "route_result.single_pass.001",
+    "request_id": "request_final_assembly_001",
+    "response_id": "request_final_assembly_001.mock_response",
+    "raw_response_record_id": "model_boundary.request_final_assembly_001.mock_response.raw",
+    "validated_response_record_id": "model_boundary.request_final_assembly_001.mock_response.schema_valid",
+    "model_invocation_record_id": "model_invocation.request_final_assembly_001"
+  },
+  "trust_summary": {
+    "highest_model_output_trust_tier": "T1",
+    "final_packet_trust_tier": "T2",
+    "final_answer_claims_verified": true,
+    "route_completion_promotes_trust": false,
+    "final_assembly_promotes_trust": true,
+    "storage_promotes_trust": false,
+    "retrieval_promotes_trust": false,
+    "model_output_is_deterministic_evidence": false,
+    "requires_hollow_verification_for_t2": true,
+    "notes": []
+  },
+  "limitations": {
+    "has_verified_hollow_evidence": false,
+    "has_live_model_provider": false,
+    "has_real_ledger_write": false,
+    "has_persistent_storage": false,
+    "has_role_rotation": false,
+    "limitation_notes": []
+  },
+  "release_eligibility": {
+    "can_release_to_user": true,
+    "release_type": "mock_single_pass_unverified",
+    "blocking_reasons": [],
+    "required_disclaimer": "This response is assembled from mocked/model-shaped T1 output and is not verified final truth.",
+    "trust_label": "verified final answer"
+  },
+  "warnings": [],
+  "issues": [],
+  "created_at": "2026-07-02T19:35:00.000Z"
+}

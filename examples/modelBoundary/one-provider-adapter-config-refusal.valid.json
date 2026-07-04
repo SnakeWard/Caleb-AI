@@ -1,0 +1,14 @@
+{
+  "refusal_id": "one_provider_adapter_config_refusal_example",
+  "config_status": "future_live_not_enabled",
+  "refusal_kind": "live_provider_not_enabled",
+  "ok": false,
+  "fake_success_returned": false,
+  "provider_call_attempted": false,
+  "network_call_attempted": false,
+  "api_key_value_read": false,
+  "trust_promoted": false,
+  "warnings": [],
+  "errors": ["live provider is not enabled in R24"],
+  "notes": ["Structured refusal only; no provider path is attempted."]
+}

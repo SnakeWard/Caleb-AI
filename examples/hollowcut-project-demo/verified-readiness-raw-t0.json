@@ -1,0 +1,58 @@
+{
+  "invocation": {
+    "hollow_id": "hollow.hollowcut.export_readiness_check",
+    "result": {
+      "ready": true,
+      "valid": true,
+      "status": "ready_with_warnings",
+      "warning_count": 4,
+      "error_count": 0,
+      "blocking_count": 0,
+      "blockers": [],
+      "checks": [],
+      "issues": [],
+      "warnings": [],
+      "skipped_checks": [],
+      "summary": {
+        "project_id": "proj-export-ready-001",
+        "timeline_id": "tl-export-001",
+        "asset_count": 1,
+        "track_count": 1,
+        "timeline_item_count": 1,
+        "export_target_count": 1,
+        "export_profile_present": true,
+        "matched_export_target_count": 1
+      },
+      "readiness_summary": {
+        "ready": true,
+        "status": "ready_with_warnings",
+        "project_id": "proj-export-ready-001",
+        "timeline_id": "tl-export-001",
+        "export_profile_present": true,
+        "export_targets_count": 1,
+        "matched_export_target_count": 1,
+        "asset_count": 1,
+        "track_count": 1,
+        "timeline_item_count": 1,
+        "blocking_count": 0,
+        "error_count": 0,
+        "warning_count": 4,
+        "skipped_check_count": 0,
+        "blocking_categories": [],
+        "warning_categories": ["alignment", "asset", "supplied_state", "unknown"],
+        "top_blockers": [],
+        "next_required_actions": [],
+        "unmapped_issue_codes": [],
+        "safe_to_hand_to_future_export": true,
+        "supplied_state_only": true
+      },
+      "blocking_reasons": [],
+      "next_required_actions": [],
+      "unmapped_issue_codes": []
+    },
+    "trust_tier": "T0"
+  },
+  "verification_result": {
+    "trust_tier": "T0"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "opt_in_required": true,
+  "opt_in_env_var_name": "CALEB_ONE_PROVIDER_ADAPTER_ENABLED",
+  "opt_in_env_var_value_required": "true",
+  "provider_allowlist_required": true,
+  "adapter_id_required": true,
+  "explicit_command_flag_required": true,
+  "human_approval_required": true,
+  "default_runtime_enabled": false,
+  "missing_opt_in_failure_kind": "live_provider_not_enabled",
+  "fake_success_allowed": false,
+  "notes": ["Explicit opt-in is required and does not promote trust."]
+}

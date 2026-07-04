@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_id": "role_artifact_fixture_verifier_001",
+  "artifact_type": "verification",
+  "role_id": "verifier",
+  "task_id": "task_role_fixture_001",
+  "run_id": "run_role_fixture_001",
+  "trace_id": "trace_role_fixture_001",
+  "context_id": "context_role_fixture_001",
+  "summary": "Verifier fixture artifact summarizing static validation checks.",
+  "claims": [
+    {
+      "claim_id": "claim_verifier_001",
+      "text": "A fixture can pass RoleArtifact validation without invoking the Logic Engine.",
+      "evidence_ref_ids": ["evidence_verifier_001"]
+    }
+  ],
+  "assumptions": ["Fixture validation remains contract-only."],
+  "constraints": ["No Hollow execution is performed."],
+  "open_questions": [],
+  "recommendations": ["Pass verified claims to critic or synthesizer in a future phase."],
+  "evidence_refs": [
+    {
+      "ref_id": "evidence_verifier_001",
+      "ref_type": "artifact",
+      "description": "Static fixture validation result."
+    }
+  ],
+  "confidence": 0.88,
+  "handoff_notes": ["Fixture may be handed to critic in a future authorized phase."],
+  "required_next_role": "critic",
+  "acceptance_status": "accepted",
+  "created_at": "2026-06-13T00:00:00.000Z",
+  "telemetry_trace_ref": {
+    "trace_id": "trace_role_fixture_001",
+    "context_id": "context_role_fixture_001"
+  },
+  "execution_context_ref": {
+    "context_id": "context_role_fixture_001"
+  },
+  "warnings": []
+}

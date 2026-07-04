@@ -1,0 +1,68 @@
+{
+  "schema_version": "0.1.0",
+  "record_id": "model_invocation.request_mock_single_pass_001",
+  "record_kind": "mocked_single_pass_invocation",
+  "task_id": "task_mock_single_pass_001",
+  "run_id": "run_mock_single_pass_001",
+  "request_id": "request_mock_single_pass_001",
+  "response_id": "response_mock_single_pass_001",
+  "route_mode": "single_pass",
+  "boundary_id": "mock.single_pass.model_boundary",
+  "adapter_id": "mock.single_pass.boundary",
+  "adapter_kind": "mock",
+  "invocation_status": "schema_valid",
+  "created_at": "2026-07-02T19:10:00.000Z",
+  "completed_at": "2026-07-02T19:10:01.000Z",
+  "prompt_digest": "sha256:prompt",
+  "request_digest": "sha256:request",
+  "response_digest": "sha256:response",
+  "supplied_evidence_refs": [
+    {
+      "ref_id": "evidence_mock_001",
+      "description": "Existing verified evidence reference."
+    }
+  ],
+  "supplied_context_refs": [
+    {
+      "ref_id": "context_mock_001",
+      "ref_kind": "execution_context",
+      "description": "Execution context reference."
+    }
+  ],
+  "raw_response_record_id": "model_boundary.response_mock_single_pass_001.raw",
+  "validated_response_record_id": "model_boundary.response_mock_single_pass_001.schema_valid",
+  "storage_refs": {
+    "raw_response_record_id": "model_boundary.response_mock_single_pass_001.raw",
+    "validated_response_record_id": "model_boundary.response_mock_single_pass_001.schema_valid"
+  },
+  "trust_summary": {
+    "raw_output_trust_tier": "T0",
+    "validated_output_trust_tier": "T1",
+    "max_allowed_trust_tier": "T1",
+    "model_output_is_deterministic_evidence": false,
+    "trust_promotion_blocked": true,
+    "ledger_presence_promotes_trust": false,
+    "notes": [
+      "Model invocation provenance does not verify model truth.",
+      "Ledger presence does not promote trust."
+    ]
+  },
+  "warnings": [],
+  "issues": [],
+  "ledger_intent": {
+    "intended_activity": "mocked_single_pass_model_invocation_recorded",
+    "actor_type": "model_boundary",
+    "actor_id": "mock.single_pass.model_boundary",
+    "can_write_later": true,
+    "writes_in_this_pass": false,
+    "trust_effect": "none",
+    "notes": [
+      "Ledger intent is provenance/audit only.",
+      "No Ledger write is performed in R12."
+    ]
+  },
+  "notes": [
+    "No live model provider was called.",
+    "Model invocation provenance is audit metadata, not trust promotion."
+  ]
+}

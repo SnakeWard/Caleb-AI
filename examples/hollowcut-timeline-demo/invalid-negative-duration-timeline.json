@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "invalid_negative_duration_timeline",
+  "project_root": ".",
+  "assets": [
+    {
+      "asset_id": "asset_visual_negative",
+      "asset_type": "image",
+      "relative_path": "assets/images/negative.png",
+      "display_name": "Negative Duration Visual",
+      "expected_media_type": "image",
+      "metadata_hint": {
+        "width": 1920,
+        "height": 1080
+      },
+      "verified_metadata": null,
+      "evidence_refs": [],
+      "warnings": []
+    }
+  ],
+  "tracks": [
+    {
+      "track_id": "track_visual_main",
+      "track_type": "visual",
+      "name": "Main Visuals",
+      "locked": false,
+      "muted": false,
+      "visible": true,
+      "items": ["item_negative_duration"]
+    }
+  ],
+  "timeline": {
+    "timeline_id": "timeline_invalid_negative_duration",
+    "duration_ms": 1000,
+    "fps": 30,
+    "width": 1920,
+    "height": 1080,
+    "aspect_ratio": "16:9",
+    "timebase": "milliseconds",
+    "items": [
+      {
+        "item_id": "item_negative_duration",
+        "asset_id": "asset_visual_negative",
+        "track_id": "track_visual_main",
+        "item_type": "visual",
+        "start_ms": 0,
+        "duration_ms": -1000,
+        "end_ms": 0,
+        "layer": 0,
+        "enabled": true,
+        "transition_in": null,
+        "transition_out": null,
+        "effects": [],
+        "metadata": {},
+        "warnings": []
+      }
+    ],
+    "markers": [],
+    "warnings": ["negative duration should be rejected by future validator"]
+  }
+}

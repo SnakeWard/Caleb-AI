@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PIMP Song Output",
+  "type": "object",
+  "required": [
+    "title",
+    "concept_summary",
+    "signal_stack",
+    "lyrics",
+    "style_prompt",
+    "validation_notes"
+  ],
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "concept_summary": {
+      "type": "string"
+    },
+    "signal_stack": {
+      "type": "object",
+      "required": [
+        "identity",
+        "emotional_arc",
+        "genre_framework",
+        "production_layer",
+        "structure"
+      ],
+      "properties": {
+        "identity": { "type": "string" },
+        "emotional_arc": { "type": "string" },
+        "genre_framework": { "type": "string" },
+        "production_layer": { "type": "string" },
+        "structure": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "lyrics": {
+      "type": "string",
+      "description": "Formatted section-based lyrics."
+    },
+    "style_prompt": {
+      "type": "string"
+    },
+    "style_prompt_char_count": {
+      "type": "integer"
+    },
+    "validation_notes": {
+      "type": "object",
+      "properties": {
+        "formatting_pass": { "type": "boolean" },
+        "style_limit_pass": { "type": "boolean" },
+        "anti_trope_pass": { "type": "boolean" },
+        "warnings": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

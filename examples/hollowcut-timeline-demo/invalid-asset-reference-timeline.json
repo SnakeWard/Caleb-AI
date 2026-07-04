@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "invalid_asset_reference_timeline",
+  "project_root": ".",
+  "assets": [],
+  "tracks": [
+    {
+      "track_id": "track_visual_main",
+      "track_type": "visual",
+      "name": "Main Visuals",
+      "locked": false,
+      "muted": false,
+      "visible": true,
+      "items": ["item_missing_asset"]
+    }
+  ],
+  "timeline": {
+    "timeline_id": "timeline_invalid_asset_reference",
+    "duration_ms": 1000,
+    "fps": 30,
+    "width": 1920,
+    "height": 1080,
+    "aspect_ratio": "16:9",
+    "timebase": "milliseconds",
+    "items": [
+      {
+        "item_id": "item_missing_asset",
+        "asset_id": "asset_does_not_exist",
+        "track_id": "track_visual_main",
+        "item_type": "visual",
+        "start_ms": 0,
+        "duration_ms": 1000,
+        "end_ms": 1000,
+        "layer": 0,
+        "enabled": true,
+        "transition_in": null,
+        "transition_out": null,
+        "effects": [],
+        "metadata": {},
+        "warnings": []
+      }
+    ],
+    "markers": [],
+    "warnings": ["missing asset reference should be rejected by future validator"]
+  }
+}

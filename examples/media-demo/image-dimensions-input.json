@@ -1,0 +1,5 @@
+{
+  "project_root": "C:/path/to/explicit/project",
+  "relative_path": "images/example.png",
+  "expected_media_type": "image"
+}

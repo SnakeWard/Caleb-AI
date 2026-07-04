@@ -1,0 +1,31 @@
+{
+  "title": "PIMP Activation",
+  "concept_summary": "Musically, it lives in heartland rock, maybe a little Springsteen-esque storytelling but stripped down and stays with not dramatic. The pressure comes from unresolved pressure that remains only partially specified. It leaves the release in intentional restraint while the source detail stays limited.",
+  "signal_stack": {
+    "identity": "not dramatic",
+    "emotional_arc": "subtle self-deception -> not dramatic -> almost conversational",
+    "genre_framework": "heartland rock, maybe a little Springsteen-esque storytelling but stripped down",
+    "production_layer": "guitar-led bed",
+    "structure": [
+      "Intro",
+      "Verse 1",
+      "Pre-Chorus",
+      "Chorus",
+      "Bridge",
+      "Outro"
+    ]
+  },
+  "lyrics": "[Intro]\nhe uses phrases like \"I did what I had to\nthin room noise through the wall\n\n[Verse 1]\nmentions small things like late paychecks, missed calls, stuff like that\n- subtle self-deception\n- not dramatic\n- almost conversational\n- you realize the truth before he does\nnot dramatic\n\n[Pre-Chorus]\nI did what I had to\nmentions small things like late paychecks, missed calls, stuff like that\nkeeps holdin' onto what should've gone quiet\n\n[Chorus]\nhe uses phrases like \"I did what I had to\"\nhe uses phrases like \"I did what I had to\" under that same bad light\nkeeps sayin' he's fine plain and low\n\n[Bridge]\nAin't nobody left to blame in it\nstill does the one thing he said he'd quit\n\n[Outro]\nhe uses phrases like \"I did what I had to\nI did what I had to",
+  "style_prompt": "heartland rock, maybe a little Springsteen-esque storytelling but stripped down, not dramatic, guitar-led bed",
+  "style_prompt_char_count": 109,
+  "validation_notes": {
+    "formatting_pass": true,
+    "style_limit_pass": true,
+    "anti_trope_pass": true,
+    "warnings": [
+      "parser_recovery: rawUserIntent=inferred, desiredDirection=normalized, possibleGenreFramework=normalized, vocalDirection=inferred, instrumentationHints=missing, specialConstraints=normalized",
+      "parser_overall: recovered",
+      "production_layer=inferred"
+    ]
+  }
+}

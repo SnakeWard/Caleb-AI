@@ -1,0 +1,9 @@
+{
+  "expected_media_type": "video",
+  "metadata_hint": {
+    "duration_ms": 123456,
+    "frame_rate_hint": 30,
+    "codec_hint": "h264",
+    "container_hint": "mp4"
+  }
+}

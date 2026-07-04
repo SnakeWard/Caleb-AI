@@ -1,0 +1,16 @@
+{
+  "task_id": "task_demo_gated_001",
+  "run_id": "run_demo_gated_001",
+  "trace_id": "trace_demo_gated_001",
+  "task_type": "hollow_execution",
+  "description": "Deterministic hollow task with elevated stakes — demonstrates approval gate refusal until V0.2.",
+  "input_summary": "Character count operation on high-stakes content requiring approval before dispatch.",
+  "requested_by": "cli-demo",
+  "requires_code_mutation": false,
+  "signal_hints": {
+    "deterministic_only": 2,
+    "requires_judgment": 0,
+    "stakes": 2
+  },
+  "created_at": "2026-06-13T00:00:00.000Z"
+}

@@ -1,0 +1,123 @@
+{
+  "project_state": {
+    "schema_version": "1.0.0",
+    "project_id": "proj-export-ready-001",
+    "project_name": "Export Ready Demo",
+    "created_at": "2026-01-01T00:00:00.000Z",
+    "updated_at": "2026-01-01T00:00:00.000Z",
+    "project_root": ".",
+    "assets": [
+      {
+        "asset_id": "asset-video-main",
+        "asset_type": "video",
+        "relative_path": "assets/video/main.mp4",
+        "display_name": "Main Video",
+        "expected_media_type": "video",
+        "metadata_hint": { "duration_ms": 10000, "width": 1920, "height": 1080 },
+        "verified_metadata": null,
+        "evidence_refs": [],
+        "warnings": []
+      }
+    ],
+    "timeline": {
+      "timeline_id": "tl-export-001",
+      "duration_ms": 10000,
+      "fps": 30,
+      "width": 1920,
+      "height": 1080,
+      "aspect_ratio": "16:9",
+      "items": [
+        {
+          "item_id": "item-main",
+          "asset_id": "asset-video-main",
+          "track_id": "track-visual-main",
+          "start_ms": 0,
+          "duration_ms": 10000,
+          "end_ms": 10000,
+          "transition_in": null,
+          "transition_out": null,
+          "effects": [],
+          "warnings": []
+        }
+      ]
+    },
+    "tracks": [
+      {
+        "track_id": "track-visual-main",
+        "track_type": "visual",
+        "name": "Main Visuals",
+        "locked": false,
+        "muted": false,
+        "items": ["item-main"]
+      }
+    ],
+    "captions": [],
+    "narration": {
+      "script": "",
+      "voice_profile": null,
+      "estimated_duration_ms": null,
+      "audio_asset_id": null,
+      "evidence_refs": []
+    },
+    "export_targets": [
+      {
+        "target_id": "youtube-1080p",
+        "platform": "youtube",
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "format": "mp4",
+        "status": "planned",
+        "output_path": null,
+        "requires_approval": false,
+        "warnings": []
+      }
+    ],
+    "validation_state": {
+      "last_validated_at": null,
+      "validation_status": "not_validated",
+      "checks": [],
+      "warnings": [],
+      "errors": [],
+      "evidence_refs": [],
+      "report_refs": []
+    },
+    "ledger_refs": [],
+    "artifact_refs": [],
+    "provenance": { "fixture_type": "export_readiness_valid" }
+  },
+  "timeline_state": {
+    "timeline_id": "tl-export-001",
+    "duration_ms": 10000,
+    "fps": 30,
+    "width": 1920,
+    "height": 1080,
+    "aspect_ratio": "16:9",
+    "items": [
+      {
+        "item_id": "item-main",
+        "asset_id": "asset-video-main",
+        "track_id": "track-visual-main",
+        "start_ms": 0,
+        "duration_ms": 10000,
+        "end_ms": 10000,
+        "transition_in": null,
+        "transition_out": null,
+        "effects": [],
+        "warnings": []
+      }
+    ]
+  },
+  "export_profile": {
+    "profile_id": "prof-youtube-1080p-v1",
+    "target_platform": "youtube",
+    "format": "mp4",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "duration_limit_ms": 300000,
+    "include_audio": true,
+    "include_captions": false,
+    "quality_preset": "standard"
+  }
+}

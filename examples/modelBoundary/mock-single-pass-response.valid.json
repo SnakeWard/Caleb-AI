@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1.0",
+  "task_id": "task_mock_single_pass_001",
+  "run_id": "run_mock_single_pass_001",
+  "request_id": "request_mock_single_pass_001",
+  "response_id": "response_mock_single_pass_001",
+  "adapter_id": "mock.single_pass.boundary",
+  "adapter_kind": "mock",
+  "output_text": "Mock single_pass response only; not verified deterministic Hollow evidence.",
+  "output_claims": [
+    "This is deterministic mocked model-shaped output.",
+    "This output is not verified deterministic Hollow evidence."
+  ],
+  "used_evidence_refs": [
+    {
+      "ref_id": "evidence_mock_001",
+      "description": "Existing verified evidence reference."
+    }
+  ],
+  "warnings": [],
+  "created_at": "2026-07-02T19:00:00.000Z",
+  "raw_trust_tier": "T0",
+  "validation_status": "raw"
+}

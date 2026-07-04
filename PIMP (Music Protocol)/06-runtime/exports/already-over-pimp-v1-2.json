@@ -1,0 +1,30 @@
+{
+  "title": "PIMP Activation",
+  "concept_summary": "Built as modern acoustic or indie-folk, minimal, it stays with narrator identity partially specified, preserve a grounded human point of view. The pressure comes from unresolved pressure that remains only partially specified. It leaves the release in intentional restraint while the source detail stays limited.",
+  "signal_stack": {
+    "identity": "Narrator identity partially specified; preserve a grounded human point of view",
+    "emotional_arc": "emotional inversion -> less feeling as the song goes on, not more -> like he runs out of reaction",
+    "genre_framework": "modern acoustic or indie-folk, minimal",
+    "production_layer": "Production layer remains conservative until clearer sonic cues are provided",
+    "structure": [
+      "Intro",
+      "Verse 1",
+      "Pre-Chorus",
+      "Chorus",
+      "Bridge",
+      "Outro"
+    ]
+  },
+  "lyrics": "[Intro]\nhalf-packed boxes\nsilence is the loudest thing\n\n[Verse 1]\nthey’re still in the same room\n- emotional inversion\n- less feeling as the song goes on, not more\n- like he runs out of reaction\nNarrator identity partially specified; preserve a grounded human point of view\n\n[Pre-Chorus]\nnobody is arguing\nthey’re still in the same room\nkeeps holdin' onto what should've gone quiet\n\n[Chorus]\nhalf-packed boxes\nkeeps sayin' he's fine plain and low\n\n[Bridge]\nAin't nobody left to blame in it\nstill does the one thing he said he'd quit\n\n[Outro]\nhalf-packed boxes\nnobody is arguing",
+  "style_prompt": "modern acoustic or indie-folk, minimal, Narrator identity partially specified; preserve a grounded human point of view, Production layer remains conservative until clearer sonic cues are provided",
+  "style_prompt_char_count": 195,
+  "validation_notes": {
+    "formatting_pass": true,
+    "style_limit_pass": true,
+    "anti_trope_pass": true,
+    "warnings": [
+      "parser_recovery: rawUserIntent=inferred, desiredDirection=normalized, possibleGenreFramework=normalized, vocalDirection=missing, instrumentationHints=missing, specialConstraints=normalized",
+      "parser_overall: recovered"
+    ]
+  }
+}

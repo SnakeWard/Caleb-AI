@@ -1,0 +1,66 @@
+{
+  "invocation": {
+    "hollow_id": "hollow.hollowcut.export_readiness_check",
+    "result": {
+      "ready": false,
+      "valid": false,
+      "status": "invalid",
+      "warning_count": 0,
+      "error_count": 5,
+      "blocking_count": 3,
+      "blockers": ["broken_asset_ref", "negative_duration", "export_profile_platform_not_in_targets"],
+      "checks": [],
+      "issues": [
+        {"path": "$.timeline_state.items[0].duration_ms", "severity": "error", "code": "negative_duration", "message": "Duration must not be negative."}
+      ],
+      "warnings": [],
+      "skipped_checks": [],
+      "summary": {
+        "project_id": "proj-export-bad",
+        "timeline_id": "tl-bad",
+        "asset_count": 0,
+        "track_count": 0,
+        "timeline_item_count": 1,
+        "export_target_count": 1,
+        "export_profile_present": true,
+        "matched_export_target_count": 0
+      },
+      "readiness_summary": {
+        "ready": false,
+        "status": "invalid",
+        "project_id": "proj-export-bad",
+        "timeline_id": "tl-bad",
+        "export_profile_present": true,
+        "export_targets_count": 1,
+        "matched_export_target_count": 0,
+        "asset_count": 0,
+        "track_count": 0,
+        "timeline_item_count": 1,
+        "blocking_count": 3,
+        "error_count": 5,
+        "warning_count": 0,
+        "skipped_check_count": 0,
+        "blocking_categories": ["asset", "timing", "export_profile"],
+        "warning_categories": [],
+        "top_blockers": ["broken_asset_ref", "negative_duration", "export_profile_platform_not_in_targets"],
+        "next_required_actions": ["Resolve unknown asset references before export.", "Fix negative timeline item durations."],
+        "unmapped_issue_codes": [],
+        "safe_to_hand_to_future_export": false,
+        "supplied_state_only": true
+      },
+      "blocking_reasons": ["broken_asset_ref", "negative_duration", "export_profile_platform_not_in_targets"],
+      "next_required_actions": ["Resolve unknown asset references before export.", "Fix negative timeline item durations."],
+      "unmapped_issue_codes": []
+    },
+    "trust_tier": "T2",
+    "provenance": {
+      "verified_return_path": true
+    }
+  },
+  "verification_result": {
+    "trust_tier": "T2",
+    "evidence_packet": {
+      "verified_return_path": true
+    }
+  }
+}

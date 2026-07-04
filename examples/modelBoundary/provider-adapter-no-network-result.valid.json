@@ -1,0 +1,93 @@
+{
+  "schema_version": "0.1.0",
+  "result_id": "result_invocation_r21_example",
+  "invocation_id": "invocation_r21_example",
+  "stub_id": "provider_adapter_no_network_stub_r21",
+  "adapter_id": "adapter_r21_no_network_stub",
+  "provider_id": "provider_neutral_no_network_stub",
+  "provider_kind": "custom_compatible",
+  "ok": false,
+  "status": "future_live_not_enabled",
+  "failure_kind": "live_provider_not_enabled",
+  "capabilities": {
+    "schema_version": "0.1.0",
+    "stub_id": "provider_adapter_no_network_stub_r21",
+    "adapter_id": "adapter_r21_no_network_stub",
+    "adapter_version": "0.1.0",
+    "provider_id": "provider_neutral_no_network_stub",
+    "provider_kind": "custom_compatible",
+    "supports_live_network": false,
+    "supports_mock_compatible_interface": true,
+    "requires_api_key": false,
+    "imports_provider_sdk": false,
+    "performs_network_call": false,
+    "stores_raw_prompt": false,
+    "stores_raw_output": false,
+    "writes_ledger_directly": false,
+    "max_output_trust_tier": "T1",
+    "created_at": "2026-07-03T13:09:30.000Z",
+    "notes": [
+      "Offline no-network stub capabilities."
+    ]
+  },
+  "health": {
+    "schema_version": "0.1.0",
+    "stub_id": "provider_adapter_no_network_stub_r21",
+    "adapter_id": "adapter_r21_no_network_stub",
+    "provider_id": "provider_neutral_no_network_stub",
+    "status": "future_live_not_enabled",
+    "live_network_available": false,
+    "provider_sdk_available": false,
+    "api_key_available": false,
+    "mock_compatible_interface_available": true,
+    "checked_at": "2026-07-03T13:09:30.000Z",
+    "warnings": [
+      "Live provider behavior is not enabled in R21."
+    ],
+    "errors": []
+  },
+  "trust_summary": {
+    "stub_execution_promotes_trust": false,
+    "stub_availability_promotes_trust": false,
+    "provider_identity_promotes_trust": false,
+    "successful_provider_response_promotes_trust": false,
+    "provider_output_is_deterministic_evidence": false,
+    "raw_provider_output_trust_tier": "T0",
+    "schema_valid_provider_output_trust_tier": "T1",
+    "max_allowed_output_trust_tier": "T1",
+    "ledger_presence_promotes_trust": false,
+    "storage_promotes_trust": false,
+    "retrieval_promotes_trust": false,
+    "verified_final_truth_claimed": false,
+    "requires_hollow_verification_for_t2": true,
+    "notes": [
+      "Stub refusal is not model evidence."
+    ]
+  },
+  "safety_summary": {
+    "redaction_required": true,
+    "redaction_result_required": true,
+    "safety_profile_required": true,
+    "raw_prompt_blocked": true,
+    "raw_output_blocked": true,
+    "api_key_blocked": true,
+    "secrets_blocked": true,
+    "env_values_blocked": true,
+    "credentials_blocked": true,
+    "no_network_enforced": true,
+    "no_provider_sdk_enforced": true,
+    "no_ledger_write_enforced": true,
+    "no_file_write_enforced": true,
+    "notes": [
+      "R21 stub returns refs, status, and summaries only."
+    ]
+  },
+  "warnings": [
+    "R21 no-network stub refused live provider execution."
+  ],
+  "errors": [],
+  "created_at": "2026-07-03T13:09:30.000Z",
+  "notes": [
+    "No provider output, fake model text, SDK call, network call, Ledger write, or file write was produced."
+  ]
+}

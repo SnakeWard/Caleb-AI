@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "project_name": "Invalid Missing Project ID Demo",
+  "created_at": "2026-06-07T00:00:00.000Z",
+  "updated_at": "2026-06-07T00:00:00.000Z",
+  "project_root": ".",
+  "assets": [],
+  "timeline": {
+    "timeline_id": "timeline_invalid_missing_project_id",
+    "duration_ms": 0,
+    "fps": 30,
+    "width": 1920,
+    "height": 1080,
+    "aspect_ratio": "16:9",
+    "items": []
+  },
+  "tracks": [],
+  "captions": [],
+  "narration": {
+    "script": "",
+    "voice_profile": null,
+    "estimated_duration_ms": null,
+    "audio_asset_id": null,
+    "evidence_refs": []
+  },
+  "export_targets": [],
+  "validation_state": {
+    "last_validated_at": null,
+    "validation_status": "not_validated",
+    "checks": [],
+    "warnings": [],
+    "errors": [],
+    "evidence_refs": [],
+    "report_refs": []
+  },
+  "ledger_refs": [],
+  "artifact_refs": [],
+  "provenance": {
+    "fixture_type": "invalid_static_planning_example",
+    "trusted_evidence": false
+  }
+}

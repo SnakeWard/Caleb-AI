@@ -1,0 +1,16 @@
+{
+  "task_id": "task_demo_003",
+  "run_id": "run_demo_003",
+  "trace_id": "trace_demo_003",
+  "task_type": "recovery",
+  "description": "Recover from a failed synthesis pass that produced a contradictory output.",
+  "input_summary": "Prior run failed verification. Recovery path required before re-attempting synthesis.",
+  "requested_by": "cli-demo",
+  "requires_code_mutation": false,
+  "signal_hints": {
+    "prior_failure": 2,
+    "contradiction_risk": 1,
+    "audit_need": 2
+  },
+  "created_at": "2026-06-12T00:00:00.000Z"
+}

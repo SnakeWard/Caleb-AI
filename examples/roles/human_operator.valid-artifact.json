@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_id": "role_artifact_fixture_human_operator_001",
+  "artifact_type": "human_decision",
+  "role_id": "human_operator",
+  "task_id": "task_role_fixture_001",
+  "run_id": "run_role_fixture_001",
+  "trace_id": "trace_role_fixture_001",
+  "context_id": "context_role_fixture_001",
+  "summary": "Human operator fixture artifact recording a bounded human decision shape.",
+  "claims": [
+    {
+      "claim_id": "claim_human_operator_001",
+      "text": "A human decision artifact can be represented without authenticated approval runtime.",
+      "evidence_ref_ids": ["evidence_human_operator_001"]
+    }
+  ],
+  "assumptions": ["This fixture is not an authenticated approval."],
+  "constraints": ["No authenticated approval flow is added in R2."],
+  "open_questions": [],
+  "recommendations": ["Use as a static contract fixture only."],
+  "evidence_refs": [
+    {
+      "ref_id": "evidence_human_operator_001",
+      "ref_type": "human_input",
+      "description": "Static human operator fixture artifact."
+    }
+  ],
+  "confidence": 1,
+  "handoff_notes": ["No runtime handoff is executed."],
+  "required_next_role": null,
+  "acceptance_status": "accepted",
+  "created_at": "2026-06-13T00:00:00.000Z",
+  "telemetry_trace_ref": {
+    "trace_id": "trace_role_fixture_001",
+    "context_id": "context_role_fixture_001"
+  },
+  "execution_context_ref": {
+    "context_id": "context_role_fixture_001"
+  },
+  "warnings": []
+}

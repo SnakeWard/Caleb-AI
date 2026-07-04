@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.1.0",
+  "stub_id": "one_provider_no_network_stub",
+  "adapter_id": "first_provider_adapter_no_network_stub",
+  "provider_slot_id": "first_provider_slot",
+  "status": "future_live_not_enabled",
+  "config_contract_available": true,
+  "config_valid": true,
+  "live_provider_enabled": false,
+  "network_available": false,
+  "provider_sdk_available": false,
+  "api_key_value_available": false,
+  "process_env_read": false,
+  "provider_selected": false,
+  "provider_allowlisted": false,
+  "opt_in_present": false,
+  "checked_at": "2026-07-03T00:00:00.000Z",
+  "warnings": [],
+  "errors": [],
+  "notes": [
+    "Health is derived from supplied config only."
+  ]
+}

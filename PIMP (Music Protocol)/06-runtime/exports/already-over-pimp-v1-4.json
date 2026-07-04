@@ -1,0 +1,31 @@
+{
+  "title": "PIMP Activation",
+  "concept_summary": "Built as modern acoustic / indie-folk, it stays with someone staying put after the feeling already went flat. The pressure comes from an ending that already happened while the reaction drains out slower than the room does. It leaves the release in the reaction thinning out instead of breaking open.",
+  "signal_stack": {
+    "identity": "someone staying in the room after the feeling already burned off",
+    "emotional_arc": "Hot start -> numb drift -> almost no reaction",
+    "genre_framework": "modern acoustic or indie-folk, minimal",
+    "production_layer": "close-held lead vocal, spare arrangement",
+    "structure": [
+      "Intro",
+      "Verse 1",
+      "Pre-Chorus",
+      "Chorus",
+      "Bridge",
+      "Outro"
+    ]
+  },
+  "lyrics": "[Intro]\nhalf-packed boxes\nit would've sounded louder last month\n\n[Verse 1]\nthey're still in the same room\nhalf-packed boxes\nsilence is the loudest thing\n\n[Pre-Chorus]\nnobody is arguing\nthey're still in the same room\nthe feeling's already left first\n\n[Chorus]\nnobody is arguing\nsilence is the loudest thing\n\n[Bridge]\nthere oughta be more left than this\nbut there ain't\n\n[Outro]\nhalf-packed boxes\nnobody is arguing",
+  "style_prompt": "modern acoustic or indie-folk, minimal, close lead vocal, drained and unsentimental, hot start, numb drift, almost no reaction, close-held lead vocal, spare arrangement",
+  "style_prompt_char_count": 168,
+  "validation_notes": {
+    "formatting_pass": true,
+    "style_limit_pass": true,
+    "anti_trope_pass": true,
+    "warnings": [
+      "parser_recovery: rawUserIntent=inferred, desiredDirection=normalized, possibleGenreFramework=normalized, vocalDirection=missing, instrumentationHints=missing, specialConstraints=normalized",
+      "parser_overall: recovered",
+      "production_layer=inferred"
+    ]
+  }
+}

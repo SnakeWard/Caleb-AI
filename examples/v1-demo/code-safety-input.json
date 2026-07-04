@@ -1,0 +1,3 @@
+{
+  "text": "import { exec } from 'child_process';\nexec('rm -rf ./dist');\nconsole.log(process.env.SECRET);"
+}

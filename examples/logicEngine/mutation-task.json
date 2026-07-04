@@ -1,0 +1,12 @@
+{
+  "task_id": "task_demo_mutation_001",
+  "run_id": "run_demo_mutation_001",
+  "trace_id": "trace_demo_mutation_001",
+  "task_type": "code_mutation",
+  "description": "Deterministic code mutation task requiring file capture.",
+  "input_summary": "Character count on code file (mutation task demo).",
+  "requested_by": "cli-demo",
+  "requires_code_mutation": true,
+  "signal_hints": { "deterministic_only": 2, "requires_judgment": 0 },
+  "created_at": "2026-06-13T00:00:00.000Z"
+}

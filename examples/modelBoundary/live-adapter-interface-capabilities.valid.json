@@ -1,0 +1,32 @@
+{
+  "schema_version": "0.1.0",
+  "interface_id": "live_adapter_interface_r20_mock_compatible",
+  "interface_kind": "mock_compatible_live_adapter_interface",
+  "adapter_id": "adapter_r20_mock_compatible",
+  "adapter_version": "0.1.0",
+  "supported_route_modes": [
+    "single_pass"
+  ],
+  "supported_provider_kinds": [
+    "openai_compatible",
+    "anthropic_compatible",
+    "google_compatible",
+    "xai_compatible",
+    "local_compatible",
+    "custom_compatible"
+  ],
+  "supports_live_network": false,
+  "supports_mock_invocation": true,
+  "requires_api_key": false,
+  "imports_provider_sdk": false,
+  "performs_network_call": false,
+  "stores_raw_prompt": false,
+  "stores_raw_output": false,
+  "writes_ledger_directly": false,
+  "max_output_trust_tier": "T1",
+  "created_at": "2026-07-03T12:40:00.000Z",
+  "notes": [
+    "R20 defines a mock-compatible interface seam only.",
+    "No live provider behavior is enabled."
+  ]
+}

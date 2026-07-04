@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PIMP Song Input",
+  "type": "object",
+  "required": [
+    "title",
+    "concept"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Song title or working title."
+    },
+    "concept": {
+      "type": "string",
+      "description": "Core idea or song concept in natural language."
+    },
+    "genre_target": {
+      "type": "string",
+      "description": "Primary genre or fusion direction."
+    },
+    "emotional_goal": {
+      "type": "string",
+      "description": "Desired emotional tone or movement."
+    },
+    "narrator_identity": {
+      "type": "string",
+      "description": "Who is speaking and from what stance."
+    },
+    "dominant_tension": {
+      "type": "string",
+      "description": "Primary unresolved emotional or narrative pressure."
+    },
+    "release_goal": {
+      "type": "string",
+      "description": "Desired payoff, resolution, collapse, or revelation."
+    },
+    "vocal_direction": {
+      "type": "string",
+      "description": "Vocal tone, style, or delivery notes."
+    },
+    "instrumentation": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key instruments or arrangement cues."
+    },
+    "special_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Special rules or user constraints."
+    }
+  },
+  "additionalProperties": false
+}

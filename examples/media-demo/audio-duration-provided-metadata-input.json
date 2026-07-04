@@ -1,0 +1,8 @@
+{
+  "expected_media_type": "audio",
+  "metadata_hint": {
+    "duration_ms": 123456,
+    "codec_hint": "mp3",
+    "container_hint": "mp3"
+  }
+}

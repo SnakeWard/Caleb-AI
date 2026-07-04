@@ -1,0 +1,14 @@
+{
+  "kill_switch_required": true,
+  "kill_switch_env_var_name": "CALEB_DISABLE_LIVE_PROVIDER",
+  "kill_switch_value_required_for_live": "false",
+  "kill_switch_value_present": false,
+  "kill_switch_value_read": false,
+  "kill_switch_enabled_by_default": false,
+  "kill_switch_allows_live_execution": false,
+  "kill_switch_blocks_live_execution": true,
+  "kill_switch_promotes_trust": false,
+  "notes": [
+    "Kill switch value is not read."
+  ]
+}

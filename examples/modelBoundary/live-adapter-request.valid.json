@@ -1,0 +1,38 @@
+{
+  "schema_version": "0.1.0",
+  "task_id": "task_live_adapter_001",
+  "run_id": "run_live_adapter_001",
+  "request_id": "request_live_adapter_001",
+  "route_mode": "single_pass",
+  "provider_id": "provider.neutral.example",
+  "provider_kind": "custom_compatible",
+  "adapter_id": "adapter.neutral.example",
+  "adapter_version": "0.1.0",
+  "prompt_ref": {
+    "prompt_ref_id": "prompt_ref_live_adapter_001",
+    "prompt_digest": "sha256:prompt_digest",
+    "prompt_storage_kind": "digest_only",
+    "raw_prompt_included": false
+  },
+  "redacted_prompt_digest": "sha256:redacted_prompt_digest",
+  "context_refs": [],
+  "evidence_refs": [],
+  "constraints": {
+    "no_raw_ledger_text": true
+  },
+  "limits": {
+    "timeout_ms": 30000,
+    "max_output_tokens": 1024,
+    "retry_count": 0,
+    "temperature_allowed": false,
+    "streaming_allowed": false
+  },
+  "safety_profile": {
+    "safety_profile_id": "safety.r18.default",
+    "redaction_required": true,
+    "raw_transcript_storage_allowed": false,
+    "ledger_raw_prompt_allowed": false,
+    "ledger_raw_output_allowed": false
+  },
+  "created_at": "2026-07-03T05:13:00.000Z"
+}

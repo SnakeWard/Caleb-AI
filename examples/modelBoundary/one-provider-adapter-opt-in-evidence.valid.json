@@ -1,0 +1,74 @@
+{
+  "schema_version": "0.1.0",
+  "evidence_id": "one_provider_adapter_opt_in_evidence_example",
+  "harness_id": "one_provider_adapter_opt_in_harness",
+  "env_flag_ref": {
+    "env_var_name": "CALEB_ENABLE_LIVE_PROVIDER",
+    "env_var_value_required": "true",
+    "env_var_value_present": false,
+    "env_var_value_read": false,
+    "env_var_value_stored": false,
+    "env_var_value_logged": false,
+    "env_var_value_written_to_ledger": false,
+    "env_var_value_written_to_storage": false,
+    "env_var_name_promotes_trust": false,
+    "notes": [
+      "Name only; value not read."
+    ]
+  },
+  "command_flag": {
+    "command_flag_required": true,
+    "command_flag_name": "--enable-live-provider",
+    "command_flag_present": false,
+    "command_flag_source": "static_fixture",
+    "command_flag_promotes_trust": false,
+    "notes": [
+      "Command flag absent by default."
+    ]
+  },
+  "allowlist": {
+    "provider_allowlist_required": true,
+    "provider_id": "first_provider_placeholder",
+    "provider_kind": "placeholder",
+    "provider_allowlist_present": false,
+    "provider_allowlisted": false,
+    "provider_allowlist_source": "static_fixture",
+    "provider_allowlist_promotes_trust": false,
+    "provider_not_allowlisted_failure_kind": "provider_not_allowlisted",
+    "notes": [
+      "Allowlist does not promote trust."
+    ]
+  },
+  "adapter_id": {
+    "adapter_id_required": true,
+    "adapter_id": "first_provider_adapter_no_network_stub",
+    "adapter_id_present": true,
+    "adapter_id_allowed": false,
+    "adapter_id_promotes_trust": false,
+    "adapter_id_missing_failure_kind": "adapter_id_missing",
+    "notes": [
+      "Adapter id data does not enable live execution."
+    ]
+  },
+  "api_key_availability": {
+    "api_key_required_for_live": true,
+    "api_key_env_var_name": "CALEB_ONE_PROVIDER_API_KEY",
+    "api_key_env_var_name_is_secret": false,
+    "api_key_value_present": false,
+    "api_key_value_read": false,
+    "api_key_value_stored": false,
+    "api_key_value_logged": false,
+    "api_key_value_written_to_ledger": false,
+    "api_key_value_written_to_storage": false,
+    "api_key_value_available_for_r26": false,
+    "api_key_presence_promotes_trust": false,
+    "missing_api_key_failure_kind": "missing_api_key",
+    "notes": [
+      "API key value is unavailable and unread."
+    ]
+  },
+  "created_at": "2026-07-03T00:00:00.000Z",
+  "notes": [
+    "Static R26 opt-in evidence only."
+  ]
+}

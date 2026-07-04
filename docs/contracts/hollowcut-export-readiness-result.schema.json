@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://caleb-ai.example/schemas/hollowcut-export-readiness-result.schema.json",
+  "title": "Hollowcut Export Readiness Check Result",
+  "description": "Stable contract for the result returned by hollow.hollowcut.export_readiness_check. This is the consumer shape for future UI/export-engine. The Hollow is supplied-state-only and performs deterministic structural validation only.",
+  "type": "object",
+  "required": [
+    "ready",
+    "valid",
+    "status",
+    "checks",
+    "issues",
+    "warnings",
+    "blockers",
+    "blocking_count",
+    "skipped_checks",
+    "summary",
+    "readiness_summary",
+    "blocking_reasons",
+    "next_required_actions",
+    "unmapped_issue_codes"
+  ],
+  "properties": {
+    "ready": { "type": "boolean", "description": "True if no error-severity issues (blocking_count === 0 and no errors)." },
+    "valid": { "type": "boolean", "description": "Alias/synonym for ready in current contract." },
+    "status": { "type": "string", "enum": ["valid", "warnings", "invalid"], "description": "High-level status. Normalized in readiness_summary.status to ready/ready_with_warnings/not_ready/invalid." },
+    "warning_count": { "type": "integer", "minimum": 0 },
+    "error_count": { "type": "integer", "minimum": 0 },
+    "blocking_count": { "type": "integer", "minimum": 0 },
+    "blockers": { "type": "array", "items": { "type": "string" } },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check_id", "label", "status", "severity"],
+        "properties": {
+          "check_id": { "type": "string" },
+          "label": { "type": "string" },
+          "status": { "type": "string" },
+          "severity": { "type": "string", "enum": ["info", "warning", "error"] }
+        }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "severity", "code", "message"],
+        "properties": {
+          "path": { "type": "string" },
+          "severity": { "type": "string", "enum": ["warning", "error"] },
+          "code": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "object" } },
+    "skipped_checks": { "type": "array", "items": { "type": "string" } },
+    "summary": {
+      "type": "object",
+      "description": "Legacy summary. Must remain for backward compatibility.",
+      "required": ["project_id", "timeline_id", "asset_count", "track_count", "timeline_item_count", "export_target_count", "export_profile_present", "matched_export_target_count"],
+      "properties": {
+        "project_id": { "type": ["string", "null"] },
+        "timeline_id": { "type": ["string", "null"] },
+        "asset_count": { "type": "integer" },
+        "track_count": { "type": "integer" },
+        "timeline_item_count": { "type": "integer" },
+        "export_target_count": { "type": "integer" },
+        "export_profile_present": { "type": "boolean" },
+        "matched_export_target_count": { "type": "integer" },
+        "matched_target_platforms": { "type": "array", "items": { "type": "string" } },
+        "warning_count": { "type": "integer" },
+        "error_count": { "type": "integer" },
+        "blocking_count": { "type": "integer" },
+        "alignment_error_count": { "type": "integer" },
+        "alignment_warning_count": { "type": "integer" }
+      }
+    },
+    "readiness_summary": {
+      "type": "object",
+      "description": "Primary deterministic rollup for consumers. All fields listed are required.",
+      "required": [
+        "ready", "status", "project_id", "timeline_id", "export_profile_present",
+        "export_targets_count", "matched_export_target_count",
+        "asset_count", "track_count", "timeline_item_count",
+        "blocking_count", "error_count", "warning_count", "skipped_check_count",
+        "blocking_categories", "warning_categories", "top_blockers",
+        "next_required_actions", "unmapped_issue_codes",
+        "safe_to_hand_to_future_export", "supplied_state_only"
+      ],
+      "properties": {
+        "ready": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["ready", "ready_with_warnings", "not_ready", "invalid"] },
+        "project_id": { "type": ["string", "null"] },
+        "timeline_id": { "type": ["string", "null"] },
+        "export_profile_present": { "type": "boolean" },
+        "export_targets_count": { "type": "integer", "minimum": 0 },
+        "matched_export_target_count": { "type": "integer", "minimum": 0 },
+        "asset_count": { "type": "integer", "minimum": 0 },
+        "track_count": { "type": "integer", "minimum": 0 },
+        "timeline_item_count": { "type": "integer", "minimum": 0 },
+        "blocking_count": { "type": "integer", "minimum": 0 },
+        "error_count": { "type": "integer", "minimum": 0 },
+        "warning_count": { "type": "integer", "minimum": 0 },
+        "skipped_check_count": { "type": "integer", "minimum": 0 },
+        "blocking_categories": { "type": "array", "items": { "type": "string" } },
+        "warning_categories": { "type": "array", "items": { "type": "string" } },
+        "top_blockers": { "type": "array", "items": { "type": "string" } },
+        "next_required_actions": { "type": "array", "items": { "type": "string" }, "description": "Deterministic strings derived ONLY from known codes in NEXT_ACTION_MAP. Never invented." },
+        "unmapped_issue_codes": { "type": "array", "items": { "type": "string" }, "description": "Codes not present in the known action map. Must not generate invented advice." },
+        "safe_to_hand_to_future_export": {
+          "type": "boolean",
+          "description": "True ONLY when ready===true && valid===true && blocking_count===0 && error_count===0. Warnings may coexist with ready_with_warnings per existing contract."
+        },
+        "supplied_state_only": { "type": "boolean", "const": true }
+      }
+    },
+    "blocking_reasons": { "type": "array", "items": { "type": "string" } },
+    "next_required_actions": { "type": "array", "items": { "type": "string" } },
+    "unmapped_issue_codes": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,31 @@
+{
+  "title": "PIMP Activation",
+  "concept_summary": "Built as americana with country storytelling, it stays with narrator identity partially specified, preserve a grounded human point of view. The pressure comes from unresolved pressure that remains only partially specified. It leaves the release in intentional restraint while the source detail stays limited.",
+  "signal_stack": {
+    "identity": "Narrator identity partially specified; preserve a grounded human point of view",
+    "emotional_arc": "moral ambiguity -> no clear side -> no judgment tone",
+    "genre_framework": "Americana with country storytelling",
+    "production_layer": "guitar-led bed",
+    "structure": [
+      "Intro",
+      "Verse 1",
+      "Pre-Chorus",
+      "Chorus",
+      "Bridge",
+      "Outro"
+    ]
+  },
+  "lyrics": "[Intro]\nlate-night drive\nboth knew better\n\n[Verse 1]\nhands on the steering wheel too tight\n- late-night drive\n- hands on the steering wheel too tight\n- phone lighting up but ignored\n- both knew better\nNarrator identity partially specified; preserve a grounded human point of view\n\n[Pre-Chorus]\nphone lighting up but ignored\nhands on the steering wheel too tight\nkeeps holdin' onto what should've gone quiet\n\n[Chorus]\nlate-night drive\nkeeps sayin' he's fine plain and low\n\n[Bridge]\nAin't nobody left to blame in it\nstill does the one thing he said he'd quit\n\n[Outro]\nlate-night drive\nphone lighting up but ignored",
+  "style_prompt": "americana with country storytelling, Narrator identity partially specified; preserve a grounded human point of view, guitar-led bed",
+  "style_prompt_char_count": 131,
+  "validation_notes": {
+    "formatting_pass": true,
+    "style_limit_pass": true,
+    "anti_trope_pass": true,
+    "warnings": [
+      "parser_recovery: rawUserIntent=inferred, desiredDirection=normalized, possibleGenreFramework=normalized, vocalDirection=missing, instrumentationHints=missing, specialConstraints=normalized",
+      "parser_overall: recovered",
+      "production_layer=inferred"
+    ]
+  }
+}

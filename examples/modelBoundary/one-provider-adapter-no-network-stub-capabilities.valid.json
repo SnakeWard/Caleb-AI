@@ -1,0 +1,26 @@
+{
+  "schema_version": "0.1.0",
+  "stub_id": "one_provider_no_network_stub",
+  "adapter_id": "first_provider_adapter_no_network_stub",
+  "adapter_version": "0.1.0",
+  "provider_slot_id": "first_provider_slot",
+  "provider_id": "first_provider_placeholder",
+  "provider_kind": "placeholder",
+  "consumes_config_contract": true,
+  "supports_no_network_invocation": true,
+  "supports_live_network": false,
+  "supports_provider_sdk": false,
+  "requires_api_key_value": false,
+  "reads_process_env": false,
+  "reads_api_key_value": false,
+  "performs_network_call": false,
+  "writes_ledger": false,
+  "writes_files": false,
+  "returns_provider_output": false,
+  "returns_fake_success": false,
+  "max_output_trust_tier": "T1",
+  "created_at": "2026-07-03T00:00:00.000Z",
+  "notes": [
+    "Offline config-consuming stub only."
+  ]
+}

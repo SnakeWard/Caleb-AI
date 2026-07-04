@@ -1,0 +1,32 @@
+{
+  "title": "The Whistler: Outlaw Gunman",
+  "concept_summary": "A dark Americana outlaw ballad about a cold, methodical gunman returning to settle an old score. The identity is controlled and menacing, the dominant tension is revenge carried with patience rather than rage, and the release comes through inevitable violence and the haunting whistle that frames the story.",
+  "signal_stack": {
+    "identity": "Calm outlaw narrator; hardened, watchful, emotionally withheld, dangerous by implication",
+    "emotional_arc": "Silent approach -> memory of wrong -> tightening threat -> violent reckoning -> ghostly aftermath",
+    "genre_framework": "Dark Americana folk country with old-country outlaw influence and cinematic frontier tension",
+    "production_layer": "Sparse acoustic guitar, low upright bass, brushed snare, tremolo guitar accents, whistle motif, dry vocal, shadowy space",
+    "structure": [
+      "Intro",
+      "Verse 1",
+      "Verse 2",
+      "Pre-Chorus",
+      "Chorus",
+      "Verse 3",
+      "Bridge",
+      "Final Chorus",
+      "Outro"
+    ]
+  },
+  "lyrics": "[Intro]\n(lonesome whistling, dry acoustic guitar)\n(bootsteps in dirt)\n\n[Verse 1]\nTown went quiet when I crossed the ridge,\ndust on my hat brim, heel on the bridge\nno one asked nothin', no one waved me in,\nthey'd all heard the name of the man I'd come for then\n\n[Verse 2]\nHe took mine mean, took 'em quick, took 'em cheap,\nleft one in the yard and the others buried deep\nI carried that day like a nail through bone,\nnow the whistle hits the wind when I ain't alone\n\n[Pre-Chorus]\nStorefront glass and a dead sun sinkin',\nhis men kept laughin', but I saw 'em thinkin'\none of 'em muttered, \"best let him pass,\"\nsome men keep breathin' long past their day\n\n[Chorus]\nI am the whistler, low and thin,\none note by the feed store and heads start turnin',\nboots in the road dust, hand down by my side,\nand every face in town knew why I'd come\n\n[Verse 3]\nHe stepped out smilin' like he still owned time,\ngold in his teeth and a hand near his side\nsaid my name easy like we were old friends,\nthen he saw I came to finish what he started back then\n\n[Bridge]\n(snare pulse rises, tremolo guitar deepens)\nFirst shot cracked and the horses pulled,\nsecond one dropped him where the road turned dull\nthird one was mercy, if mercy counts,\nthen the whole town went still but for the horses snortin'\n\n[Final Chorus]\nI am the whistler, low and thin,\nwind through the feed store, rattlin' the tin,\nhe went down hard by the hitchin' post,\nand nobody said a word when I turned and left him there\n\n[Outro]\n(lonesome whistling returns)\n(tremolo guitar fades into dry night air)",
+  "style_prompt": "Dark Americana folk country with old-country outlaw energy, low weathered male vocal delivered with calm menace, sparse acoustic guitar, upright bass, brushed snare, tremolo guitar accents, lonesome whistle motif at beginning and end, dry intimate mix, cinematic frontier tension, story-driven revenge ballad, dusty and shadowed atmosphere, restrained dynamics with violent payoff, grounded language, no cartoon outlaw swagger, cold deliberate pacing, haunting aftermath, no overexplained revenge backstory, sharp grounded language",
+  "style_prompt_char_count": 531,
+  "validation_notes": {
+    "formatting_pass": true,
+    "style_limit_pass": true,
+    "anti_trope_pass": true,
+    "warnings": [
+      "none"
+    ]
+  }
+}
