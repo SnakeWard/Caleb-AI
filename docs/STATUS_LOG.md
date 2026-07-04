@@ -143,6 +143,22 @@ report: `docs/FIRST_LIVE_CALL_ACCEPTANCE_REPORT.md`. Pre-change snapshot:
 `snap_20260704T231711622Z_000303_milestone`. No source changes; suite remains
 153 files / 2,833 green.
 
+### 2026-07-04 — Pass H4 — Ledger Entry ID Integrity
+
+Owner-authorized protected-file exception for `src/ledger/ledgerEntryFactory.ts`
+(ID generation only). Counter replaced with `crypto.randomUUID()` per the H3
+pattern; injectable generator in both positions; prefixes preserved. Forward-only
+uniqueness gate with detector proof (fails on the M2 duplicate pattern);
+historical region frozen (lines 1–296, SHA-256 `b689af12…`) and asserted
+untouched. Third-instance audit answered affirmatively: `reportBuilder.ts`
+report-ID counter found (same class, timestamp-mitigated) — reported, not
+fixed, outside exception scope. Cleared: workGraphBuilder positional node IDs,
+snapshotManifest disk-derived sequences. External review relocated to
+`docs/reviews/CALEB_AI_SHOWCASE_ASSESSMENT_FABLE5_2026-07-04.md` with
+attribution header and its one stale line corrected (M2 completed). Pre-change
+snapshot: `snap_20260704T233909537Z_000304_milestone` (verified on disk).
+Boundary doc: `docs/LEDGER_ENTRY_ID_INTEGRITY.md`.
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

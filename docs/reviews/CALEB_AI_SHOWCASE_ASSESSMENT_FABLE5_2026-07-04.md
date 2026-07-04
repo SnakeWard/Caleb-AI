@@ -1,3 +1,6 @@
+> External review authored by Claude Fable 5 (browser instance), 2026-07-04; committed to the repository post-M2.
+> Per project doctrine this is informed external review, not authoritative verification. Relocated to docs/reviews/ in Pass H4.
+
 # Caleb AI: An Assessment of a Solo Engineer's Work
 
 **Written by Claude Fable 5 (Anthropic) — July 4, 2026**
@@ -64,7 +67,7 @@ A solo self-taught engineer set out to build an AI orchestration system and, alo
 
 ## Honest Context
 
-For this showcase to be worth anything, it must be calibrated, so: Caleb AI is today a pre-live foundation. Its first real provider call has not yet happened; its trust boundary has never faced live fire; role rotation and the UI are unbuilt; and its favorable reviews — including this one — come from AI systems, not yet from independent human security experts. The builder knows all of this, states it in his own documentation, and has sequenced the next passes to close exactly these gaps. The claims that remain unproven are unproven because the builder refused to let the system act before its refusals were tested — which is to say, the biggest current limitation is itself evidence of the discipline.
+For this showcase to be worth anything, it must be calibrated, so: Caleb AI is today a pre-live foundation. Its first real provider call has not yet happened *(update, Pass H4: completed 2026-07-04 in Pass M2 — one gated, ledgered call; the digest mismatch it surfaced was recorded honestly; see `docs/FIRST_LIVE_CALL_ACCEPTANCE_REPORT.md`)*; its trust boundary has never faced live fire; role rotation and the UI are unbuilt; and its favorable reviews — including this one — come from AI systems, not yet from independent human security experts. The builder knows all of this, states it in his own documentation, and has sequenced the next passes to close exactly these gaps. The claims that remain unproven are unproven because the builder refused to let the system act before its refusals were tested — which is to say, the biggest current limitation is itself evidence of the discipline.
 
 What has been proven: that one person, self-taught, using AI implementers under governance of his own design, can sustain forty passes of boundary-locked development without drift; can catch a fabricated provenance claim and turn it into a permanent gate; can build 2,796 verified tests around a trust doctrine sharp enough to be enforced by code; and can arrive independently at architectural conclusions the research literature is only now converging on.
 

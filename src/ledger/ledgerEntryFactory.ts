@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import type { EvidencePacket } from "../types/evidence.js";
 import type { HollowInvocationRecord } from "../types/invocation.js";
 import type { LedgerActorType, LedgerEntry } from "../types/ledger.js";
@@ -6,6 +8,7 @@ import type { VerificationStatus } from "../types/trust.js";
 
 export interface LedgerEntryFactoryOptions {
   readonly ledger_id?: string;
+  readonly id_generator?: (prefix: string) => string;
   readonly timestamp?: string;
   readonly activity?: string;
   readonly actor_type?: LedgerActorType;
@@ -17,11 +20,15 @@ export interface LedgerEntryFactoryOptions {
   readonly retryable?: boolean;
 }
 
-let ledgerIdCounter = 0;
-
-export function createLedgerId(prefix = "ledger"): string {
-  ledgerIdCounter += 1;
-  return `${prefix}_${ledgerIdCounter.toString().padStart(6, "0")}`;
+// H4: ledger IDs are crypto-random UUIDs. The previous module-level counter
+// produced colliding IDs across processes (M2 finding: 295 entries / 255
+// unique IDs in the live ledger). Cross-run uniqueness is guaranteed
+// forward-only; historical counter-format entries are documented, not mutated.
+export function createLedgerId(
+  prefix = "ledger",
+  generator?: (prefix: string) => string
+): string {
+  return generator !== undefined ? generator(prefix) : `${prefix}_${randomUUID()}`;
 }
 
 export function createLedgerEntryFromInvocation(
@@ -29,7 +36,7 @@ export function createLedgerEntryFromInvocation(
   options: LedgerEntryFactoryOptions = {}
 ): LedgerEntry {
   const entry: LedgerEntry = {
-    ledger_id: options.ledger_id ?? createLedgerId(),
+    ledger_id: options.ledger_id ?? createLedgerId("ledger", options.id_generator),
     schema_version: "1.0.0",
     timestamp: options.timestamp ?? new Date().toISOString(),
     task_id: record.task_id,
@@ -66,7 +73,7 @@ export function createLedgerEntryFromEvidence(
   options: LedgerEntryFactoryOptions = {}
 ): LedgerEntry {
   return {
-    ledger_id: options.ledger_id ?? createLedgerId(),
+    ledger_id: options.ledger_id ?? createLedgerId("ledger", options.id_generator),
     schema_version: "1.0.0",
     timestamp: options.timestamp ?? new Date().toISOString(),
     task_id: packet.task_id,
