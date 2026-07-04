@@ -1,3 +1,4 @@
+import { createHash, randomUUID } from "node:crypto";
 import type { JsonObject, JsonValue, Sha256Digest } from "../types/common.js";
 import type { HollowManifest } from "../types/hollow.js";
 import type { CalebError, HollowInvocationRecord } from "../types/invocation.js";
@@ -34,14 +35,13 @@ interface InvocationBase {
   readonly completed_at: string;
 }
 
-let localIdCounter = 0;
-
 export class HollowRunner {
   private readonly implementations = new Map<string, HollowImplementation>();
   private readonly default_caller: string;
   private readonly default_requested_by: string;
   private readonly default_timeout_ms: number | undefined;
   private readonly now: () => Date;
+  private readonly id_generator: (prefix: "invocation" | "task" | "run" | "trace") => string;
 
   constructor(
     private readonly registry: HollowRegistry,
@@ -52,6 +52,7 @@ export class HollowRunner {
     this.default_requested_by = options.default_requested_by ?? "Caleb AI";
     this.default_timeout_ms = options.default_timeout_ms;
     this.now = options.now ?? (() => new Date());
+    this.id_generator = options.id_generator ?? ((prefix) => `${prefix}_${randomUUID()}`);
 
     if (implementations instanceof Map) {
       for (const [hollow_id, implementation] of implementations.entries()) {
@@ -99,7 +100,8 @@ export class HollowRunner {
     }
 
     const timeoutMs = this.resolveTimeoutMs(manifest);
-    const context = this.createExecutionContext(base, timeoutMs);
+    const abortController = new AbortController();
+    const context = this.createExecutionContext(base, timeoutMs, abortController.signal);
 
     try {
       const result = await this.runWithOptionalTimeout(
@@ -109,7 +111,8 @@ export class HollowRunner {
           context
         }),
         manifest.hollow_id,
-        timeoutMs
+        timeoutMs,
+        abortController
       );
 
       return this.createSuccessRecord(base, request.input_payload, result);
@@ -133,23 +136,28 @@ export class HollowRunner {
   ): InvocationBase {
     return {
       manifest,
-      invocation_id: request.invocation_id ?? createLocalId("invocation"),
-      task_id: request.task_id ?? createLocalId("task"),
-      run_id: request.run_id ?? createLocalId("run"),
-      trace_id: request.trace_id ?? createLocalId("trace"),
+      invocation_id: request.invocation_id ?? this.id_generator("invocation"),
+      task_id: request.task_id ?? this.id_generator("task"),
+      run_id: request.run_id ?? this.id_generator("run"),
+      trace_id: request.trace_id ?? this.id_generator("trace"),
       caller: request.caller ?? this.default_caller,
       requested_by: request.requested_by ?? this.default_requested_by,
       approved_by: request.approved_by ?? null,
-      input_digest: request.input_digest ?? "sha256:unprovided",
+      input_digest: request.input_digest ?? computeInputDigest(request.input_payload),
       permissions: request.permissions ?? manifest.permissions_required,
       started_at,
       completed_at: this.timestamp()
     };
   }
 
-  private createExecutionContext(base: InvocationBase, timeoutMs: number): HollowExecutionContext {
+  private createExecutionContext(
+    base: InvocationBase,
+    timeoutMs: number,
+    abortSignal: AbortSignal
+  ): HollowExecutionContext {
     const deadline = new Date(Date.parse(base.started_at) + timeoutMs).toISOString();
     return {
+      abort_signal: abortSignal,
       invocation_id: base.invocation_id,
       task_id: base.task_id,
       run_id: base.run_id,
@@ -242,7 +250,8 @@ export class HollowRunner {
   private async runWithOptionalTimeout(
     result: Promise<HollowImplementationResult> | HollowImplementationResult,
     hollow_id: string,
-    timeoutMs: number
+    timeoutMs: number,
+    abortController: AbortController
   ): Promise<HollowImplementationResult> {
     const execution = Promise.resolve(result);
 
@@ -252,6 +261,7 @@ export class HollowRunner {
 
     return await new Promise<HollowImplementationResult>((resolve, reject) => {
       const timeout = setTimeout(() => {
+        abortController.abort();
         reject(new HollowRunnerTimeoutError(hollow_id, timeoutMs));
       }, timeoutMs);
 
@@ -396,7 +406,7 @@ export class HollowRunner {
     return {
       error_id: error.name,
       message: error.message,
-      severity: error instanceof HollowRunnerTimeoutError ? "error" : "error",
+      severity: "error",
       retryable
     };
   }
@@ -418,7 +428,20 @@ export function createHollowRunner(
   return new HollowRunner(registry, implementations, options);
 }
 
-function createLocalId(prefix: "invocation" | "task" | "run" | "trace"): string {
-  localIdCounter += 1;
-  return `${prefix}_${localIdCounter.toString().padStart(6, "0")}`;
+// Digest is over the runtime JSON serialization (JS key order), not a canonical
+// JSON form. Unserializable payloads get a sentinel digest and are then rejected
+// by the input size check, so no completed record can carry the sentinel.
+function computeInputDigest(input_payload: JsonValue): Sha256Digest {
+  let serialized: string | undefined;
+  try {
+    serialized = JSON.stringify(input_payload);
+  } catch {
+    return "sha256:unserializable";
+  }
+
+  if (serialized === undefined) {
+    return "sha256:unserializable";
+  }
+
+  return `sha256:${createHash("sha256").update(serialized).digest("hex")}`;
 }

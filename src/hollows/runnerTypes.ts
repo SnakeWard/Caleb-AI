@@ -22,6 +22,10 @@ export interface HollowExecutionContext {
   readonly approved_by: string | null;
   readonly permissions: readonly SideEffectClass[];
   readonly execution_mode: HollowExecutionMode;
+  // Aborted when the invocation timeout fires. V1 timeout is rejection plus this
+  // signal, not guaranteed cancellation: pure Hollows may ignore it, but any
+  // future side-effect-capable Hollow MUST observe it.
+  readonly abort_signal?: AbortSignal;
 }
 
 export interface HollowImplementationInput {
@@ -48,6 +52,7 @@ export interface HollowRunnerOptions {
   readonly default_requested_by?: string;
   readonly default_timeout_ms?: number;
   readonly now?: () => Date;
+  readonly id_generator?: (prefix: "invocation" | "task" | "run" | "trace") => string;
 }
 
 export interface RunHollowRequest {

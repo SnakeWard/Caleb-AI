@@ -86,6 +86,22 @@ reports. README rewritten to a stable short form (doctrine, quickstart, CLI, doc
 index); accreted/duplicated status prose removed. Docs only — no source changes.
 Pre-change snapshot: `snap_20260704T153744476Z_000294_milestone`.
 
+### 2026-07-04 — Pass H3 — Runner Integrity
+
+Owner-authorized protected-file exception for `src/hollows/runner.ts` and
+`src/hollows/runnerTypes.ts`. Four changes: (1) real SHA-256 input digests
+computed via `node:crypto` when the caller provides none (`sha256:unserializable`
+sentinel for unserializable payloads, which are then rejected before execution —
+no completed record can carry it); (2) generated IDs moved from a module-level
+counter to `crypto.randomUUID()` with an injectable `id_generator` runner option;
+(3) dead severity ternary removed; (4) `abort_signal` added to
+`HollowExecutionContext`, aborted when the invocation timeout fires (V1 timeout is
+rejection plus signal, not guaranteed cancellation). Zero dependencies added; VRP,
+trust policy, catalogs, and gate ordering untouched. New test file
+`tests/hollows/runnerIntegrity.test.ts` (+9 tests). Pre-change snapshot:
+`snap_20260704T160701614Z_000296_milestone`. Suite at pass close: 150 test files /
+2,796 tests green; typecheck and build clean.
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its
