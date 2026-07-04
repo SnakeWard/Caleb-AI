@@ -8,3 +8,5 @@ export * from "./oneProviderAdapterDryRunReport.js";
 export * from "./oneProviderAdapterDryRunCli.js";
 export * from "./livePrerequisitesTypes.js";
 export * from "./oneProviderAdapterLivePrerequisitesEvaluator.js";
+export * from "./anthropicLiveAdapterTypes.js";
+export * from "./anthropicLiveAdapter.js";

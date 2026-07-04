@@ -29,8 +29,14 @@ What exists today, all local and deterministic:
   including `export_readiness_check` — structural readiness only; no export, no
   render, no media file inspection.
 - **Role Artifact Contract Layer, runtime storage contracts, and model-boundary
-  contracts/stubs** — planning and no-network scaffolding for the future live
-  adapter. No model API call exists anywhere in this repository.
+  contracts/stubs** — the contract lattice the live adapter is built against.
+- **A live Anthropic adapter** (`src/providers/anthropicLiveAdapter.ts`, Pass
+  M1) — fetch-based, zero dependencies, disabled by default behind a full gate
+  chain (prerequisites, kill switch, caller-granted network permission, human
+  approval, caller-declared credential, mandatory ledger). Records are
+  digest-only; provider output trust is capped at T1. **No live call has been
+  made yet**; default test runs remain fully offline. See
+  `docs/ONE_PROVIDER_ADAPTER_LIVE_IMPLEMENTATION.md`.
 
 ## What V1 is not
 

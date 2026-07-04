@@ -102,6 +102,31 @@ trust policy, catalogs, and gate ordering untouched. New test file
 `snap_20260704T160701614Z_000296_milestone`. Suite at pass close: 150 test files /
 2,796 tests green; typecheck and build clean.
 
+**H3 addendum (provenance):** snapshot ID sequence gap 000294 → 000296 explained:
+`snap_20260704T154028197Z_000295_milestone` was an incidental "test-milestone"
+snapshot created by a CLI test during H2's validation suite run (15:40:28Z).
+
+### 2026-07-04 — Pass M1 — Live Adapter Implementation
+
+The live boundary pass R17–R36 prepared. New: `src/providers/anthropicLiveAdapter.ts`
+and `anthropicLiveAdapterTypes.ts` — a fetch-based (zero-dependency) Anthropic
+Messages API adapter implementing the R18 provider-neutral contracts, plus the
+explicit CLI surface `run-one-provider-adapter-live`. Gate chain before any
+network: R36 prerequisites (incl. in-process dry-run evidence, ledgered before
+the live call proceeds), kill switch, caller-granted network permission, human
+approval, allowlist, request contract validation, prompt digest integrity,
+caller-declared credential closure (`credential_auto_read` stays false — the
+adapter never reads the environment). Digest-only records; expected-output
+digest comparison is informational only, never a failure. Budgets: 64 output
+tokens, 30s timeout, 1 bounded retry, 1 MiB response guard; default model
+`claude-haiku-4-5`. Live test scaffold `*.live.test.ts` excluded from default
+runs (vitest config + acceptance guard). Boundary tests deliberately updated:
+provider allowlist +2 files; commandHandlers pinned to exactly one env read.
+`.caleb/ledger/ledger.jsonl` now tracked in git (snapshots stay ignored).
+**No live call was made in this pass.** Pre-change snapshot:
+`snap_20260704T162413397Z_000298_milestone`. Suite at pass close: 153 test
+files / 2,833 tests green; typecheck and build clean. V1 catalog 12; Hollowcut 9.
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

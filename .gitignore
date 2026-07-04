@@ -6,6 +6,7 @@ coverage/
 .env.*
 
 .caleb/ledger/*.jsonl
+!.caleb/ledger/ledger.jsonl
 .caleb/snapshots/
 .caleb/change-guard/
 .caleb/reports/

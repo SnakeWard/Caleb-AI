@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 
 import { projectInfo } from "../project/projectInfo.js";
@@ -13,7 +14,12 @@ import {
   getMediaHollowManifest,
   MEDIA_HOLLOW_MANIFESTS
 } from "../hollows/mediaHollowCatalog.js";
-import { createLedgerEntryFromEvidence, createLedgerEntryFromInvocation, JsonlLedger } from "../ledger/index.js";
+import {
+  createLedgerEntryFromEvidence,
+  createLedgerEntryFromInvocation,
+  createLedgerId,
+  JsonlLedger
+} from "../ledger/index.js";
 import { buildCalebReport, writeCalebReport } from "../reports/index.js";
 import { validateHollowcutProject } from "../hollowcut/index.js";
 import type { JsonValue, LedgerEntry } from "../types/index.js";
@@ -33,7 +39,15 @@ import { createLedgerEntryFromRouteDecision } from "../logicEngine/ledgerEmitter
 import { validateTaskFrameInput } from "../logicEngine/taskFrameValidator.js";
 import { executeWorkGraphLite } from "../logicEngine/workGraphExecutorLite.js";
 import { createTelemetryTraceCollector } from "../logicEngine/telemetryTraceCollector.js";
-import { createOneProviderAdapterDryRunCliReport } from "../providers/index.js";
+import {
+  ALLOWLISTED_LIVE_ADAPTER_IDS,
+  ALLOWLISTED_LIVE_HARNESS_IDS,
+  buildAnthropicLiveAdapterRequest,
+  createAnthropicLiveAdapter,
+  createOneProviderAdapterDryRunCliReport,
+  DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG,
+  evaluateOneProviderAdapterLivePrerequisites
+} from "../providers/index.js";
 import type {
   CliCommandName,
   CliCommandResult,
@@ -84,6 +98,8 @@ export async function handleCliCommand(parsed: ParsedCliCommand): Promise<CliCom
       return handleLogicExecuteCommand(parsed);
     case "one-provider-adapter-dry-run":
       return handleOneProviderAdapterDryRunCommand(parsed);
+    case "run-one-provider-adapter-live":
+      return handleRunOneProviderAdapterLiveCommand(parsed);
   }
 }
 
@@ -105,7 +121,8 @@ export function handleHelpCommand(): CliCommandResult {
       "caleb preview-hollowcut-export-plan (--input-json <json> | --input-file <file>) [--json] [--write-ledger] [--ledger-path <path>] [--write-report] [--report-dir <dir>] [--report-format markdown|json|both]",
       "caleb route-decision (--input-json <json> | --input-file <file>) [--json] [--write-ledger] [--ledger-path <path>]",
       "caleb logic-execute --id <hollow_id> (--input-json <json> | --input-file <file>) (--hollow-input-json <json> | --hollow-input-file <file>) [--approved-by <actor>] [--files-to-capture-json <json> | --files-to-capture-file <file>] [--json] [--include-context] [--include-trace] [--write-ledger] [--ledger-path <path>]",
-      "caleb one-provider-adapter-dry-run [--explicit-opt-in true|false] [--explicit-live-request true|false] [--json]"
+      "caleb one-provider-adapter-dry-run [--explicit-opt-in true|false] [--explicit-live-request true|false] [--json]",
+      "caleb run-one-provider-adapter-live --explicit-opt-in true --explicit-live-request true --network-permission true --kill-switch-open true --credential-env-var <ENV_VAR_NAME> --approved-by <actor> --prompt-file <file> --write-ledger [--ledger-path <path>] [--model <model_id>] [--max-output-tokens <n>] [--timeout-ms <n>] [--expected-output-sha256 <hex>] [--json]"
     ],
     note:
       "Media commands are explicit and separate from the accepted V1 catalog. Hollowcut project inspection validates project JSON only; it does not render, export, mutate, write Ledger entries, or assign trust. route-decision is a dry-run diagnostic: it classifies signals, selects a route, and builds a work graph without executing any model calls. logic-execute dispatches exactly one V1 Hollow for hollow_only routes through the Verified Return Path. --files-to-capture-json and --files-to-capture-file supply a JSON array of project-relative file paths to snapshot before dispatch; required when requires_code_mutation is true."
@@ -125,6 +142,298 @@ export function handleOneProviderAdapterDryRunCommand(parsed: ParsedCliCommand):
   return okResult("one-provider-adapter-dry-run", `One-provider adapter dry-run report: ${result.report.status}.`, {
     report: result.report
   });
+}
+
+const LIVE_SURFACE_HARNESS_ID = "run_one_provider_adapter_live_cli";
+
+interface LiveSurfaceLedgerEntryInput {
+  readonly activity: string;
+  readonly task_id: string;
+  readonly run_id: string;
+  readonly trace_id: string;
+  readonly actor_type: "orchestration_core" | "model";
+  readonly status: "completed" | "rejected" | "failed";
+  readonly result: unknown;
+  readonly parent_refs: readonly string[];
+  readonly model: string;
+}
+
+function buildLiveSurfaceLedgerEntry(input: LiveSurfaceLedgerEntryInput): LedgerEntry {
+  return {
+    ledger_id: createLedgerId(),
+    schema_version: "1.0.0",
+    timestamp: new Date().toISOString(),
+    task_id: input.task_id,
+    run_id: input.run_id,
+    trace_id: input.trace_id,
+    actor_type: input.actor_type,
+    actor_id: "anthropic_live_adapter",
+    actor_version: "0.1.0",
+    activity: input.activity,
+    status: input.status,
+    // Digest-only records by contract: no raw prompt, raw output, or key
+    // material can appear here because the adapter never emits them.
+    result: JSON.parse(JSON.stringify(input.result)) as JsonValue,
+    warnings: [],
+    errors: [],
+    artifact_hashes: [],
+    provenance: {
+      surface: "run-one-provider-adapter-live",
+      harness_id: LIVE_SURFACE_HARNESS_ID,
+      model: input.model
+    },
+    retryable: false,
+    verification_status: "unverified",
+    trust_tier: "T0",
+    parent_refs: [...input.parent_refs],
+    artifact_refs: []
+  };
+}
+
+export async function handleRunOneProviderAdapterLiveCommand(
+  parsed: ParsedCliCommand
+): Promise<CliCommandResult> {
+  const command = "run-one-provider-adapter-live" as const;
+  const usageErrors: CliErrorShape[] = [];
+
+  const flagTrue = (key: string): boolean => parsed.flags[key] === "true";
+  const explicitOptIn = flagTrue("explicit_opt_in");
+  const explicitLiveRequest = flagTrue("explicit_live_request");
+  const networkPermission = flagTrue("network_permission");
+  const killSwitchOpen = flagTrue("kill_switch_open");
+  const credentialEnvVar = stringFlag(parsed, "credential_env_var");
+  const approvedBy = stringFlag(parsed, "approved_by") ?? null;
+  const promptFile = stringFlag(parsed, "prompt_file");
+  const modelOverride = stringFlag(parsed, "model");
+  const expectedOutputSha = stringFlag(parsed, "expected_output_sha256");
+  const writeLedger = parsed.flags.write_ledger === true;
+  const ledgerPath = stringFlag(parsed, "ledger_path") ?? ".caleb/ledger/ledger.jsonl";
+
+  const maxOutputTokensFlag = stringFlag(parsed, "max_output_tokens");
+  const timeoutMsFlag = stringFlag(parsed, "timeout_ms");
+  const maxOutputTokens =
+    maxOutputTokensFlag === undefined ? undefined : Number.parseInt(maxOutputTokensFlag, 10);
+  const timeoutMs = timeoutMsFlag === undefined ? undefined : Number.parseInt(timeoutMsFlag, 10);
+
+  if (promptFile === undefined) {
+    usageErrors.push({
+      code: "missing_prompt_file",
+      message: "run-one-provider-adapter-live requires --prompt-file <path>."
+    });
+  }
+  if (!writeLedger) {
+    usageErrors.push({
+      code: "ledger_write_required",
+      message:
+        "run-one-provider-adapter-live requires --write-ledger: live invocations must be ledgered."
+    });
+  }
+  if (maxOutputTokens !== undefined && (!Number.isFinite(maxOutputTokens) || maxOutputTokens <= 0)) {
+    usageErrors.push({
+      code: "invalid_max_output_tokens",
+      message: "--max-output-tokens must be a positive integer."
+    });
+  }
+  if (timeoutMs !== undefined && (!Number.isFinite(timeoutMs) || timeoutMs <= 0)) {
+    usageErrors.push({ code: "invalid_timeout_ms", message: "--timeout-ms must be a positive integer." });
+  }
+  if (usageErrors.length > 0) {
+    return errorResult(command, "Invalid run-one-provider-adapter-live usage.", usageErrors);
+  }
+
+  let promptText: string;
+  try {
+    const fileInfo = await stat(promptFile as string);
+    if (fileInfo.size > MAX_INPUT_FILE_BYTES) {
+      return errorResult(command, "Prompt file exceeds the maximum allowed size.", [
+        { code: "prompt_file_too_large", message: `Prompt file exceeds ${MAX_INPUT_FILE_BYTES} bytes.` }
+      ]);
+    }
+    promptText = await readFile(promptFile as string, "utf8");
+  } catch (err) {
+    return errorResult(command, "Prompt file could not be read.", [
+      {
+        code: "prompt_file_unreadable",
+        message: err instanceof Error ? err.message : "Unknown prompt file read error."
+      }
+    ]);
+  }
+
+  const config = {
+    ...DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG,
+    ...(modelOverride === undefined ? {} : { model: modelOverride }),
+    limits: {
+      ...DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG.limits,
+      ...(maxOutputTokens === undefined ? {} : { max_output_tokens: maxOutputTokens }),
+      ...(timeoutMs === undefined ? {} : { timeout_ms: timeoutMs })
+    }
+  };
+
+  const runId = `live_run_${randomUUID()}`;
+  const request = buildAnthropicLiveAdapterRequest({
+    prompt_text: promptText,
+    config,
+    task_id: `live_task_${randomUUID()}`,
+    run_id: runId,
+    request_id: `live_request_${randomUUID()}`
+  });
+  const traceId = `live_trace_${randomUUID()}`;
+  const ledger = new JsonlLedger(ledgerPath);
+
+  // Correction (c): the in-process dry-run evidence is ledgered as its own
+  // entry BEFORE any live call proceeds.
+  const dryRun = createOneProviderAdapterDryRunCliReport({
+    explicit_opt_in: explicitOptIn,
+    explicit_live_request: explicitLiveRequest,
+    created_at: new Date().toISOString()
+  });
+  if (!dryRun.ok) {
+    return errorResult(command, "In-process dry-run evaluation failed.", dryRun.errors);
+  }
+
+  const dryRunEntry = buildLiveSurfaceLedgerEntry({
+    activity: "one_provider_adapter_live_dry_run_evidence",
+    task_id: request.task_id,
+    run_id: runId,
+    trace_id: traceId,
+    actor_type: "orchestration_core",
+    status: "completed",
+    result: dryRun.report,
+    parent_refs: [],
+    model: config.model
+  });
+
+  try {
+    await ledger.appendMany([dryRunEntry]);
+  } catch (err) {
+    return errorResult(command, "Ledger write failed; live call not attempted.", [
+      {
+        code: "ledger_write_failed",
+        message: err instanceof Error ? err.message : "Unknown ledger write error."
+      }
+    ]);
+  }
+
+  let repoRootConfirmed = false;
+  try {
+    await stat("package.json");
+    repoRootConfirmed = true;
+  } catch {
+    repoRootConfirmed = false;
+  }
+
+  const prerequisites = evaluateOneProviderAdapterLivePrerequisites({
+    repo_root_confirmed: repoRootConfirmed,
+    explicit_opt_in: explicitOptIn,
+    explicit_live_request: explicitLiveRequest,
+    provider_adapter_allowlisted: ALLOWLISTED_LIVE_ADAPTER_IDS.includes(config.adapter_id),
+    live_harness_allowlisted: ALLOWLISTED_LIVE_HARNESS_IDS.includes(LIVE_SURFACE_HARNESS_ID),
+    credential_source_declared_by_caller: credentialEnvVar !== undefined,
+    credential_auto_read: false,
+    network_permission_granted_by_caller: networkPermission,
+    explicit_live_command_or_flag: true,
+    dry_run_report_completed: true,
+    default_tests_non_live: true,
+    default_acceptance_non_live: true,
+    default_ci_non_live: true,
+    provider_output_trust_ceiling: "T1",
+    vrp_evidence_required_for_T2: true,
+    created_at: new Date().toISOString()
+  });
+
+  if (!prerequisites.prerequisites_met) {
+    const refusalEntry = buildLiveSurfaceLedgerEntry({
+      activity: "one_provider_adapter_live_refusal",
+      task_id: request.task_id,
+      run_id: runId,
+      trace_id: traceId,
+      actor_type: "orchestration_core",
+      status: "rejected",
+      result: prerequisites,
+      parent_refs: [dryRunEntry.ledger_id],
+      model: config.model
+    });
+    let refusalLedgerId: string | null = refusalEntry.ledger_id;
+    try {
+      await ledger.appendMany([refusalEntry]);
+    } catch {
+      refusalLedgerId = null;
+    }
+    return okResult(command, "Live invocation refused: prerequisites not met.", {
+      refused: true,
+      missing_prerequisites: prerequisites.missing_prerequisites,
+      blocking_reasons: prerequisites.blocking_reasons,
+      dry_run_ledger_id: dryRunEntry.ledger_id,
+      refusal_ledger_id: refusalLedgerId,
+      network_attempted: false,
+      ledger_path: ledgerPath
+    });
+  }
+
+  const adapter = createAnthropicLiveAdapter(
+    config,
+    {
+      prerequisites_evaluation: prerequisites,
+      kill_switch_open: killSwitchOpen,
+      network_permission_granted_by_caller: networkPermission,
+      approved_by: approvedBy
+    },
+    {
+      // The only environment read on the live path, and only because the
+      // caller explicitly declared the variable name via --credential-env-var.
+      credential_provider:
+        credentialEnvVar === undefined ? null : () => process.env[credentialEnvVar]
+    }
+  );
+
+  const result = await adapter.invokeLive({ request, prompt_text: promptText });
+
+  // Correction (a): digest comparison is informational only — a mismatch still
+  // proves the loop worked and is never treated as a failed invocation.
+  let digestMatch: boolean | null = null;
+  if (expectedOutputSha !== undefined && result.ok) {
+    const normalized = expectedOutputSha.startsWith("sha256:")
+      ? expectedOutputSha
+      : `sha256:${expectedOutputSha}`;
+    digestMatch = normalized === result.response.output_ref.output_digest;
+  }
+
+  const invocationEntry = buildLiveSurfaceLedgerEntry({
+    activity: "one_provider_adapter_live_invocation",
+    task_id: request.task_id,
+    run_id: runId,
+    trace_id: traceId,
+    actor_type: "model",
+    status: result.ok ? "completed" : "failed",
+    result,
+    parent_refs: [dryRunEntry.ledger_id],
+    model: config.model
+  });
+  let invocationLedgerId: string | null = invocationEntry.ledger_id;
+  let ledgerWriteStatus: "ok" | "failed" = "ok";
+  try {
+    await ledger.appendMany([invocationEntry]);
+  } catch {
+    invocationLedgerId = null;
+    ledgerWriteStatus = "failed";
+  }
+
+  return okResult(
+    command,
+    result.ok
+      ? `Live invocation completed: ${result.status}.`
+      : `Live invocation did not complete: ${result.status} (${result.failure.failure_kind}).`,
+    {
+      refused: false,
+      adapter_result: result,
+      digest_match: digestMatch,
+      dry_run_ledger_id: dryRunEntry.ledger_id,
+      live_invocation_ledger_id: invocationLedgerId,
+      ledger_write_status: ledgerWriteStatus,
+      ledger_path: ledgerPath,
+      model: config.model
+    }
+  );
 }
 
 export function handleInfoCommand(): CliCommandResult {

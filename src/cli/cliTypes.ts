@@ -14,7 +14,8 @@ export type CliCommandName =
   | "preview-hollowcut-export-plan"
   | "route-decision"
   | "logic-execute"
-  | "one-provider-adapter-dry-run";
+  | "one-provider-adapter-dry-run"
+  | "run-one-provider-adapter-live";
 
 export type CliOutputFormat = "text" | "json";
 

@@ -49,6 +49,10 @@ const ALLOWED_TIMELINE_HOLLOW_FILES = [
 ].sort();
 
 const ALLOWED_PROVIDER_SKELETON_FILES = [
+  // M1 (2026-07-04): live adapter files authorized by the owner-approved
+  // live-boundary pass (docs/ONE_PROVIDER_ADAPTER_LIVE_IMPLEMENTATION.md).
+  "src/providers/anthropicLiveAdapter.ts",
+  "src/providers/anthropicLiveAdapterTypes.ts",
   "src/providers/disabledByDefaultLiveHarnessScaffold.ts",
   "src/providers/dryRunReportTypes.ts",
   "src/providers/explicitOptInProviderGate.ts",

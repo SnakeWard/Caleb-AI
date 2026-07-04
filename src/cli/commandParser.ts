@@ -16,7 +16,8 @@ const COMMANDS = new Set<CliCommandName>([
   "preview-hollowcut-export-plan",
   "route-decision",
   "logic-execute",
-  "one-provider-adapter-dry-run"
+  "one-provider-adapter-dry-run",
+  "run-one-provider-adapter-live"
 ]);
 
 const VALUE_FLAGS = new Set([
@@ -33,7 +34,15 @@ const VALUE_FLAGS = new Set([
   "--files-to-capture-json",
   "--files-to-capture-file",
   "--explicit-opt-in",
-  "--explicit-live-request"
+  "--explicit-live-request",
+  "--network-permission",
+  "--kill-switch-open",
+  "--credential-env-var",
+  "--prompt-file",
+  "--model",
+  "--max-output-tokens",
+  "--timeout-ms",
+  "--expected-output-sha256"
 ]);
 
 const BOOLEAN_FLAGS = new Set([
@@ -65,7 +74,15 @@ const FLAG_TO_KEY: Record<string, string> = {
   "--files-to-capture-json": "files_to_capture_json",
   "--files-to-capture-file": "files_to_capture_file",
   "--explicit-opt-in": "explicit_opt_in",
-  "--explicit-live-request": "explicit_live_request"
+  "--explicit-live-request": "explicit_live_request",
+  "--network-permission": "network_permission",
+  "--kill-switch-open": "kill_switch_open",
+  "--credential-env-var": "credential_env_var",
+  "--prompt-file": "prompt_file",
+  "--model": "model",
+  "--max-output-tokens": "max_output_tokens",
+  "--timeout-ms": "timeout_ms",
+  "--expected-output-sha256": "expected_output_sha256"
 };
 
 export function parseCliArgs(argv: readonly string[]): ParsedCliCommand {
@@ -309,6 +326,31 @@ export function parseCliArgs(argv: readonly string[]): ParsedCliCommand {
         errors.push({
           code: "unsupported_flag",
           message: `one-provider-adapter-dry-run does not support --${flagKey.replace(/_/g, "-")}.`
+        });
+      }
+    }
+  }
+
+  if (command === "run-one-provider-adapter-live") {
+    for (const flagKey of [
+      "id",
+      "input_json",
+      "input_file",
+      "write_report",
+      "report_dir",
+      "report_format",
+      "name",
+      "include_context",
+      "include_trace",
+      "hollow_input_json",
+      "hollow_input_file",
+      "files_to_capture_json",
+      "files_to_capture_file"
+    ]) {
+      if (flags[flagKey] !== undefined) {
+        errors.push({
+          code: "unsupported_flag",
+          message: `run-one-provider-adapter-live does not support --${flagKey.replace(/_/g, "-")}.`
         });
       }
     }

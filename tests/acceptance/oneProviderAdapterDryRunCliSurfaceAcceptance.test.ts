@@ -110,12 +110,21 @@ describe("one provider adapter dry-run CLI surface acceptance", () => {
     expect(data.report.vrp_evidence_required_for_T2).toBe(true);
   });
 
-  it("source does not read env, import network/provider frameworks, or write provider side effects", () => {
-    const source = [read("src/providers/oneProviderAdapterDryRunCli.ts"), read("src/cli/commandHandlers.ts")].join("\n");
+  it("dry-run source reads no env and imports no network/provider frameworks", () => {
+    const source = read("src/providers/oneProviderAdapterDryRunCli.ts");
     const importLines = source.split(/\r?\n/).filter((line) => line.trim().startsWith("import "));
     expect(source).not.toMatch(/process\.env/);
     expect(importLines.join("\n")).not.toMatch(/node:http|node:https|fetch|XMLHttpRequest/);
     expect(importLines.join("\n")).not.toMatch(/openai|anthropic|gemini|grok|langchain|langgraph|autogen|crewai|@ai-sdk|google/i);
+  });
+
+  it("commandHandlers contains exactly one env read: the caller-declared live credential (M1 authorized)", () => {
+    const source = read("src/cli/commandHandlers.ts");
+    const envReads = source.match(/process\.env/g) ?? [];
+    expect(envReads).toHaveLength(1);
+    expect(source).toContain("() => process.env[credentialEnvVar]");
+    const importLines = source.split(/\r?\n/).filter((line) => line.trim().startsWith("import "));
+    expect(importLines.join("\n")).not.toMatch(/node:http|node:https|fetch|XMLHttpRequest/);
   });
 
   it("does not add provider SDK dependencies", () => {
