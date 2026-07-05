@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - L1 Logic Engine Route-Input Hardening Diagnostic
+
+**Objective:** Perform the L1 diagnostic only, using `docs/protocols/PASS_PROTOCOL_L1.md` as the canonical protocol source, and stop before implementation.
+
+**Source Authority:** Explicit user approval to proceed to L1 diagnostic only, `docs/protocols/PASS_PROTOCOL_L1.md`, M3/M3-A/M3-B acceptance state, AGENTS.md, CODEX.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, docs/03_CANONICAL_CONTRACTS.md, docs/04_STORAGE_AND_LEDGER_DECISIONS.md, docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md, docs/06_V1_TEST_AND_FIXTURE_PLAN.md, and this `PLANS.md`.
+
+**Current State:** L1 protocol draft is approved and committed. The working tree was clean before diagnostic work. The protocol is allowlist-based and requires detector coverage for synthetic T1 provider/model route input, tier-field misuse, display/report text, unknown record types, and digest/storage/provider identity authority attempts.
+
+**Scope:** Create `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md`, identify current route-input surfaces, diagnose unsafe/advisory acceptance risk, recommend allowed and rejected route-input record types, recommend decision-facing type shape, connect M3 `effective_tier` to L1, list likely implementation files and tests, and record risks/Pat decisions.
+
+**Out of Scope:** No L1 implementation, `src/` changes, `tests/` changes, `types/` changes, M3 runtime changes, provider changes, egress changes, package changes, catalog changes, historical Ledger mutation, UI, role rotation, validators, storage, lineage gates, trust logic, or route-input gate implementation.
+
+**Files Expected To Change:** `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md`, `PLANS.md`, and `docs/STATUS_LOG.md`. The required pre-change snapshot command also appends its normal snapshot-created entry to `.caleb/ledger/ledger.jsonl`.
+
+**Risk Level:** Low. Diagnostic/documentation-only. The main risk is accidentally specifying implementation as completed behavior; this pass records recommendations only.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T185401847Z_000336_milestone` created with name `L1 diagnostic pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Verify clean tree. Read canonical L1 protocol and authority docs. Create and verify pre-change snapshot. Inspect current Logic Engine route-input surfaces. Draft the diagnostic report. Update pass ledgers. Run docs-only validation and catalog checks. Commit with L1 diagnostic in the message and verify clean tree.
+
+**Validation Commands:** `npx tsc --noEmit`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** Diagnostic confirms L1 is allowlist-based; identifies exact current route-input surfaces; identifies unsafe/advisory acceptance risk; defines proposed allowed and rejected record types; recommends a decision-facing route-input shape; connects M3 `effective_tier` only decision records to L1; identifies likely implementation files, acceptance tests, risks, ambiguities, and Pat decisions; confirms L1 remains CLI/test-only and display/report text may not route Caleb; no implementation files are modified.
+
+**Progress Log:** Clean tree verified. Canonical L1 protocol and authority docs read. Pre-change snapshot `snap_20260705T185401847Z_000336_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T185401847Z_000336_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Current Logic Engine route-input surfaces inspected: TaskFrame validation, signal classification, route selection, work graph building, execution context summary, single-pass route MVP, and route Ledger event builder. Diagnostic document drafted at `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md`. Typecheck passed. Build passed. Full suite passed 164/164 files and 2,905/2,905 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T185849865Z_000337_milestone`, verified present on disk before recording.
+
+**Decision Log:** Diagnostic recommends a fail-closed allowlist gate using a closed discriminated union. Existing `selectRoute(frame, signals)` should remain deterministic selection logic but be protected by an explicit route-input authority gate. M3 should connect only through lineage-resolved decision-facing records exposing `effective_tier`; provenance-only fields remain outside route authority.
+
+**Surprises / Discoveries:** `TaskFrame.signal_hints` and `classifySignals` are the practical route-influence surface that L1 must guard carefully. `RouteLedgerEventBuildInput.route_result` accepts broad records for provenance/reporting and should remain downstream, not route authority.
+
+**Final Report:** L1 diagnostic completed only. Diagnostic created at `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md`. It confirms the protocol is allowlist-based, identifies current route-input surfaces, names current implicit trust risks, recommends the structural split with decision-facing `effective_tier` only, lists likely implementation files/tests, and records open Pat decisions. No L1 implementation, `src`, `tests`, `types`, M3 runtime, provider, egress, package, catalog, UI, role-rotation, or historical Ledger changes were made. Required pre-change snapshot `snap_20260705T185401847Z_000336_milestone` and validation-created snapshot `snap_20260705T185849865Z_000337_milestone` were verified on disk before recording. Validation passed: typecheck, build, full suite 164 files / 2,905 tests, V1 catalog 12, Hollowcut catalog 9.
+
 ## ExecPlan - L1 Logic Engine Route-Input Hardening Protocol
 
 **Objective:** Draft the canonical L1 protocol for hardening the Logic Engine route-input surface so only approved decision-facing records may move Caleb's state machine.

@@ -322,6 +322,25 @@ tests; V1 catalog 12; Hollowcut catalog 9. Full suite created validation
 snapshot `snap_20260705T184115662Z_000335_milestone` (verified on disk before
 recording).
 
+### 2026-07-05 — L1 Diagnostic
+
+`docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md` created as a
+diagnostic only. It confirms the canonical L1 protocol is allowlist-based,
+identifies the current route-input surfaces, names the existing implicit trust
+risk around `TaskFrame.signal_hints`, `SignalFrame`, and `selectRoute`, and
+recommends a fail-closed discriminated-union route-input gate for a future L1
+implementation pass. It keeps M3 connected through lineage-resolved
+decision-facing records exposing `effective_tier` only, with
+`measurement_tier` and `subject_tier` remaining provenance-only. No L1
+implementation, no `src/`, no `tests/`, no `types/`, no M3 runtime, no
+provider, no egress, no package, no catalog, no UI, and no historical Ledger
+changes. Pre-change snapshot: `snap_20260705T185401847Z_000336_milestone`
+(verified on disk before recording). The required snapshot command appended its
+normal snapshot-created Ledger entry. Validation: typecheck passed; build
+passed; full suite passed 164 files / 2,905 tests; V1 catalog 12; Hollowcut
+catalog 9. Full suite created validation snapshot
+`snap_20260705T185849865Z_000337_milestone` (verified on disk before recording).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its
