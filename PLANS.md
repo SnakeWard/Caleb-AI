@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - RA-C Role Artifact Consumption Boundary Contract
+
+**Objective:** Create the design-only role artifact consumption boundary contract before any role runtime exists, binding future role artifacts to M3/L1 trust and routing rules.
+
+**Source Authority:** Explicit attached L1-A/RA-C protocol, `docs/protocols/PASS_PROTOCOL_L1A_RAC.md`, accepted L1-A lock, M3/M3-A/M3-B chain, `docs/ROLE_ARTIFACT_CONTRACT_LAYER.md`, `docs/ROLE_ARTIFACT_CONTRACT_LAYER_ACCEPTANCE_REPORT.md`, runtime storage planning/type contracts, AGENTS.md, CODEX.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, and this `PLANS.md`.
+
+**Current State:** L1-A is committed and clean. Existing role artifact contract layer is static and contract-only. Role artifact validator, registry, handoff gate, bundle, and report contracts exist, but no role runtime is authorized.
+
+**Scope:** Create `docs/ROLE_ARTIFACT_CONSUMPTION_BOUNDARY_CONTRACT.md`, answer all seven RA-C questions, include a worked example, identify RA implementation acceptance obligations, and update `PLANS.md` plus `docs/STATUS_LOG.md`.
+
+**Out of Scope:** No `src/`, no `tests/`, no `types/`, no runtime behavior, no role rotation, no Role Router, no routing changes, no UI/display, no providers/adapters, no egress changes, no package changes, no catalog changes, no L1 allowlist changes, no storage implementation, no validator implementation, no trust promotion, and no historical Ledger mutation.
+
+**Files Expected To Change:** `docs/ROLE_ARTIFACT_CONSUMPTION_BOUNDARY_CONTRACT.md`, `PLANS.md`, `docs/STATUS_LOG.md`, and `.caleb/ledger/ledger.jsonl` via required snapshot command and validation-created snapshot if any.
+
+**Risk Level:** Low. Design-only. The main risk is silence around Analyst registry absence or the extraction question; both are explicitly answered/deferred with named home passes.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T215233125Z_000342_milestone` created with name `rac_role_artifact_boundary_contract_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Verify clean tree after L1-A. Create and verify RA-C pre-change snapshot. Inspect existing role artifact contracts, handoff gate, storage planning, and M3/L1 locks. Draft RA-C contract with no-silence answers, worked example, and acceptance obligations. Update pass ledgers. Run full validation and catalog checks. Commit with pass ID and verify clean tree.
+
+**Validation Commands:** `npx tsc --noEmit`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** Contract exists. Seven questions are answered or named-deferred with home pass. Worked example exists. Role artifacts are explicitly model outputs capped at T1. Role identity is a non-promoter. Existing role contracts are reconciled with M3/L1 vocabulary. Extraction shortcut is barred and future deterministic extraction path is named. RA implementation obligations and required detectors are listed. No implementation files are modified. V1 catalog remains 12. Hollowcut catalog remains 9. Existing suite remains green.
+
+**Progress Log:** Clean tree verified after L1-A commit. Pre-change snapshot `snap_20260705T215233125Z_000342_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T215233125Z_000342_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Existing role artifact contract layer, role artifact validator, role contract registry, role handoff gate, runtime storage type contracts, and runtime storage planning boundary inspected. RA-C contract drafted. Typecheck passed. Build passed. Full suite passed 167/167 files and 2,935/2,935 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T215701269Z_000343_milestone`, verified present on disk before recording.
+
+**Decision Log:** RA-C mandates using the M3 content-addressed artifact store for future role artifact raw content unless a later protocol explicitly justifies an equivalent. `validateRoleArtifact` schema validation maps to T1 maximum. Role handoff gate `allowed` means context-consumption eligibility only, not route authority. The missing `analyst` role in the current registry is recorded as `RA-REGISTRY-ANALYST`, not silently assumed.
+
+**Surprises / Discoveries:** The accepted static role registry currently contains no `analyst` role even though role-rotation doctrine names Analyst. This remains design-only and requires a future registry amendment before Analyst runtime claims.
+
+**Final Report:** RA-C Role Artifact Consumption Boundary Contract completed. Contract created at `docs/ROLE_ARTIFACT_CONSUMPTION_BOUNDARY_CONTRACT.md`. All seven questions are answered or named-deferred with home pass: identity/tiering answered in Section 1; pre-M3 reconciliation answered in Section 2 with `RA-REGISTRY-ANALYST`; consumption flows answered in Section 3; extraction answered in Section 4 with `RA-X-DETERMINISTIC-EXTRACTION`; lineage answered in Section 5; cross-model provenance answered in Section 6; non-authorizations answered in Section 7. Worked example included. RA implementation acceptance obligations and required detectors included. No `src`, `tests`, `types`, runtime, role rotation, Role Router, routing, UI/display, provider, egress, package, catalog, L1 allowlist, storage implementation, validator implementation, trust-promotion, or historical Ledger behavior changed. Required pre-change snapshot `snap_20260705T215233125Z_000342_milestone` and validation-created snapshot `snap_20260705T215701269Z_000343_milestone` were verified on disk before recording. Validation passed: typecheck, build, full suite 167 files / 2,935 tests, V1 catalog 12, Hollowcut catalog 9.
+
 ## ExecPlan - L1-A Route-Input Boundary Acceptance Lock
 
 **Objective:** Lock the accepted L1 route-input hardening boundary with a dedicated acceptance report and lock test, following the M3-A precedent.

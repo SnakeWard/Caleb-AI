@@ -382,6 +382,27 @@ build passed; full suite passed 167 files / 2,935 tests; V1 catalog 12;
 Hollowcut catalog 9. Full suite created validation snapshot
 `snap_20260705T214857931Z_000341_milestone` (verified on disk before recording).
 
+### 2026-07-05 — RA-C Role Artifact Consumption Boundary Contract
+
+`docs/ROLE_ARTIFACT_CONSUMPTION_BOUNDARY_CONTRACT.md` created as a design-only
+contract. It states that role artifacts are model outputs: raw artifacts enter
+at T0, schema-valid role artifacts may reach T1 only, and role identity
+promotes nothing. It reconciles the accepted R1-R6 role artifact contract layer
+with M3 content-addressed storage and L1/L1-A route-input rejection rules,
+defines allowed and forbidden consumption flows, names the future deterministic
+extraction home pass `RA-X-DETERMINISTIC-EXTRACTION`, and records
+`RA-REGISTRY-ANALYST` because the current static registry has no `analyst`
+role. No `src`, `tests`, `types`, runtime behavior, role rotation, Role Router,
+routing changes, UI/display, provider, egress, package, catalog, L1 allowlist,
+storage implementation, validator implementation, trust promotion, or historical
+Ledger behavior changed. Pre-change snapshot:
+`snap_20260705T215233125Z_000342_milestone` (verified on disk before recording).
+The required snapshot command appended its normal snapshot-created Ledger entry.
+Validation: typecheck passed; build passed; full suite passed 167 files / 2,935
+tests; V1 catalog 12; Hollowcut catalog 9. Full suite created validation
+snapshot `snap_20260705T215701269Z_000343_milestone` (verified on disk before
+recording).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its
