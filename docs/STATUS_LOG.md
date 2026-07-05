@@ -259,6 +259,20 @@ normal snapshot-created Ledger entry. Pre-change snapshot:
 Validation: typecheck passed; full suite passed 158 files / 2,879 tests; V1
 catalog 12; Hollowcut catalog 9.
 
+### 2026-07-05 — M3 Diagnostic
+
+`docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_DIAGNOSTIC.md` created as a diagnostic
+only. It confirms the canonical M3 protocol represents M3-C obligations,
+evaluates in-memory vs `.caleb/artifacts/` content-addressed storage, recommends
+the authority path with `.gitignore` guardrails, recommends the structural tier
+split, confirms M3 remains CLI/test-only, and defers display flow to
+`M4-DISPLAY-BOUNDARY`. No M3 implementation, no `src/`, no `tests/`, no `types/`,
+no provider, no egress, no catalog, and no historical Ledger changes.
+Pre-change snapshot: `snap_20260705T173738508Z_000327_milestone` (verified on
+disk before recording). The required snapshot command appended its normal
+snapshot-created Ledger entry. Validation: typecheck passed; build passed; full
+suite passed 158 files / 2,879 tests; V1 catalog 12; Hollowcut catalog 9.
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - M3 Diagnostic
+
+**Objective:** Perform the M3 diagnostic only, using `docs/protocols/PASS_PROTOCOL_M3.md` as the canonical protocol source, and stop before any implementation.
+
+**Source Authority:** Explicit user approval to proceed to M3 diagnostic only, `docs/protocols/PASS_PROTOCOL_M3.md`, `docs/RAW_OUTPUT_BOUNDARY_CONTRACT.md`, `AGENTS.md`, `CODEX.md`, `docs/00_SOURCE_INDEX_AND_AUTHORITY.md`, `docs/01_CODEX_OPERATING_CONTRACT.md`, `docs/02_V1_PHASE_BOUNDARIES.md`, and this `PLANS.md`.
+
+**Current State:** M3 protocol draft is approved and committed. The working tree was clean before diagnostic work. M3-C obligations are represented in the canonical protocol. `.caleb/artifacts/` is not currently ignored. The repo has an existing `InMemoryArtifactStore`, and no M3 raw-output consumption implementation exists yet.
+
+**Scope:** Create a diagnostic document evaluating M3-C coverage, artifact-store substrate options, Fast Path vs Authority Path, structural tier split, CLI/test-only boundary, display deferral, proposed implementation files, proposed acceptance tests, risks, ambiguities, and Pat approval decisions.
+
+**Out of Scope:** No M3 implementation, `src/` changes, `tests/` changes, `types/` changes, provider adapter changes, egress allowlist changes, storage implementation, validator implementation, lineage gate implementation, trust logic implementation, catalog changes, package changes, UI, or historical Ledger mutation.
+
+**Files Expected To Change:** `docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_DIAGNOSTIC.md`, `PLANS.md`, and `docs/STATUS_LOG.md`. The required pre-change snapshot command also appends its normal snapshot-created entry to `.caleb/ledger/ledger.jsonl`.
+
+**Risk Level:** Low. Diagnostic/documentation-only. The main risk is accidentally crossing into implementation; this pass avoids `src/`, `tests/`, and type changes entirely.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T173738508Z_000327_milestone` created with name `M3-diagnostic-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if needed.
+
+**Implementation Steps:** Verify clean tree. Read canonical protocol and M3-C contract. Refresh authority docs. Create and verify pre-change snapshot. Draft the diagnostic report. Update pass ledgers. Run docs-only validation and catalog checks. Commit diagnostic if validation passes, verify clean tree, and stop.
+
+**Validation Commands:** `git status --short`; `npx tsc --noEmit`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** Diagnostic confirms M3-C obligations are represented; evaluates in-memory extension and `.caleb/artifacts/` content-addressed store; includes Fast Path vs Authority Path; recommends structural split; confirms M3 remains CLI/test-only; confirms display flow is deferred to `M4-DISPLAY-BOUNDARY`; identifies proposed files, acceptance tests, risks, ambiguities, and Pat approval decisions; no implementation files are modified.
+
+**Progress Log:** Clean tree verified after Git PATH repair from the prior pass. Canonical M3 protocol and M3-C contract read. Authority docs refreshed. Pre-change snapshot `snap_20260705T173738508Z_000327_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T173738508Z_000327_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Diagnostic document drafted at `docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_DIAGNOSTIC.md`. Validation passed: `npx tsc --noEmit`; `npm run build`; full suite 158/158 files and 2,879/2,879 tests; V1 catalog check found 12 Hollows; Hollowcut catalog check found 9 Hollows.
+
+**Decision Log:** Diagnostic recommends `.caleb/artifacts/` content-addressed storage as the M3 authority path, guarded by `.gitignore` and temp-dir tests, with in-memory storage kept as a fast-path test adapter. Diagnostic recommends the structural split: provenance-facing tier triplet and decision-facing `effective_tier` only. Diagnostic recommends no new CLI command unless Pat explicitly wants one.
+
+**Surprises / Discoveries:** `.caleb/artifacts/` is not currently ignored, so authority-path implementation must add that ignore rule before any raw-content write.
+
+**Final Report:** M3 diagnostic completed only. Diagnostic confirms M3-C obligations are fully represented, recommends `.caleb/artifacts/` as the authority path with `.gitignore` guardrails, keeps in-memory as the fast-path test adapter, recommends the structural split, confirms M3 remains CLI/test-only, confirms display flow is deferred to `M4-DISPLAY-BOUNDARY`, identifies proposed files/tests/risks/decisions, and stops before implementation. No `src`, `tests`, `types`, provider, egress, package, catalog, UI, or historical Ledger changes were made. Required snapshot `snap_20260705T173738508Z_000327_milestone` was verified on disk before recording; the snapshot command appended its normal Ledger record. Ready for Pat implementation approval: yes.
+
 ## ExecPlan - M3 Protocol Draft
 
 **Objective:** Draft the missing canonical base protocol for M3 Raw Output Consumption Boundary Implementation at `docs/protocols/PASS_PROTOCOL_M3.md`, integrating Amendment A directly and stopping before any M3 diagnostic or implementation.
