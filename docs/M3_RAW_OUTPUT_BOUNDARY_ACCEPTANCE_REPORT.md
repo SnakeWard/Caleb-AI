@@ -126,6 +126,30 @@ Required M3 categories locked by report and tests:
 22. Existing suite acceptance
 23. Completion report acceptance
 
+## 2026-07-05 Amendment - M3-T Acceptance Test Honesty Strengthening
+
+Origin chain: Pat spot-check witnessed the M3 NEVER-flow acceptance surface passing on a clean tree; full-text review then found two acceptance assertions that did not exercise Caleb's system under test; M3-T replaced those assertions with real boundary checks.
+
+Standing rule: an acceptance test must exercise the system under test; a test that asserts a locally constructed literal's own fields certifies nothing, and its green is not evidence.
+
+What was vacuous:
+
+- The non-promoter test iterated over named non-promoters but did not use each name to perform a distinct real attempt.
+- The display-deferral test constructed local display and decision objects, then asserted those local literal fields back at themselves.
+
+What now exercises the system:
+
+- Storage is tested through the content-addressed raw-output store and a post-storage read.
+- Digest presence is tested through a digest-bearing Ledger reference and the lineage-resolution gate.
+- API success and network/timing success are tested through adapter-shaped success data plus the real trust-summary builder, then through the raw-output lifecycle cap.
+- Provider identity and model agreement are tested through actual ingestions using the Anthropic and xAI adapter identities.
+- Report inclusion is tested through the real Caleb report builder.
+- Ledger reference is tested through the lineage-resolution gate.
+- Opt-in metadata is recorded as structurally unrepresentable in raw-output lifecycle records, with the nearest constructible lifecycle output still capped at T1.
+- Display deferral is tested against the real M3 implementation documentation and the absence of display/render/preview exports from `src/rawOutput/index.ts`.
+
+The golden-path worked example remains intact and now also threads a factory-produced Ledger entry through `resolveLineageReferences` to reduce fixture drift.
+
 ## Non-Changes
 
 M3-A does not implement:

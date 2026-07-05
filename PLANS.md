@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - M3-T Acceptance Test Honesty Strengthening
+
+**Objective:** Replace vacuous M3 acceptance assertions with tests that exercise Caleb's system under test or honestly assert unrepresentability, without changing runtime behavior.
+
+**Source Authority:** Explicit attached M3-T protocol, `docs/protocols/PASS_PROTOCOL_M3T.md`, M3/M3-A/M3-B accepted state, Pat spot-check results, AGENTS.md, CODEX.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, and this `PLANS.md`.
+
+**Current State:** M3 is accepted and locked, but post-spot-check full-text review found two weak tests in `tests/acceptance/m3RawOutputConsumptionBoundaryAcceptance.test.ts`: a non-promoter test that looped over unused labels and a display-deferral test that asserted local literal fields.
+
+**Scope:** Commit the M3-T protocol, strengthen the M3 acceptance test file, amend the M3 acceptance report, update pass ledgers, reconcile the M3-A lock only if required, and record required snapshot Ledger appends.
+
+**Out of Scope:** No `src/` changes, no runtime behavior changes, no providers, no egress, no role rotation, no UI, no package changes, no catalog changes, no allowlist changes, no new record types, and no historical Ledger mutation.
+
+**Files Expected To Change:** `docs/protocols/PASS_PROTOCOL_M3T.md`, `tests/acceptance/m3RawOutputConsumptionBoundaryAcceptance.test.ts`, `docs/M3_RAW_OUTPUT_BOUNDARY_ACCEPTANCE_REPORT.md`, `PLANS.md`, `docs/STATUS_LOG.md`, and `.caleb/ledger/ledger.jsonl` via required snapshot commands. `tests/acceptance/m3RawOutputBoundaryAcceptanceLock.test.ts` changes only if its pins require reconciliation.
+
+**Risk Level:** Medium. This is test-only, but the tests intentionally probe trust-promotion temptations; any actual promotion above T1 would be a boundary defect requiring Pat review.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T231325269Z_000346_milestone` created with name `m3t_test_honesty_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Verify clean tree. Read authority docs and M3-T protocol. Create and verify pre-change snapshot. Replace the non-promoter loop with named real-attempt or unrepresentability tests. Replace display literal assertion with real documentation/export absence assertion. Optionally add factory-produced Ledger lineage to the golden path. Amend acceptance report and pass ledgers. Run typecheck, focused M3/M3-A tests, build, full suite, catalog checks. Commit with pass ID, attempt push, and verify clean tree.
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/acceptance/m3RawOutputConsumptionBoundaryAcceptance.test.ts tests/acceptance/m3RawOutputBoundaryAcceptanceLock.test.ts`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** Old vacuous non-promoter loop is gone. Every mandated non-promoter has a named real-attempt or unrepresentability test. Display-deferral acceptance no longer asserts a local literal. Golden path remains intact and may include factory-produced Ledger lineage. M3-A lock is reconciled if needed. V1 catalog remains 12. Hollowcut catalog remains 9. Full suite remains green.
+
+**Progress Log:** Clean tree verified. M3-T protocol read. Authority docs and M3 acceptance/lock files inspected. Pre-change snapshot `snap_20260705T231325269Z_000346_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T231325269Z_000346_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. M3 acceptance test strengthened with named non-promoter tests, real display deferral/export absence assertion, and factory-produced Ledger lineage in the golden path. Focused M3 acceptance file passed 1 file / 15 tests. Focused M3/M3-A lock run passed 2 files / 21 tests. Typecheck passed. Build passed. Full suite passed 168 files / 2,945 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T232219310Z_000347_milestone`, verified present on disk before recording.
+
+**Decision Log:** Display deferral uses option (a): assert against real M3 implementation documentation and the absence of display/render/preview exports from `src/rawOutput/index.ts`. API success and network success use adapter-shaped success data plus the real trust-summary builder; network/timing fields remain structurally outside the raw-output lifecycle, so the lifecycle assertion is the nearest constructible promotion attempt. Opt-in metadata is asserted as structurally absent from raw-output lifecycle records.
+
+**Surprises / Discoveries:** The M3-A lock does not pin M3 acceptance test names or counts, so it required no source change.
+
+**Final Report:** M3-T Acceptance Test Honesty Strengthening completed. The old unused non-promoter loop and display literal assertion were removed. Non-promoter coverage now includes named storage, digest_presence, api_success, network_success, provider_identity, model_agreement, report_inclusion, ledger_reference, and opt_in_flags tests. Display deferral uses option (a), asserting against real M3 implementation documentation and absence of display/render/preview exports from `src/rawOutput/index.ts`. The M3-A lock required no source reconciliation. Golden-path lineage addition was made with `createLedgerEntryFromInvocation` and `resolveLineageReferences`. No `src`, runtime, provider, egress, role rotation, UI, package, catalog, allowlist, record-type, or historical Ledger behavior changed. Required pre-change snapshot `snap_20260705T231325269Z_000346_milestone` and validation-created snapshot `snap_20260705T232219310Z_000347_milestone` were verified on disk before recording. Validation passed: typecheck, focused M3/M3-A tests 2 files / 21 tests, build, full suite 168 files / 2,945 tests, V1 catalog 12, Hollowcut catalog 9.
+
 ## ExecPlan - L1-B Route-Input Allowlist Correction
 
 **Objective:** Remove `lineage_resolved_decision_facing_record` from the L1 route-input allowlist until RA-X attaches lineage verification and deterministic extraction machinery.

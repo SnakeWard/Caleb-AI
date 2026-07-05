@@ -424,6 +424,26 @@ tests; V1 catalog 12; Hollowcut catalog 9. Full suite created validation
 snapshot `snap_20260705T222857309Z_000345_milestone` (verified on disk before
 recording).
 
+### 2026-07-05 — M3-T Acceptance Test Honesty Strengthening
+
+Pat's witnessed spot-check saw the M3 acceptance surface pass; follow-up
+full-text review found two vacuous assertions in
+`tests/acceptance/m3RawOutputConsumptionBoundaryAcceptance.test.ts`. M3-T
+replaced the unused non-promoter loop with named real-attempt or
+unrepresentability tests for storage, digest presence, API success, network
+success, provider identity, model agreement, report inclusion, Ledger reference,
+and opt-in flags. Display deferral now checks real M3 documentation plus absence
+of display/render/preview exports from `src/rawOutput/index.ts`. The golden path
+remains intact and now also threads a factory-produced Ledger entry through
+`resolveLineageReferences`. No `src/`, runtime, provider, egress, role rotation,
+UI, package, catalog, allowlist, record-type, or historical Ledger behavior
+changed. Pre-change snapshot: `snap_20260705T231325269Z_000346_milestone`
+(verified on disk before recording). The M3-A lock required no source
+reconciliation. Validation passed: typecheck; focused M3/M3-A tests 2 files /
+21 tests; build; full suite 168 files / 2,945 tests; V1 catalog 12; Hollowcut
+catalog 9. Full suite created validation snapshot
+`snap_20260705T232219310Z_000347_milestone` (verified on disk before recording).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its
