@@ -22,6 +22,7 @@ export const CREDENTIAL_ENV_DENYLIST: readonly string[] = [
   "ANTHROPIC_AUTH_TOKEN",
   "XAI_API_KEY",
   "OPENAI_API_KEY",
+  "GEMINI_API_KEY",
   "GOOGLE_API_KEY",
   "AWS_SECRET_ACCESS_KEY"
 ];

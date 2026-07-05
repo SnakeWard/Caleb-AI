@@ -85,3 +85,17 @@ Codex MUST report:
 - Validation run
 - Known issues
 - Recommended next pass
+
+## Protocol Provenance Discipline (adopted post-G1/G2, first instance H5)
+
+Every pass protocol MUST be committed to `docs/protocols/` before or with the
+work it authorizes, so the authorization chain is a repo query, not oral
+history. The protocol commit may precede the pass's pre-change snapshot,
+because it authorizes rather than implements.
+
+## Handoff Discipline (adopted post-G1/G2)
+
+A handoff between implementing agents is complete only when the working tree
+is clean. An incoming agent MUST verify `git status` is clean before touching
+anything, and MUST stop and report if it is not clean and the uncommitted work
+is not its own.

@@ -199,6 +199,24 @@ from the pre-G diagnostic: two gated call sites, not one. No protected files;
 no src changes. Pre-change snapshot: `snap_20260705T042116614Z_000317_milestone`
 (verified on disk). Boundary doc: `docs/NETWORK_EGRESS_PROOF.md`.
 
+### 2026-07-05 — Pass H5-A — Network Egress Proof (amendment to the superseding protocol)
+
+The amended protocol (`docs/protocols/PASS_PROTOCOL_H5_H6.md`, committed before
+this work per the new authorization-chain convention) arrived after original
+H5 shipped; this amendment reconciles. Added: **call-site pin** — egress
+surface is an enumerated allowlist (verbatim:
+`src/providers/anthropicLiveAdapter.ts`, `src/providers/xaiLiveAdapter.ts`)
+enforced by a two-direction gate, detector-proven against a synthetic third
+call site AND a stale allowlist entry; `GEMINI_API_KEY` added to the
+credential denylist (future-proofing); denylist-coverage assertion; operating
+contract (`docs/01_CODEX_OPERATING_CONTRACT.md`) gains the two post-G1/G2
+conventions (protocol provenance in `docs/protocols/`; handoff-complete-only-
+when-tree-clean). Pre-change snapshot:
+`snap_20260705T145141971Z_000319_milestone` (verified on disk). Deviation
+recorded honestly: the operating-contract edit landed seconds before the
+snapshot's completion confirmation (command issued first; git provides
+rollback; the snapshot's protected-file capture set was unaffected).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

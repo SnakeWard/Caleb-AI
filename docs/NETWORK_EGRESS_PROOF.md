@@ -1,8 +1,11 @@
-# Network Egress Proof (Pass H5)
+# Network Egress Proof (Pass H5, amended)
 
-Status: Accepted — default suite is behaviorally offline
-Date: 2026-07-05
-Pre-change snapshot: `snap_20260705T042116614Z_000317_milestone` (verified on disk)
+Status: Accepted — default suite is behaviorally offline; egress surface pinned
+Date: 2026-07-05 (original), amended same day to conform to
+`docs/protocols/PASS_PROTOCOL_H5_H6.md` (call-site pin, GEMINI_API_KEY denylist
+addition, operating-contract conventions)
+Pre-change snapshots: `snap_20260705T042116614Z_000317_milestone` (original),
+`snap_20260705T145141971Z_000319_milestone` (amendment) — both verified on disk
 No protected files. No src/ changes. Test environment, tests, and docs only.
 
 ## 1. Threat Model
@@ -28,8 +31,12 @@ default suite, installs four traps before any test module loads:
 4. `process.env` replaced with a Proxy that throws
    `CREDENTIAL_ENV_READ_BLOCKED_BY_H5` on value reads of an exact-name
    denylist (`ANTHROPIC_API_KEY`, `ANTHROPIC_AUTH_TOKEN`, `XAI_API_KEY`,
-   `OPENAI_API_KEY`, `GOOGLE_API_KEY`, `AWS_SECRET_ACCESS_KEY`); all other env
-   access passes through untouched.
+   `OPENAI_API_KEY`, `GEMINI_API_KEY`, `GOOGLE_API_KEY`,
+   `AWS_SECRET_ACCESS_KEY` — the GPT/Gemini names future-proof providers under
+   discussion); all other env access passes through untouched. This coexists
+   with the acceptance pin of exactly one env-read site in commandHandlers:
+   that site is exercised only on the live flag path, which the default suite
+   never runs — confirmed by the full suite passing under the trap.
 
 Stand-down rule: the setup file reads `CALEB_LIVE_TEST` once at load time,
 before installing anything. Traps arm in every default run and stand down only
@@ -40,11 +47,12 @@ so live tests needed no changes.
 
 This is **in-process interception, not OS-level enforcement**. It does not
 constrain child processes — currently a theoretical limit, since V1 forbids
-`shell_command` and the runner blocks it as a permission class. It also cannot
-constrain native addons; the project has zero dependencies, making that limit
-equally theoretical today. The dependency lock below keeps both limits visible:
-if either precondition changes, this document and the trap design must be
-revisited in the authorizing pass.
+`shell_command` and the runner blocks it as a permission class; **revisit at
+the ffprobe boundary**, the first pass that would legitimize an external
+binary. It also cannot constrain native addons; the project has zero
+dependencies, making that limit equally theoretical today. The dependency lock
+below keeps both limits visible: if either precondition changes, this document
+and the trap design must be revisited in the authorizing pass.
 
 ## 4. Canary Evidence (detector proof)
 
@@ -62,11 +70,19 @@ that has never caught anything is unproven; these have.
 - **Dependency lock:** an acceptance assertion pins `package.json` to zero
   runtime dependencies and exactly `@types/node`, `tsx`, `typescript`,
   `vitest` as devDependencies — SDK creep becomes structurally visible.
-- **Inventory lock:** acceptance assertions pin `src/` to zero `node:http(s)`
-  imports and enumerate every file referencing `fetch` — the two adapters,
-  their types, and one documented exemption: the code-safety Hollow's
+- **Call-site pin (amended):** the egress surface is an enumerated allowlist —
+  verbatim as of acceptance:
+  `src/providers/anthropicLiveAdapter.ts`, `src/providers/xaiLiveAdapter.ts` —
+  enforced by a gate that scans all of `src/` for fetch usage and
+  `node:http(s)/net/tls` imports. It fails in **both directions**: egress-capable
+  code outside the allowlist (a third adapter cannot arrive silently, the
+  G1/G2 lesson), and an allowlisted file that no longer contains its call site
+  (stale allowlist). Both failure directions are detector-proven against
+  synthetic fixtures. One documented exemption: the code-safety Hollow's
   `network_call` detection rule contains the literal pattern `"fetch("` in
   order to flag fetch in scanned code (a detector, not an egress path).
+  **Any future adapter pass must amend the allowlist explicitly in its own
+  diff — that visibility is the mechanism.**
 
 ## 6. Headline Result — M2 Outstanding-Artifact Closure
 

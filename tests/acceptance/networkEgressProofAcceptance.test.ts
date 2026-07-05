@@ -6,6 +6,66 @@ import { describe, expect, it } from "vitest";
 
 import { V1_HOLLOW_MANIFESTS } from "../../src/hollows/v1HollowCatalog.js";
 import { HOLLOWCUT_HOLLOW_MANIFESTS } from "../../src/hollows/hollowcutHollowCatalog.js";
+import { CREDENTIAL_ENV_DENYLIST } from "../setup/networkEgressBlock.js";
+
+// H5-amended call-site pin: the complete allowlist of egress-capable source
+// files. Any future adapter pass must amend this list in its own diff — that
+// visibility is the mechanism (docs/protocols/PASS_PROTOCOL_H5_H6.md).
+const EGRESS_CALL_SITE_ALLOWLIST: readonly string[] = [
+  "src/providers/anthropicLiveAdapter.ts",
+  "src/providers/xaiLiveAdapter.ts"
+];
+
+// Detector, not an egress path: the code-safety Hollow's network_call rule
+// contains the literal pattern "fetch(" so it can FLAG fetch in scanned code.
+const EXEMPT_DETECTOR_FILES: readonly string[] = [
+  "src/hollows/categories/code/codeSafetyScanHollow.ts"
+];
+
+const EGRESS_IMPORT_PATTERN = /from\s+"node:(https?|net|tls)"|require\(\s*"node:(https?|net|tls)"\s*\)/;
+const FETCH_USAGE_PATTERN = /\bfetch\s*\(|\?\?\s*fetch\b|=\s*fetch\b/;
+
+interface EgressPinResult {
+  readonly ok: boolean;
+  readonly unexpected_call_sites: readonly string[];
+  readonly stale_allowlist_entries: readonly string[];
+}
+
+function evaluateEgressCallSitePin(
+  files: Readonly<Record<string, string>>,
+  allowlist: readonly string[],
+  exempt: readonly string[]
+): EgressPinResult {
+  const unexpected: string[] = [];
+  for (const [path, source] of Object.entries(files)) {
+    const capable = EGRESS_IMPORT_PATTERN.test(source) || FETCH_USAGE_PATTERN.test(source);
+    if (capable && !allowlist.includes(path) && !exempt.includes(path)) {
+      unexpected.push(path);
+    }
+  }
+  const stale: string[] = [];
+  for (const entry of allowlist) {
+    const source = files[entry];
+    if (source === undefined || !FETCH_USAGE_PATTERN.test(source)) {
+      stale.push(entry);
+    }
+  }
+  return {
+    ok: unexpected.length === 0 && stale.length === 0,
+    unexpected_call_sites: unexpected,
+    stale_allowlist_entries: stale
+  };
+}
+
+async function readSourceTree(): Promise<Record<string, string>> {
+  const files = await listSourceFiles("src");
+  const tree: Record<string, string> = {};
+  for (const file of files) {
+    if (!file.endsWith(".ts")) continue;
+    tree[file.replaceAll("\\", "/")] = await readFile(file, "utf8");
+  }
+  return tree;
+}
 
 // H5 canaries: traps that have never caught anything are unproven. Each test
 // here deliberately attempts the violation the trap exists to stop.
@@ -36,6 +96,12 @@ describe("network egress proof acceptance (H5)", () => {
     expect(() => process.env.XAI_API_KEY).toThrow(/CREDENTIAL_ENV_READ_BLOCKED_BY_H5/);
   });
 
+  it("denylist covers the protocol minimum, including future-proofed provider names", () => {
+    for (const name of ["ANTHROPIC_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY"]) {
+      expect(CREDENTIAL_ENV_DENYLIST).toContain(name);
+    }
+  });
+
   it("non-denylisted env reads pass through untouched", () => {
     expect(() => process.env.PATH).not.toThrow();
     expect(() => process.env.CALEB_TEST_LIVE_KEY_INTENTIONALLY_UNSET).not.toThrow();
@@ -63,40 +129,43 @@ describe("network egress proof acceptance (H5)", () => {
     ]);
   });
 
-  it("EGRESS INVENTORY: no node:http/https imports anywhere in src", async () => {
-    const files = await listSourceFiles("src");
-    const offenders: string[] = [];
-    for (const file of files) {
-      if (!file.endsWith(".ts")) continue;
-      const source = await readFile(file, "utf8");
-      if (/from\s+"node:https?"/.test(source) || /require\(\s*"node:https?"\s*\)/.test(source)) {
-        offenders.push(file);
-      }
-    }
-    expect(offenders).toEqual([]);
+  it("CALL-SITE PIN: the real tree contains egress-capable code only in the allowlisted adapters", async () => {
+    const tree = await readSourceTree();
+
+    const pin = evaluateEgressCallSitePin(tree, EGRESS_CALL_SITE_ALLOWLIST, EXEMPT_DETECTOR_FILES);
+
+    expect(pin.unexpected_call_sites).toEqual([]);
+    expect(pin.stale_allowlist_entries).toEqual([]);
+    expect(pin.ok).toBe(true);
   });
 
-  it("EGRESS INVENTORY: only the two gated adapters (plus the safety scanner's detection rule) reference fetch in src", async () => {
-    const files = await listSourceFiles("src");
-    const fetchFiles: string[] = [];
-    for (const file of files) {
-      if (!file.endsWith(".ts")) continue;
-      const source = await readFile(file, "utf8");
-      if (/\bfetch\b/.test(source)) {
-        fetchFiles.push(file.replaceAll("\\", "/"));
-      }
-    }
-    expect(fetchFiles.sort()).toEqual([
-      // Detector, not an egress path: the code-safety Hollow's network_call
-      // rule contains the literal pattern "fetch(" so it can FLAG fetch in
-      // scanned code. Its own no-egress property is covered by the runtime
-      // traps and the no-http-imports assertion above.
-      "src/hollows/categories/code/codeSafetyScanHollow.ts",
-      "src/providers/anthropicLiveAdapter.ts",
-      "src/providers/anthropicLiveAdapterTypes.ts",
-      "src/providers/xaiLiveAdapter.ts",
-      "src/providers/xaiLiveAdapterTypes.ts"
+  it("DETECTOR: the pin fails when a synthetic third call site is present", async () => {
+    const tree = await readSourceTree();
+    const poisoned = {
+      ...tree,
+      "src/hollows/categories/text/sneakyEgressHollow.ts":
+        'export async function leak(): Promise<void> { await fetch("https://example.com"); }'
+    };
+
+    const pin = evaluateEgressCallSitePin(poisoned, EGRESS_CALL_SITE_ALLOWLIST, EXEMPT_DETECTOR_FILES);
+
+    expect(pin.ok).toBe(false);
+    expect(pin.unexpected_call_sites).toEqual([
+      "src/hollows/categories/text/sneakyEgressHollow.ts"
     ]);
+  });
+
+  it("DETECTOR: the pin fails when an allowlisted file no longer contains its call site (stale allowlist)", async () => {
+    const tree = await readSourceTree();
+    const gutted = {
+      ...tree,
+      "src/providers/anthropicLiveAdapter.ts": "export const adapterRemoved = true;"
+    };
+
+    const pin = evaluateEgressCallSitePin(gutted, EGRESS_CALL_SITE_ALLOWLIST, EXEMPT_DETECTOR_FILES);
+
+    expect(pin.ok).toBe(false);
+    expect(pin.stale_allowlist_entries).toEqual(["src/providers/anthropicLiveAdapter.ts"]);
   });
 
   it("keeps catalog invariants: V1 = 12, Hollowcut = 9", () => {
