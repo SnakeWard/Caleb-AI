@@ -217,6 +217,18 @@ recorded honestly: the operating-contract edit landed seconds before the
 snapshot's completion confirmation (command issued first; git provides
 rollback; the snapshot's protected-file capture set was unaffected).
 
+### 2026-07-05 — Pass H6 — Report ID Integrity
+
+Third and final resolution of the per-process counter defect class:
+`createReportId` → `crypto.randomUUID()` (timestamp component dropped, argued
+in `docs/REPORT_ID_INTEGRITY.md`); injectable `id_generator` on the function
+and on `ReportInput`; resolution order explicit > generator > UUID, asserted
+by test. Detector reproduces the counter-collision pattern and proves the fix
+on the same shape. Filename safety verified (UUID hyphens pass the writer's
+denylist). Defect class now extinct: runner (H3), ledger (H4), reports (H6);
+look-alikes remain cleared. Pre-change snapshot:
+`snap_20260705T150745922Z_000321_milestone` (verified on disk).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

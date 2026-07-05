@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import type { VerificationResult } from "../verification/index.js";
 import type {
   ArtifactHash,
@@ -20,11 +22,17 @@ import type {
 
 const TRUST_TIERS: readonly TrustTier[] = ["T0", "T1", "T2", "T3", "T4"];
 
-let reportCounter = 0;
-
-export function createReportId(prefix = "report"): string {
-  reportCounter += 1;
-  return `${prefix}_${Date.now().toString(36)}_${reportCounter.toString().padStart(6, "0")}`;
+// H6: report IDs are crypto-random UUIDs — the third and final resolution of
+// the per-process counter defect class (runner: H3, ledger: H4, reports: H6).
+// The former Date.now().toString(36) component was dropped: reports carry
+// generated_at, so the embedded time added no integrity, and pure
+// prefix_<uuid> matches the H3/H4 shape exactly.
+// Resolution order: explicit report_id > injected generator > default UUID.
+export function createReportId(
+  prefix = "report",
+  generator?: (prefix: string) => string
+): string {
+  return generator !== undefined ? generator(prefix) : `${prefix}_${randomUUID()}`;
 }
 
 export function buildCalebReport(input: ReportInput): CalebReport {
@@ -134,7 +142,7 @@ export function buildCalebReport(input: ReportInput): CalebReport {
   });
 
   const baseReport = {
-    report_id: input.report_id ?? createReportId("report"),
+    report_id: input.report_id ?? createReportId("report", input.id_generator),
     schema_version: "1.0.0",
     generated_at: input.generated_at ?? new Date().toISOString(),
     title: input.title ?? "Caleb AI Report",

@@ -89,6 +89,7 @@ export interface ReportInput {
   readonly notes?: string;
   readonly generated_at?: ISODateTimeString;
   readonly report_id?: string;
+  readonly id_generator?: (prefix: string) => string;
 }
 
 export interface ReportRenderOptions {
