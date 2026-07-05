@@ -229,6 +229,22 @@ denylist). Defect class now extinct: runner (H3), ledger (H4), reports (H6);
 look-alikes remain cleared. Pre-change snapshot:
 `snap_20260705T150745922Z_000321_milestone` (verified on disk).
 
+### 2026-07-05 — Pass M3-C — Raw Output Boundary Contract (design only)
+
+`docs/RAW_OUTPUT_BOUNDARY_CONTRACT.md` created; nothing else. All five
+mandatory questions answered, no deferrals: advisory flow allowlist (§3);
+taint rule with the measurement/subject split kept first-class and
+`effective_tier = min` (§4, including the owner-approved
+effective-tier-consumption rule); lineage recording on post-H4 UUID ledger
+refs with the named lineage-resolution gate (§5); content-addressed raw-output
+storage with retention and the owner-approved deletion/dangling-reference
+clause — deletion removes content, never provenance (§6); display vs.
+consumption separated (§7). Worked example traces one artifact end to end
+(§9). M3 implementation bound to five acceptance obligations incl. three
+detectors: laundering, effective-tier consumption, lineage resolution (§10).
+Pre-change snapshot: `snap_20260705T153926420Z_000323_milestone` (verified on
+disk). Design-only: suite counts unchanged from H6 (158 files / 2,879).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its
