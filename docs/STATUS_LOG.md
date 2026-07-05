@@ -245,6 +245,20 @@ detectors: laundering, effective-tier consumption, lineage resolution (§10).
 Pre-change snapshot: `snap_20260705T153926420Z_000323_milestone` (verified on
 disk). Design-only: suite counts unchanged from H6 (158 files / 2,879).
 
+### 2026-07-05 — Path B — M3 Protocol Draft
+
+Base M3 protocol absence handled honestly: `docs/protocols/PASS_PROTOCOL_M3.md`
+did not previously exist as a committed protocol file, while
+`docs/protocols/PASS_PROTOCOL_M3_AMENDMENT_A.md` did. Path B created the new
+canonical base M3 protocol and integrated Amendment A directly into the protocol
+text. This is a protocol-draft pass only: no M3 diagnostic, no M3
+implementation, and no `src/`, `tests/`, `types/`, provider, egress, catalog, or
+historical ledger-content changes. The required snapshot command appended its
+normal snapshot-created Ledger entry. Pre-change snapshot:
+`snap_20260705T172058443Z_000325_milestone` (verified on disk before recording).
+Validation: typecheck passed; full suite passed 158 files / 2,879 tests; V1
+catalog 12; Hollowcut catalog 9.
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

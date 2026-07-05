@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - M3 Protocol Draft
+
+**Objective:** Draft the missing canonical base protocol for M3 Raw Output Consumption Boundary Implementation at `docs/protocols/PASS_PROTOCOL_M3.md`, integrating Amendment A directly and stopping before any M3 diagnostic or implementation.
+
+**Source Authority:** Explicit Path B authorization in the M3 protocol-draft handoff, `AGENTS.md`, `CODEX.md`, `docs/00_SOURCE_INDEX_AND_AUTHORITY.md`, `docs/01_CODEX_OPERATING_CONTRACT.md`, `docs/02_V1_PHASE_BOUNDARIES.md`, `docs/03_CANONICAL_CONTRACTS.md`, `docs/04_STORAGE_AND_LEDGER_DECISIONS.md`, `docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md`, `docs/06_V1_TEST_AND_FIXTURE_PLAN.md`, `docs/protocols/PASS_PROTOCOL_M3_AMENDMENT_A.md`, and `PLANS.md`.
+
+**Current State:** The base M3 protocol did not previously exist as a committed `docs/protocols/` file. `docs/protocols/PASS_PROTOCOL_M3_AMENDMENT_A.md` existed and referred to a base M3 protocol, so this pass creates the base protocol without pretending the missing file already existed. Initial `git status --short` was blocked because Git was installed but not on PATH in the current shell; after prepending `C:\Program Files\Git\cmd` for the session, `git status --short` succeeded and returned clean.
+
+**Scope:** Create `docs/protocols/PASS_PROTOCOL_M3.md` using the house 10-section protocol format, integrate Amendment A directly, and update `PLANS.md` plus `docs/STATUS_LOG.md` only as pass ledgers.
+
+**Out of Scope:** No M3 diagnostic, M3 implementation, `src/` changes, `tests/` changes, `types/` changes, provider adapter changes, egress allowlist changes, historical ledger-content mutation, package changes, catalog changes, UI work, live execution, or backfill of older H4/H5/M3-C protocol documents.
+
+**Files Expected To Change:** `docs/protocols/PASS_PROTOCOL_M3.md`, `PLANS.md`, and `docs/STATUS_LOG.md`. The required pre-change snapshot command also appends its normal snapshot-created entry to `.caleb/ledger/ledger.jsonl`.
+
+**Risk Level:** Low. Documentation/protocol-only. The main risk is authorization-chain accuracy, handled by stating that the base M3 protocol was missing and by integrating Amendment A into the new canonical file rather than leaving a floating amendment.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T172058443Z_000325_milestone` created with name `M3-protocol-draft-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Confirm Git availability and clean status. Read authority docs and existing protocol style. Create and verify pre-change snapshot. Draft `PASS_PROTOCOL_M3.md` in the 10-section format with Amendment A integrated directly. Update `PLANS.md` and `docs/STATUS_LOG.md`. Run docs-only validation, catalog checks, commit with M3 protocol in the commit message, and verify final clean status.
+
+**Validation Commands:** `git status --short`; `npx tsc --noEmit`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** Path B authorized. Base M3 protocol absence acknowledged. New canonical protocol exists at `docs/protocols/PASS_PROTOCOL_M3.md`. Amendment A is integrated directly. No M3 diagnostic or implementation is performed. No `src`, `tests`, `types`, provider, egress, or ledger-history changes are made. Snapshot exists and was verified on disk before recording. V1 catalog remains exactly 12. Hollowcut catalog remains exactly 9. Final tree is clean after commit.
+
+**Progress Log:** Git was found installed at `C:\Program Files\Git\cmd\git.exe` but absent from PATH; the current command environment was repaired by prepending that directory, after which `git status --short` returned clean. Required authority docs and existing protocol style were read. Pre-change snapshot `snap_20260705T172058443Z_000325_milestone` was created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T172058443Z_000325_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. `docs/protocols/PASS_PROTOCOL_M3.md` was created with the 10-section protocol format and Amendment A integrated directly. Validation passed: `npx tsc --noEmit`; V1 catalog check found 12 Hollows; Hollowcut catalog check found 9 Hollows; full suite passed 158/158 files and 2,879/2,879 tests.
+
+**Decision Log:** The pass records the missing base protocol honestly instead of treating Amendment A as proof that a base file existed. The new protocol does not authorize implementation files because the handoff requires the diagnostic and Pat approval before M3 implementation. Validation includes typecheck and the full suite even though the pass is docs-only, because the repo has established scripts and recent passes use the full default suite as the baseline.
+
+**Surprises / Discoveries:** Git was installed locally but not on PATH in the Codex-launched PowerShell environment.
+
+**Final Report:** Path B protocol-draft pass completed. Base M3 protocol did not previously exist as a committed `docs/protocols/` file. New canonical protocol drafted at `docs/protocols/PASS_PROTOCOL_M3.md`. Amendment A integrated directly. No M3 diagnostic performed. No M3 implementation performed. No `src`, `tests`, `types`, provider, egress, package, catalog, or historical ledger-content changes were made. Required snapshot `snap_20260705T172058443Z_000325_milestone` was verified on disk before recording; the snapshot command appended its normal Ledger record. Validation passed: typecheck, full suite, V1 catalog 12, Hollowcut catalog 9. Ready for Pat approval after commit and final clean status: yes.
+
 ## ExecPlan - Snapshot Claim Integrity Gate
 
 **Objective:** Add a deterministic, local integrity gate that validates snapshot IDs claimed in PLANS.md against actual `.caleb/snapshots` records, converting the R36 fabricated-snapshot-ID incident into a structural, repeatable gate rather than a one-off manual correction.
