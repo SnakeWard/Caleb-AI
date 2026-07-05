@@ -18,8 +18,7 @@ const ALLOWED_KINDS: readonly RouteInputRecordKind[] = [
   "deterministic_hollow_signal",
   "accepted_gate_policy_result",
   "human_pat_approval_record",
-  "snapshot_change_guard_state",
-  "lineage_resolved_decision_facing_record"
+  "snapshot_change_guard_state"
 ];
 
 const APPROVED_EFFECTIVE_TIERS: readonly TrustTier[] = ["T2", "T3", "T4"];
@@ -137,15 +136,6 @@ const ALLOWED_TOP_LEVEL_FIELDS: Readonly<Record<RouteInputRecordKind, readonly s
     "snapshot_id",
     "status",
     "gate_satisfied"
-  ],
-  lineage_resolved_decision_facing_record: [
-    "record_kind",
-    "record_id",
-    "source",
-    "validated_at",
-    "lineage_refs",
-    "effective_tier",
-    "decision_signal"
   ]
 };
 
@@ -258,8 +248,6 @@ function validateByKind(input: Record<string, unknown>, recordKind: RouteInputRe
       return validateHumanPatApproval(input);
     case "snapshot_change_guard_state":
       return validateSnapshotChangeGuard(input);
-    case "lineage_resolved_decision_facing_record":
-      return validateLineageDecisionFacing(input);
   }
 }
 
@@ -357,17 +345,6 @@ function validateSnapshotChangeGuard(input: Record<string, unknown>): RouteInput
   return issues;
 }
 
-function validateLineageDecisionFacing(input: Record<string, unknown>): RouteInputIssue[] {
-  const issues: RouteInputIssue[] = [];
-  if (!isApprovedEffectiveTier(input["effective_tier"])) {
-    issues.push(issue("unapproved_effective_tier", "$.effective_tier", "Decision-facing route inputs require effective_tier T2 or higher."));
-  }
-  if (!isJsonObject(input["decision_signal"])) {
-    issues.push(issue("invalid_decision_signal", "$.decision_signal", "decision_signal must be a JSON object."));
-  }
-  return issues;
-}
-
 function validateNoUnknownTopLevelFields(input: Record<string, unknown>, recordKind: RouteInputRecordKind): RouteInputIssue[] {
   const allowed = new Set(ALLOWED_TOP_LEVEL_FIELDS[recordKind]);
   return Object.keys(input)
@@ -408,8 +385,6 @@ function expectedSourceFor(recordKind: RouteInputRecordKind): "logic_engine" | "
       return "human_pat";
     case "snapshot_change_guard_state":
       return "change_guard";
-    case "lineage_resolved_decision_facing_record":
-      return ["logic_engine", "hollow", "gate"] as const;
   }
 }
 

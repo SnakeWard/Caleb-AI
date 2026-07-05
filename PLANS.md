@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - L1-B Route-Input Allowlist Correction
+
+**Objective:** Remove `lineage_resolved_decision_facing_record` from the L1 route-input allowlist until RA-X attaches lineage verification and deterministic extraction machinery.
+
+**Source Authority:** Explicit attached L1-B protocol, `docs/protocols/PASS_PROTOCOL_L1B.md`, L1-A lock, RA-C contract, AGENTS.md, CODEX.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, and this `PLANS.md`.
+
+**Current State:** L1-A locked an eight-entry allowlist. Post-review analysis confirmed `lineage_resolved_decision_facing_record` validates only shape, not lineage resolution or deterministic extraction, and therefore pre-admits a verifier that does not exist.
+
+**Scope:** Commit the L1-B protocol, remove `lineage_resolved_decision_facing_record` from L1 route-input types and gate allowlist, update L1/L1-A tests to seven-entry allowlist, add a standing masquerade detector, amend the L1-A acceptance report, and update pass ledgers.
+
+**Out of Scope:** No partial lineage verifier, no RA-X implementation, no role rotation, no providers, no egress, no UI, no package changes, no catalog changes, no historical Ledger mutation, no other allowlist changes, and no validation logic changes for the remaining seven kinds.
+
+**Files Expected To Change:** `docs/protocols/PASS_PROTOCOL_L1B.md`, `src/logicEngine/types/routeInput.ts`, `src/logicEngine/routeInputGate.ts`, L1/L1-A/L1-B acceptance tests, `docs/L1_ROUTE_INPUT_BOUNDARY_ACCEPTANCE_REPORT.md`, `PLANS.md`, `docs/STATUS_LOG.md`, and `.caleb/ledger/ledger.jsonl` via required snapshot commands.
+
+**Risk Level:** Medium. This removes an allowed route-input kind. Blocking grep confirmed no live producer or consumer exists beyond gate/type definitions and tests, so removal is safe in current tree.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T222323485Z_000344_milestone` created with name `l1b_allowlist_correction_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Verify clean tree. Run blocking producer/consumer grep. Create and verify pre-change snapshot. Remove the record kind from types/gate. Update L1/L1-A tests and acceptance report. Add masquerade detector. Run typecheck, focused L1/L1-A/L1-B tests, build, full suite, catalog checks. Commit with pass ID and verify clean tree.
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/logicEngine/routeInputGate.test.ts tests/acceptance/l1RouteInputHardeningAcceptance.test.ts tests/acceptance/l1RouteInputBoundaryAcceptanceLock.test.ts tests/acceptance/l1bAllowlistCorrection.test.ts`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** Blocking grep finds zero real producers/consumers. Allowlist is seven entries. Removed kind is rejected as unknown. Masquerade fixture with unverified role-artifact lineage is rejected. L1-A lock green with seven-entry pin. Existing L1 detectors remain green. V1 catalog remains 12. Hollowcut catalog remains 9. Full suite remains green.
+
+**Progress Log:** Clean tree verified. Blocking grep found zero real producers or consumers beyond gate/type definitions and L1/L1-A test fixtures. Pre-change snapshot `snap_20260705T222323485Z_000344_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T222323485Z_000344_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Protocol file, allowlist correction, test updates, report amendment, and L1-B masquerade detector drafted. Typecheck passed. Focused L1/L1-A/L1-B tests passed 4 files / 32 tests. Build passed. Full suite passed 168 files / 2,937 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T222857309Z_000345_milestone`, verified present on disk before recording.
+
+**Decision Log:** The removed kind is fully withdrawn rather than retained as known-but-disabled, so it now fails exactly like any unknown record kind. No partial lineage verifier was added.
+
+**Surprises / Discoveries:** None.
+
+**Final Report:** L1-B Route-Input Allowlist Correction completed. Blocking grep found zero real producers or consumers beyond gate/type definitions and L1/L1-A test fixtures. The L1 route-input allowlist is now seven entries: `contract_validated_task_frame`, `verified_signal_frame`, `engine_internal_state`, `deterministic_hollow_signal`, `accepted_gate_policy_result`, `human_pat_approval_record`, and `snapshot_change_guard_state`. `lineage_resolved_decision_facing_record` is withdrawn until RA-X attaches lineage verification and deterministic extraction machinery, and now rejects exactly like an unknown kind. Standing masquerade detector added: `l1b masquerade fixture: decision record with unverified role-artifact lineage is rejected`. No RA-X verifier, role rotation, provider, egress, UI, package, catalog, historical Ledger, or other allowlist change was made. Required pre-change snapshot `snap_20260705T222323485Z_000344_milestone` and validation-created snapshot `snap_20260705T222857309Z_000345_milestone` were verified on disk before recording. Validation passed: typecheck, focused L1/L1-A/L1-B tests 4 files / 32 tests, build, full suite 168 files / 2,937 tests, V1 catalog 12, Hollowcut catalog 9.
+
 ## ExecPlan - RA-C Role Artifact Consumption Boundary Contract
 
 **Objective:** Create the design-only role artifact consumption boundary contract before any role runtime exists, binding future role artifacts to M3/L1 trust and routing rules.

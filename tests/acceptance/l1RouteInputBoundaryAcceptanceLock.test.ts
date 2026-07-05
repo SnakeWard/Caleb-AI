@@ -22,8 +22,7 @@ const LOCKED_ALLOWLIST = [
   "deterministic_hollow_signal",
   "accepted_gate_policy_result",
   "human_pat_approval_record",
-  "snapshot_change_guard_state",
-  "lineage_resolved_decision_facing_record"
+  "snapshot_change_guard_state"
 ] as const;
 
 describe("L1-A route-input boundary acceptance lock", () => {
@@ -66,7 +65,7 @@ describe("L1-A route-input boundary acceptance lock", () => {
     const attempts = [
       {
         name: "synthetic T1 provider/model record",
-        input: decisionFacing({ effective_tier: "T1", decision_signal: { provider_model_output: "schema-valid advisory output" } }),
+        input: engineState({ state_value: { provider_model_output: "schema-valid advisory output" } }),
         expected: "forbidden_provider_model_output"
       },
       {
@@ -76,12 +75,12 @@ describe("L1-A route-input boundary acceptance lock", () => {
       },
       {
         name: "measurement_tier",
-        input: decisionFacing({ measurement_tier: "T2" }),
+        input: engineState({ measurement_tier: "T2" }),
         expected: "forbidden_measurement_tier"
       },
       {
         name: "subject_tier",
-        input: decisionFacing({ subject_tier: "T1" }),
+        input: engineState({ subject_tier: "T1" }),
         expected: "forbidden_subject_tier"
       },
       {
@@ -91,22 +90,22 @@ describe("L1-A route-input boundary acceptance lock", () => {
       },
       {
         name: "digest authority",
-        input: decisionFacing({ digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }),
+        input: engineState({ digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }),
         expected: "forbidden_digest_authority"
       },
       {
         name: "storage authority",
-        input: decisionFacing({ storage_presence: true }),
+        input: engineState({ storage_presence: true }),
         expected: "forbidden_storage_authority"
       },
       {
         name: "provider identity",
-        input: decisionFacing({ provider_id: "anthropic_live_adapter" }),
+        input: engineState({ provider_id: "anthropic_live_adapter" }),
         expected: "forbidden_provider_identity"
       },
       {
         name: "model confidence",
-        input: decisionFacing({ model_confidence: 0.99 }),
+        input: engineState({ model_confidence: 0.99 }),
         expected: "forbidden_model_confidence"
       },
       {
@@ -136,7 +135,7 @@ describe("L1-A route-input boundary acceptance lock", () => {
 
     expect(exportedHardenedEntrypoints).toEqual(["routeInputGate.ts:selectRouteFromRouteInputs"]);
     expect(source.some(([, text]) => text.includes("selectRouteFromRawModelOutput"))).toBe(false);
-    expect(selectRouteFromRouteInputs([decisionFacing({ raw_model_output: "route" })]).ok).toBe(false);
+    expect(selectRouteFromRouteInputs([engineState({ raw_model_output: "route" })]).ok).toBe(false);
   });
 
   it("locks the report's allowlist-growth rule and lock-fires evidence", async () => {
@@ -157,19 +156,6 @@ describe("L1-A route-input boundary acceptance lock", () => {
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });
-
-function decisionFacing(overrides: Record<string, unknown> = {}) {
-  return {
-    record_kind: "lineage_resolved_decision_facing_record",
-    record_id: "route_input.lock.decision",
-    source: "hollow",
-    validated_at: NOW,
-    lineage_refs: [],
-    effective_tier: "T2",
-    decision_signal: { deterministic_measurement_available: true },
-    ...overrides
-  };
-}
 
 function engineState(overrides: Record<string, unknown> = {}) {
   return {

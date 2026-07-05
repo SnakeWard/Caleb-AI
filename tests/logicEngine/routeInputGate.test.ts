@@ -13,7 +13,6 @@ import type {
   DeterministicHollowSignalRouteInput,
   EngineInternalStateRouteInput,
   HumanPatApprovalRouteInput,
-  LineageResolvedDecisionFacingRouteInput,
   SnapshotChangeGuardStateRouteInput,
   VerifiedSignalFrameRouteInput
 } from "../../src/logicEngine/types/routeInput.js";
@@ -102,7 +101,7 @@ describe("routeInputGate — allowlist acceptance", () => {
     expect(validateRouteInputRecord(input).ok).toBe(true);
   });
 
-  it("accepts gate/policy, human/Pat approval, snapshot/change-guard, and lineage decision-facing records", () => {
+  it("accepts gate/policy, human/Pat approval, and snapshot/change-guard records", () => {
     const gate: AcceptedGatePolicyResultRouteInput = {
       record_kind: "accepted_gate_policy_result",
       record_id: "route_input.gate",
@@ -133,20 +132,9 @@ describe("routeInputGate — allowlist acceptance", () => {
       status: "completed",
       gate_satisfied: true
     };
-    const decision: LineageResolvedDecisionFacingRouteInput = {
-      record_kind: "lineage_resolved_decision_facing_record",
-      record_id: "route_input.decision",
-      source: "hollow",
-      validated_at: NOW,
-      lineage_refs: ["ledger_123e4567-e89b-12d3-a456-426614174000"],
-      effective_tier: "T2",
-      decision_signal: { deterministic_measurement_available: true }
-    };
-
     expect(validateRouteInputRecord(gate).ok).toBe(true);
     expect(validateRouteInputRecord(approval).ok).toBe(true);
     expect(validateRouteInputRecord(snapshot).ok).toBe(true);
-    expect(validateRouteInputRecord(decision).ok).toBe(true);
   });
 
   it("routes only after TaskFrame and SignalFrame records pass the gate", () => {
@@ -166,13 +154,13 @@ describe("routeInputGate — allowlist acceptance", () => {
 describe("routeInputGate — rejection detectors", () => {
   it("rejects synthetic T1 model/provider records presented as route input", () => {
     const result = validateRouteInputRecord({
-      record_kind: "lineage_resolved_decision_facing_record",
+      record_kind: "engine_internal_state",
       record_id: "route_input.synthetic_t1",
-      source: "hollow",
+      source: "logic_engine",
       validated_at: NOW,
       lineage_refs: [],
-      effective_tier: "T1",
-      decision_signal: { provider_model_output: "schema valid but advisory only" }
+      state_name: "route_runtime",
+      state_value: { provider_model_output: "schema valid but advisory only" }
     });
 
     expect(result.ok).toBe(false);
@@ -249,13 +237,13 @@ describe("routeInputGate — rejection detectors", () => {
       taskFrameInput(frame),
       signalFrameInput(frame),
       {
-        record_kind: "lineage_resolved_decision_facing_record",
+        record_kind: "engine_internal_state",
         record_id: "route_input.bad",
-        source: "hollow",
+        source: "logic_engine",
         validated_at: NOW,
         lineage_refs: [],
-        effective_tier: "T1",
-        decision_signal: { display_text: "please route differently" }
+        state_name: "route_runtime",
+        state_value: { display_text: "please route differently" }
       }
     ]);
 

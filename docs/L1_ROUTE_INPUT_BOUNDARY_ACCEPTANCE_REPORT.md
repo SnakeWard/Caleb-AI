@@ -40,7 +40,6 @@ The L1 route-input allowlist is locked to exactly these record kinds:
 5. `accepted_gate_policy_result`
 6. `human_pat_approval_record`
 7. `snapshot_change_guard_state`
-8. `lineage_resolved_decision_facing_record`
 
 No record kind may be added, renamed, or removed without a future protocol-governed pass that edits `tests/acceptance/l1RouteInputBoundaryAcceptanceLock.test.ts` in a visible diff.
 
@@ -118,3 +117,35 @@ Required L1-A categories locked by report and tests:
 ## Final Verdict
 
 L1-A Route-Input Boundary Acceptance Lock: Accepted - steering boundary locked; allowlist growth now requires a visible protocol-governed diff.
+
+## 2026-07-05 Amendment - L1-B Allowlist Correction
+
+Review chain: L1-A required the route-input allowlist to be stated verbatim; that transparency exposed that `lineage_resolved_decision_facing_record` had been admitted before its verifier existed. Post-L1-A implementer analysis confirmed that the gate validated `lineage_refs` shape only: it did not dereference lineage, detect role-artifact ancestry, or verify deterministic extraction. The transparency machinery worked within one pass of being built.
+
+Removed record kind:
+
+- `lineage_resolved_decision_facing_record`
+
+Reason:
+
+- The verifier promised by the type name does not exist yet.
+- A structurally well-formed record could self-declare `effective_tier: "T2"` and hide role-artifact ancestry in opaque lineage strings.
+- RA-C explicitly deferred the deterministic extraction path to `RA-X-DETERMINISTIC-EXTRACTION`.
+
+The L1 route-input allowlist is now locked to exactly these seven record kinds:
+
+1. `contract_validated_task_frame`
+2. `verified_signal_frame`
+3. `engine_internal_state`
+4. `deterministic_hollow_signal`
+5. `accepted_gate_policy_result`
+6. `human_pat_approval_record`
+7. `snapshot_change_guard_state`
+
+Re-admission condition:
+
+`lineage_resolved_decision_facing_record` may be re-admitted only by a future protocol-governed RA-X pass that attaches the verifier in the same visible diff. That verifier must dereference lineage through the M3 lineage-resolution gate, reject role-artifact ancestry absent a ledgered deterministic-extraction step, and reject self-declared tiers unsupported by resolved lineage.
+
+Standing masquerade detector:
+
+- `l1b masquerade fixture: decision record with unverified role-artifact lineage is rejected`

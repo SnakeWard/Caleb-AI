@@ -403,6 +403,27 @@ tests; V1 catalog 12; Hollowcut catalog 9. Full suite created validation
 snapshot `snap_20260705T215701269Z_000343_milestone` (verified on disk before
 recording).
 
+### 2026-07-05 — L1-B Route-Input Allowlist Correction
+
+Post-L1-A review identified that `lineage_resolved_decision_facing_record` had
+been admitted before its lineage verifier existed. Blocking producer/consumer
+grep found zero real producers or consumers beyond gate/type definitions and
+L1/L1-A test fixtures, so the kind was withdrawn. The L1 route-input allowlist
+is now seven entries: `contract_validated_task_frame`,
+`verified_signal_frame`, `engine_internal_state`, `deterministic_hollow_signal`,
+`accepted_gate_policy_result`, `human_pat_approval_record`, and
+`snapshot_change_guard_state`. The L1-A report was amended, the lock pin was
+shrunk, and `tests/acceptance/l1bAllowlistCorrection.test.ts` adds the standing
+masquerade detector: `l1b masquerade fixture: decision record with unverified
+role-artifact lineage is rejected`. No RA-X verifier, role rotation, provider,
+egress, UI, package, catalog, historical Ledger, or other allowlist change was
+made. Pre-change snapshot: `snap_20260705T222323485Z_000344_milestone`
+(verified on disk before recording). Validation passed: typecheck; focused
+L1/L1-A/L1-B tests 4 files / 32 tests; build; full suite 168 files / 2,937
+tests; V1 catalog 12; Hollowcut catalog 9. Full suite created validation
+snapshot `snap_20260705T222857309Z_000345_milestone` (verified on disk before
+recording).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

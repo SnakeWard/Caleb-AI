@@ -67,13 +67,13 @@ describe("L1 route-input hardening acceptance", () => {
     const result = selectRouteFromRouteInputs([
       ...approvedRouteInputs(),
       {
-        record_kind: "lineage_resolved_decision_facing_record",
+        record_kind: "engine_internal_state",
         record_id: "route_input.synthetic_provider",
-        source: "hollow",
+        source: "logic_engine",
         validated_at: NOW,
         lineage_refs: [],
-        effective_tier: "T1",
-        decision_signal: {
+        state_name: "route_runtime",
+        state_value: {
           provider_model_output: "schema-valid advisory output",
           model_confidence: 0.99
         }
@@ -88,13 +88,13 @@ describe("L1 route-input hardening acceptance", () => {
   it("rejects measurement_tier and subject_tier as route input", () => {
     for (const tierField of ["measurement_tier", "subject_tier"] as const) {
       const result = validateRouteInputRecord({
-        record_kind: "lineage_resolved_decision_facing_record",
+        record_kind: "engine_internal_state",
         record_id: `route_input.${tierField}`,
-        source: "hollow",
+        source: "logic_engine",
         validated_at: NOW,
         lineage_refs: [],
-        effective_tier: "T2",
-        decision_signal: { deterministic_measurement_available: true },
+        state_name: "route_runtime",
+        state_value: { deterministic_measurement_available: true },
         [tierField]: "T2"
       });
 
@@ -139,13 +139,13 @@ describe("L1 route-input hardening acceptance", () => {
 
     for (const attempt of attempts) {
       const result = validateRouteInputRecord({
-        record_kind: "lineage_resolved_decision_facing_record",
+        record_kind: "engine_internal_state",
         record_id: "route_input.non_authority",
-        source: "hollow",
+        source: "logic_engine",
         validated_at: NOW,
         lineage_refs: [],
-        effective_tier: "T2",
-        decision_signal: { deterministic_measurement_available: true },
+        state_name: "route_runtime",
+        state_value: { deterministic_measurement_available: true },
         ...attempt
       });
 

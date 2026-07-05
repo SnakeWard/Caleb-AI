@@ -11,8 +11,7 @@ export type RouteInputRecordKind =
   | "deterministic_hollow_signal"
   | "accepted_gate_policy_result"
   | "human_pat_approval_record"
-  | "snapshot_change_guard_state"
-  | "lineage_resolved_decision_facing_record";
+  | "snapshot_change_guard_state";
 
 export type RouteInputSource = "logic_engine" | "hollow" | "gate" | "human_pat" | "change_guard";
 
@@ -81,13 +80,6 @@ export interface SnapshotChangeGuardStateRouteInput extends RouteInputBase {
   readonly gate_satisfied: true;
 }
 
-export interface LineageResolvedDecisionFacingRouteInput extends RouteInputBase {
-  readonly record_kind: "lineage_resolved_decision_facing_record";
-  readonly source: "logic_engine" | "hollow" | "gate";
-  readonly effective_tier: TrustTier;
-  readonly decision_signal: JsonObject;
-}
-
 export type LogicEngineRouteInput =
   | ContractValidatedTaskFrameRouteInput
   | VerifiedSignalFrameRouteInput
@@ -95,8 +87,7 @@ export type LogicEngineRouteInput =
   | DeterministicHollowSignalRouteInput
   | AcceptedGatePolicyResultRouteInput
   | HumanPatApprovalRouteInput
-  | SnapshotChangeGuardStateRouteInput
-  | LineageResolvedDecisionFacingRouteInput;
+  | SnapshotChangeGuardStateRouteInput;
 
 export interface RouteInputIssue {
   readonly code: string;
