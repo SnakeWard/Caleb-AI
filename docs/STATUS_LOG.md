@@ -183,6 +183,22 @@ snapshot: `snap_20260705T014356336Z_000311_milestone`. Suite at pass close:
 Hollowcut 9. Doc: `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md`. Next: G2 first
 Grok live call (owner authorization required).
 
+### 2026-07-05 — Pass H5 — Network Egress Proof
+
+Default test runs are now behaviorally offline: `tests/setup/networkEgressBlock.ts`
+traps `globalThis.fetch`, `net.Socket.prototype.connect`, `tls.connect`, and
+credential env reads (exact-name denylist incl. ANTHROPIC_API_KEY and
+XAI_API_KEY) in every default run, standing down only under CALEB_LIVE_TEST=1.
+Canaries prove each trap fires; config lock pins the setup file + live
+exclusion; dependency lock pins zero runtime deps; inventory lock pins the
+egress surface to exactly the two gated adapters (one documented exemption:
+the code-safety Hollow's fetch *detection rule*). **Headline / M2
+outstanding-artifact closure: full suite green under active traps — 157 test
+files / 2,870 tests, zero egress attempts, zero credential reads.** Amended
+from the pre-G diagnostic: two gated call sites, not one. No protected files;
+no src changes. Pre-change snapshot: `snap_20260705T042116614Z_000317_milestone`
+(verified on disk). Boundary doc: `docs/NETWORK_EGRESS_PROOF.md`.
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its
