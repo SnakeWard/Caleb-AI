@@ -305,6 +305,23 @@ Validation: typecheck passed; focused M3-A/M3 acceptance passed 2 files / 13
 tests; build passed; full suite passed 164 files / 2,905 tests; V1 catalog 12;
 Hollowcut catalog 9.
 
+### 2026-07-05 — L1 Protocol Draft
+
+`docs/protocols/PASS_PROTOCOL_L1.md` drafted as the canonical protocol for Logic
+Engine route-input hardening. Protocol-only: no L1 diagnostic, no L1
+implementation, no `src/`, no `tests/`, no `types/`, no provider, no egress, no
+package, no catalog, no M3 runtime, and no historical Ledger changes. The
+protocol requires allowlist-based route-input authority and detector coverage
+for synthetic T1 model/provider route input, tier-field misuse, display/report
+text, unknown record types, and digest/storage/provider identity authority
+attempts. Pre-change snapshot:
+`snap_20260705T183721991Z_000334_milestone` (verified on disk before recording).
+The required snapshot command appended its normal snapshot-created Ledger entry.
+Validation: typecheck passed; build passed; full suite passed 164 files / 2,905
+tests; V1 catalog 12; Hollowcut catalog 9. Full suite created validation
+snapshot `snap_20260705T184115662Z_000335_milestone` (verified on disk before
+recording).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

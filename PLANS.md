@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - L1 Logic Engine Route-Input Hardening Protocol
+
+**Objective:** Draft the canonical L1 protocol for hardening the Logic Engine route-input surface so only approved decision-facing records may move Caleb's state machine.
+
+**Source Authority:** Explicit user authorization for L1 protocol drafting, `docs/protocols/PASS_PROTOCOL_M3.md`, M3/M3-A/M3-B acceptance state, AGENTS.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, and this `PLANS.md`.
+
+**Current State:** M3-A lock verified complete and its validation-created Ledger append has been committed. Working tree was clean before this pass. L1 protocol does not yet exist.
+
+**Scope:** Create `docs/protocols/PASS_PROTOCOL_L1.md` using the house 10-section format, and update `PLANS.md` plus `docs/STATUS_LOG.md` only as pass ledgers.
+
+**Out of Scope:** No L1 diagnostic, L1 implementation, `src/` changes, `tests/` changes, `types/` changes, provider changes, egress changes, package changes, catalog changes, M3 runtime changes, or historical Ledger mutation.
+
+**Files Expected To Change:** `docs/protocols/PASS_PROTOCOL_L1.md`, `PLANS.md`, and `docs/STATUS_LOG.md`. The required pre-change snapshot command also appends its normal snapshot-created entry to `.caleb/ledger/ledger.jsonl`.
+
+**Risk Level:** Low. Documentation/protocol-only. The key risk is accidentally authorizing future implementation through vague wording; the protocol is explicit that implementation requires L1 diagnostic and Pat approval.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T183721991Z_000334_milestone` created with name `L1-protocol-draft-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Verify clean tree. Read authority docs and M3 protocol context. Create and verify pre-change snapshot. Draft L1 protocol in `docs/protocols/`. Update `PLANS.md` and `docs/STATUS_LOG.md`. Run docs-pass validation and catalog checks. Commit with L1 protocol in the message and verify final clean tree.
+
+**Validation Commands:** `npx tsc --noEmit`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** Protocol exists at `docs/protocols/PASS_PROTOCOL_L1.md`; uses the house 10-section format; defines allowlist-based route-input hardening; lists allowed route-input categories; rejects raw/T1 model/provider output, prose, display/report text, provider identity, model confidence, digest/storage presence, provenance-only fields, and unknown record types; requires detectors including synthetic T1 provider/model route input rejection; no implementation files are modified; V1 catalog remains 12; Hollowcut catalog remains 9.
+
+**Progress Log:** Clean tree verified. Authority docs and M3 protocol context read. Pre-change snapshot `snap_20260705T183721991Z_000334_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T183721991Z_000334_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. L1 protocol drafted in the required 10-section format. Typecheck passed. Build passed. Full suite passed 164/164 files and 2,905/2,905 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T184115662Z_000335_milestone`, verified present on disk before recording.
+
+**Decision Log:** The L1 protocol uses allowlist-first language and frames non-authority examples as rejected by construction rather than as a denylist foundation. It requires a synthetic T1 provider/model route-input detector and separate detector coverage for tier-field misuse, display/report text, unknown record types, and digest/storage/provider identity authority attempts.
+
+**Surprises / Discoveries:** None.
+
+**Final Report:** L1 protocol draft completed. Protocol created at `docs/protocols/PASS_PROTOCOL_L1.md`. No L1 diagnostic or implementation performed. No `src`, `tests`, `types`, provider, egress, package, catalog, M3 runtime, or historical Ledger changes were made. Required pre-change snapshot `snap_20260705T183721991Z_000334_milestone` and validation-created snapshot `snap_20260705T184115662Z_000335_milestone` were verified on disk before recording. Validation passed: typecheck, build, full suite 164 files / 2,905 tests, V1 catalog 12, Hollowcut catalog 9.
+
 ## ExecPlan - M3-A Raw Output Boundary Acceptance Lock
 
 **Objective:** Lock M3 as accepted and add acceptance report coverage so future work cannot regress model-output trust boundaries.
