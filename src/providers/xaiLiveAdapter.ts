@@ -7,29 +7,26 @@ import type {
   LiveAdapterRequest,
   LiveAdapterResponse,
   LiveAdapterResult,
-  LiveAdapterResultStatus,
-  LiveAdapterTrustSummary
+  LiveAdapterResultStatus
 } from "../modelBoundary/types/liveAdapterTypes.js";
-import type {
-  AnthropicLiveAdapter,
-  AnthropicLiveAdapterCapabilities,
-  AnthropicLiveAdapterConfig,
-  AnthropicLiveAdapterDeps,
-  AnthropicLiveAdapterGateEvidence,
-  AnthropicLiveInvocationArgs,
-  BuildAnthropicLiveAdapterRequestInput
-} from "./anthropicLiveAdapterTypes.js";
-import { ANTHROPIC_LIVE_ADAPTER_ID } from "./anthropicLiveAdapterTypes.js";
 import { buildLiveAdapterTrustSummary, computeSha256Digest } from "./liveAdapterShared.js";
-
-export { buildLiveAdapterTrustSummary, computeSha256Digest } from "./liveAdapterShared.js";
+import type {
+  BuildGrokLiveAdapterRequestInput,
+  GrokLiveAdapter,
+  GrokLiveAdapterCapabilities,
+  GrokLiveAdapterConfig,
+  GrokLiveAdapterDeps,
+  GrokLiveAdapterGateEvidence,
+  GrokLiveInvocationArgs
+} from "./xaiLiveAdapterTypes.js";
+import { GROK_LIVE_ADAPTER_ID } from "./xaiLiveAdapterTypes.js";
 
 type FailureStatus = Exclude<LiveAdapterResultStatus, "response_schema_valid" | "response_raw">;
 
 const MAX_RETRY_AFTER_WAIT_MS = 5_000;
 
-export function buildAnthropicLiveAdapterRequest(
-  input: BuildAnthropicLiveAdapterRequestInput
+export function buildGrokLiveAdapterRequest(
+  input: BuildGrokLiveAdapterRequestInput
 ): LiveAdapterRequest {
   const createdAt = input.created_at ?? new Date().toISOString();
   const promptDigest = computeSha256Digest(input.prompt_text);
@@ -67,15 +64,15 @@ export function buildAnthropicLiveAdapterRequest(
   };
 }
 
-export function createAnthropicLiveAdapter(
-  config: AnthropicLiveAdapterConfig,
-  gateEvidence: AnthropicLiveAdapterGateEvidence,
-  deps: AnthropicLiveAdapterDeps
-): AnthropicLiveAdapter {
+export function createGrokLiveAdapter(
+  config: GrokLiveAdapterConfig,
+  gateEvidence: GrokLiveAdapterGateEvidence,
+  deps: GrokLiveAdapterDeps
+): GrokLiveAdapter {
   const now = deps.now ?? (() => new Date());
   const fetchImpl = deps.fetch_impl ?? fetch;
 
-  function capabilities(): AnthropicLiveAdapterCapabilities {
+  function capabilities(): GrokLiveAdapterCapabilities {
     return {
       adapter_id: config.adapter_id,
       adapter_version: config.adapter_version,
@@ -122,11 +119,9 @@ export function createAnthropicLiveAdapter(
     return { ok: false, status, failure: record, issues: [] };
   }
 
-  async function invokeLive(args: AnthropicLiveInvocationArgs): Promise<LiveAdapterResult> {
+  async function invokeLive(args: GrokLiveInvocationArgs): Promise<LiveAdapterResult> {
     const { request, prompt_text } = args;
 
-    // Gate chain — every check runs before any network activity and every
-    // miss returns a structured failure, never a throw.
     const prereqs = gateEvidence.prerequisites_evaluation;
     if (prereqs.prerequisites_met !== true) {
       return failure(request, "adapter_unavailable", "rejected", false, [
@@ -145,7 +140,7 @@ export function createAnthropicLiveAdapter(
     if (gateEvidence.approved_by === null || gateEvidence.approved_by.trim().length === 0) {
       return failure(request, "adapter_unavailable", "rejected", false, ["human_approval_missing"]);
     }
-    if (config.adapter_id !== ANTHROPIC_LIVE_ADAPTER_ID) {
+    if (config.adapter_id !== GROK_LIVE_ADAPTER_ID) {
       return failure(request, "adapter_unavailable", "rejected", false, ["adapter_not_allowlisted"]);
     }
 
@@ -172,13 +167,15 @@ export function createAnthropicLiveAdapter(
       ]);
     }
 
-    // Never allow the key to appear in any outbound message string.
     const scrub = (text: string): string => text.split(apiKey).join("[redacted]");
 
+    // Do not send search_parameters: xAI returns HTTP 410 ("Live search is
+    // deprecated") when that field is present, even with mode "off" (G2 finding).
     const wireBody = JSON.stringify({
       model: config.model,
+      messages: [{ role: "user", content: prompt_text }],
       max_tokens: request.limits.max_output_tokens,
-      messages: [{ role: "user", content: prompt_text }]
+      stream: false
     });
 
     const startedAt = now().toISOString();
@@ -194,11 +191,10 @@ export function createAnthropicLiveAdapter(
       let response: Response;
 
       try {
-        response = await fetchImpl(`${config.api_base_url}/v1/messages`, {
+        response = await fetchImpl(`${config.api_base_url}/v1/chat/completions`, {
           method: "POST",
           headers: {
-            "x-api-key": apiKey,
-            "anthropic-version": config.anthropic_version,
+            authorization: `Bearer ${apiKey}`,
             "content-type": "application/json"
           },
           body: wireBody,
@@ -287,45 +283,49 @@ export function createAnthropicLiveAdapter(
     }
 
     const body = parsed as Record<string, unknown>;
-    const contentBlocks = Array.isArray(body.content) ? body.content : null;
+    const choices = Array.isArray(body.choices) ? body.choices : null;
+    const firstChoice =
+      choices !== null && choices.length > 0 && typeof choices[0] === "object" && choices[0] !== null
+        ? (choices[0] as Record<string, unknown>)
+        : null;
+    const message =
+      firstChoice !== null && typeof firstChoice.message === "object" && firstChoice.message !== null
+        ? (firstChoice.message as Record<string, unknown>)
+        : null;
     const usage =
       typeof body.usage === "object" && body.usage !== null
         ? (body.usage as Record<string, unknown>)
         : null;
-    const inputTokens = typeof usage?.input_tokens === "number" ? usage.input_tokens : 0;
-    const outputTokens = typeof usage?.output_tokens === "number" ? usage.output_tokens : 0;
-    const usageAvailable = usage !== null && typeof usage.input_tokens === "number";
+    const inputTokens = typeof usage?.prompt_tokens === "number" ? usage.prompt_tokens : 0;
+    const outputTokens = typeof usage?.completion_tokens === "number" ? usage.completion_tokens : 0;
+    const usageAvailable = usage !== null && typeof usage.prompt_tokens === "number";
 
     const schemaValid =
       typeof body.id === "string" &&
-      contentBlocks !== null &&
+      choices !== null &&
+      message !== null &&
       typeof body.model === "string" &&
       usageAvailable;
 
     const outputText =
-      contentBlocks === null
-        ? ""
-        : contentBlocks
-            .filter(
-              (block): block is { type: string; text: string } =>
-                typeof block === "object" &&
-                block !== null &&
-                (block as Record<string, unknown>).type === "text" &&
-                typeof (block as Record<string, unknown>).text === "string"
-            )
-            .map((block) => block.text)
-            .join("");
+      message !== null && typeof message.content === "string" ? message.content : "";
 
     const warnings: string[] = [];
-    const stopReason = typeof body.stop_reason === "string" ? body.stop_reason : "unknown";
-    if (stopReason === "refusal") {
-      warnings.push("provider_stop_reason_refusal");
+    const finishReason =
+      firstChoice !== null && typeof firstChoice.finish_reason === "string"
+        ? firstChoice.finish_reason
+        : "unknown";
+    if (finishReason === "content_filter") {
+      warnings.push("provider_finish_reason_content_filter");
     }
     if (outputText.length === 0) {
       warnings.push("provider_output_text_empty");
     }
     if (!schemaValid) {
       warnings.push("provider_response_shape_unexpected_treated_as_raw");
+    }
+    if (message !== null && typeof message.reasoning_content === "string") {
+      warnings.push("provider_reasoning_content_excluded_from_digest");
     }
 
     const record: LiveAdapterResponse = {
@@ -347,7 +347,7 @@ export function createAnthropicLiveAdapter(
         raw_output_included: false
       },
       redacted_output_digest: computeSha256Digest(outputText),
-      finish_reason: stopReason,
+      finish_reason: finishReason,
       token_usage: {
         input_tokens: inputTokens,
         output_tokens: outputTokens,

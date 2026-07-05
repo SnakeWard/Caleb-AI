@@ -42,12 +42,20 @@ import { createTelemetryTraceCollector } from "../logicEngine/telemetryTraceColl
 import {
   ALLOWLISTED_LIVE_ADAPTER_IDS,
   ALLOWLISTED_LIVE_HARNESS_IDS,
+  ANTHROPIC_LIVE_ADAPTER_ID,
   buildAnthropicLiveAdapterRequest,
+  buildGrokLiveAdapterRequest,
   createAnthropicLiveAdapter,
+  createGrokLiveAdapter,
   createOneProviderAdapterDryRunCliReport,
   DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG,
-  evaluateOneProviderAdapterLivePrerequisites
+  DEFAULT_GROK_LIVE_ADAPTER_CONFIG,
+  evaluateOneProviderAdapterLivePrerequisites,
+  GROK_LIVE_ADAPTER_ID
 } from "../providers/index.js";
+import type { LiveAdapterRequest, LiveAdapterResult } from "../modelBoundary/types/liveAdapterTypes.js";
+import type { AnthropicLiveAdapterConfig } from "../providers/anthropicLiveAdapterTypes.js";
+import type { GrokLiveAdapterConfig } from "../providers/xaiLiveAdapterTypes.js";
 import type {
   CliCommandName,
   CliCommandResult,
@@ -122,7 +130,7 @@ export function handleHelpCommand(): CliCommandResult {
       "caleb route-decision (--input-json <json> | --input-file <file>) [--json] [--write-ledger] [--ledger-path <path>]",
       "caleb logic-execute --id <hollow_id> (--input-json <json> | --input-file <file>) (--hollow-input-json <json> | --hollow-input-file <file>) [--approved-by <actor>] [--files-to-capture-json <json> | --files-to-capture-file <file>] [--json] [--include-context] [--include-trace] [--write-ledger] [--ledger-path <path>]",
       "caleb one-provider-adapter-dry-run [--explicit-opt-in true|false] [--explicit-live-request true|false] [--json]",
-      "caleb run-one-provider-adapter-live --explicit-opt-in true --explicit-live-request true --network-permission true --kill-switch-open true --credential-env-var <ENV_VAR_NAME> --approved-by <actor> --prompt-file <file> --write-ledger [--ledger-path <path>] [--model <model_id>] [--max-output-tokens <n>] [--timeout-ms <n>] [--expected-output-sha256 <hex>] [--json]"
+      "caleb run-one-provider-adapter-live --explicit-opt-in true --explicit-live-request true --network-permission true --kill-switch-open true --credential-env-var <ENV_VAR_NAME> --approved-by <actor> --prompt-file <file> --write-ledger [--adapter-id anthropic_live_adapter|grok_live_adapter] [--ledger-path <path>] [--model <model_id>] [--max-output-tokens <n>] [--timeout-ms <n>] [--expected-output-sha256 <hex>] [--json]"
     ],
     note:
       "Media commands are explicit and separate from the accepted V1 catalog. Hollowcut project inspection validates project JSON only; it does not render, export, mutate, write Ledger entries, or assign trust. route-decision is a dry-run diagnostic: it classifies signals, selects a route, and builds a work graph without executing any model calls. logic-execute dispatches exactly one V1 Hollow for hollow_only routes through the Verified Return Path. --files-to-capture-json and --files-to-capture-file supply a JSON array of project-relative file paths to snapshot before dispatch; required when requires_code_mutation is true."
@@ -152,6 +160,8 @@ interface LiveSurfaceLedgerEntryInput {
   readonly run_id: string;
   readonly trace_id: string;
   readonly actor_type: "orchestration_core" | "model";
+  readonly actor_id: string;
+  readonly actor_version: string;
   readonly status: "completed" | "rejected" | "failed";
   readonly result: unknown;
   readonly parent_refs: readonly string[];
@@ -167,8 +177,8 @@ function buildLiveSurfaceLedgerEntry(input: LiveSurfaceLedgerEntryInput): Ledger
     run_id: input.run_id,
     trace_id: input.trace_id,
     actor_type: input.actor_type,
-    actor_id: "anthropic_live_adapter",
-    actor_version: "0.1.0",
+    actor_id: input.actor_id,
+    actor_version: input.actor_version,
     activity: input.activity,
     status: input.status,
     // Digest-only records by contract: no raw prompt, raw output, or key
@@ -204,6 +214,7 @@ export async function handleRunOneProviderAdapterLiveCommand(
   const credentialEnvVar = stringFlag(parsed, "credential_env_var");
   const approvedBy = stringFlag(parsed, "approved_by") ?? null;
   const promptFile = stringFlag(parsed, "prompt_file");
+  const adapterId = stringFlag(parsed, "adapter_id") ?? ANTHROPIC_LIVE_ADAPTER_ID;
   const modelOverride = stringFlag(parsed, "model");
   const expectedOutputSha = stringFlag(parsed, "expected_output_sha256");
   const writeLedger = parsed.flags.write_ledger === true;
@@ -237,6 +248,12 @@ export async function handleRunOneProviderAdapterLiveCommand(
   if (timeoutMs !== undefined && (!Number.isFinite(timeoutMs) || timeoutMs <= 0)) {
     usageErrors.push({ code: "invalid_timeout_ms", message: "--timeout-ms must be a positive integer." });
   }
+  if (!ALLOWLISTED_LIVE_ADAPTER_IDS.includes(adapterId)) {
+    usageErrors.push({
+      code: "adapter_not_allowlisted",
+      message: `--adapter-id must be one of: ${ALLOWLISTED_LIVE_ADAPTER_IDS.join(", ")}.`
+    });
+  }
   if (usageErrors.length > 0) {
     return errorResult(command, "Invalid run-one-provider-adapter-live usage.", usageErrors);
   }
@@ -259,24 +276,55 @@ export async function handleRunOneProviderAdapterLiveCommand(
     ]);
   }
 
-  const config = {
-    ...DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG,
-    ...(modelOverride === undefined ? {} : { model: modelOverride }),
-    limits: {
-      ...DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG.limits,
-      ...(maxOutputTokens === undefined ? {} : { max_output_tokens: maxOutputTokens }),
-      ...(timeoutMs === undefined ? {} : { timeout_ms: timeoutMs })
-    }
-  };
-
   const runId = `live_run_${randomUUID()}`;
-  const request = buildAnthropicLiveAdapterRequest({
-    prompt_text: promptText,
-    config,
-    task_id: `live_task_${randomUUID()}`,
-    run_id: runId,
-    request_id: `live_request_${randomUUID()}`
-  });
+  const taskId = `live_task_${randomUUID()}`;
+  const requestId = `live_request_${randomUUID()}`;
+  let request: LiveAdapterRequest;
+  let surfaceAdapterId: string;
+  let surfaceAdapterVersion: string;
+  let surfaceModel: string;
+
+  if (adapterId === GROK_LIVE_ADAPTER_ID) {
+    const grokConfig: GrokLiveAdapterConfig = {
+      ...DEFAULT_GROK_LIVE_ADAPTER_CONFIG,
+      ...(modelOverride === undefined ? {} : { model: modelOverride }),
+      limits: {
+        ...DEFAULT_GROK_LIVE_ADAPTER_CONFIG.limits,
+        ...(maxOutputTokens === undefined ? {} : { max_output_tokens: maxOutputTokens }),
+        ...(timeoutMs === undefined ? {} : { timeout_ms: timeoutMs })
+      }
+    };
+    surfaceAdapterId = grokConfig.adapter_id;
+    surfaceAdapterVersion = grokConfig.adapter_version;
+    surfaceModel = grokConfig.model;
+    request = buildGrokLiveAdapterRequest({
+      prompt_text: promptText,
+      config: grokConfig,
+      task_id: taskId,
+      run_id: runId,
+      request_id: requestId
+    });
+  } else {
+    const anthropicConfig: AnthropicLiveAdapterConfig = {
+      ...DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG,
+      ...(modelOverride === undefined ? {} : { model: modelOverride }),
+      limits: {
+        ...DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG.limits,
+        ...(maxOutputTokens === undefined ? {} : { max_output_tokens: maxOutputTokens }),
+        ...(timeoutMs === undefined ? {} : { timeout_ms: timeoutMs })
+      }
+    };
+    surfaceAdapterId = anthropicConfig.adapter_id;
+    surfaceAdapterVersion = anthropicConfig.adapter_version;
+    surfaceModel = anthropicConfig.model;
+    request = buildAnthropicLiveAdapterRequest({
+      prompt_text: promptText,
+      config: anthropicConfig,
+      task_id: taskId,
+      run_id: runId,
+      request_id: requestId
+    });
+  }
   const traceId = `live_trace_${randomUUID()}`;
   const ledger = new JsonlLedger(ledgerPath);
 
@@ -297,10 +345,12 @@ export async function handleRunOneProviderAdapterLiveCommand(
     run_id: runId,
     trace_id: traceId,
     actor_type: "orchestration_core",
+    actor_id: surfaceAdapterId,
+    actor_version: surfaceAdapterVersion,
     status: "completed",
     result: dryRun.report,
     parent_refs: [],
-    model: config.model
+    model: surfaceModel
   });
 
   try {
@@ -326,7 +376,7 @@ export async function handleRunOneProviderAdapterLiveCommand(
     repo_root_confirmed: repoRootConfirmed,
     explicit_opt_in: explicitOptIn,
     explicit_live_request: explicitLiveRequest,
-    provider_adapter_allowlisted: ALLOWLISTED_LIVE_ADAPTER_IDS.includes(config.adapter_id),
+    provider_adapter_allowlisted: ALLOWLISTED_LIVE_ADAPTER_IDS.includes(surfaceAdapterId),
     live_harness_allowlisted: ALLOWLISTED_LIVE_HARNESS_IDS.includes(LIVE_SURFACE_HARNESS_ID),
     credential_source_declared_by_caller: credentialEnvVar !== undefined,
     credential_auto_read: false,
@@ -348,10 +398,12 @@ export async function handleRunOneProviderAdapterLiveCommand(
       run_id: runId,
       trace_id: traceId,
       actor_type: "orchestration_core",
+      actor_id: surfaceAdapterId,
+      actor_version: surfaceAdapterVersion,
       status: "rejected",
       result: prerequisites,
       parent_refs: [dryRunEntry.ledger_id],
-      model: config.model
+      model: surfaceModel
     });
     let refusalLedgerId: string | null = refusalEntry.ledger_id;
     try {
@@ -370,23 +422,49 @@ export async function handleRunOneProviderAdapterLiveCommand(
     });
   }
 
-  const adapter = createAnthropicLiveAdapter(
-    config,
-    {
-      prerequisites_evaluation: prerequisites,
-      kill_switch_open: killSwitchOpen,
-      network_permission_granted_by_caller: networkPermission,
-      approved_by: approvedBy
-    },
-    {
-      // The only environment read on the live path, and only because the
-      // caller explicitly declared the variable name via --credential-env-var.
-      credential_provider:
-        credentialEnvVar === undefined ? null : () => process.env[credentialEnvVar]
-    }
-  );
+  const gateEvidence = {
+    prerequisites_evaluation: prerequisites,
+    kill_switch_open: killSwitchOpen,
+    network_permission_granted_by_caller: networkPermission,
+    approved_by: approvedBy
+  };
+  const adapterDeps = {
+    // The only environment read on the live path, and only because the
+    // caller explicitly declared the variable name via --credential-env-var.
+    credential_provider:
+      credentialEnvVar === undefined ? null : () => process.env[credentialEnvVar]
+  };
 
-  const result = await adapter.invokeLive({ request, prompt_text: promptText });
+  let result: LiveAdapterResult;
+  if (adapterId === GROK_LIVE_ADAPTER_ID) {
+    const grokConfig: GrokLiveAdapterConfig = {
+      ...DEFAULT_GROK_LIVE_ADAPTER_CONFIG,
+      ...(modelOverride === undefined ? {} : { model: modelOverride }),
+      limits: {
+        ...DEFAULT_GROK_LIVE_ADAPTER_CONFIG.limits,
+        ...(maxOutputTokens === undefined ? {} : { max_output_tokens: maxOutputTokens }),
+        ...(timeoutMs === undefined ? {} : { timeout_ms: timeoutMs })
+      }
+    };
+    result = await createGrokLiveAdapter(grokConfig, gateEvidence, adapterDeps).invokeLive({
+      request,
+      prompt_text: promptText
+    });
+  } else {
+    const anthropicConfig: AnthropicLiveAdapterConfig = {
+      ...DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG,
+      ...(modelOverride === undefined ? {} : { model: modelOverride }),
+      limits: {
+        ...DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG.limits,
+        ...(maxOutputTokens === undefined ? {} : { max_output_tokens: maxOutputTokens }),
+        ...(timeoutMs === undefined ? {} : { timeout_ms: timeoutMs })
+      }
+    };
+    result = await createAnthropicLiveAdapter(anthropicConfig, gateEvidence, adapterDeps).invokeLive({
+      request,
+      prompt_text: promptText
+    });
+  }
 
   // Correction (a): digest comparison is informational only — a mismatch still
   // proves the loop worked and is never treated as a failed invocation.
@@ -404,10 +482,12 @@ export async function handleRunOneProviderAdapterLiveCommand(
     run_id: runId,
     trace_id: traceId,
     actor_type: "model",
+    actor_id: surfaceAdapterId,
+    actor_version: surfaceAdapterVersion,
     status: result.ok ? "completed" : "failed",
     result,
     parent_refs: [dryRunEntry.ledger_id],
-    model: config.model
+    model: surfaceModel
   });
   let invocationLedgerId: string | null = invocationEntry.ledger_id;
   let ledgerWriteStatus: "ok" | "failed" = "ok";
@@ -431,7 +511,8 @@ export async function handleRunOneProviderAdapterLiveCommand(
       live_invocation_ledger_id: invocationLedgerId,
       ledger_write_status: ledgerWriteStatus,
       ledger_path: ledgerPath,
-      model: config.model
+      model: surfaceModel,
+      adapter_id: surfaceAdapterId
     }
   );
 }

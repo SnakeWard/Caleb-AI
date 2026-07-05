@@ -159,6 +159,30 @@ attribution header and its one stale line corrected (M2 completed). Pre-change
 snapshot: `snap_20260704T233909537Z_000304_milestone` (verified on disk).
 Boundary doc: `docs/LEDGER_ENTRY_ID_INTEGRITY.md`.
 
+### 2026-07-05 — Pass G2 — First Grok Live Call Acceptance
+
+First live Grok/xAI invocation via `grok_live_adapter` / `grok-3-mini`. Attempt 1
+failed HTTP 410 because `search_parameters` is rejected by xAI even with
+`mode: "off"`; wire body corrected in `xaiLiveAdapter.ts`. Attempt 2 succeeded:
+`response_schema_valid`, provider ID `91bc2421-b27f-9247-8009-5cda43341a53`,
+137/2/139 tokens, 1,265 ms, digest matches lowercase `acknowledged`. Membrane
+and redaction verified; credential bridge file deleted post-pass. Pre-change
+snapshot: `snap_20260705T015648621Z_000313_milestone`. Report:
+`docs/FIRST_GROK_LIVE_CALL_ACCEPTANCE_REPORT.md`.
+
+### 2026-07-05 — Pass G1 — Grok (xAI) Live Adapter Implementation
+
+Second live provider adapter (`grok_live_adapter`) implemented at
+`src/providers/xaiLiveAdapter.ts` behind the full M1 gate chain. CLI
+`run-one-provider-adapter-live` generalized with `--adapter-id` (default remains
+`anthropic_live_adapter`). Shared helpers in `liveAdapterShared.ts`. Digest-only,
+search off, T1 trust ceiling, zero new dependencies. **No live call in G1.**
+Pre-change snapshot: `snap_20260705T011849270Z_000307_milestone`. Validation
+snapshot: `snap_20260705T014356336Z_000311_milestone`. Suite at pass close:
+156 test files / 2859 tests green; typecheck and build clean. V1 catalog 12;
+Hollowcut 9. Doc: `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md`. Next: G2 first
+Grok live call (owner authorization required).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

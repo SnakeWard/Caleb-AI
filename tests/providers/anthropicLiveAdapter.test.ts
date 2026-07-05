@@ -536,8 +536,11 @@ describe("anthropic live adapter request builder and capabilities", () => {
     expect(caps.max_output_trust_tier).toBe("T1");
   });
 
-  it("keeps the adapter allowlist locked to the single anthropic adapter", () => {
-    expect(ALLOWLISTED_LIVE_ADAPTER_IDS).toEqual(["anthropic_live_adapter"]);
+  it("keeps the adapter allowlist locked to the authorized live adapters", () => {
+    expect(ALLOWLISTED_LIVE_ADAPTER_IDS).toEqual([
+      "anthropic_live_adapter",
+      "grok_live_adapter"
+    ]);
     expect(DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG.adapter_id).toBe("anthropic_live_adapter");
     expect(DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG.model).toBe("claude-haiku-4-5");
   });

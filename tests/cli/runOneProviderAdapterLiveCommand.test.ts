@@ -140,4 +140,47 @@ describe("run-one-provider-adapter-live CLI surface (offline refusal paths)", ()
     const parsed = parseCliArgs(["run-one-provider-adapter-live", "--write-report"]);
     expect(parsed.errors.some((e) => e.code === "unsupported_flag")).toBe(true);
   });
+
+  it("rejects a non-allowlisted --adapter-id before any ledger work", async () => {
+    const { promptFile } = await makeWorkspace();
+    const result = await handleCliCommand(
+      parseCliArgs([
+        "run-one-provider-adapter-live",
+        "--adapter-id",
+        "unknown_live_adapter",
+        "--prompt-file",
+        promptFile,
+        "--write-ledger",
+        "--json"
+      ])
+    );
+
+    expect(result.ok).toBe(false);
+    expect(result.errors.some((e) => e.code === "adapter_not_allowlisted")).toBe(true);
+  });
+
+  it("routes grok_live_adapter through the shared gate chain without network when prerequisites are missing", async () => {
+    const { promptFile, ledgerPath } = await makeWorkspace();
+    const result = await handleCliCommand(
+      parseCliArgs([
+        "run-one-provider-adapter-live",
+        "--adapter-id",
+        "grok_live_adapter",
+        "--prompt-file",
+        promptFile,
+        "--write-ledger",
+        "--ledger-path",
+        ledgerPath,
+        "--json"
+      ])
+    );
+
+    expect(result.ok).toBe(true);
+    const data = result.data as Record<string, unknown>;
+    expect(data.refused).toBe(true);
+    expect(data.network_attempted).toBe(false);
+
+    const entries = await readLedgerEntries(ledgerPath);
+    expect(entries[0]?.actor_id).toBe("grok_live_adapter");
+  });
 });

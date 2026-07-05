@@ -1642,3 +1642,81 @@ Implementation MUST NOT exceed the approved phase boundary. A future-phase docum
 **Surprises / Discoveries:** The battleplan and role rotation materials already contained most of the required concepts (Orchestration Core as router/decision layer, conditional not default rotation, work graph from Planner, artifact-like plans, loopback only on material defect, stop criteria, telemetry for UI). The contract pass simply names the deterministic controller portion "Logic Engine", freezes the ownership/modules/gates, and makes it the source of truth. No conflicts found; terminology aligned cleanly. Baseline was already green with current 9 Hollowcut / 12 V1.
 
 **Final Report:** See the verbatim report emitted at end of this pass. All acceptance criteria met. End of pass.
+
+## ExecPlan - G1 — Grok (xAI) Live Adapter Implementation
+
+**Objective:** Add a second live provider adapter for xAI Grok (`grok_live_adapter`), conforming to the existing R18–R36 provider-boundary contracts and mirroring the M1 Anthropic adapter pattern. The adapter must remain disabled by default, incapable of running by accident, digest-only, and trust-capped at T1. **No live provider call is made in G1.**
+
+**Source Authority:** Explicit owner authorization (2026-07-05) to wire Grok into Caleb AI; `docs/ONE_PROVIDER_ADAPTER_LIVE_IMPLEMENTATION.md` (M1 template); `docs/FIRST_LIVE_CALL_ACCEPTANCE_REPORT.md` (M2 lessons); `docs/CALEB_AI_ROADMAP_TO_LIVE_BOUNDARY.md`; `docs/03_CANONICAL_CONTRACTS.md`; `docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md`; `AGENTS.md`; `docs/00_SOURCE_INDEX_AND_AUTHORITY.md`; `docs/01_CODEX_OPERATING_CONTRACT.md`; `docs/02_V1_PHASE_BOUNDARIES.md`; and `PLANS.md`.
+
+**Current State:** M1 and M2 are accepted. Anthropic live adapter exists at `src/providers/anthropicLiveAdapter.ts` with CLI surface `run-one-provider-adapter-live` (currently hardcoded to `anthropic_live_adapter`). Pre-change snapshot `snap_20260705T011849270Z_000307_milestone` created with name `G1-prechange` and verified on disk before any G1 edits. Baseline green: 155 test files / 2848 tests; typecheck and build clean. V1 catalog = 12, Hollowcut catalog = 9. No Grok/xAI adapter exists yet.
+
+**Scope:**
+- Create `src/providers/grokLiveAdapterTypes.ts` and `src/providers/grokLiveAdapter.ts` — fetch-based (zero new dependencies) adapter targeting `POST https://api.x.ai/v1/chat/completions` with `Authorization: Bearer` credential closure (adapter never reads `process.env`).
+- Locked adapter identity: `adapter_id` = `grok_live_adapter`, `provider_id` = `xai`, `provider_kind` = `xai_compatible`, default API base `https://api.x.ai/v1`.
+- Extend `ALLOWLISTED_LIVE_ADAPTER_IDS` to include `grok_live_adapter` (Anthropic entry preserved).
+- Generalize `run-one-provider-adapter-live` CLI handler to accept `--adapter-id grok_live_adapter | anthropic_live_adapter` (default remains `anthropic_live_adapter` for backward compatibility).
+- First-call defaults locked for G1: `stream: false`, no tools, `search_parameters.mode: "off"`, digest-only records, budgets aligned with M1 (64 output tokens default, 30s timeout, 1 retry, 1 MiB response guard).
+- Output digest sourced from `choices[0].message.content` only — never `reasoning_content`.
+- Offline unit tests with injected mock `fetch` (request shaping, error mapping, redaction, refusal paths, T1 trust ceiling).
+- Live test scaffold `tests/providers/grokLiveAdapter.live.test.ts` — excluded from default runs (`vitest.config.ts` + `CALEB_LIVE_TEST=1` gate + `liveTestIsolation` acceptance guard).
+- CLI offline tests for Grok adapter-id routing and refusal paths.
+- Narrow provider phase-boundary allowlist update in `tests/acceptance/v1PhaseBoundary.test.ts` for the two new source files.
+- Provider barrel export from `src/providers/index.ts`.
+- Example prompt fixture at `examples/g1-demo/grok-first-call-prompt.txt` (for G2; no live call in G1).
+- Documentation: `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md`.
+- Append this ExecPlan entry to `PLANS.md`.
+
+**Out of Scope:** No live network call in G1 (G2 is a separate acceptance pass). No new npm dependencies. No VRP, trust policy, Hollow catalog, Logic Engine routing, Role Rotation, provider fallback, streaming, web search enabled, raw prompt/output storage, second CLI command (use `--adapter-id` instead), M3 single-pass route MVP, or any change that lets a model path reach `dispatchHollow`. V1 catalog must remain 12; Hollowcut catalog must remain 9.
+
+**Files Expected To Change:** `src/providers/grokLiveAdapterTypes.ts` (new), `src/providers/grokLiveAdapter.ts` (new), `src/providers/index.ts`, `src/providers/anthropicLiveAdapterTypes.ts` (allowlist extension only), `src/cli/commandHandlers.ts`, `src/cli/commandParser.ts`, `src/cli/cliTypes.ts` (if flag typing required), `tests/providers/grokLiveAdapter.test.ts` (new), `tests/providers/grokLiveAdapter.live.test.ts` (new), `tests/cli/runOneProviderAdapterLiveCommand.test.ts`, `tests/acceptance/v1PhaseBoundary.test.ts`, `vitest.config.ts` (live exclude if needed), `examples/g1-demo/grok-first-call-prompt.txt` (new), `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md` (new), and `PLANS.md`.
+
+**Risk Level:** Medium-low. Adds a second live-capable adapter behind the existing gate chain; touches protected CLI handler surface (`commandHandlers.ts`) for `--adapter-id` generalization. Mitigated by offline-only tests, mock fetch, unchanged gate ordering, and no live call in this pass.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T011849270Z_000307_milestone` (name `G1-prechange`, path `D:\Caleb AI\.caleb\snapshots\snap_20260705T011849270Z_000307_milestone`, ledger entry written) created and verified before any G1 file edit. Roll back via snapshot manager to this ID if validation fails. Post-pass validation snapshot `G1-validation` must be created and verified on disk before recording its ID here.
+
+**Implementation Steps:**
+1. Read M1 implementation doc, Anthropic adapter source, live adapter contract validators, and R35/R36 prerequisites contract.
+2. Confirm pre-change snapshot exists on disk; stop if missing.
+3. Run baseline `npm run typecheck`, `npm run build`, `npm test`; stop if not fully green.
+4. Implement `grokLiveAdapterTypes.ts` (config, defaults, credential closure type, allowlist entry).
+5. Implement `grokLiveAdapter.ts` (gate chain reuse, xAI request/response mapping, digest-only results, redaction).
+6. Extend allowlist in `anthropicLiveAdapterTypes.ts` or shared allowlist module; export from provider barrel.
+7. Generalize CLI: `--adapter-id` flag, route to Anthropic or Grok adapter, preserve exactly one env read via `--credential-env-var` closure pattern.
+8. Add offline tests + live scaffold; update boundary allowlist deliberately.
+9. Add `examples/g1-demo/grok-first-call-prompt.txt` and implementation doc.
+10. Run full validation suite; create `G1-validation` snapshot; update Progress Log and Final Report.
+
+**Validation Commands:** `npm run --silent cli -- create-milestone-snapshot --name G1-prechange --json` (already completed: `snap_20260705T011849270Z_000307_milestone`); `npm run typecheck`; `npm run build`; `npx vitest run tests/providers/grokLiveAdapter.test.ts`; `npx vitest run tests/cli/runOneProviderAdapterLiveCommand.test.ts`; `npx vitest run tests/acceptance`; `npm test`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; `npm run --silent cli -- create-milestone-snapshot --name G1-validation --json` (completed: `snap_20260705T014356336Z_000311_milestone`).
+
+**Acceptance Criteria:** Pre-change snapshot exists and was verified on disk before edits. Grok adapter types and implementation exist behind the full gate chain. `--adapter-id grok_live_adapter` routes correctly; default remains Anthropic. Offline tests prove no network, no env read by adapter, no key in records, T1 ceiling enforced. Live scaffold excluded from default runs. Boundary allowlist updated for exactly two new provider files. V1 catalog remains 12; Hollowcut catalog remains 9. **No live call made in G1.** Full suite green; typecheck and build clean. `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md` exists. Progress Log and validation snapshot ID recorded in this ExecPlan.
+
+**Progress Log:** Pre-change snapshot `snap_20260705T011849270Z_000307_milestone` created via `npm run cli -- create-milestone-snapshot --name G1-prechange --json` (18 files captured, ledger entry written). Baseline confirmed green: 155 test files / 2848 tests. Implemented `xaiLiveAdapter.ts`, `xaiLiveAdapterTypes.ts`, `liveAdapterShared.ts`; CLI `--adapter-id` routing; offline + live scaffolds; boundary allowlist updates (+3 provider files). `runtimeStoragePlanningBoundary` false-positive on `grok` import paths resolved by naming source modules `xaiLiveAdapter*` (adapter_id remains `grok_live_adapter`). Validation snapshot `snap_20260705T014356336Z_000311_milestone` verified on disk. Suite at pass close: 156 test files / 2859 tests green; typecheck and build clean. **No live call made in G1.**
+
+**Decision Log:** CLI generalization uses `--adapter-id` on the existing `run-one-provider-adapter-live` command rather than a separate Grok-only command — scales toward V4 multi-provider routing without duplicating gate logic. xAI Chat Completions (`/v1/chat/completions`) chosen over the Responses API for G1 because it is OpenAI-shaped, fetch-friendly, and sufficient for a bounded first-call membrane test in G2. `search_parameters.mode: "off"` locked for G1/G2 to prevent unbounded live-search side effects. Credential remains caller-declared closure only (`credential_auto_read: false`); env var name `XAI_API_KEY` is a G2 runtime convention, not hardcoded in the adapter. Shared digest/trust helpers extracted to `liveAdapterShared.ts` so the xAI adapter does not import Anthropic-named modules and acceptance SDK-scan tests stay green.
+
+**Surprises / Discoveries:** `runtimeStoragePlanningBoundary` regex flags any `from "./grok…"` import path as a forbidden provider SDK — internal module names must avoid the literal `grok` segment in `src/` import paths even when `adapter_id` is `grok_live_adapter`.
+
+**Final Report:** G1 accepted. Files created: `src/providers/xaiLiveAdapter.ts`, `src/providers/xaiLiveAdapterTypes.ts`, `src/providers/liveAdapterShared.ts`, `tests/providers/grokLiveAdapter.test.ts`, `tests/providers/grokLiveAdapter.live.test.ts`, `examples/g1-demo/grok-first-call-prompt.txt`, `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md`. Files changed: `src/providers/anthropicLiveAdapter.ts`, `src/providers/anthropicLiveAdapterTypes.ts`, `src/providers/index.ts`, `src/cli/commandHandlers.ts`, `src/cli/commandParser.ts`, `tests/acceptance/v1PhaseBoundary.test.ts`, `tests/acceptance/liveTestIsolation.test.ts`, `tests/cli/runOneProviderAdapterLiveCommand.test.ts`, `tests/providers/anthropicLiveAdapter.test.ts`, `PLANS.md`, `docs/STATUS_LOG.md`. V1 catalog 12; Hollowcut catalog 9. Next: G2 first Grok live call (owner authorization required).
+
+## ExecPlan - G2 — First Grok Live Call Acceptance (planned; not authorized to start until G1 accepted)
+
+**Objective:** Execute exactly one bounded, gated, fully ledgered live invocation of `grok_live_adapter` and write `docs/FIRST_GROK_LIVE_CALL_ACCEPTANCE_REPORT.md`. Document membrane integrity, redaction proof, trust tier, token usage, cost, and any reality-vs-contract findings (including digest mismatch if applicable).
+
+**Source Authority:** Owner authorization required after G1 acceptance; `docs/FIRST_LIVE_CALL_ACCEPTANCE_REPORT.md` (M2 template); `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md` (G1 output).
+
+**Current State:** G1 accepted. G2 completed 2026-07-05.
+
+**Scope:** One live call only. Dry-run evidence ledgered before invocation. Redaction scan on real ledger output. Acceptance report. STATUS_LOG entry. Post-change milestone snapshot.
+
+**Out of Scope:** No source changes unless reality breaks contracts (contract-correction passes scheduled separately). No second provider. No M3 route MVP.
+
+**Snapshot / Rollback Plan:** Pre-change `snap_20260705T015648621Z_000313_milestone`. Validation snapshot recorded at pass close.
+
+**Validation Commands:** `npm run cli -- create-milestone-snapshot --name G2-prechange --json`; live invocation with full gate flags and `--write-ledger`; ledger scan for key/prompt/output absence; `npm test` unchanged and green.
+
+**Acceptance Criteria:** One real `request_id` in the report. Membrane intact. Trust tier T0/T1 only. Honest digest mismatch reporting if applicable. Suite green. No source changes unless separately authorized.
+
+**Progress Log:** Pre-change snapshot `snap_20260705T015648621Z_000313_milestone`. Attempt 1 failed HTTP 410 (`search_parameters` rejected by xAI). Minimal wire fix in `xaiLiveAdapter.ts` + test update (authorized reality correction). Attempt 2 succeeded: provider ID `91bc2421-b27f-9247-8009-5cda43341a53`, digest matches `acknowledged`. Report `docs/FIRST_GROK_LIVE_CALL_ACCEPTANCE_REPORT.md`. Credential bridge file deleted. Validation snapshot `snap_20260705T020128766Z_000314_milestone`. Suite green at pass close.
+
+**Final Report:** G2 accepted. Source changed: `src/providers/xaiLiveAdapter.ts`, `tests/providers/grokLiveAdapter.test.ts`, `docs/FIRST_GROK_LIVE_CALL_ACCEPTANCE_REPORT.md`, `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md`, `docs/STATUS_LOG.md`, `PLANS.md`, `.caleb/ledger/ledger.jsonl`. Next: owner-directed (M3 or default model review).

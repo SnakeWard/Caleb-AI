@@ -17,3 +17,6 @@ coverage/
 *.temp
 .tmp-*.json
 npm-debug.log*
+
+# AI-implementer harness artifacts (terminal transcripts etc.) — never committed
+terminals/

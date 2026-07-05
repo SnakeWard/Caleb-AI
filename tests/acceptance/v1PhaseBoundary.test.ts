@@ -53,9 +53,12 @@ const ALLOWED_PROVIDER_SKELETON_FILES = [
   // live-boundary pass (docs/ONE_PROVIDER_ADAPTER_LIVE_IMPLEMENTATION.md).
   "src/providers/anthropicLiveAdapter.ts",
   "src/providers/anthropicLiveAdapterTypes.ts",
+  "src/providers/xaiLiveAdapter.ts",
+  "src/providers/xaiLiveAdapterTypes.ts",
   "src/providers/disabledByDefaultLiveHarnessScaffold.ts",
   "src/providers/dryRunReportTypes.ts",
   "src/providers/explicitOptInProviderGate.ts",
+  "src/providers/liveAdapterShared.ts",
   "src/providers/index.ts",
   "src/providers/liveHarnessTypes.ts",
   "src/providers/livePrerequisitesTypes.ts",

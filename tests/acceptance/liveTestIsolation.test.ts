@@ -11,9 +11,14 @@ describe("live test isolation boundary", () => {
     expect(config).toMatch(/exclude:\s*\[\.\.\.configDefaults\.exclude/);
   });
 
-  it("the live test scaffold uses the excluded naming convention", async () => {
-    const scaffold = await readFile("tests/providers/anthropicLiveAdapter.live.test.ts", "utf8");
-    expect(scaffold.length).toBeGreaterThan(0);
-    expect(scaffold).toContain("CALEB_LIVE_TEST");
+  it("the live test scaffolds use the excluded naming convention", async () => {
+    for (const path of [
+      "tests/providers/anthropicLiveAdapter.live.test.ts",
+      "tests/providers/grokLiveAdapter.live.test.ts"
+    ]) {
+      const scaffold = await readFile(path, "utf8");
+      expect(scaffold.length).toBeGreaterThan(0);
+      expect(scaffold).toContain("CALEB_LIVE_TEST");
+    }
   });
 });

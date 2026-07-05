@@ -42,7 +42,8 @@ const VALUE_FLAGS = new Set([
   "--model",
   "--max-output-tokens",
   "--timeout-ms",
-  "--expected-output-sha256"
+  "--expected-output-sha256",
+  "--adapter-id"
 ]);
 
 const BOOLEAN_FLAGS = new Set([
@@ -82,7 +83,8 @@ const FLAG_TO_KEY: Record<string, string> = {
   "--model": "model",
   "--max-output-tokens": "max_output_tokens",
   "--timeout-ms": "timeout_ms",
-  "--expected-output-sha256": "expected_output_sha256"
+  "--expected-output-sha256": "expected_output_sha256",
+  "--adapter-id": "adapter_id"
 };
 
 export function parseCliArgs(argv: readonly string[]): ParsedCliCommand {

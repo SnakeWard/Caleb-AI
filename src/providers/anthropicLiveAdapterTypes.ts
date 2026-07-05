@@ -4,6 +4,7 @@ import type {
   LiveAdapterResult
 } from "../modelBoundary/types/liveAdapterTypes.js";
 import type { OneProviderAdapterLivePrerequisitesEvaluation } from "./livePrerequisitesTypes.js";
+import { GROK_LIVE_ADAPTER_ID } from "./xaiLiveAdapterTypes.js";
 
 // M1 live-enabled adapter types. The R20 mock-compatible interface hard-codes
 // performs_network_call: false by design; this module is the explicitly
@@ -25,7 +26,10 @@ export const ANTHROPIC_LIVE_ADAPTER_ID = "anthropic_live_adapter";
 
 // Adapter/harness allowlist consumed by the live prerequisites gate. Additions
 // require an explicit authorized pass.
-export const ALLOWLISTED_LIVE_ADAPTER_IDS: readonly string[] = [ANTHROPIC_LIVE_ADAPTER_ID];
+export const ALLOWLISTED_LIVE_ADAPTER_IDS: readonly string[] = [
+  ANTHROPIC_LIVE_ADAPTER_ID,
+  GROK_LIVE_ADAPTER_ID
+];
 export const ALLOWLISTED_LIVE_HARNESS_IDS: readonly string[] = ["run_one_provider_adapter_live_cli"];
 
 export const DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG: AnthropicLiveAdapterConfig = {
