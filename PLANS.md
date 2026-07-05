@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - M3-A Raw Output Boundary Acceptance Lock
+
+**Objective:** Lock M3 as accepted and add acceptance report coverage so future work cannot regress model-output trust boundaries.
+
+**Source Authority:** Explicit user request for M3-A Raw Output Boundary Acceptance Lock, `docs/protocols/PASS_PROTOCOL_M3.md`, `docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_DIAGNOSTIC.md`, `docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_IMPLEMENTATION.md`, `tests/acceptance/m3RawOutputConsumptionBoundaryAcceptance.test.ts`, AGENTS.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, and PLANS.md.
+
+**Current State:** M3 implementation is committed and the tree was clean before M3-A. M3 acceptance already proves the golden path, NEVER-flow absence, structural split, catalog counts, H5 trap preservation, and artifact guardrail. M3-A adds a durable acceptance report and a report lock test.
+
+**Scope:** Create `docs/M3_RAW_OUTPUT_BOUNDARY_ACCEPTANCE_REPORT.md`, create `tests/acceptance/m3RawOutputBoundaryAcceptanceLock.test.ts`, update `PLANS.md` and `docs/STATUS_LOG.md`, and record the required snapshot Ledger append.
+
+**Out of Scope:** No runtime behavior change, no trust logic change, no storage behavior change, no provider/adapter change, no egress change, no role rotation, no UI, no package change, no catalog change, and no historical Ledger mutation.
+
+**Files Expected To Change:** `docs/M3_RAW_OUTPUT_BOUNDARY_ACCEPTANCE_REPORT.md`, `tests/acceptance/m3RawOutputBoundaryAcceptanceLock.test.ts`, `PLANS.md`, `docs/STATUS_LOG.md`, and `.caleb/ledger/ledger.jsonl` via the required snapshot command's normal append.
+
+**Risk Level:** Low. Acceptance-report and regression-lock only.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T180028231Z_000331_milestone` created with name `M3-A-acceptance-lock-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Verify clean tree. Read M3 protocol, diagnostic, implementation doc, and acceptance test. Create and verify pre-change snapshot. Add acceptance report and lock test. Run focused acceptance lock, typecheck, build, full suite, and catalog checks. Commit with M3-A acceptance lock in the message and verify clean tree.
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/acceptance/m3RawOutputBoundaryAcceptanceLock.test.ts tests/acceptance/m3RawOutputConsumptionBoundaryAcceptance.test.ts`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** M3 acceptance report exists and states M3 accepted. Report names canonical protocol, implementation doc, and acceptance test. Report locks trust ceiling, non-promoters, structural split, golden path, NEVER-flow absence, artifact-store evidence, CLI/test-only boundary, display deferral, all 23 M3 acceptance categories, and catalog counts. Lock test passes. V1 catalog remains 12. Hollowcut catalog remains 9. Final tree is clean.
+
+**Progress Log:** Clean tree verified. M3 authority/evidence docs read. Pre-change snapshot `snap_20260705T180028231Z_000331_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T180028231Z_000331_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Acceptance report and lock test created. Initial focused lock run caught a report wording mismatch (`effective_tier only` with backticks); report wording was tightened and focused M3-A/M3 acceptance passed 2/2 files and 13/13 tests. Typecheck passed. Build passed. Full suite passed 164/164 files and 2,905/2,905 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows.
+
+**Decision Log:** M3-A is deliberately report-and-lock only. It does not change raw-output runtime behavior because M3 is already accepted; it makes acceptance evidence harder to regress by pinning the report to the canonical evidence files and acceptance categories.
+
+**Surprises / Discoveries:** The first focused lock run proved the value of the report-lock pattern by catching an imprecise acceptance-report phrase before commit.
+
+**Final Report:** M3-A Raw Output Boundary Acceptance Lock completed. M3 is locked as accepted by `docs/M3_RAW_OUTPUT_BOUNDARY_ACCEPTANCE_REPORT.md`, with `tests/acceptance/m3RawOutputBoundaryAcceptanceLock.test.ts` pinning the report to the canonical protocol, implementation doc, M3 acceptance test, trust ceiling, non-promoters, structural split, golden-path evidence, NEVER-flow absence evidence, artifact-store guardrails, and all 23 required acceptance categories. No runtime, provider, egress, UI, package, catalog, or historical Ledger behavior changed. Validation passed: typecheck, focused M3-A/M3 acceptance 2 files / 13 tests, build, full suite 164 files / 2,905 tests, V1 catalog 12, Hollowcut catalog 9.
+
 ## ExecPlan - M3 Raw Output Consumption Boundary Implementation
 
 **Objective:** Implement M3 raw output consumption boundary under `docs/protocols/PASS_PROTOCOL_M3.md` and `docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_DIAGNOSTIC.md`, allowing model/provider output to become a Caleb artifact that downstream logic can consume only under Caleb trust rules.

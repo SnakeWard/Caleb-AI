@@ -290,6 +290,21 @@ Ledger entry. Validation: typecheck passed; focused M3 tests passed 5 files /
 20 tests; build passed; acceptance suite passed 43 files / 398 tests; full suite
 passed 163 files / 2,899 tests; V1 catalog 12; Hollowcut catalog 9.
 
+### 2026-07-05 — M3-A Raw Output Boundary Acceptance Lock
+
+`docs/M3_RAW_OUTPUT_BOUNDARY_ACCEPTANCE_REPORT.md` created to lock M3 as
+accepted and preserve model-output trust-boundary evidence. Added
+`tests/acceptance/m3RawOutputBoundaryAcceptanceLock.test.ts` to pin the report
+to the canonical M3 protocol, implementation doc, golden-path acceptance,
+NEVER-flow absence checks, structural split, non-promoters, and all 23 required
+acceptance categories. No runtime behavior, provider, egress, catalog, package,
+UI, role-rotation, or historical Ledger changes. Pre-change snapshot:
+`snap_20260705T180028231Z_000331_milestone` (verified on disk before recording).
+The required snapshot command appended its normal snapshot-created Ledger entry.
+Validation: typecheck passed; focused M3-A/M3 acceptance passed 2 files / 13
+tests; build passed; full suite passed 164 files / 2,905 tests; V1 catalog 12;
+Hollowcut catalog 9.
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its
