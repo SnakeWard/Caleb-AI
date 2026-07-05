@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - L1-A Route-Input Boundary Acceptance Lock
+
+**Objective:** Lock the accepted L1 route-input hardening boundary with a dedicated acceptance report and lock test, following the M3-A precedent.
+
+**Source Authority:** Explicit attached L1-A/RA-C protocol, `docs/protocols/PASS_PROTOCOL_L1A_RAC.md`, accepted L1 implementation commit `014bec4`, `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_IMPLEMENTATION.md`, AGENTS.md, CODEX.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, and this `PLANS.md`.
+
+**Current State:** L1 implementation is committed and clean. It added an allowlist-based route-input gate and required detectors. L1-A has not yet locked the accepted boundary surface.
+
+**Scope:** Create the combined protocol file, create `docs/L1_ROUTE_INPUT_BOUNDARY_ACCEPTANCE_REPORT.md`, create `tests/acceptance/l1RouteInputBoundaryAcceptanceLock.test.ts`, update `PLANS.md` and `docs/STATUS_LOG.md`, and record required snapshot Ledger appends.
+
+**Out of Scope:** No runtime behavior changes, no L1 implementation patches, no role rotation, routing behavior changes, UI/display, providers, egress, package changes, catalog changes, M3 runtime changes, trust promotion, side effects, or new route-input record types.
+
+**Files Expected To Change:** `docs/protocols/PASS_PROTOCOL_L1A_RAC.md`, `docs/L1_ROUTE_INPUT_BOUNDARY_ACCEPTANCE_REPORT.md`, `tests/acceptance/l1RouteInputBoundaryAcceptanceLock.test.ts`, `PLANS.md`, `docs/STATUS_LOG.md`, and `.caleb/ledger/ledger.jsonl` via required snapshot commands.
+
+**Risk Level:** Low. Acceptance-lock only. The main risk is discovering an L1 coverage gap; per protocol, that would stop the pass rather than silently patching runtime.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T214419613Z_000340_milestone` created with name `l1a_route_input_lock_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Verify clean tree. Create and verify pre-change snapshot. Commit combined protocol before or with L1-A work. Create acceptance report. Add lock test pinning allowlist, fail-closed behavior, public-surface detectors, entrypoint uniqueness, and lock-fires evidence. Run typecheck, focused lock test, build, full suite, catalog checks. Commit with pass ID and verify clean tree.
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/acceptance/l1RouteInputBoundaryAcceptanceLock.test.ts`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** Acceptance report exists. Lock test passes. Allowlist is pinned verbatim. Unknown record types reject. Every L1 detector fires through the gate public surface. `selectRouteFromRouteInputs` is the sole hardened entrypoint. Lock-fires evidence is recorded. No L1 runtime changes are made. V1 catalog remains 12. Hollowcut catalog remains 9. Existing suite remains green.
+
+**Progress Log:** Clean tree verified. Pre-change snapshot `snap_20260705T214419613Z_000340_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T214419613Z_000340_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Combined protocol file, acceptance report, and lock test drafted. Initial focused lock test passed but typecheck caught a test-helper narrowing issue; fixed in test only. Typecheck passed. Focused L1-A lock test passed 1 file / 7 tests. Build passed. Full suite passed 167/167 files and 2,935/2,935 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T214857931Z_000341_milestone`, verified present on disk before recording.
+
+**Decision Log:** The lock pins allowlist contents by inspecting the accepted `ALLOWED_KINDS` source and proves detector behavior through public gate exports. The synthetic lock-fires fixture uses `future_unprotocolled_route_input` and `selectRouteFromRawModelOutput` as non-runtime weakening examples.
+
+**Surprises / Discoveries:** None so far.
+
+**Final Report:** L1-A Route-Input Boundary Acceptance Lock completed. Acceptance report created at `docs/L1_ROUTE_INPUT_BOUNDARY_ACCEPTANCE_REPORT.md`; lock test created at `tests/acceptance/l1RouteInputBoundaryAcceptanceLock.test.ts`; combined protocol recorded at `docs/protocols/PASS_PROTOCOL_L1A_RAC.md`. The locked allowlist is: `contract_validated_task_frame`, `verified_signal_frame`, `engine_internal_state`, `deterministic_hollow_signal`, `accepted_gate_policy_result`, `human_pat_approval_record`, `snapshot_change_guard_state`, `lineage_resolved_decision_facing_record`. Lock-fires evidence references synthetic weakening fixtures `future_unprotocolled_route_input` and `selectRouteFromRawModelOutput`. No runtime behavior changes were made. Required pre-change snapshot `snap_20260705T214419613Z_000340_milestone` and validation-created snapshot `snap_20260705T214857931Z_000341_milestone` were verified on disk before recording. Validation passed: typecheck, focused L1-A lock 1 file / 7 tests, build, full suite 167 files / 2,935 tests, V1 catalog 12, Hollowcut catalog 9.
+
 ## ExecPlan - L1 Logic Engine Route-Input Hardening Implementation
 
 **Objective:** Implement L1 under `docs/protocols/PASS_PROTOCOL_L1.md` and `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md` by adding an allowlist-based Logic Engine route-input gate so only approved decision-facing records may move Caleb's state machine.

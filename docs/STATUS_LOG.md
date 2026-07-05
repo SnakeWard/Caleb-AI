@@ -363,6 +363,25 @@ Full validation: build passed; full suite passed 166 files / 2,928 tests; V1
 catalog 12; Hollowcut catalog 9. Full suite created validation snapshot
 `snap_20260705T212456285Z_000339_milestone` (verified on disk before recording).
 
+### 2026-07-05 — L1-A Route-Input Boundary Acceptance Lock
+
+`docs/L1_ROUTE_INPUT_BOUNDARY_ACCEPTANCE_REPORT.md` and
+`tests/acceptance/l1RouteInputBoundaryAcceptanceLock.test.ts` created to lock
+the accepted L1 steering boundary. The lock pins the exact route-input allowlist,
+fail-closed unknown record rejection, required L1 detector behavior through the
+public gate surface, and `selectRouteFromRouteInputs` as the sole hardened
+entrypoint. Lock-fires evidence uses synthetic weakening fixtures:
+`future_unprotocolled_route_input` and `selectRouteFromRawModelOutput`. No L1
+runtime behavior, role rotation, routing behavior, UI/display, provider, egress,
+package, catalog, M3 runtime, trust-promotion, side-effect, or historical Ledger
+behavior changed. Pre-change snapshot:
+`snap_20260705T214419613Z_000340_milestone` (verified on disk before recording).
+The required snapshot command appended its normal snapshot-created Ledger entry.
+Validation: typecheck passed; focused L1-A lock test passed 1 file / 7 tests;
+build passed; full suite passed 167 files / 2,935 tests; V1 catalog 12;
+Hollowcut catalog 9. Full suite created validation snapshot
+`snap_20260705T214857931Z_000341_milestone` (verified on disk before recording).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its
