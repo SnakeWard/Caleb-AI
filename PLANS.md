@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - M3 Raw Output Consumption Boundary Implementation
+
+**Objective:** Implement M3 raw output consumption boundary under `docs/protocols/PASS_PROTOCOL_M3.md` and `docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_DIAGNOSTIC.md`, allowing model/provider output to become a Caleb artifact that downstream logic can consume only under Caleb trust rules.
+
+**Source Authority:** Explicit user approval for M3 implementation, `docs/protocols/PASS_PROTOCOL_M3.md`, `docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_DIAGNOSTIC.md`, `docs/RAW_OUTPUT_BOUNDARY_CONTRACT.md`, `AGENTS.md`, `CODEX.md`, `docs/00_SOURCE_INDEX_AND_AUTHORITY.md`, `docs/01_CODEX_OPERATING_CONTRACT.md`, `docs/02_V1_PHASE_BOUNDARIES.md`, `docs/03_CANONICAL_CONTRACTS.md`, `docs/04_STORAGE_AND_LEDGER_DECISIONS.md`, `docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md`, `docs/06_V1_TEST_AND_FIXTURE_PLAN.md`, and this `PLANS.md`.
+
+**Current State:** M3 diagnostic is approved and committed. The working tree was clean before implementation. `.caleb/artifacts/` was not ignored before this pass, so the first guardrail change is to add it to `.gitignore` before any raw-content store usage. No raw-output consumption implementation exists before this pass.
+
+**Scope:** Add `.caleb/artifacts/` gitignore guardrail; implement raw-output artifact types, authority-path content-addressed store, in-memory fast-path store, lifecycle helper, derived evidence policy, lineage-resolution gate, Character Count consumption boundary wrapper, exports, unit tests, M3 acceptance tests, implementation documentation, and pass ledger entries.
+
+**Out of Scope:** No role rotation, display UI, 3D Thinking Mode, 2D inspector, new providers or adapters, egress expansion, H5 weakening, historical Ledger mutation, V1 catalog change, Hollowcut catalog change, provider/model output above T1, model/provider-driven routing, side effects, trust promotion, or persistence as truth.
+
+**Files Expected To Change:** `.gitignore`, `src/index.ts`, `src/rawOutput/*`, `tests/rawOutput/*`, `tests/acceptance/m3RawOutputConsumptionBoundaryAcceptance.test.ts`, `docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_IMPLEMENTATION.md`, `PLANS.md`, and `docs/STATUS_LOG.md`. The required pre-change snapshot command also appends its normal snapshot-created entry to `.caleb/ledger/ledger.jsonl`.
+
+**Risk Level:** Medium. M3 adds a new trust boundary and a local content-addressed storage path. Risk is controlled by `.gitignore` guardrails, temp-dir tests, no provider/egress changes, structural effective-tier split, and absence detectors.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T174603371Z_000329_milestone` created with name `M3-implementation-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Verify clean tree. Create and verify pre-change snapshot. Add `.caleb/artifacts/` to `.gitignore`. Implement raw-output modules. Add unit and acceptance tests including the golden path and NEVER-flow absence checks. Add docs and ledger entries. Run full validation and catalog checks. Commit with M3 implementation in the message and verify clean tree.
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/rawOutput tests/acceptance/m3RawOutputConsumptionBoundaryAcceptance.test.ts`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** Raw output lifecycle, trust ceiling, non-promoters, mandatory tier split, `effective_tier` computation, tier misuse detectors, laundering detector, Ledger raw-content absence, content addressing, lineage-resolution gate, deletion/dangling-reference distinction, display vs consumption boundary, NEVER-flow absence assertions, H5 trap preservation, golden-path worked example, V1 catalog 12, Hollowcut catalog 9, existing suite, and completion report are all satisfied.
+
+**Progress Log:** Clean tree verified. Pre-change snapshot `snap_20260705T174603371Z_000329_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T174603371Z_000329_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. `.caleb/artifacts/` added to `.gitignore` before raw-output store tests were introduced. Raw-output modules, focused tests, M3 acceptance test, and implementation doc created. Initial typecheck and focused tests passed. Build passed. Acceptance suite passed 43/43 files and 398/398 tests. Full suite passed 163/163 files and 2,899/2,899 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows.
+
+**Decision Log:** The authority path is `ContentAddressedRawOutputStore` rooted by default at `.caleb/artifacts/raw-output`, while tests use temp roots. `InMemoryRawOutputStore` exists only as the fast-path adapter for pure tests. The Character Count Hollow itself was not modified; the M3 boundary resolves stored/ref-addressed content and then invokes the existing Hollow through the existing runner/VRP path. Lineage/tier metadata is held in new raw-output provenance records instead of changing the base Ledger type in this pass.
+
+**Surprises / Discoveries:** None so far beyond the already-diagnosed `.caleb/artifacts/` ignore requirement.
+
+**Final Report:** M3 Raw Output Consumption Boundary Implementation completed. `.caleb/artifacts/` guardrail added before raw-output store behavior. Authority-path content-addressed raw-output store implemented with digest retrieval, corruption detection, and structured deletion absence. In-memory fast-path store added for pure tests. Raw-output lifecycle, structural tier policy, lineage-resolution gate, and Character Count consumption boundary wrapper implemented. Golden-path worked example acceptance proves live-call-shaped T1 output -> digest storage -> Character Count Hollow consumption -> derived evidence `measurement_tier = T2`, `subject_tier = T1`, `effective_tier = T1`, with decision-facing `effective_tier` only. NEVER-flow absence detectors cover persistence-as-truth, side-effect triggers, trust-promotion inputs, and Logic Engine routing decisions. M3 remains CLI/test-only; display flow remains deferred. Validation passed: typecheck, build, focused tests, acceptance suite 43/398, full suite 163/2,899, V1 catalog 12, Hollowcut catalog 9. No role rotation, UI, provider, egress, package, catalog, or historical Ledger changes were made.
+
 ## ExecPlan - M3 Diagnostic
 
 **Objective:** Perform the M3 diagnostic only, using `docs/protocols/PASS_PROTOCOL_M3.md` as the canonical protocol source, and stop before any implementation.

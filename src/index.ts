@@ -17,6 +17,7 @@ export * from "./storage/index.js";
 export * from "./modelBoundary/index.js";
 export * from "./finalAssembly/index.js";
 export * from "./providers/index.js";
+export * from "./rawOutput/index.js";
 
 export const startupMessage = `${projectInfo.name}: ${projectInfo.doctrine} (${projectInfo.currentPhase})`;
 

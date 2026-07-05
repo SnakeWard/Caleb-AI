@@ -273,6 +273,23 @@ disk before recording). The required snapshot command appended its normal
 snapshot-created Ledger entry. Validation: typecheck passed; build passed; full
 suite passed 158 files / 2,879 tests; V1 catalog 12; Hollowcut catalog 9.
 
+### 2026-07-05 — M3 Raw Output Consumption Boundary Implementation
+
+M3 implementation added the raw-output consumption boundary: `.caleb/artifacts/`
+gitignore guardrail, content-addressed authority-path raw-output store,
+in-memory fast-path store for pure tests, raw-output lifecycle helper,
+derived-evidence tier policy, lineage-resolution gate, and Character Count
+consumption boundary wrapper. The structural split is enforced: provenance
+records carry `measurement_tier`, `subject_tier`, and `effective_tier`, while
+decision-facing evidence exposes `effective_tier` only. M3 remains CLI/test-only
+and display flow remains deferred to `M4-DISPLAY-BOUNDARY`. No provider, egress,
+role rotation, UI, package, catalog, or historical Ledger changes. Pre-change
+snapshot: `snap_20260705T174603371Z_000329_milestone` (verified on disk before
+recording). The required snapshot command appended its normal snapshot-created
+Ledger entry. Validation: typecheck passed; focused M3 tests passed 5 files /
+20 tests; build passed; acceptance suite passed 43 files / 398 tests; full suite
+passed 163 files / 2,899 tests; V1 catalog 12; Hollowcut catalog 9.
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

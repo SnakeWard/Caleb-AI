@@ -9,6 +9,7 @@ coverage/
 !.caleb/ledger/ledger.jsonl
 .caleb/snapshots/
 .caleb/change-guard/
+.caleb/artifacts/
 .caleb/reports/
 .caleb/tmp/
 
