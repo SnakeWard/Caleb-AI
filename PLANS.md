@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - L1 Logic Engine Route-Input Hardening Implementation
+
+**Objective:** Implement L1 under `docs/protocols/PASS_PROTOCOL_L1.md` and `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md` by adding an allowlist-based Logic Engine route-input gate so only approved decision-facing records may move Caleb's state machine.
+
+**Source Authority:** Explicit user approval for L1 implementation, `docs/protocols/PASS_PROTOCOL_L1.md`, `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md`, M3/M3-A/M3-B acceptance state, AGENTS.md, CODEX.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, docs/03_CANONICAL_CONTRACTS.md, docs/04_STORAGE_AND_LEDGER_DECISIONS.md, docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md, docs/06_V1_TEST_AND_FIXTURE_PLAN.md, and this `PLANS.md`.
+
+**Current State:** L1 diagnostic is approved and committed. The working tree was clean before implementation. Existing route selection is deterministic but trusted shaped `TaskFrame` and `SignalFrame` inputs implicitly; no route-input allowlist gate existed before this pass.
+
+**Scope:** Add route-input gate types, a fail-closed route-input validator/gate, a hardened `selectRouteFromRouteInputs` entrypoint, unit tests, acceptance tests, implementation documentation, pass ledger updates, and required snapshot Ledger appends.
+
+**Out of Scope:** No role rotation, UI/display, provider or adapter additions, egress expansion, H5 weakening, package changes, catalog changes, M3 runtime changes outside the approved L1 integration surface, historical Ledger mutation, provider/model trust promotion, or model/provider output routing.
+
+**Files Expected To Change:** `src/logicEngine/types/routeInput.ts`, `src/logicEngine/routeInputGate.ts`, `src/logicEngine/index.ts`, `src/logicEngine/types/index.ts`, `tests/logicEngine/routeInputGate.test.ts`, `tests/acceptance/l1RouteInputHardeningAcceptance.test.ts`, `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_IMPLEMENTATION.md`, `PLANS.md`, `docs/STATUS_LOG.md`, and `.caleb/ledger/ledger.jsonl` via required snapshot commands.
+
+**Risk Level:** Medium. This pass adds a route/state authority boundary. Risk is controlled by keeping `selectRoute` as deterministic inner logic, adding a hardened wrapper entrypoint, rejecting non-authority records structurally, and adding acceptance detectors for required forbidden flows.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T211607042Z_000338_milestone` created with name `L1 implementation pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Verify clean tree. Read canonical protocol and diagnostic. Create and verify pre-change snapshot. Add closed route-input types and validator/gate. Add hardened route-input selector wrapper. Export new gate/types. Add unit and acceptance tests. Add implementation documentation. Run focused tests, typecheck, build, full suite, and catalog checks. Commit with L1 implementation in the message and verify clean tree.
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/logicEngine/routeInputGate.test.ts tests/acceptance/l1RouteInputHardeningAcceptance.test.ts`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** Allowlist gate exists. Approved route-input categories are represented. Non-authority records are rejected: synthetic T1 provider/model record, raw model output, `measurement_tier`, `subject_tier`, display/report text, unknown record type, digest/storage/provider identity, model confidence, and role artifact prose. Decision-facing records expose `effective_tier` only. H5 traps remain preserved. V1 catalog remains 12. Hollowcut catalog remains 9. Existing suite remains green.
+
+**Progress Log:** Clean tree verified. Canonical L1 protocol and diagnostic read. Pre-change snapshot `snap_20260705T211607042Z_000338_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T211607042Z_000338_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Added `LogicEngineRouteInput` closed union and route-input gate. Added `selectRouteFromRouteInputs` as the hardened entrypoint before deterministic `selectRoute`. Added focused unit and acceptance tests plus implementation documentation. Initial focused tests caught a wrong H5 setup-file assumption; corrected to the actual combined `networkEgressBlock.ts` trap. Typecheck passed. Focused L1 tests passed 2 files / 23 tests. Build passed. Full suite passed 166/166 files and 2,928/2,928 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T212456285Z_000339_milestone`, verified present on disk before recording.
+
+**Decision Log:** L1 keeps `selectRoute(frame, signals)` as deterministic inner logic and exposes `selectRouteFromRouteInputs(inputs)` as the hardened route-input boundary. Deterministic Hollow and lineage-resolved decision-facing route inputs require approved `effective_tier` T2 or higher, preventing T1 provider/model output from steering Caleb. The gate scans records for provenance-only and non-authority fields and rejects unknown top-level fields for each approved kind.
+
+**Surprises / Discoveries:** H5 credential-read and network traps are both implemented in `tests/setup/networkEgressBlock.ts`; there is no separate env trap file.
+
+**Final Report:** L1 Logic Engine Route-Input Hardening Implementation completed. The allowlist gate and route-input record union are implemented. The hardened `selectRouteFromRouteInputs` entrypoint rejects non-authority records before route selection and accepts only approved route-input kinds. Required detectors cover synthetic T1 provider/model route input, raw model output, `measurement_tier`, `subject_tier`, display/report text, unknown record type, digest/storage/provider identity, model confidence, and role artifact prose. H5 traps remain preserved. No role rotation, UI/display, provider, egress, package, catalog, M3 runtime, or historical Ledger behavior changed. Required pre-change snapshot `snap_20260705T211607042Z_000338_milestone` and validation-created snapshot `snap_20260705T212456285Z_000339_milestone` were verified on disk before recording. Validation passed: typecheck, focused L1 tests 2 files / 23 tests, build, full suite 166 files / 2,928 tests, V1 catalog 12, Hollowcut catalog 9.
+
 ## ExecPlan - L1 Logic Engine Route-Input Hardening Diagnostic
 
 **Objective:** Perform the L1 diagnostic only, using `docs/protocols/PASS_PROTOCOL_L1.md` as the canonical protocol source, and stop before implementation.

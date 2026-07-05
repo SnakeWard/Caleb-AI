@@ -341,6 +341,28 @@ passed; full suite passed 164 files / 2,905 tests; V1 catalog 12; Hollowcut
 catalog 9. Full suite created validation snapshot
 `snap_20260705T185849865Z_000337_milestone` (verified on disk before recording).
 
+### 2026-07-05 — L1 Logic Engine Route-Input Hardening Implementation
+
+L1 implementation added a closed allowlist route-input boundary:
+`src/logicEngine/types/routeInput.ts` and `src/logicEngine/routeInputGate.ts`.
+The hardened entrypoint is `selectRouteFromRouteInputs`; it validates approved
+route-input records before calling the deterministic inner `selectRoute`.
+Approved route-input kinds cover contract-validated TaskFrames, verified
+SignalFrames, engine-internal state, deterministic Hollow signals, accepted
+gate/policy results, human/Pat approval records, snapshot/change-guard states,
+and lineage-resolved decision-facing records exposing `effective_tier` only.
+Required detectors reject synthetic T1 provider/model route input, raw model
+output, `measurement_tier`, `subject_tier`, display/report text, unknown record
+types, digest/storage/provider identity authority, model confidence, and role
+artifact prose. No role rotation, UI/display, provider, egress, package,
+catalog, M3 runtime, or historical Ledger behavior changed. Pre-change snapshot:
+`snap_20260705T211607042Z_000338_milestone` (verified on disk before recording).
+The required snapshot command appended its normal snapshot-created Ledger entry.
+Focused validation: typecheck passed; L1 focused tests passed 2 files / 23 tests.
+Full validation: build passed; full suite passed 166 files / 2,928 tests; V1
+catalog 12; Hollowcut catalog 9. Full suite created validation snapshot
+`snap_20260705T212456285Z_000339_milestone` (verified on disk before recording).
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its

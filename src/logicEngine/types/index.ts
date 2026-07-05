@@ -1,6 +1,7 @@
 export * from "./taskFrame.js";
 export * from "./signalFrame.js";
 export * from "./routeDecision.js";
+export * from "./routeInput.js";
 export * from "./workGraph.js";
 export * from "./hollowDispatchRequest.js";
 export * from "./logicEngineResult.js";
