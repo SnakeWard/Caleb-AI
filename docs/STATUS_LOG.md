@@ -444,6 +444,78 @@ reconciliation. Validation passed: typecheck; focused M3/M3-A tests 2 files /
 catalog 9. Full suite created validation snapshot
 `snap_20260705T232219310Z_000347_milestone` (verified on disk before recording).
 
+### 2026-07-05 — RA-R1 Static Rotation Runtime Protocol
+
+RA-R1 protocol-draft pass created
+`docs/protocols/PASS_PROTOCOL_RA_R1.md` and recorded the next staged path:
+protocol -> diagnostic -> implementation, each gated by Pat approval. This pass
+does not begin the diagnostic and does not implement role runtime or role
+rotation. The protocol preserves RA-C as higher authority, keeps role artifacts
+T1/advisory, requires static human-authored or fixture-authored rotation plans,
+requires inert context transport with digest-only Ledger provenance, requires
+handoff-gate classification during the future diagnostic, and forbids any L1
+allowlist change in this stage. No `src`, `tests`, `types`, providers, egress,
+package files, catalogs, UI, L1 allowlist, M3 boundary module, role runtime, role
+rotation, or historical Ledger behavior changed. Pre-change snapshot:
+`snap_20260705T235443061Z_000348_milestone` (verified on disk before recording).
+Typecheck passed; build passed; V1 catalog 12; Hollowcut catalog 9. Standard
+full-suite validation is blocked: two `npx vitest run` attempts failed on
+timeout-only failures in unrelated tests under full-suite load. First attempt
+timed out in `tests/acceptance/networkEgressProofAcceptance.test.ts` and
+`tests/hollows/media/imageDimensionsHollow.test.ts`; focused rerun passed those
+two files, 33 tests. Second attempt timed out in `tests/cli/minimalCli.test.ts`
+and `tests/acceptance/networkEgressProofAcceptance.test.ts`; focused rerun
+passed those two files, 29 tests. First full-suite attempt created validation
+snapshot `snap_20260706T000428986Z_000349_milestone` (verified on disk before
+recording). RA-R1 protocol stage remains uncommitted until full-suite validation
+is resolved or Pat authorizes a different disposition.
+
+### 2026-07-06 — Pass H7 — Implementer Environment Reverification (BLOCKED)
+
+Grok inherited a dirty tree from Codex's unfinished RA-R1 protocol-draft pass:
+`M .caleb/ledger/ledger.jsonl`, `M PLANS.md`, `M docs/STATUS_LOG.md`,
+`?? docs/protocols/PASS_PROTOCOL_RA_R1.md`. Step 1 STOP branch taken for
+another implementer's uncommitted work; Pat's H7 authorization received; RA-R1
+commit deferred because standard full-suite validation did not pass.
+
+**Position from the record (authoritative):** latest committed pass is M3-T at
+`d281302` ("Pass M3-T acceptance test honesty strengthening"). Last accepted pass
+per STATUS_LOG is M3-T (2026-07-05). RA-R1 protocol exists on disk but is NOT
+committed. Codex's RA-R1 ExecPlan final report: blocked before commit (full-suite
+timeouts 166/168 files, 2,943/2,945 tests on two attempts; focused reruns passed).
+Roadmap documents (e.g. H3-as-upcoming) are stale relative to STATUS_LOG — H3
+(H1 version-control baseline) completed 2026-07-04.
+
+**Vitest diagnosis:** `npm ci` from lockfile (51 packages) did not repair the
+failure. `node --version`: v24.11.1 (`C:\Users\Snake\Downloads\node.exe`; no
+`package.json` engines field; project docs cite Node 18+). Standard command
+`npx vitest run` (Vitest 4.1.8 default `forks` pool): **168/168 files failed at
+collection** with `TypeError: Cannot read properties of undefined (reading
+'config')` at `describe()` — `@vitest/runner` global runner never initialized in
+fork-worker module context. Not a test assertion failure; runner runtime error.
+`--pool=threads`: same error. `--pool=vmThreads` / `--pool=vmForks`: single-file
+runs pass; full parallel vmThreads trips `ERR_INVALID_OBJECT_DEFINE_PROPERTY` on
+`process.env` when H5 proxy conflicts with Vitest worker redefinition.
+`--pool=vmForks --maxWorkers=1` (non-standard; diagnostic only): 165/168 files
+passed, 2893/2919 tests passed, 26 failed — `guardRunner` (6) and `cliSmoke` (20)
+tripped `CREDENTIAL_ENV_READ_BLOCKED_BY_H5` because `ANTHROPIC_API_KEY` is present
+in the implementer shell environment and child-process env enumeration hits the
+H5 credential-read trap. Locked files (`vitest.config.ts`, H5 traps, lockfile,
+`package.json`) were not modified per H7 bounds.
+
+**Step 6 sweep:** typecheck passed; build passed; V1 catalog 12; Hollowcut
+catalog 9.
+
+**RA-R1 resolution:** STOP — protocol file left uncommitted with Codex's other
+draft edits; Pat must decide disposition after environment repair.
+
+**Verdict:** H7 Implementer Environment Reverification: **BLOCKED** — standard
+`npx vitest run` cannot complete in this implementer environment without locked
+boundary changes; implementer is not qualified for governed passes until Pat
+repairs the environment or authorizes an exception. RA-R1 diagnostic not started.
+No pre-change snapshot (blocked pass; only H7 protocol + this STATUS_LOG entry
+committed). `docs/protocols/PASS_PROTOCOL_H7_RAR1_DIAG.md` committed with this entry.
+
 ---
 
 **Convention:** every future pass appends one dated entry here as part of its
