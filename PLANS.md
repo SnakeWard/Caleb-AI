@@ -44,6 +44,28 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - RA-R1-D Static Rotation Diagnostic
+
+**Objective:** Produce `docs/RA_R1_STATIC_ROTATION_DIAGNOSTIC.md` per committed RA-R1 protocol (`82df49c`), classify roleHandoffGate, survey R1–R6 layer, propose rotation schema and runtime decision surface, validate, commit, push, STOP.
+
+**Source Authority:** `docs/protocols/PASS_PROTOCOL_H8_RAR1D.md`, `docs/protocols/PASS_PROTOCOL_RA_R1.md`, RA-C, `src/roles/roleHandoffGate.ts` and related modules.
+
+**Current State:** H8 accepted at `5128079`. RA-R1 protocol at `82df49c`. Environment valid (keys empty; canonical suite green).
+
+**Scope:** One diagnostic document plus STATUS_LOG and PLANS entries only.
+
+**Out of Scope:** No implementation, no src/tests/types changes.
+
+**Snapshot / Rollback Plan:** Pre-change `snap_20260706T032542674Z_000360_milestone` (verified on disk before recording).
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run`; catalog commands.
+
+**Acceptance Criteria:** Five deliverables complete with file:line citations in Deliverable 1; findings section present; suite green 168/2,945; catalogs 12/9; clean tree; STOP after push.
+
+**Progress Log:** Pre-change snapshot `snap_20260706T032542674Z_000360_milestone` created and verified. Diagnostic document drafted with 18-branch decision inventory. Typecheck passed. Full suite `npx vitest run`: 168 files / 2,945 tests green. V1 catalog 12; Hollowcut catalog 9.
+
+**Final Report:** RA-R1-D accepted. Files created: `docs/RA_R1_STATIC_ROTATION_DIAGNOSTIC.md`. Files changed: `docs/STATUS_LOG.md`, `PLANS.md`, `.caleb/ledger/ledger.jsonl`. Verdict: handoff gate clean; runtime decision surface proposed; awaiting Pat and Fable review. STOP — no implementation authorized.
+
 ## ExecPlan - H8 Network Egress Proof Documentation Amendment
 
 **Objective:** Record the H7 field catch and precise subprocess env-enumeration coverage in `docs/NETWORK_EGRESS_PROOF.md`, add the no-ambient-credentials rule to the operating contract, commit protocol file, validate, commit, push, and proceed to RA-R1-D.

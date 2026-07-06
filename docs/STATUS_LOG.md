@@ -532,5 +532,17 @@ file `docs/protocols/PASS_PROTOCOL_H8_RAR1D.md` committed with this pass. No
 `src/`, tests, traps, config, or package changes. Pre-change snapshot:
 `snap_20260706T024327264Z_000358_milestone` (verified on disk before recording).
 
+### 2026-07-06 — Pass RA-R1-D — Role Artifact Runtime Diagnostic
+
+RA-R1-D created `docs/RA_R1_STATIC_ROTATION_DIAGNOSTIC.md` with all five
+deliverables: roleHandoffGate classification (clean — structure-only, no
+judgment-shaped checks; non-routing relative to L1 seven-entry allowlist),
+R1–R6 contract layer survey (M3 store composes without modification: yes; T1
+terms match: yes), rotation-plan schema proposal with fixture example, 18-branch
+decision inventory (all structurally annotated), and open-items table. No `src/`,
+`tests/`, or `types/` changes. Pre-change snapshot:
+`snap_20260706T032542674Z_000360_milestone` (verified on disk before recording).
+Sequenced after H8 (`5128079`).
+
 **Convention:** every future pass appends one dated entry here as part of its
 completion report, including pre-change snapshot ID and suite counts at pass close.
