@@ -532,6 +532,19 @@ file `docs/protocols/PASS_PROTOCOL_H8_RAR1D.md` committed with this pass. No
 `src/`, tests, traps, config, or package changes. Pre-change snapshot:
 `snap_20260706T024327264Z_000358_milestone` (verified on disk before recording).
 
+### 2026-07-06 — Pass RA-R1 — Static Role Rotation Runtime Implementation
+
+RA-R1 implemented `src/roleRuntime/` static rotation runtime: plan validator
+(rejects `authored_by: model`), mock adapter boundary, M3
+`ContentAddressedRawOutputStore` composition (no M3 edits), artifact schema
+validation, executor-local `validateRoleHandoffGate`, inert digest-ordered
+`context_refs`, 18-branch decision inventory, and mandatory detector suite in
+`tests/acceptance/raR1StaticRotationAcceptance.test.ts`. L1 allowlist unchanged
+at seven entries; `RoleHandoffGateResult` not added; no live provider path.
+Pre-change snapshot: `snap_20260706T154747284Z_000362_milestone` (verified on
+disk before recording). Suite at pass close: 170 files / 2,966 tests green. V1
+catalog 12; Hollowcut catalog 9. Sequenced after RA-R1-D (`b627ed3`).
+
 ### 2026-07-06 — Pass RA-R1-D — Role Artifact Runtime Diagnostic
 
 RA-R1-D created `docs/RA_R1_STATIC_ROTATION_DIAGNOSTIC.md` with all five

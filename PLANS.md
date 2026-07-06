@@ -44,6 +44,28 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - RA-R1 Static Role Rotation Runtime Implementation
+
+**Objective:** Implement static role rotation runtime per `docs/protocols/PASS_PROTOCOL_RA_R1.md` and RA-R1-D diagnostic, with mock adapters, M3 compose-only storage, executor-local handoff gate, 18-branch decision inventory, mandatory detectors, validation, commit, and completion report.
+
+**Source Authority:** `docs/protocols/PASS_PROTOCOL_RA_R1.md`, `docs/RA_R1_STATIC_ROTATION_DIAGNOSTIC.md`, RA-R1-D handoff-gate classification (PASSED), `src/roles/roleHandoffGate.ts`, `src/rawOutput/contentAddressedRawOutputStore.ts`, `src/logicEngine/routeInputGate.ts` (read-only).
+
+**Current State:** RA-R1-D accepted at `b627ed3`. H8 at `5128079`. Environment valid (keys empty; canonical suite green 168/2,945).
+
+**Scope:** `src/roleRuntime/`, `tests/roleRuntime/`, `tests/acceptance/raR1StaticRotationAcceptance.test.ts`, `docs/RA_R1_STATIC_ROLE_ROTATION_RUNTIME_IMPLEMENTATION.md`, append-only ledger, PLANS, STATUS_LOG.
+
+**Out of Scope:** Dynamic routing, L1 allowlist changes, M3 module edits, live providers, credentials, network egress, RA-X, V1/Hollowcut catalog changes.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260706T154747284Z_000362_milestone` (verified on disk before recording).
+
+**Validation Commands:** `npx tsc --noEmit`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`.
+
+**Acceptance Criteria:** 18-branch inventory implemented and documented; all mandatory detectors pass; L1 allowlist remains 7; M3 unchanged; V1 catalog 12; Hollowcut catalog 9; full suite green; clean tree after commit.
+
+**Progress Log:** Pre-change snapshot `snap_20260706T154747284Z_000362_milestone` created and verified. Runtime, validators, mock adapter, executor, tests, and implementation doc drafted. Typecheck passed. Build passed. Full suite `npx vitest run`: 170 files / 2,966 tests green. V1 catalog 12; Hollowcut catalog 9.
+
+**Final Report:** RA-R1 accepted. Files created: `src/roleRuntime/**`, `tests/roleRuntime/**`, `tests/acceptance/raR1StaticRotationAcceptance.test.ts`, `docs/RA_R1_STATIC_ROLE_ROTATION_RUNTIME_IMPLEMENTATION.md`. Files changed: `PLANS.md`, `docs/STATUS_LOG.md`, `.caleb/ledger/ledger.jsonl`. 18-branch inventory implemented; all mandatory detectors pass; L1 allowlist unchanged at seven; M3 unchanged; no live provider path.
+
 ## ExecPlan - RA-R1-D Static Rotation Diagnostic
 
 **Objective:** Produce `docs/RA_R1_STATIC_ROTATION_DIAGNOSTIC.md` per committed RA-R1 protocol (`82df49c`), classify roleHandoffGate, survey R1–R6 layer, propose rotation schema and runtime decision surface, validate, commit, push, STOP.
