@@ -44,6 +44,38 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - RA-R1 Static Rotation Runtime Protocol
+
+**Objective:** Commit the RA-R1 protocol-draft document only, record the pass ledger entries, validate the repository, commit, push, and stop before diagnostic or implementation.
+
+**Source Authority:** Explicit attached RA-R1 protocol, RA-C full text `docs/ROLE_ARTIFACT_CONSUMPTION_BOUNDARY_CONTRACT.md`, M3/M3-A/M3-B/M3-T boundary stack, L1/L1-A/L1-B route-input stack, Pat's witnessed spot-check, AGENTS.md, CODEX.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, docs/03_CANONICAL_CONTRACTS.md, docs/04_STORAGE_AND_LEDGER_DECISIONS.md, docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md, docs/06_V1_TEST_AND_FIXTURE_PLAN.md, and this `PLANS.md`.
+
+**Current State:** M3-T is committed, pushed, and clean. RA-C exists as an accepted design contract. RA-R1 diagnostic and implementation are not authorized yet.
+
+**Scope:** Create `docs/protocols/PASS_PROTOCOL_RA_R1.md`, update `PLANS.md` and `docs/STATUS_LOG.md`, preserve the required snapshot Ledger append, run validation and catalog checks, commit with RA-R1 protocol in the message, push, verify clean tree, and stop.
+
+**Out of Scope:** No diagnostic, no implementation, no `src/`, no `tests/`, no `types/`, no providers, no egress, no package changes, no catalog changes, no UI, no L1 allowlist changes, no M3 boundary changes, no role runtime, no role rotation, and no historical Ledger mutation.
+
+**Files Expected To Change:** `docs/protocols/PASS_PROTOCOL_RA_R1.md`, `PLANS.md`, `docs/STATUS_LOG.md`, and `.caleb/ledger/ledger.jsonl` via required snapshot command.
+
+**Risk Level:** Low. This is documentation/protocol only. The main risk is accidentally beginning diagnostic or implementation work; this pass explicitly stops before either.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T235443061Z_000348_milestone` created with name `ra_r1_protocol_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+
+**Implementation Steps:** Verify clean tree. Read RA-R1 protocol and authority docs. Create and verify pre-change snapshot. Add protocol file and pass ledger entries only. Run typecheck, build, full suite, and catalog checks. Commit with RA-R1 protocol in the message. Push. Verify clean tree. Stop.
+
+**Validation Commands:** `npx tsc --noEmit`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; final `git status --short`.
+
+**Acceptance Criteria:** RA-R1 protocol file exists. Pass ledgers record protocol-only stage. No diagnostic or implementation occurs. No implementation files are modified. V1 catalog remains 12. Hollowcut catalog remains 9. Full suite remains green. Commit is pushed and tree ends clean.
+
+**Progress Log:** Clean tree verified. RA-R1 attachment read. Authority docs read. Pre-change snapshot `snap_20260705T235443061Z_000348_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T235443061Z_000348_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Protocol file and ledger entries drafted. Typecheck passed. Build passed. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Standard full suite command `npx vitest run` was attempted twice and failed both times on timeout-only failures in unrelated tests under full-suite load. First attempt: `tests/acceptance/networkEgressProofAcceptance.test.ts` call-site pin timed out and `tests/hollows/media/imageDimensionsHollow.test.ts` PNG metadata test timed out; 166/168 files and 2,943/2,945 tests passed. Focused rerun of those two files passed 2 files / 33 tests. Second full-suite attempt: `tests/cli/minimalCli.test.ts` create-milestone-snapshot parse-level test timed out and `tests/acceptance/networkEgressProofAcceptance.test.ts` stale-allowlist detector timed out; 166/168 files and 2,943/2,945 tests passed. Focused rerun of those two files passed 2 files / 29 tests. Full-suite validation is not accepted yet. First full-suite attempt created validation snapshot `snap_20260706T000428986Z_000349_milestone`, verified present on disk before recording.
+
+**Decision Log:** RA-R1 remains protocol-only. The diagnostic must be explicitly authorized by Pat before handoff-gate classification or role-runtime design survey begins.
+
+**Surprises / Discoveries:** Standard full-suite validation is currently unstable under 5-second per-test timeout pressure, with different unrelated tests timing out across repeated runs while focused reruns pass.
+
+**Final Report:** Blocked before commit. RA-R1 protocol-stage edits are drafted, but the required standard full-suite command did not pass. No diagnostic or implementation was started.
+
 ## ExecPlan - M3-T Acceptance Test Honesty Strengthening
 
 **Objective:** Replace vacuous M3 acceptance assertions with tests that exercise Caleb's system under test or honestly assert unrepresentability, without changing runtime behavior.
