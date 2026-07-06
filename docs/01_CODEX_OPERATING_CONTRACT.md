@@ -99,3 +99,9 @@ A handoff between implementing agents is complete only when the working tree
 is clean. An incoming agent MUST verify `git status` is clean before touching
 anything, and MUST stop and report if it is not clean and the uncommitted work
 is not its own.
+
+## Credential Discipline (adopted Pass H8, 2026-07-06)
+
+Provider credentials MUST NOT be ambient in implementer shells. Codex MUST set
+credentials only for an explicitly authorized live call and MUST unset them
+immediately after. Default validation runs under H5 traps that enforce this.

@@ -109,3 +109,32 @@ acceptance file).
 Network Egress Proof: Accepted — default suite is behaviorally offline; egress
 and credential reads are trapped, canaries proven.
 Next phase: M3-C — Raw Output Boundary Contract (design only)
+
+## 10. Amendment — Field Catch and Subprocess Env-Enumeration Coverage (Pass H8, 2026-07-06)
+
+**Protocol:** `docs/protocols/PASS_PROTOCOL_H8_RAR1D.md`
+**Pre-change snapshot:** `snap_20260706T024327264Z_000358_milestone` (verified on disk before recording)
+**Evidence citations:** Pass H7 STATUS_LOG entry (2026-07-06, BLOCKED then environment repaired); RA-R1 protocol commit `82df49c` (2026-07-06, witnessed green suite before commit)
+
+### Original known-limits claim (Section 3, unchanged above)
+
+Section 3 stated that H5 traps are in-process interception and **do not constrain child processes** — a theoretical limit at the time of H5 acceptance.
+
+### Observed field behavior (H7 episode)
+
+During Pass H7 environment reverification, the credential-read trap (`CREDENTIAL_ENV_READ_BLOCKED_BY_H5`) fired in **child-process paths** exercised by the default suite:
+
+- `tests/hollows/runner.test.ts` (`guardRunner` paths) — 6 failures
+- `tests/cli/cliSmoke.test.ts` (`cliSmoke` paths) — 20 failures
+
+Cause: a real ambient `ANTHROPIC_API_KEY` was present in the implementer shell. Child processes spawned by those tests inherited the proxied `process.env`; enumeration of denylisted credential names in the child tripped the trap. This is **broader than Section 3 claimed** for the specific behavior of env-name enumeration in subprocesses that load the H5 setup file — not a claim of OS-level subprocess network blocking.
+
+Precise scope statement: subprocess coverage was proven for **credential env-enumeration paths exercised by guardRunner and cliSmoke**, not for all conceivable child-process network or env behavior. Section 3's network/subprocess limit for fetch/socket/TLS remains accurate; only the credential-read trap's subprocess reach was under-documented.
+
+### Remediation (H7 resolution, witnessed before `82df49c`)
+
+Pat unset provider credentials from the persistent implementer environment. Post-remediation verification (witnessed in the RA-R1 commit session): `ANTHROPIC_API_KEY`, `XAI_API_KEY`, `GROK_API_KEY`, and `OPENAI_API_KEY` all **empty**. Canonical validation `npx vitest run` then completed green at **168 test files / 2,945 tests**.
+
+### Standing operational rule (binds all implementers)
+
+**Credentials are never ambient in implementer shells.** They are set only in the moment of an explicitly authorized live call and unset immediately after. This rule is also recorded in `docs/01_CODEX_OPERATING_CONTRACT.md` (H8 amendment). The trap that produced the first field catch remains armed in every default suite run.

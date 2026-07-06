@@ -518,5 +518,19 @@ committed). `docs/protocols/PASS_PROTOCOL_H7_RAR1_DIAG.md` committed with this e
 
 ---
 
+### 2026-07-06 — Pass H8 — Network Egress Proof Documentation Amendment
+
+H8 amended `docs/NETWORK_EGRESS_PROOF.md` with a dated field-catch record from
+the H7 episode: the H5 credential-read trap fired on child-process env
+enumeration in guardRunner and cliSmoke paths when a real ambient
+`ANTHROPIC_API_KEY` was present; remediation and empty-key verification are
+cited from Pass H7 and commit `82df49c` without re-narration. Subprocess
+coverage is stated precisely — proven for env-enumeration paths exercised by
+those tests, not for all conceivable child-process behavior. Added the standing
+no-ambient-credentials rule to `docs/01_CODEX_OPERATING_CONTRACT.md`. Protocol
+file `docs/protocols/PASS_PROTOCOL_H8_RAR1D.md` committed with this pass. No
+`src/`, tests, traps, config, or package changes. Pre-change snapshot:
+`snap_20260706T024327264Z_000358_milestone` (verified on disk before recording).
+
 **Convention:** every future pass appends one dated entry here as part of its
 completion report, including pre-change snapshot ID and suite counts at pass close.

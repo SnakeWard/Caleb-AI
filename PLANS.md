@@ -44,6 +44,28 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - H8 Network Egress Proof Documentation Amendment
+
+**Objective:** Record the H7 field catch and precise subprocess env-enumeration coverage in `docs/NETWORK_EGRESS_PROOF.md`, add the no-ambient-credentials rule to the operating contract, commit protocol file, validate, commit, push, and proceed to RA-R1-D.
+
+**Source Authority:** `docs/protocols/PASS_PROTOCOL_H8_RAR1D.md`, Pass H7 STATUS_LOG entry, commit `82df49c`, `docs/NETWORK_EGRESS_PROOF.md`, `docs/01_CODEX_OPERATING_CONTRACT.md`.
+
+**Current State:** RA-R1 protocol committed at `82df49c`. Environment repaired (ambient keys empty; canonical suite green 168/2,945). Tree clean.
+
+**Scope:** Docs-only amendment to egress proof doc, one operating-contract line, protocol file, STATUS_LOG and PLANS entries.
+
+**Out of Scope:** No trap, test, config, or `src/` changes.
+
+**Snapshot / Rollback Plan:** Pre-change `snap_20260706T024327264Z_000358_milestone` (verified on disk before recording).
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run`; catalog commands.
+
+**Acceptance Criteria:** Amendment section present with precise subprocess scope; operating-contract rule present; suite green; catalogs 12/9; clean tree after commit.
+
+**Progress Log:** Pre-change snapshot `snap_20260706T024327264Z_000358_milestone` created and verified. Protocol and doc amendments drafted. Typecheck passed (`npx tsc --noEmit`). Full suite `npx vitest run`: 168 files / 2,945 tests green. V1 catalog 12; Hollowcut catalog 9.
+
+**Final Report:** H8 accepted. Files changed: `docs/protocols/PASS_PROTOCOL_H8_RAR1D.md` (new), `docs/NETWORK_EGRESS_PROOF.md`, `docs/01_CODEX_OPERATING_CONTRACT.md`, `docs/STATUS_LOG.md`, `PLANS.md`, `.caleb/ledger/ledger.jsonl`. Verdict: field catch recorded; subprocess coverage stated precisely; no-ambient-credentials rule binds all implementers.
+
 ## ExecPlan - RA-R1 Static Rotation Runtime Protocol
 
 **Objective:** Commit the RA-R1 protocol-draft document only, record the pass ledger entries, validate the repository, commit, push, and stop before diagnostic or implementation.
