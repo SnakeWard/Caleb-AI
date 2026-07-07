@@ -17,7 +17,8 @@ const COMMANDS = new Set<CliCommandName>([
   "route-decision",
   "logic-execute",
   "one-provider-adapter-dry-run",
-  "run-one-provider-adapter-live"
+  "run-one-provider-adapter-live",
+  "audit-pass-compliance"
 ]);
 
 const VALUE_FLAGS = new Set([
@@ -43,7 +44,9 @@ const VALUE_FLAGS = new Set([
   "--max-output-tokens",
   "--timeout-ms",
   "--expected-output-sha256",
-  "--adapter-id"
+  "--adapter-id",
+  "--manifest",
+  "--base-ref"
 ]);
 
 const BOOLEAN_FLAGS = new Set([
@@ -84,7 +87,9 @@ const FLAG_TO_KEY: Record<string, string> = {
   "--max-output-tokens": "max_output_tokens",
   "--timeout-ms": "timeout_ms",
   "--expected-output-sha256": "expected_output_sha256",
-  "--adapter-id": "adapter_id"
+  "--adapter-id": "adapter_id",
+  "--manifest": "manifest",
+  "--base-ref": "base_ref"
 };
 
 export function parseCliArgs(argv: readonly string[]): ParsedCliCommand {
@@ -328,6 +333,57 @@ export function parseCliArgs(argv: readonly string[]): ParsedCliCommand {
         errors.push({
           code: "unsupported_flag",
           message: `one-provider-adapter-dry-run does not support --${flagKey.replace(/_/g, "-")}.`
+        });
+      }
+    }
+  }
+
+  if (command === "audit-pass-compliance") {
+    if (flags.json !== true) {
+      errors.push({
+        code: "json_required",
+        message: "audit-pass-compliance requires --json for machine-readable output."
+      });
+    }
+    if (flags.manifest === undefined || typeof flags.manifest !== "string" || flags.manifest.trim().length === 0) {
+      errors.push({
+        code: "missing_manifest",
+        message: "audit-pass-compliance requires --manifest <path>."
+      });
+    }
+    for (const flagKey of [
+      "id",
+      "input_json",
+      "input_file",
+      "write_ledger",
+      "ledger_path",
+      "write_report",
+      "report_dir",
+      "report_format",
+      "name",
+      "include_context",
+      "include_trace",
+      "hollow_input_json",
+      "hollow_input_file",
+      "approved_by",
+      "files_to_capture_json",
+      "files_to_capture_file",
+      "explicit_opt_in",
+      "explicit_live_request",
+      "network_permission",
+      "kill_switch_open",
+      "credential_env_var",
+      "prompt_file",
+      "model",
+      "max_output_tokens",
+      "timeout_ms",
+      "expected_output_sha256",
+      "adapter_id"
+    ]) {
+      if (flags[flagKey] !== undefined) {
+        errors.push({
+          code: "unsupported_flag",
+          message: `audit-pass-compliance does not support --${flagKey.replace(/_/g, "-")}.`
         });
       }
     }

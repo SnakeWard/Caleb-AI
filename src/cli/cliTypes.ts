@@ -15,7 +15,8 @@ export type CliCommandName =
   | "route-decision"
   | "logic-execute"
   | "one-provider-adapter-dry-run"
-  | "run-one-provider-adapter-live";
+  | "run-one-provider-adapter-live"
+  | "audit-pass-compliance";
 
 export type CliOutputFormat = "text" | "json";
 

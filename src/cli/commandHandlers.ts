@@ -56,6 +56,7 @@ import {
 import type { LiveAdapterRequest, LiveAdapterResult } from "../modelBoundary/types/liveAdapterTypes.js";
 import type { AnthropicLiveAdapterConfig } from "../providers/anthropicLiveAdapterTypes.js";
 import type { GrokLiveAdapterConfig } from "../providers/xaiLiveAdapterTypes.js";
+import { runPassComplianceAudit } from "../audit/passComplianceAuditCommand.js";
 import type {
   CliCommandName,
   CliCommandResult,
@@ -108,7 +109,75 @@ export async function handleCliCommand(parsed: ParsedCliCommand): Promise<CliCom
       return handleOneProviderAdapterDryRunCommand(parsed);
     case "run-one-provider-adapter-live":
       return handleRunOneProviderAdapterLiveCommand(parsed);
+    case "audit-pass-compliance":
+      return handleAuditPassComplianceCommand(parsed);
   }
+}
+
+export async function handleAuditPassComplianceCommand(parsed: ParsedCliCommand): Promise<CliCommandResult> {
+  if (parsed.errors.length > 0) {
+    return auditPassCompliancePreflightError(parsed.errors);
+  }
+
+  const manifestPath = stringFlag(parsed, "manifest");
+  if (manifestPath === undefined) {
+    return auditPassCompliancePreflightError([
+      { code: "missing_manifest", message: "audit-pass-compliance requires --manifest <path>." }
+    ]);
+  }
+
+  const baseRef = stringFlag(parsed, "base_ref") ?? "HEAD";
+  const audit = await runPassComplianceAudit({
+    manifest_path: manifestPath,
+    base_ref: baseRef
+  });
+
+  if (!audit.ok) {
+    return {
+      ok: false,
+      exit_code: 1,
+      command: "audit-pass-compliance",
+      message: audit.error.message,
+      data: audit,
+      errors: [{ code: audit.error.code, message: audit.error.message }],
+      warnings: []
+    };
+  }
+
+  const message = audit.verdict.compliant
+    ? "Pass compliance audit: compliant."
+    : "Pass compliance audit: violations reported.";
+
+  return {
+    ok: true,
+    exit_code: 0,
+    command: "audit-pass-compliance",
+    message,
+    data: audit,
+    errors: [],
+    warnings: []
+  };
+}
+
+function auditPassCompliancePreflightError(errors: readonly CliErrorShape[]): CliCommandResult {
+  return {
+    ok: false,
+    exit_code: 1,
+    command: "audit-pass-compliance",
+    message: "audit-pass-compliance preflight failed.",
+    data: {
+      ok: false,
+      schema_version: "1.0.0",
+      command: "audit-pass-compliance",
+      stage: "cli_preflight",
+      error: {
+        code: errors[0]?.code ?? "AUD2_CLI_PREFLIGHT_FAILED",
+        message: errors.map((entry) => entry.message).join(" ")
+      }
+    },
+    errors,
+    warnings: []
+  };
 }
 
 export function handleHelpCommand(): CliCommandResult {
@@ -130,7 +199,8 @@ export function handleHelpCommand(): CliCommandResult {
       "caleb route-decision (--input-json <json> | --input-file <file>) [--json] [--write-ledger] [--ledger-path <path>]",
       "caleb logic-execute --id <hollow_id> (--input-json <json> | --input-file <file>) (--hollow-input-json <json> | --hollow-input-file <file>) [--approved-by <actor>] [--files-to-capture-json <json> | --files-to-capture-file <file>] [--json] [--include-context] [--include-trace] [--write-ledger] [--ledger-path <path>]",
       "caleb one-provider-adapter-dry-run [--explicit-opt-in true|false] [--explicit-live-request true|false] [--json]",
-      "caleb run-one-provider-adapter-live --explicit-opt-in true --explicit-live-request true --network-permission true --kill-switch-open true --credential-env-var <ENV_VAR_NAME> --approved-by <actor> --prompt-file <file> --write-ledger [--adapter-id anthropic_live_adapter|grok_live_adapter] [--ledger-path <path>] [--model <model_id>] [--max-output-tokens <n>] [--timeout-ms <n>] [--expected-output-sha256 <hex>] [--json]"
+      "caleb run-one-provider-adapter-live --explicit-opt-in true --explicit-live-request true --network-permission true --kill-switch-open true --credential-env-var <ENV_VAR_NAME> --approved-by <actor> --prompt-file <file> --write-ledger [--adapter-id anthropic_live_adapter|grok_live_adapter] [--ledger-path <path>] [--model <model_id>] [--max-output-tokens <n>] [--timeout-ms <n>] [--expected-output-sha256 <hex>] [--json]",
+      "caleb audit-pass-compliance --manifest <path> [--base-ref <git-ref>] --json"
     ],
     note:
       "Media commands are explicit and separate from the accepted V1 catalog. Hollowcut project inspection validates project JSON only; it does not render, export, mutate, write Ledger entries, or assign trust. route-decision is a dry-run diagnostic: it classifies signals, selects a route, and builds a work graph without executing any model calls. logic-execute dispatches exactly one V1 Hollow for hollow_only routes through the Verified Return Path. --files-to-capture-json and --files-to-capture-file supply a JSON array of project-relative file paths to snapshot before dispatch; required when requires_code_mutation is true."

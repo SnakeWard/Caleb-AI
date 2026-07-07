@@ -1,0 +1,30 @@
+{
+  "pass_id": "AUD-2",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "src/audit/**",
+    "examples/audit/**",
+    "tests/audit/**",
+    "tests/cli/auditPassComplianceCli.test.ts",
+    "tests/acceptance/aud2GitChangesetCollectionSeamAcceptance.test.ts",
+    "docs/AUD_2_GIT_CHANGESET_COLLECTION_SEAM.md"
+  ],
+  "allowed_modify": [
+    "src/cli/commandHandlers.ts",
+    "src/cli/commandParser.ts",
+    "src/cli/cliTypes.ts",
+    "tests/cli/commandParser.test.ts",
+    "PLANS.md",
+    ".caleb/ledger/ledger.jsonl"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/hollows/v1HollowCatalog.ts",
+    "src/hollows/audit/passComplianceCheck.ts",
+    "src/hollows/runner.ts",
+    "src/verification/**",
+    "src/ledger/**",
+    "src/roles/**",
+    "src/logicEngine/**"
+  ]
+}

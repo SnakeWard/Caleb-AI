@@ -245,6 +245,23 @@ describe("CLI command parser", () => {
     expect(parsed.errors.map((error) => error.code)).toContain("include_trace_requires_json");
   });
 
+  it("parses audit-pass-compliance --manifest --base-ref --json", () => {
+    const parsed = parseCliArgs([
+      "audit-pass-compliance",
+      "--manifest",
+      "examples/audit/aud2-pass-manifest.valid.json",
+      "--base-ref",
+      "HEAD",
+      "--json"
+    ]);
+
+    expect(parsed.errors).toEqual([]);
+    expect(parsed.command).toBe("audit-pass-compliance");
+    expect(parsed.flags.manifest).toBe("examples/audit/aud2-pass-manifest.valid.json");
+    expect(parsed.flags.base_ref).toBe("HEAD");
+    expect(parsed.output_format).toBe("json");
+  });
+
   it("rejects route-decision --include-trace", () => {
     const parsed = parseCliArgs([
       "route-decision",

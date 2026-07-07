@@ -2254,3 +2254,25 @@ Implementation MUST NOT exceed the approved phase boundary. A future-phase docum
 **Surprises / Discoveries:** Self-smoke duplicate changeset path (`created` + `modified` same file) caused `valid:false`; fixed by single `modified` entry. Parallel `tsc` invocations in agent session hung reproducibly; isolated user-session runs previously completed exit 0 in ~18–24s on same tree.
 
 **Final Report:** AUD-1 accepted under A2. V1 catalog 13; full suite green.
+
+## ExecPlan - AUD-2 Git Changeset Collection Seam
+
+**Objective:** Wire `hollow.audit.pass_compliance_check` to real git working-tree state via `audit-pass-compliance` CLI command. Git collection in CLI/integration layer only; Hollow purity preserved.
+
+**Source Authority:** AUD-2 go-order; `docs/PASS_COMPLIANCE_AUDITOR_CONTRACT.md`; `docs/01_CODEX_OPERATING_CONTRACT.md`.
+
+**Current State:** AUD-1 accepted at `cea7daf`. Suite 175 files / 3,022 tests green.
+
+**Scope:** `src/audit/*`; CLI registration (`commandParser.ts`, `commandHandlers.ts`, `cliTypes.ts`); tests; `docs/AUD_2_GIT_CHANGESET_COLLECTION_SEAM.md`; `examples/audit/aud2-pass-manifest.valid.json`; PLANS.
+
+**Out of Scope:** New Hollow; catalog changes; enforcement; AUD-1 Hollow contract changes; provider/role/runtime changes.
+
+**Snapshot / Rollback Plan:** Pre-change `snap_20260707T163824736Z_000372_milestone` (`AUD2_prechange`, verified on disk).
+
+**Validation Commands:** `npx vitest run tests/audit/* tests/cli/auditPassComplianceCli.test.ts tests/acceptance/aud2GitChangesetCollectionSeamAcceptance.test.ts`; `npx tsc --noEmit` (single invocation); `npx vitest run`.
+
+**Acceptance Criteria:** CLI command operational; git collection + normalization; runner/VRP path; T2 verdict; report-only exit semantics; Hollow purity regression; full suite green.
+
+**Progress Log:** Pre-change snapshot `snap_20260707T163824736Z_000372_milestone` created and verified. Git collector, CLI command, tests, and docs implemented. CLI lock discovery: no direct command-count/roster locks found. Focused AUD-2 tests: 25/25 green. Full suite: 179 files / 3,048 tests green (+4 files, +26 tests vs baseline). `npx tsc --noEmit`: first run during implementation reported 3 errors (fixed); subsequent unloaded runs hung >600s with no output (environmental finding, consistent with AUD-1). Self-smoke: T2 verified, `compliant: false` due to known `true /root/vitest-metadata.json` git noise (out of scope).
+
+**Final Report:** AUD-2 accepted. `audit-pass-compliance` CLI collects git changeset, normalizes for AUD-1 Hollow, invokes registry/runner/VRP path; Hollow purity preserved; report-only semantics confirmed.
