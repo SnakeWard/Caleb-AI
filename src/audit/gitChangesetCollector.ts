@@ -72,16 +72,11 @@ export function collectGitChangeset(options: CollectGitChangesetOptions = {}): C
 
   let untracked_count = 0;
   for (const rawPath of splitNullTerminated(untracked.stdout)) {
-    const path = normalizeRepoPath(rawPath);
-    if (path === null) {
-      return {
-        ok: false,
-        code: "AUD2_INVALID_COLLECTED_PATH",
-        message: `Collected path failed normalization: ${rawPath}`,
-        path: rawPath
-      };
+    const normalizedPath = normalizeCollectedPath(rawPath);
+    if (!normalizedPath.ok) {
+      return normalizedPath;
     }
-    entries.push({ operation: "create", path });
+    entries.push({ operation: "create", path: normalizedPath.path });
     untracked_count += 1;
   }
 
@@ -126,17 +121,16 @@ function parseNameStatusZ(
           message: "Malformed rename/copy record from git diff."
         };
       }
-      const oldPath = normalizeRepoPath(oldPathRaw);
-      const newPath = normalizeRepoPath(newPathRaw);
-      if (oldPath === null || newPath === null) {
-        return {
-          ok: false,
-          code: "AUD2_INVALID_COLLECTED_PATH",
-          message: "Collected rename path failed normalization."
-        };
+      const oldNormalized = normalizeCollectedPath(oldPathRaw);
+      if (!oldNormalized.ok) {
+        return oldNormalized;
       }
-      entries.push({ operation: "delete", path: oldPath });
-      entries.push({ operation: "create", path: newPath });
+      const newNormalized = normalizeCollectedPath(newPathRaw);
+      if (!newNormalized.ok) {
+        return newNormalized;
+      }
+      entries.push({ operation: "delete", path: oldNormalized.path });
+      entries.push({ operation: "create", path: newNormalized.path });
       continue;
     }
 
@@ -150,15 +144,11 @@ function parseNameStatusZ(
       };
     }
 
-    const path = normalizeRepoPath(pathRaw);
-    if (path === null) {
-      return {
-        ok: false,
-        code: "AUD2_INVALID_COLLECTED_PATH",
-        message: `Collected path failed normalization: ${pathRaw}`,
-        path: pathRaw
-      };
+    const normalizedPath = normalizeCollectedPath(pathRaw);
+    if (!normalizedPath.ok) {
+      return normalizedPath;
     }
+    const path = normalizedPath.path;
 
     const mapped = mapGitStatus(status);
     if (mapped === null) {
@@ -195,24 +185,80 @@ function mapGitStatus(status: string): GitChangesetOperation | null {
   }
 }
 
-export function normalizeRepoPath(value: string): string | null {
-  const trimmed = value.trim();
-  if (trimmed.length === 0) {
-    return null;
+export function getRepoPathNormalizationError(
+  value: string
+): "AUD2_INVALID_PATH_COMPONENT_WHITESPACE" | "AUD2_INVALID_COLLECTED_PATH" | null {
+  if (value.length === 0 || value.trim().length === 0) {
+    return "AUD2_INVALID_COLLECTED_PATH";
   }
 
-  const normalized = trimmed.replace(/\\/g, "/");
+  const normalized = value.replace(/\\/g, "/");
+  const whitespaceError = findPathComponentWhitespaceError(normalized);
+  if (whitespaceError !== null) {
+    return whitespaceError;
+  }
+
   if (normalized.startsWith("/") || /^[A-Za-z]:\//.test(normalized)) {
-    return null;
+    return "AUD2_INVALID_COLLECTED_PATH";
   }
   if (normalized.startsWith("./") || normalized.includes("/./") || normalized.includes("..")) {
-    return null;
+    return "AUD2_INVALID_COLLECTED_PATH";
   }
   if (normalized.includes("\\")) {
+    return "AUD2_INVALID_COLLECTED_PATH";
+  }
+
+  return null;
+}
+
+export function normalizeRepoPath(value: string): string | null {
+  const error = getRepoPathNormalizationError(value);
+  if (error !== null) {
     return null;
   }
 
-  return normalized;
+  return value.replace(/\\/g, "/");
+}
+
+function findPathComponentWhitespaceError(
+  normalized: string
+): "AUD2_INVALID_PATH_COMPONENT_WHITESPACE" | null {
+  for (const component of normalized.split("/")) {
+    if (component.length === 0) {
+      return "AUD2_INVALID_PATH_COMPONENT_WHITESPACE";
+    }
+    if (component.trim() !== component) {
+      return "AUD2_INVALID_PATH_COMPONENT_WHITESPACE";
+    }
+  }
+
+  return null;
+}
+
+function normalizeCollectedPath(
+  rawPath: string
+): { ok: true; path: string } | CollectGitChangesetFailure {
+  const errorCode = getRepoPathNormalizationError(rawPath);
+  if (errorCode === "AUD2_INVALID_PATH_COMPONENT_WHITESPACE") {
+    return {
+      ok: false,
+      code: errorCode,
+      message: "Collected path has a component with leading or trailing whitespace.",
+      path: rawPath
+    };
+  }
+
+  const path = normalizeRepoPath(rawPath);
+  if (path === null) {
+    return {
+      ok: false,
+      code: "AUD2_INVALID_COLLECTED_PATH",
+      message: `Collected path failed normalization: ${rawPath}`,
+      path: rawPath
+    };
+  }
+
+  return { ok: true, path };
 }
 
 function dedupeEntries(entries: readonly GitChangesetEntry[]): GitChangesetEntry[] {

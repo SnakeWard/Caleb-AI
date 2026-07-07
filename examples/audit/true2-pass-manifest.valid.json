@@ -1,0 +1,23 @@
+{
+  "pass_id": "TRUE-2",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/TRUE_2_VITEST_DUMP_HYGIENE.md",
+    "examples/audit/true2-pass-manifest.valid.json",
+    "tests/audit/gitChangesetCollectorPathHygiene.test.ts"
+  ],
+  "allowed_modify": [
+    ".gitignore",
+    "src/audit/gitChangesetCollector.ts",
+    "PLANS.md",
+    ".caleb/ledger/ledger.jsonl"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/hollows/**",
+    "src/providers/**",
+    "src/roles/**",
+    "src/logicEngine/**",
+    "package-lock.json"
+  ]
+}

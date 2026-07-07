@@ -19,5 +19,11 @@ coverage/
 .tmp-*.json
 npm-debug.log*
 
+# Vitest debug-dump artifacts (VITEST_DEBUG_DUMP / server.debug.dump)
+.vitest-dump/
+**/vitest-metadata.json
+# Malformed dump dir when VITEST_DEBUG_DUMP is "true " (trailing space) — see docs/TRUE_2_VITEST_DUMP_HYGIENE.md
+/true /
+
 # AI-implementer harness artifacts (terminal transcripts etc.) — never committed
 terminals/

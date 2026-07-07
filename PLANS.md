@@ -2276,3 +2276,25 @@ Implementation MUST NOT exceed the approved phase boundary. A future-phase docum
 **Progress Log:** Pre-change snapshot `snap_20260707T163824736Z_000372_milestone` created and verified. Git collector, CLI command, tests, and docs implemented. CLI lock discovery: no direct command-count/roster locks found. Focused AUD-2 tests: 25/25 green. Full suite: 179 files / 3,048 tests green (+4 files, +26 tests vs baseline). `npx tsc --noEmit`: first run during implementation reported 3 errors (fixed); subsequent unloaded runs hung >600s with no output (environmental finding, consistent with AUD-1). Self-smoke: T2 verified, `compliant: false` due to known `true /root/vitest-metadata.json` git noise (out of scope).
 
 **Final Report:** AUD-2 accepted. `audit-pass-compliance` CLI collects git changeset, normalizes for AUD-1 Hollow, invokes registry/runner/VRP path; Hollow purity preserved; report-only semantics confirmed.
+
+## ExecPlan - TRUE-2 Vitest Dump Hygiene + Audit Noise Guardrail
+
+**Objective:** Remove malformed `true /root/vitest-metadata.json` Vitest dump artifact; add `.gitignore` protection; harden AUD-2 collector against whitespace-polluted path components; document operator guidance.
+
+**Source Authority:** TRUE-1 diagnostic report; `docs/AUD_2_GIT_CHANGESET_COLLECTION_SEAM.md`.
+
+**Current State:** AUD-2 accepted at `ec8309c`. Suite 179 files / 3,048 tests green. Pre-existing `true /` git noise from Vitest `VITEST_DEBUG_DUMP="true "` footgun.
+
+**Scope:** `.gitignore`; `src/audit/gitChangesetCollector.ts`; path hygiene tests; `docs/TRUE_2_VITEST_DUMP_HYGIENE.md`; `examples/audit/true2-pass-manifest.valid.json`; artifact cleanup; PLANS.
+
+**Out of Scope:** Hollow changes; LE consumption; Vitest config override; cross-env; package lockfiles; external env mutation.
+
+**Snapshot / Rollback Plan:** Pre-change `snap_20260707T183454421Z_000376_milestone` (`TRUE2_prechange`, verified on disk).
+
+**Validation Commands:** `npx vitest run tests/audit/gitChangesetCollector*.test.ts`; `npm run --silent cli -- audit-pass-compliance --manifest examples/audit/true2-pass-manifest.valid.json --base-ref HEAD --json`; `npx tsc --noEmit`; `npx vitest run`.
+
+**Acceptance Criteria:** Artifact removed; git warning gone; ignore patterns verified; `AUD2_INVALID_PATH_COMPONENT_WHITESPACE` collector hardening; self-smoke T2 without `true /root` violation; suite green.
+
+**Progress Log:** Pre-change snapshot `snap_20260707T183454421Z_000376_milestone` created and verified. Malformed `true ` directory removed via Node `fs.rmSync` (PowerShell `Remove-Item` failed on trailing-space literal path). `.gitignore` Vitest dump patterns added and verified with `git check-ignore`. Collector hardened with `AUD2_INVALID_PATH_COMPONENT_WHITESPACE`. Focused tests: 17/17 green. Self-smoke TRUE-2 manifest: compliant, T2 verified, no `true /root` violation. Full suite: 180 files / 3,055 tests green (+1 file, +7 tests). `npx tsc --noEmit`: pass.
+
+**Final Report:** TRUE-2 accepted. Vitest dump hygiene guardrails in place; AUD-2 collector rejects whitespace-polluted paths; git `true /` warning eliminated.
