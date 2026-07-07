@@ -44,6 +44,28 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - RA-R2 Runtime Rotation Plan Artifact Contract
+
+**Objective:** Define RuntimeRotationPlan types, strict validator, fixtures, tests, and contract doc only — no runtime consumption.
+
+**Source Authority:** RA-R2 go-order, `docs/ROLE_ARTIFACT_CONTRACT_LAYER.md`, `docs/LEDGER_ID_FORMAT_CONTRACT.md`.
+
+**Current State:** LG-1 at `4ab5b4e`. Suite 172/2,983 green.
+
+**Scope:** `src/roles/types/runtimeRotationPlan.ts`, `src/roles/runtimeRotationPlanValidator.ts`, `examples/roles/runtime-rotation-plan.*.json`, tests, docs, barrel exports, PLANS.
+
+**Out of Scope:** Rotation execution, Logic Engine wiring, ledger writes, model calls, idFactory changes.
+
+**Snapshot / Rollback Plan:** Pre-change `snap_20260707T133131435Z_000366_milestone` (verified on disk).
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/roles/runtimeRotationPlanValidator.test.ts`; `npx vitest run`.
+
+**Acceptance Criteria:** Strict validator with RRP_* codes; fixtures; accumulation tests; runtime isolation; suite green.
+
+**Progress Log:** Pre-change snapshot `snap_20260707T133131435Z_000366_milestone` created and verified. Types, validator, fixtures, tests, and contract doc implemented. Typecheck passed. Full suite: 173 files / 3,001 tests green (+1 file, +18 tests vs LG-1).
+
+**Final Report:** RA-R2 accepted. Contract-only RuntimeRotationPlan with strict validator; no runtime consumption; runtime isolation confirmed.
+
 ## ExecPlan - LG-1 Ledger Identity Uniqueness Guardrail
 
 **Objective:** Replace counter-based Hollow/VRP/ledger ID generation with centralized `idFactory` UUID creators; preserve correlation semantics; add tests and format contract doc.

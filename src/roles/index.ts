@@ -4,3 +4,4 @@ export * from "./roleContractRegistry.js";
 export * from "./roleHandoffGate.js";
 export * from "./roleArtifactBundleValidator.js";
 export * from "./roleArtifactBundleReportValidator.js";
+export * from "./runtimeRotationPlanValidator.js";

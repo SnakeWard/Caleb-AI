@@ -1,0 +1,18 @@
+{
+  "runtime_rotation_plan_id": "rrp_523e4567-e89b-12d3-a456-426614174000",
+  "schema_version": "1.0.0",
+  "task_id": "task_523e4567-e89b-12d3-a456-426614174001",
+  "run_id": "run_523e4567-e89b-12d3-a456-426614174002",
+  "authored_by": "orchestration_core",
+  "route_mode": "full_rotation",
+  "roles_required": ["planner", "analyst", "critic", "synthesizer"],
+  "hollows_required": ["hollow.text.character_count"],
+  "gates_required": ["role_handoff_gate", "final_verification_gate"],
+  "max_cycles": 2,
+  "stop_criteria": ["halt_on_gate_blocked"],
+  "side_effect_policy": "requires_approval",
+  "code_mutation_policy": "requires_snapshot",
+  "snapshot_requirement": true,
+  "ledger_policy": "record_all_passes",
+  "created_at": "2026-07-07T00:00:00.000Z"
+}

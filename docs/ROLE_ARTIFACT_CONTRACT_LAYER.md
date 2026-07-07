@@ -6,6 +6,8 @@ The Role Artifact Contract Layer defines the first structured artifact boundary 
 
 R1 creates types, validators, documentation, and tests only. It does not execute roles, call models, perform Role Rotation, invoke Hollows, or connect to Logic Engine runtime execution.
 
+Runtime Rotation Plan contract (RA-R2): see `docs/RUNTIME_ROTATION_PLAN_CONTRACT.md`.
+
 ## 2. Relationship To Accepted Logic Engine V0
 
 Logic Engine V0 is accepted as the deterministic orchestration foundation:

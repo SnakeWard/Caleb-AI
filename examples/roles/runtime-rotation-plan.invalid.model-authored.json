@@ -1,0 +1,18 @@
+{
+  "runtime_rotation_plan_id": "rrp_323e4567-e89b-12d3-a456-426614174000",
+  "schema_version": "1.0.0",
+  "task_id": "task_323e4567-e89b-12d3-a456-426614174001",
+  "run_id": "run_323e4567-e89b-12d3-a456-426614174002",
+  "authored_by": "model",
+  "route_mode": "planner_synthesizer",
+  "roles_required": ["planner", "synthesizer"],
+  "hollows_required": [],
+  "gates_required": ["role_handoff_gate", "final_verification_gate"],
+  "max_cycles": 1,
+  "stop_criteria": ["sequence_exhausted"],
+  "side_effect_policy": "none",
+  "code_mutation_policy": "none",
+  "snapshot_requirement": false,
+  "ledger_policy": "record_all_passes",
+  "created_at": "2026-07-07T00:00:00.000Z"
+}
