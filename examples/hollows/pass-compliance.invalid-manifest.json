@@ -1,0 +1,12 @@
+{
+  "pass_manifest": {
+    "pass_id": "",
+    "schema_version": "9.9.9",
+    "allowed_create": "not-an-array",
+    "allowed_modify": [],
+    "forbidden": []
+  },
+  "changeset": {
+    "entries": []
+  }
+}

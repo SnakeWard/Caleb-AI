@@ -1,0 +1,17 @@
+{
+  "pass_manifest": {
+    "pass_id": "AUD-1-fixture",
+    "schema_version": "1.0.0",
+    "allowed_create": ["src/hollows/audit/**", "examples/hollows/**"],
+    "allowed_modify": ["src/hollows/v1HollowCatalog.ts", "PLANS.md"],
+    "allowed_delete": [],
+    "forbidden": ["src/hollows/runner.ts", "src/ledger/**"]
+  },
+  "changeset": {
+    "entries": [
+      { "path": "src/hollows/audit/passComplianceCheck.ts", "change_kind": "created" },
+      { "path": "examples/hollows/pass-compliance.compliant.json", "change_kind": "created" },
+      { "path": "src/hollows/v1HollowCatalog.ts", "change_kind": "modified" }
+    ]
+  }
+}

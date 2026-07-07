@@ -1,0 +1,55 @@
+{
+  "pass_manifest": {
+    "pass_id": "AUD-1",
+    "schema_version": "1.0.0",
+    "allowed_create": [
+      "src/hollows/audit/**",
+      "examples/hollows/**",
+      "tests/hollows/passComplianceCheck.test.ts",
+      "tests/hollows/passComplianceCheck.vrp.regression.test.ts",
+      "docs/PASS_COMPLIANCE_AUDITOR_CONTRACT.md"
+    ],
+    "allowed_modify": [
+      "src/hollows/v1HollowCatalog.ts",
+      "src/hollows/index.ts",
+      "PLANS.md",
+      "tests/hollows/v1HollowCatalog.test.ts",
+      "tests/acceptance/logicEngineBoundaryLock.test.ts",
+      "tests/cli/commandHandlers.test.ts",
+      "tests/cli/mediaCommandHandlers.test.ts",
+      "tests/cli/minimalCli.test.ts"
+    ],
+    "allowed_delete": [],
+    "forbidden": [
+      "src/hollows/runner.ts",
+      "src/verification/**",
+      "src/ledger/**",
+      "src/changeGuard/**",
+      "src/roles/**",
+      "src/logicEngine/**",
+      "src/roleRuntime/**"
+    ]
+  },
+  "changeset": {
+    "entries": [
+      { "path": "src/hollows/audit/passComplianceCheck.ts", "change_kind": "created" },
+      { "path": "examples/hollows/pass-compliance.compliant.json", "change_kind": "created" },
+      { "path": "examples/hollows/pass-compliance.forbidden-touched.json", "change_kind": "created" },
+      { "path": "examples/hollows/pass-compliance.unlisted-modified.json", "change_kind": "created" },
+      { "path": "examples/hollows/pass-compliance.unexpected-deletion.json", "change_kind": "created" },
+      { "path": "examples/hollows/pass-compliance.invalid-manifest.json", "change_kind": "created" },
+      { "path": "examples/hollows/pass-compliance.aud1-self-smoke.json", "change_kind": "created" },
+      { "path": "tests/hollows/passComplianceCheck.test.ts", "change_kind": "created" },
+      { "path": "tests/hollows/passComplianceCheck.vrp.regression.test.ts", "change_kind": "created" },
+      { "path": "docs/PASS_COMPLIANCE_AUDITOR_CONTRACT.md", "change_kind": "created" },
+      { "path": "src/hollows/v1HollowCatalog.ts", "change_kind": "modified" },
+      { "path": "src/hollows/index.ts", "change_kind": "modified" },
+      { "path": "PLANS.md", "change_kind": "modified" },
+      { "path": "tests/hollows/v1HollowCatalog.test.ts", "change_kind": "modified" },
+      { "path": "tests/acceptance/logicEngineBoundaryLock.test.ts", "change_kind": "modified" },
+      { "path": "tests/cli/commandHandlers.test.ts", "change_kind": "modified" },
+      { "path": "tests/cli/mediaCommandHandlers.test.ts", "change_kind": "modified" },
+      { "path": "tests/cli/minimalCli.test.ts", "change_kind": "modified" }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "pass_manifest": {
+    "pass_id": "AUD-1-fixture-unlisted-modify",
+    "schema_version": "1.0.0",
+    "allowed_create": ["src/hollows/audit/**"],
+    "allowed_modify": ["PLANS.md"],
+    "allowed_delete": ["__no_deletes__/**"],
+    "forbidden": ["__no_forbidden__/**"]
+  },
+  "changeset": {
+    "entries": [
+      { "path": "src/hollows/v1HollowCatalog.ts", "change_kind": "modified" }
+    ]
+  }
+}

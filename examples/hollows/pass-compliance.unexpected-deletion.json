@@ -1,0 +1,15 @@
+{
+  "pass_manifest": {
+    "pass_id": "AUD-1-fixture-unexpected-delete",
+    "schema_version": "1.0.0",
+    "allowed_create": ["__no_creates__/**"],
+    "allowed_modify": ["__no_modifies__/**"],
+    "allowed_delete": ["docs/obsolete.md"],
+    "forbidden": ["__no_forbidden__/**"]
+  },
+  "changeset": {
+    "entries": [
+      { "path": "src/hollows/runner.ts", "change_kind": "deleted" }
+    ]
+  }
+}

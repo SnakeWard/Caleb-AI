@@ -2214,3 +2214,41 @@ Implementation MUST NOT exceed the approved phase boundary. A future-phase docum
 **Progress Log:** Pre-change snapshot `snap_20260705T015648621Z_000313_milestone`. Attempt 1 failed HTTP 410 (`search_parameters` rejected by xAI). Minimal wire fix in `xaiLiveAdapter.ts` + test update (authorized reality correction). Attempt 2 succeeded: provider ID `91bc2421-b27f-9247-8009-5cda43341a53`, digest matches `acknowledged`. Report `docs/FIRST_GROK_LIVE_CALL_ACCEPTANCE_REPORT.md`. Credential bridge file deleted. Validation snapshot `snap_20260705T020128766Z_000314_milestone`. Suite green at pass close.
 
 **Final Report:** G2 accepted. Source changed: `src/providers/xaiLiveAdapter.ts`, `tests/providers/grokLiveAdapter.test.ts`, `docs/FIRST_GROK_LIVE_CALL_ACCEPTANCE_REPORT.md`, `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md`, `docs/STATUS_LOG.md`, `PLANS.md`, `.caleb/ledger/ledger.jsonl`. Next: owner-directed (M3 or default model review).
+
+## ExecPlan - AUD-1 Pass Compliance Auditor Hollow
+
+**Objective:** Implement `hollow.audit.pass_compliance_check` v1.0.0 — a supplied-state-only, deterministic, report-only protocol compliance auditor. Register in V1 catalog (12 → 13). Add fixtures, unit tests, VRP regression, and contract doc.
+
+**Source Authority:** AUD-1 go-order; Amendment A1 (catalog count lock re-key); `docs/01_CODEX_OPERATING_CONTRACT.md`; `docs/02_V1_PHASE_BOUNDARIES.md`.
+
+**Current State:** RA-R2 at `53f7e37`. Suite 173 files / 3,001 tests green. LG-1 `idFactory` prefix_uuid IDs in production.
+
+**Scope:** `src/hollows/audit/passComplianceCheck.ts`; catalog registration in `v1HollowCatalog.ts` + `index.ts`; `examples/hollows/pass-compliance.*.json`; `tests/hollows/passComplianceCheck.test.ts`; `tests/hollows/passComplianceCheck.vrp.regression.test.ts`; `docs/PASS_COMPLIANCE_AUDITOR_CONTRACT.md`; PLANS update.
+
+**Amendment A1 (authorized narrow re-key):** Update catalog count/roster assertions 12 → 13 only in `tests/hollows/v1HollowCatalog.test.ts`, `tests/acceptance/logicEngineBoundaryLock.test.ts`, `tests/cli/commandHandlers.test.ts`, `tests/cli/mediaCommandHandlers.test.ts`, `tests/cli/minimalCli.test.ts`. Update `pass-compliance.aud1-self-smoke.json` manifest/changeset to mirror final file set.
+
+**Out of Scope:** AUD-2 git changeset collection; enforcement/mutation; edits to other existing Hollow tests; non-count assertion changes in lock tests.
+
+**Snapshot / Rollback Plan:** Pre-change `snap_20260707T142234020Z_000368_milestone` (`aud_1_pass_compliance_auditor_prechange`, verified on disk).
+
+**Implementation Steps:**
+1. Implement pass compliance evaluator + Hollow manifest/implementation.
+2. Register in V1 catalog and export from barrel.
+3. Add example fixtures including self-smoke.
+4. Re-key authorized catalog count locks (Amendment A1).
+5. Add unit + VRP regression tests.
+6. Add contract doc.
+7. Run `npx tsc --noEmit`; focused vitest; full vitest suite.
+8. Commit; issue formal PASS REPORT.
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/hollows/passComplianceCheck.test.ts tests/hollows/passComplianceCheck.vrp.regression.test.ts`; `npx vitest run`.
+
+**Acceptance Criteria:** All protocol test cases pass; VRP T2 evidence with LG-1 IDs; self-smoke compliant; authorized locks re-keyed 12 → 13; full suite green; no forbidden files touched.
+
+**Progress Log:** Pre-change snapshot `snap_20260707T142234020Z_000368_milestone` verified. Core Hollow, catalog registration, fixtures, Amendment A1 re-keys, tests, and contract doc implemented. Focused vitest: 21/21 green. Full vitest: 59 failures (all unauthorized count-lock files expecting 12). Typecheck: initial errors fixed (JsonValue cast, sync implementation guard); clean re-run pending on host.
+
+**Decision Log:** Amendment A1 resolves scope contradiction between catalog registration and forbidden existing-test edits by authorizing count/roster re-key only in five named lock files. Self-smoke uses explicit path lists (not `examples/hollows/*` glob) for truthful AUD-1 scope evaluation. Unknown-field violations now invalidate input (`valid:false`).
+
+**Surprises / Discoveries:** ~50 additional count-lock tests outside Amendment A1 scope still assert V1 catalog = 12; full suite cannot go green under A1-only authorization.
+
+**Final Report:** AUD-1 implementation delivered; Amendment A1 re-keys applied; full suite not green (59 count-lock failures in unauthorized files). See formal PASS REPORT for causation.

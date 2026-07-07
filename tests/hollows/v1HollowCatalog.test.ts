@@ -21,7 +21,8 @@ const EXPECTED_IDS = [
   "hollow.code.line_count",
   "hollow.code.import_surface",
   "hollow.code.export_surface",
-  "hollow.code.safety_scan"
+  "hollow.code.safety_scan",
+  "hollow.audit.pass_compliance_check"
 ].sort();
 
 describe("V1 Hollow catalog", () => {

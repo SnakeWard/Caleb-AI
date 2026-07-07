@@ -30,6 +30,10 @@ import {
   lineCountImplementation,
   lineCountManifest
 } from "./categories/code/index.js";
+import {
+  passComplianceCheckImplementation,
+  passComplianceCheckManifest
+} from "./audit/passComplianceCheck.js";
 import { HollowRegistry } from "./registry.js";
 import { HollowRunner } from "./runner.js";
 import type { HollowImplementation, HollowRunnerOptions } from "./runnerTypes.js";
@@ -47,7 +51,8 @@ export const V1_HOLLOW_MANIFESTS = [
   lineCountManifest,
   importSurfaceManifest,
   exportSurfaceManifest,
-  codeSafetyScanManifest
+  codeSafetyScanManifest,
+  passComplianceCheckManifest
 ] as const satisfies readonly HollowManifest[];
 
 export const V1_HOLLOW_IMPLEMENTATIONS: Readonly<Record<string, HollowImplementation>> = {
@@ -62,7 +67,8 @@ export const V1_HOLLOW_IMPLEMENTATIONS: Readonly<Record<string, HollowImplementa
   [lineCountManifest.hollow_id]: lineCountImplementation,
   [importSurfaceManifest.hollow_id]: importSurfaceImplementation,
   [exportSurfaceManifest.hollow_id]: exportSurfaceImplementation,
-  [codeSafetyScanManifest.hollow_id]: codeSafetyScanImplementation
+  [codeSafetyScanManifest.hollow_id]: codeSafetyScanImplementation,
+  [passComplianceCheckManifest.hollow_id]: passComplianceCheckImplementation
 };
 
 export function createV1HollowRegistry(): HollowRegistry {

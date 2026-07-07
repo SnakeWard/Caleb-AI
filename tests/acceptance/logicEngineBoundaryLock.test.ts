@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { V1_HOLLOW_MANIFESTS } from "../../src/hollows/v1HollowCatalog.js";
 import { HOLLOWCUT_HOLLOW_MANIFESTS } from "../../src/hollows/hollowcutHollowCatalog.js";
 
-const EXPECTED_V1_COUNT = 12;
+const EXPECTED_V1_COUNT = 13;
 const EXPECTED_HOLLOWCUT_COUNT = 9;
 
 const EXPECTED_V1_IDS = [
@@ -17,7 +17,8 @@ const EXPECTED_V1_IDS = [
   "hollow.code.line_count",
   "hollow.code.import_surface",
   "hollow.code.export_surface",
-  "hollow.code.safety_scan"
+  "hollow.code.safety_scan",
+  "hollow.audit.pass_compliance_check"
 ] as const;
 
 const EXPECTED_HOLLOWCUT_IDS = [

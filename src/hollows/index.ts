@@ -30,4 +30,10 @@ export {
   ledgerProvenanceImplementation
 } from "./categories/provenance/index.js";
 export * from "./categories/code/index.js";
+export {
+  evaluatePassCompliance,
+  passComplianceCheckImplementation,
+  passComplianceCheckManifest,
+  pathMatchesRule
+} from "./audit/passComplianceCheck.js";
 export * from "./hollowcutHollowCatalog.js";

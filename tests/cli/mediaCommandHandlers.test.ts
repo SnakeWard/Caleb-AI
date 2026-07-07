@@ -166,10 +166,10 @@ describe("CLI media command handlers", () => {
     expect(result.errors[0]?.code).toBe("hollow_not_found");
   });
 
-  it("list-hollows still returns exactly 12 V1 Hollows", async () => {
+  it("list-hollows still returns exactly 13 V1 Hollows", async () => {
     const result = await handleCliCommand(parseCliArgs(["list-hollows"]));
 
-    expect((result.data as { hollows: unknown[] }).hollows).toHaveLength(12);
+    expect((result.data as { hollows: unknown[] }).hollows).toHaveLength(13);
     expect(JSON.stringify(result.data)).not.toContain("hollow.media.");
   });
 
