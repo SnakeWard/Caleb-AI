@@ -573,5 +573,24 @@ No `src/` implementation. Pre-change snapshot:
 Suite at diagnostic close: 180 files / 3,055 tests green. **STOP — Pat approval
 required before LE-1 implementation.**
 
+### 2026-07-07 — Pass LE-1 — Rotation Plan Consumption Seam (Implementation)
+
+LE-1 implementation stage: read-only Logic Engine seam
+`classifyRotationPlanAtSeam()` in `src/logicEngine/rotationPlanSeam.ts` consumes
+RA-R2 `RuntimeRotationPlan` at route-selection boundary via allowlisted carrier
+`contract_validated_task_frame` (`task_type: "planning"`, plan as sibling payload,
+`lineage_refs` linkage). Classification enum:
+`valid_rotation_plan | invalid_schema | rejected_authorship |
+rejected_reference_format | unknown`. Emits deterministic
+`RotationPlanRouteDecisionArtifact` (T2 verified, digests/refs only). 12-branch
+decision inventory, all structurally annotated. **P1** V1 catalog **13** /
+Hollowcut **9**; AUD-1 Auditor in V1 via Amendment A1/A2. **P2** RA-R1-D
+handoff-gate classification **clean**. **P3** RA-R1 static rotation runtime
+**implemented** at `src/roleRuntime/`; LE-1 adds read-only consumption only. L1
+seven-entry allowlist unchanged. Seam not wired into routing. Pre-change snapshot:
+`snap_20260707T195956421Z_000380_milestone` (verified on disk before recording).
+Suite at implementation close: 182 files / 3,069 tests green. `npx tsc --noEmit`
+and `npm run build`: pass. **STOP — next pass is Pat's call.**
+
 **Convention:** every future pass appends one dated entry here as part of its
 completion report, including pre-change snapshot ID and suite counts at pass close.

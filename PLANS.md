@@ -2319,6 +2319,8 @@ Implementation MUST NOT exceed the approved phase boundary. A future-phase docum
 
 **Acceptance Criteria (diagnostic):** P1–P3 resolved on record; carrier type argued; classification enum proposed; L1 seven entries verbatim; STOP for Pat.
 
-**Progress Log:** Pre-change snapshot `snap_20260707T193901342Z_000378_milestone` created and verified. P1: V1=13, Hollowcut=9; AUD-1 Auditor in V1 via Amendment A1/A2. P2: RA-R1-D clean classification re-confirmed. P3: RA-R1 implemented; RA-R2 contract-only; LE-1 read-only seam proposed. Diagnostic doc drafted. **STOP — awaiting Pat approval for implementation.**
+**Progress Log (diagnostic):** Pre-change snapshot `snap_20260707T193901342Z_000378_milestone` created and verified. P1: V1=13, Hollowcut=9; AUD-1 Auditor in V1 via Amendment A1/A2. P2: RA-R1-D clean classification re-confirmed. P3: RA-R1 implemented; RA-R2 contract-only; LE-1 read-only seam proposed. Diagnostic committed at `353a74d`. Pat approved implementation.
 
-**Final Report:** Diagnostic stage pending validation commit and Pat approval. Implementation not authorized.
+**Progress Log (implementation):** Pre-change snapshot `snap_20260707T195956421Z_000380_milestone` (`le1_seam_implementation_prechange`, verified on disk). Added `src/logicEngine/rotationPlanSeam.ts` with 12-branch decision inventory; barrel export in `src/logicEngine/index.ts`. Unit tests (6) + acceptance tests (8): all classification enum values, all detectors, L1 lock verbatim, read-only proof, catalog 13/9. Focused seam tests: 14/14 green. Full suite: 182 files / 3,069 tests green (+2 files, +14 tests). `npx tsc --noEmit`: pass. `npm run build`: pass. Seam not wired into `routeInputGate.ts` or `selectRoute`.
+
+**Final Report:** LE-1 Rotation Plan Consumption Seam: Accepted — the engine can read rotation plans on the record; it cannot run them; the steering boundary is unchanged.
