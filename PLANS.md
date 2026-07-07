@@ -2298,3 +2298,27 @@ Implementation MUST NOT exceed the approved phase boundary. A future-phase docum
 **Progress Log:** Pre-change snapshot `snap_20260707T183454421Z_000376_milestone` created and verified. Malformed `true ` directory removed via Node `fs.rmSync` (PowerShell `Remove-Item` failed on trailing-space literal path). `.gitignore` Vitest dump patterns added and verified with `git check-ignore`. Collector hardened with `AUD2_INVALID_PATH_COMPONENT_WHITESPACE`. Focused tests: 17/17 green. Self-smoke TRUE-2 manifest: compliant, T2 verified, no `true /root` violation. Full suite: 180 files / 3,055 tests green (+1 file, +7 tests). `npx tsc --noEmit`: pass.
 
 **Final Report:** TRUE-2 accepted. Vitest dump hygiene guardrails in place; AUD-2 collector rejects whitespace-polluted paths; git `true /` warning eliminated.
+
+## ExecPlan - LE-1 Logic Engine RuntimeRotationPlan Consumption Seam
+
+**Objective:** Read-only Logic Engine seam: consume RA-R2 RuntimeRotationPlan at route-selection boundary, classify structurally, emit ledgered route-decision artifact — no rotation execution, no L1 allowlist change.
+
+**Source Authority:** `docs/protocols/PASS_PROTOCOL_LE1.md`; `docs/RUNTIME_ROTATION_PLAN_CONTRACT.md`; `docs/RA_R1_STATIC_ROTATION_DIAGNOSTIC.md`; L1 seven-entry allowlist (`routeInputGate.ts`).
+
+**Current State:** TRUE-2 at `3711cea`. Suite 180 files / 3,055 tests green. RA-R2 contract defined; RA-R1 runtime implemented separately; no LE consumption yet.
+
+**Scope (diagnostic stage):** `docs/protocols/PASS_PROTOCOL_LE1.md`; `docs/LE1_ROTATION_PLAN_CONSUMPTION_SEAM_DIAGNOSTIC.md`; `PLANS.md`; `docs/STATUS_LOG.md`.
+
+**Scope (implementation stage, on approval):** `src/logicEngine/rotationPlanSeam.ts`; tests; `docs/LE1_ROTATION_PLAN_CONSUMPTION_SEAM.md`; barrel exports only.
+
+**Out of Scope:** L1 allowlist change; role rotation execution; provider calls; RA-R1 runtime edits; catalog changes; vitest config; package files.
+
+**Snapshot / Rollback Plan:** Diagnostic pre-change `snap_20260707T193901342Z_000378_milestone` (`le1_seam_diagnostic_prechange`, verified on disk).
+
+**Validation Commands (diagnostic):** `npx tsc --noEmit`; `npx vitest run` (baseline must remain green).
+
+**Acceptance Criteria (diagnostic):** P1–P3 resolved on record; carrier type argued; classification enum proposed; L1 seven entries verbatim; STOP for Pat.
+
+**Progress Log:** Pre-change snapshot `snap_20260707T193901342Z_000378_milestone` created and verified. P1: V1=13, Hollowcut=9; AUD-1 Auditor in V1 via Amendment A1/A2. P2: RA-R1-D clean classification re-confirmed. P3: RA-R1 implemented; RA-R2 contract-only; LE-1 read-only seam proposed. Diagnostic doc drafted. **STOP — awaiting Pat approval for implementation.**
+
+**Final Report:** Diagnostic stage pending validation commit and Pat approval. Implementation not authorized.

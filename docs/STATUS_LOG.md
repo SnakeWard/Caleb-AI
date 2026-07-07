@@ -557,5 +557,21 @@ decision inventory (all structurally annotated), and open-items table. No `src/`
 `snap_20260706T032542674Z_000360_milestone` (verified on disk before recording).
 Sequenced after H8 (`5128079`).
 
+### 2026-07-07 — Pass LE-1-D — Rotation Plan Consumption Seam Diagnostic
+
+LE-1 diagnostic stage: committed `docs/protocols/PASS_PROTOCOL_LE1.md` and
+`docs/LE1_ROTATION_PLAN_CONSUMPTION_SEAM_DIAGNOSTIC.md`. Restored mandatory
+precondition record lines omitted from TRUE-2 report: **P1** V1 catalog **13** /
+Hollowcut **9**; AUD-1 Auditor `hollow.audit.pass_compliance_check` in V1 via
+AUD-1 Amendment A1/A2 (12→13 visible re-key). **P2** RA-R1-D handoff-gate
+classification re-confirmed clean (structure-only). **P3** RA-R1 static rotation
+runtime implemented at `src/roleRuntime/`; RA-R2 contract defined, not yet consumed
+at Logic Engine boundary. Proposed carrier: `contract_validated_task_frame` with
+plan sibling payload + `lineage_refs` linkage; seven-entry L1 allowlist unchanged.
+No `src/` implementation. Pre-change snapshot:
+`snap_20260707T193901342Z_000378_milestone` (verified on disk before recording).
+Suite at diagnostic close: 180 files / 3,055 tests green. **STOP — Pat approval
+required before LE-1 implementation.**
+
 **Convention:** every future pass appends one dated entry here as part of its
 completion report, including pre-change snapshot ID and suite counts at pass close.
