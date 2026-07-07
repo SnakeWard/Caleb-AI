@@ -139,7 +139,7 @@ describe("V1 phase boundary acceptance", () => {
   });
 
   it("does not include shell, network, or media Hollows in the V1 runtime catalog", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
     expect(MEDIA_HOLLOW_MANIFESTS).toHaveLength(4);
 
     for (const manifest of V1_HOLLOW_MANIFESTS) {

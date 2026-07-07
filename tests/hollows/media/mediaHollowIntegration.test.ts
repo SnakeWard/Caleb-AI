@@ -330,8 +330,8 @@ describe("Media Hollow integration", () => {
     }
   });
 
-  it("V1_HOLLOW_MANIFESTS remains exactly 12", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+  it("V1_HOLLOW_MANIFESTS remains exactly 13", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
   });
 
   it("V1 catalog contains no hollow.media IDs", () => {

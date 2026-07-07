@@ -365,7 +365,7 @@ describe("RA-R1 static rotation acceptance", () => {
   });
 
   it("preserves protected catalogs", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });

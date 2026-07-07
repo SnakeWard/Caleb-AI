@@ -152,7 +152,7 @@ describe("L1-A route-input boundary acceptance lock", () => {
   it("preserves H5 traps and catalog counts", async () => {
     await expect(readFile("vitest.config.ts", "utf8")).resolves.toContain("tests/setup/networkEgressBlock.ts");
     await expect(readFile("tests/setup/networkEgressBlock.ts", "utf8")).resolves.toContain("CREDENTIAL_ENV_DENYLIST");
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });

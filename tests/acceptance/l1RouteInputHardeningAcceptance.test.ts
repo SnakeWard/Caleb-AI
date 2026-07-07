@@ -178,7 +178,7 @@ describe("L1 route-input hardening acceptance", () => {
   });
 
   it("preserves catalog counts", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });

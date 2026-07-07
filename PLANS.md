@@ -2225,9 +2225,11 @@ Implementation MUST NOT exceed the approved phase boundary. A future-phase docum
 
 **Scope:** `src/hollows/audit/passComplianceCheck.ts`; catalog registration in `v1HollowCatalog.ts` + `index.ts`; `examples/hollows/pass-compliance.*.json`; `tests/hollows/passComplianceCheck.test.ts`; `tests/hollows/passComplianceCheck.vrp.regression.test.ts`; `docs/PASS_COMPLIANCE_AUDITOR_CONTRACT.md`; PLANS update.
 
-**Amendment A1 (authorized narrow re-key):** Update catalog count/roster assertions 12 → 13 only in `tests/hollows/v1HollowCatalog.test.ts`, `tests/acceptance/logicEngineBoundaryLock.test.ts`, `tests/cli/commandHandlers.test.ts`, `tests/cli/mediaCommandHandlers.test.ts`, `tests/cli/minimalCli.test.ts`. Update `pass-compliance.aud1-self-smoke.json` manifest/changeset to mirror final file set.
+**Amendment A1 (authorized narrow re-key):** Update catalog count/roster assertions 12 → 13 only in five named lock files. Superseded by A2 for remaining locks.
 
-**Out of Scope:** AUD-2 git changeset collection; enforcement/mutation; edits to other existing Hollow tests; non-count assertion changes in lock tests.
+**Amendment A2 (exhaustive count-lock re-key):** Discovery-first re-key of all V1 catalog count/roster locks across `tests/` (57 files touched). Historical doc-content locks left untouched (`snapshotClaimIntegrityGateAcceptance`, `m3RawOutputBoundaryAcceptanceLock` category string). Self-smoke fixture updated with test-tree `allowed_modify` globs.
+
+**Out of Scope:** AUD-2 git changeset collection; enforcement/mutation; non-count assertion changes in lock tests; historical acceptance report doc edits.
 
 **Snapshot / Rollback Plan:** Pre-change `snap_20260707T142234020Z_000368_milestone` (`aud_1_pass_compliance_auditor_prechange`, verified on disk).
 
@@ -2245,10 +2247,10 @@ Implementation MUST NOT exceed the approved phase boundary. A future-phase docum
 
 **Acceptance Criteria:** All protocol test cases pass; VRP T2 evidence with LG-1 IDs; self-smoke compliant; authorized locks re-keyed 12 → 13; full suite green; no forbidden files touched.
 
-**Progress Log:** Pre-change snapshot `snap_20260707T142234020Z_000368_milestone` verified. Core Hollow, catalog registration, fixtures, Amendment A1 re-keys, tests, and contract doc implemented. Focused vitest: 21/21 green. Full vitest: 59 failures (all unauthorized count-lock files expecting 12). Typecheck: initial errors fixed (JsonValue cast, sync implementation guard); clean re-run pending on host.
+**Progress Log:** A1 snapshot `snap_20260707T142234020Z_000368_milestone`. A2 snapshot `snap_20260707T154921326Z_000370_milestone` verified. Exhaustive count-lock re-key across 57 test files. Self-smoke fixture fixed (duplicate path removed). Focused vitest: 21/21 green. Full vitest: **175 files / 3,022 tests green** (+21 tests vs RA-R2 baseline count; +2 files).
 
-**Decision Log:** Amendment A1 resolves scope contradiction between catalog registration and forbidden existing-test edits by authorizing count/roster re-key only in five named lock files. Self-smoke uses explicit path lists (not `examples/hollows/*` glob) for truthful AUD-1 scope evaluation. Unknown-field violations now invalidate input (`valid:false`).
+**Decision Log:** A2 leaves historical doc-content locks at 12 (`snapshotClaimIntegrityGateAcceptance` line 57, `m3RawOutputBoundaryAcceptanceLock` report category string). Self-smoke `allowed_modify` uses `tests/**` subtree globs for truthful A2 scope.
 
-**Surprises / Discoveries:** ~50 additional count-lock tests outside Amendment A1 scope still assert V1 catalog = 12; full suite cannot go green under A1-only authorization.
+**Surprises / Discoveries:** Self-smoke duplicate changeset path (`created` + `modified` same file) caused `valid:false`; fixed by single `modified` entry. Parallel `tsc` invocations in agent session hung reproducibly; isolated user-session runs previously completed exit 0 in ~18–24s on same tree.
 
-**Final Report:** AUD-1 implementation delivered; Amendment A1 re-keys applied; full suite not green (59 count-lock failures in unauthorized files). See formal PASS REPORT for causation.
+**Final Report:** AUD-1 accepted under A2. V1 catalog 13; full suite green.

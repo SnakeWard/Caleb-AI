@@ -116,8 +116,8 @@ describe("ledger entry id integrity acceptance (H4)", () => {
     expect(duplicatedValues.size).toBe(KNOWN_PRE_H4_DUPLICATED_ID_VALUES);
   });
 
-  it("keeps catalog invariants: V1 = 12, Hollowcut = 9", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+  it("keeps catalog invariants: V1 = 13, Hollowcut = 9", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });

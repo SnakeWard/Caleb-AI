@@ -103,7 +103,7 @@ describe("one provider adapter opt-in harness acceptance", () => {
     const hollowcutData = hollowcut.data as { hollows: unknown[] };
 
     expect(v1.ok).toBe(true);
-    expect(v1Data.hollows).toHaveLength(12);
+    expect(v1Data.hollows).toHaveLength(13);
     expect(hollowcut.ok).toBe(true);
     expect(hollowcutData.hollows).toHaveLength(9);
   });

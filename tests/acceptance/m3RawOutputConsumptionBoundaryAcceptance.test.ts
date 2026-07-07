@@ -251,7 +251,7 @@ describe("M3 raw output consumption boundary acceptance", () => {
   });
 
   it("preserves catalog counts", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });

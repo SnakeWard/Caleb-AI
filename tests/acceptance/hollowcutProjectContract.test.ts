@@ -221,8 +221,8 @@ describe("Hollowcut project contract and validator boundary", () => {
     }
   });
 
-  it("V1 catalog remains exactly 12", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+  it("V1 catalog remains exactly 13", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
   });
 
   it("Media catalog remains exactly 4", () => {

@@ -18,6 +18,7 @@ import { buildCalebReport } from "../../src/reports/index.js";
 import { VerifiedReturnPath } from "../../src/verification/index.js";
 
 const EXPECTED_V1_HOLLOW_IDS = [
+  "hollow.audit.pass_compliance_check",
   "hollow.code.export_surface",
   "hollow.code.import_surface",
   "hollow.code.line_count",
@@ -33,10 +34,10 @@ const EXPECTED_V1_HOLLOW_IDS = [
 ];
 
 describe("V1 MVP acceptance", () => {
-  it("contains exactly the 12 expected production Hollows", () => {
+  it("contains exactly the 13 expected production Hollows", () => {
     const ids = V1_HOLLOW_MANIFESTS.map((manifest) => manifest.hollow_id).sort();
 
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
     expect(ids).toEqual(EXPECTED_V1_HOLLOW_IDS);
   });
 
@@ -93,7 +94,7 @@ describe("V1 MVP acceptance", () => {
     expect(report.stats.ledger_entry_count).toBe(1);
   });
 
-  it("lists all 12 Hollows through the CLI handler", async () => {
+  it("lists all 13 Hollows through the CLI handler", async () => {
     const result = await handleCliCommand(parseCliArgs(["list-hollows", "--json"]));
     const data = result.data as { hollows: Array<{ hollow_id: string }> };
 

@@ -67,8 +67,8 @@ describe("single_pass Route MVP acceptance lock", () => {
     expect(source).not.toMatch(/writeLedger|appendLedger|ledgerWriter|createLedgerEntry/);
   });
 
-  it("keeps V1 Hollow catalog count locked at 12", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+  it("keeps V1 Hollow catalog count locked at 13", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
   });
 
   it("keeps Hollowcut catalog count locked at 9", () => {

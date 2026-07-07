@@ -232,7 +232,7 @@ describe("Logic Engine V0.7 telemetry trace collector", () => {
   });
 
   it("catalog counts remain protected", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(12);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });
