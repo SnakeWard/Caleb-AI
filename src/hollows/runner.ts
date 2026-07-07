@@ -1,4 +1,11 @@
-import { createHash, randomUUID } from "node:crypto";
+import { createHash } from "node:crypto";
+
+import {
+  createInvocationId,
+  createRunId,
+  createTaskId,
+  createTraceId
+} from "../ledger/idFactory.js";
 import type { JsonObject, JsonValue, Sha256Digest } from "../types/common.js";
 import type { HollowManifest } from "../types/hollow.js";
 import type { CalebError, HollowInvocationRecord } from "../types/invocation.js";
@@ -52,7 +59,20 @@ export class HollowRunner {
     this.default_requested_by = options.default_requested_by ?? "Caleb AI";
     this.default_timeout_ms = options.default_timeout_ms;
     this.now = options.now ?? (() => new Date());
-    this.id_generator = options.id_generator ?? ((prefix) => `${prefix}_${randomUUID()}`);
+    this.id_generator =
+      options.id_generator ??
+      ((prefix) => {
+        switch (prefix) {
+          case "invocation":
+            return createInvocationId();
+          case "task":
+            return createTaskId();
+          case "run":
+            return createRunId();
+          case "trace":
+            return createTraceId();
+        }
+      });
 
     if (implementations instanceof Map) {
       for (const [hollow_id, implementation] of implementations.entries()) {

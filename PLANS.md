@@ -44,6 +44,28 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - LG-1 Ledger Identity Uniqueness Guardrail
+
+**Objective:** Replace counter-based Hollow/VRP/ledger ID generation with centralized `idFactory` UUID creators; preserve correlation semantics; add tests and format contract doc.
+
+**Source Authority:** LG-1 go-order, `docs/04_STORAGE_AND_LEDGER_DECISIONS.md`, H4 ledger ID integrity findings.
+
+**Current State:** RA-R1 at `a496176`. H4 partially unified ledger IDs on `randomUUID`; runner already UUID-based. LG-1 centralizes on `src/ledger/idFactory.ts`.
+
+**Scope:** `idFactory.ts`, wire `runner.ts` + `ledgerEntryFactory.ts`, new tests, `docs/LEDGER_ID_FORMAT_CONTRACT.md`, PLANS.
+
+**Out of Scope:** Snapshot IDs, live adapter IDs, VRP logic, ledger schema, historical ledger rewrite, dependencies.
+
+**Snapshot / Rollback Plan:** Pre-change `snap_20260707T042918230Z_000364_milestone` (verified on disk before mutation).
+
+**Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/ledger/idFactory.test.ts`; `npx vitest run tests/ledger/ledgerIdUniqueness.regression.test.ts`; `npx vitest run`.
+
+**Acceptance Criteria:** Five factory functions; no counters; correlation preserved; all tests green; snapshot/live adapter untouched.
+
+**Progress Log:** Pre-change snapshot `snap_20260707T042918230Z_000364_milestone` created and verified. idFactory created; `runner.ts` and `ledgerEntryFactory.ts` wired. Tests and contract doc added. Typecheck passed. Full suite: 172 files / 2,983 tests green.
+
+**Final Report:** LG-1 accepted. Centralized UUID idFactory; hollow/VRP/ledger chain unified; correlation preserved; snapshot and live adapter IDs untouched.
+
 ## ExecPlan - RA-R1 Static Role Rotation Runtime Implementation
 
 **Objective:** Implement static role rotation runtime per `docs/protocols/PASS_PROTOCOL_RA_R1.md` and RA-R1-D diagnostic, with mock adapters, M3 compose-only storage, executor-local handoff gate, 18-branch decision inventory, mandatory detectors, validation, commit, and completion report.

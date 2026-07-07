@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 
+import { createLedgerId as createStandardLedgerId } from "./idFactory.js";
 import type { EvidencePacket } from "../types/evidence.js";
 import type { HollowInvocationRecord } from "../types/invocation.js";
 import type { LedgerActorType, LedgerEntry } from "../types/ledger.js";
@@ -20,15 +21,21 @@ export interface LedgerEntryFactoryOptions {
   readonly retryable?: boolean;
 }
 
-// H4: ledger IDs are crypto-random UUIDs. The previous module-level counter
-// produced colliding IDs across processes (M2 finding: 295 entries / 255
-// unique IDs in the live ledger). Cross-run uniqueness is guaranteed
-// forward-only; historical counter-format entries are documented, not mutated.
+// LG-1: hollow/VRP ledger IDs use idFactory (prefix_uuid). Custom prefixes
+// (e.g. route_) and injected generators remain for tests and Logic Engine.
 export function createLedgerId(
   prefix = "ledger",
   generator?: (prefix: string) => string
 ): string {
-  return generator !== undefined ? generator(prefix) : `${prefix}_${randomUUID()}`;
+  if (generator !== undefined) {
+    return generator(prefix);
+  }
+
+  if (prefix === "ledger") {
+    return createStandardLedgerId();
+  }
+
+  return `${prefix}_${randomUUID()}`;
 }
 
 export function createLedgerEntryFromInvocation(
