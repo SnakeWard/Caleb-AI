@@ -16,6 +16,7 @@ const COMMANDS = new Set<CliCommandName>([
   "preview-hollowcut-export-plan",
   "route-decision",
   "logic-execute",
+  "execute-rotation-plan",
   "one-provider-adapter-dry-run",
   "run-one-provider-adapter-live",
   "audit-pass-compliance"
@@ -46,7 +47,8 @@ const VALUE_FLAGS = new Set([
   "--expected-output-sha256",
   "--adapter-id",
   "--manifest",
-  "--base-ref"
+  "--base-ref",
+  "--plan-file"
 ]);
 
 const BOOLEAN_FLAGS = new Set([
@@ -55,7 +57,8 @@ const BOOLEAN_FLAGS = new Set([
   "--write-report",
   "--help",
   "--include-context",
-  "--include-trace"
+  "--include-trace",
+  "--confirm"
 ]);
 
 const FLAG_TO_KEY: Record<string, string> = {
@@ -89,7 +92,9 @@ const FLAG_TO_KEY: Record<string, string> = {
   "--expected-output-sha256": "expected_output_sha256",
   "--adapter-id": "adapter_id",
   "--manifest": "manifest",
-  "--base-ref": "base_ref"
+  "--base-ref": "base_ref",
+  "--plan-file": "plan_file",
+  "--confirm": "confirm"
 };
 
 export function parseCliArgs(argv: readonly string[]): ParsedCliCommand {
@@ -292,6 +297,58 @@ export function parseCliArgs(argv: readonly string[]): ParsedCliCommand {
     }
   }
 
+  if (command === "execute-rotation-plan") {
+    if (flags.plan_file === undefined || typeof flags.plan_file !== "string" || flags.plan_file.trim().length === 0) {
+      errors.push({
+        code: "missing_plan_file",
+        message: "execute-rotation-plan requires --plan-file <bridged-plan.json>."
+      });
+    }
+    if (flags.confirm !== true) {
+      errors.push({
+        code: "confirmation_required",
+        message: "execute-rotation-plan requires explicit --confirm human authority."
+      });
+    }
+    for (const flagKey of [
+      "id",
+      "input_json",
+      "input_file",
+      "write_ledger",
+      "write_report",
+      "report_dir",
+      "report_format",
+      "name",
+      "include_context",
+      "include_trace",
+      "hollow_input_json",
+      "hollow_input_file",
+      "approved_by",
+      "files_to_capture_json",
+      "files_to_capture_file",
+      "explicit_opt_in",
+      "explicit_live_request",
+      "network_permission",
+      "kill_switch_open",
+      "credential_env_var",
+      "prompt_file",
+      "model",
+      "max_output_tokens",
+      "timeout_ms",
+      "expected_output_sha256",
+      "adapter_id",
+      "manifest",
+      "base_ref"
+    ]) {
+      if (flags[flagKey] !== undefined) {
+        errors.push({
+          code: "unsupported_flag",
+          message: `execute-rotation-plan does not support --${flagKey.replace(/_/g, "-")}.`
+        });
+      }
+    }
+  }
+
   if (command === "list-hollowcut-hollows") {
     // Read-only command: reject write flags for safety and clarity
     for (const flagKey of ["write_ledger", "write_report", "ledger_path", "report_dir", "report_format"]) {
@@ -419,7 +476,7 @@ export function parseCliArgs(argv: readonly string[]): ParsedCliCommand {
     flags,
     errors,
     output_format: flags.json === true ? "json" : "text",
-    ...(command === "route-decision" || command === "logic-execute"
+    ...(command === "route-decision" || command === "logic-execute" || command === "execute-rotation-plan"
       ? {}
       : {
           catalog:

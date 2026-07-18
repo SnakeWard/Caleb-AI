@@ -665,3 +665,30 @@ already matched the user's authority.
 
 **Convention:** every future pass appends one dated entry here as part of its
 completion report, including pre-change snapshot ID and suite counts at pass close.
+
+### 2026-07-18 — Pass LE-3 — Guarded Execution Seam (acceptance pending TIME-1)
+
+Protocol `fd3663c` is committed and pushed. Pre-change snapshot
+`snap_20260718T205307165Z_000390_milestone` was Ledgered and verified on disk
+before implementation. The new seam accepts only exact LE-2-bridged plans with a
+matching successful bridge Ledger record, explicit human CLI `--confirm`,
+human/fixture authorship, mock adapters, structural revalidation, and a mandatory
+Ledger start write. It then composes the unchanged RA-R1 executor and M3 store.
+
+The golden two-cycle Planner→Critic→Planner→Critic path, JSONL-only chain
+reconstruction, all refusal codes, the four named detectors, and failing-Critic
+halt are implemented. Initial focused validation passed 3 files / 26 tests.
+`LE1-LEDGER-1` remains named-deferred because adding async write/failure semantics
+to LE-1's synchronous pure classifier is not a cheap reuse. The widened matrix
+passed 8 files / 100 tests; canonical typecheck and build exited 0; AUD-2
+self-smoke was compliant/T2 across 14 paths.
+
+LE-3 did not clear the required canonical-suite gate. Three completed unmodified
+runs passed 3,116/3,120, 3,119/3,120, and 3,112/3,120 tests respectively; all
+failures were 5-second timeouts in unchanged tests and no LE-3 assertion failed.
+A serial five-file diagnostic passed 47/48 and reproduced only the AUD-2 CLI
+timeout. The protocol does not authorize widening Vitest/config or those existing
+tests. LE-3 is implemented but not accepted. Its verified implementation is
+committed for repository safety with acceptance explicitly pending the separately
+authorized TIME-1 micro-pass. LE-3-A has not started (no snapshot, report, lock
+test, or verdict).

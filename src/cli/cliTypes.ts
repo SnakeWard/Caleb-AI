@@ -14,6 +14,7 @@ export type CliCommandName =
   | "preview-hollowcut-export-plan"
   | "route-decision"
   | "logic-execute"
+  | "execute-rotation-plan"
   | "one-provider-adapter-dry-run"
   | "run-one-provider-adapter-live"
   | "audit-pass-compliance";

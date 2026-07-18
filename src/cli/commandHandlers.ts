@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
+import { dirname, join } from "node:path";
 
 import { projectInfo } from "../project/projectInfo.js";
 import {
@@ -57,6 +58,11 @@ import type { LiveAdapterRequest, LiveAdapterResult } from "../modelBoundary/typ
 import type { AnthropicLiveAdapterConfig } from "../providers/anthropicLiveAdapterTypes.js";
 import type { GrokLiveAdapterConfig } from "../providers/xaiLiveAdapterTypes.js";
 import { runPassComplianceAudit } from "../audit/passComplianceAuditCommand.js";
+import { ContentAddressedRawOutputStore } from "../rawOutput/contentAddressedRawOutputStore.js";
+import { createMockRoleRuntimeAdapter } from "../roleRuntime/mockRoleRuntimeAdapter.js";
+import type { RoleRuntimeAdapter } from "../roleRuntime/types/roleRuntimeAdapter.js";
+import type { RoleId } from "../roles/types/roleArtifact.js";
+import { executeBridgedRotationAtSeam } from "../logicEngine/rotationExecutionSeam.js";
 import type {
   CliCommandName,
   CliCommandResult,
@@ -105,6 +111,8 @@ export async function handleCliCommand(parsed: ParsedCliCommand): Promise<CliCom
       return handleRouteDecisionCommand(parsed);
     case "logic-execute":
       return handleLogicExecuteCommand(parsed);
+    case "execute-rotation-plan":
+      return handleExecuteRotationPlanCommand(parsed);
     case "one-provider-adapter-dry-run":
       return handleOneProviderAdapterDryRunCommand(parsed);
     case "run-one-provider-adapter-live":
@@ -198,13 +206,166 @@ export function handleHelpCommand(): CliCommandResult {
       "caleb preview-hollowcut-export-plan (--input-json <json> | --input-file <file>) [--json] [--write-ledger] [--ledger-path <path>] [--write-report] [--report-dir <dir>] [--report-format markdown|json|both]",
       "caleb route-decision (--input-json <json> | --input-file <file>) [--json] [--write-ledger] [--ledger-path <path>]",
       "caleb logic-execute --id <hollow_id> (--input-json <json> | --input-file <file>) (--hollow-input-json <json> | --hollow-input-file <file>) [--approved-by <actor>] [--files-to-capture-json <json> | --files-to-capture-file <file>] [--json] [--include-context] [--include-trace] [--write-ledger] [--ledger-path <path>]",
+      "caleb execute-rotation-plan --plan-file <bridged-plan.json> --confirm [--ledger-path <path>] [--json]",
       "caleb one-provider-adapter-dry-run [--explicit-opt-in true|false] [--explicit-live-request true|false] [--json]",
       "caleb run-one-provider-adapter-live --explicit-opt-in true --explicit-live-request true --network-permission true --kill-switch-open true --credential-env-var <ENV_VAR_NAME> --approved-by <actor> --prompt-file <file> --write-ledger [--adapter-id anthropic_live_adapter|grok_live_adapter] [--ledger-path <path>] [--model <model_id>] [--max-output-tokens <n>] [--timeout-ms <n>] [--expected-output-sha256 <hex>] [--json]",
       "caleb audit-pass-compliance --manifest <path> [--base-ref <git-ref>] --json"
     ],
     note:
-      "Media commands are explicit and separate from the accepted V1 catalog. Hollowcut project inspection validates project JSON only; it does not render, export, mutate, write Ledger entries, or assign trust. route-decision is a dry-run diagnostic: it classifies signals, selects a route, and builds a work graph without executing any model calls. logic-execute dispatches exactly one V1 Hollow for hollow_only routes through the Verified Return Path. --files-to-capture-json and --files-to-capture-file supply a JSON array of project-relative file paths to snapshot before dispatch; required when requires_code_mutation is true."
+      "Media commands are explicit and separate from the accepted V1 catalog. Hollowcut project inspection validates project JSON only; it does not render, export, mutate, write Ledger entries, or assign trust. route-decision is a dry-run diagnostic: it classifies signals, selects a route, and builds a work graph without executing any model calls. logic-execute dispatches exactly one V1 Hollow for hollow_only routes through the Verified Return Path. execute-rotation-plan is human-confirmed, mock-only, bridged-plan-only, and always Ledgered. --files-to-capture-json and --files-to-capture-file supply a JSON array of project-relative file paths to snapshot before dispatch; required when requires_code_mutation is true."
   });
+}
+
+const DEFAULT_ROTATION_LEDGER_PATH = ".caleb/ledger/ledger.jsonl";
+
+export async function handleExecuteRotationPlanCommand(
+  parsed: ParsedCliCommand
+): Promise<CliCommandResult> {
+  const planFile = stringFlag(parsed, "plan_file");
+  if (planFile === undefined) {
+    return errorResult("execute-rotation-plan", "Missing required --plan-file.", [
+      { code: "missing_plan_file", message: "execute-rotation-plan requires --plan-file <bridged-plan.json>." }
+    ]);
+  }
+  if (parsed.flags.confirm !== true) {
+    return errorResult("execute-rotation-plan", "Explicit human confirmation is required.", [
+      { code: "confirmation_required", message: "execute-rotation-plan requires --confirm." }
+    ]);
+  }
+
+  let plan: unknown;
+  try {
+    const fileStat = await stat(planFile);
+    if (!fileStat.isFile()) {
+      return errorResult("execute-rotation-plan", "Plan path is not a file.", [
+        { code: "plan_file_not_file", message: "--plan-file must point to a JSON file." }
+      ]);
+    }
+    if (fileStat.size > MAX_INPUT_FILE_BYTES) {
+      return errorResult("execute-rotation-plan", "Plan file exceeds 1 MB.", [
+        { code: "plan_file_too_large", message: "--plan-file exceeds the 1 MB limit." }
+      ]);
+    }
+    plan = JSON.parse(await readFile(planFile, "utf8")) as unknown;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Could not read bridged plan JSON.";
+    return errorResult("execute-rotation-plan", "Could not read bridged plan JSON.", [
+      { code: "invalid_plan_file", message }
+    ]);
+  }
+
+  const ledgerPath = stringFlag(parsed, "ledger_path") ?? DEFAULT_ROTATION_LEDGER_PATH;
+  const ledger = new JsonlLedger(ledgerPath);
+  let bridgeEntries: readonly LedgerEntry[];
+  try {
+    bridgeEntries = await ledger.readAll();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Could not read the execution Ledger.";
+    return errorResult("execute-rotation-plan", "Could not read the execution Ledger.", [
+      { code: "ledger_read_failed", message }
+    ]);
+  }
+
+  const adapters = createCliRotationAdapters(plan);
+  const artifactRoot =
+    ledgerPath === DEFAULT_ROTATION_LEDGER_PATH
+      ? ".caleb/artifacts/raw-output/role-rotation"
+      : join(dirname(ledgerPath), "rotation-artifacts");
+  const store = new ContentAddressedRawOutputStore({ root_dir: artifactRoot });
+  const result = await executeBridgedRotationAtSeam({
+    plan,
+    human_confirmed: true,
+    bridge_ledger_entries: bridgeEntries,
+    adapters,
+    store,
+    append_ledger_entry: async (entry) => {
+      await ledger.append(entry);
+      return true;
+    }
+  });
+
+  const data = {
+    status: result.status,
+    refusal_code: result.refusal_code,
+    failure_code: result.failure_code,
+    bridge_ledger_id: result.bridge_ledger_id,
+    completed_steps: result.execution_result?.completed_steps ?? 0,
+    role_order: result.execution_result?.records.map((record) => record.role_id) ?? [],
+    ledger_entries_written: result.ledger_entries.length,
+    ledger_path: ledgerPath,
+    mock_only: true,
+    human_confirmed: true
+  };
+
+  if (!result.ok) {
+    const code = result.refusal_code ?? result.failure_code ?? "rotation_execution_failed";
+    return errorResult(
+      "execute-rotation-plan",
+      result.status === "refused" ? `Rotation refused: ${code}.` : `Rotation failed: ${code}.`,
+      [{ code, message: `Guarded rotation ended with ${code}.` }],
+      data
+    );
+  }
+
+  return okResult(
+    "execute-rotation-plan",
+    `Rotation completed with ${result.execution_result.completed_steps} role invocations.`,
+    data
+  );
+}
+
+function createCliRotationAdapters(plan: unknown): Map<string, RoleRuntimeAdapter> {
+  const adapters = new Map<string, RoleRuntimeAdapter>();
+  if (typeof plan !== "object" || plan === null || Array.isArray(plan)) {
+    return adapters;
+  }
+  const sequence = (plan as Record<string, unknown>)["sequence"];
+  if (!Array.isArray(sequence)) {
+    return adapters;
+  }
+  for (const step of sequence) {
+    if (typeof step !== "object" || step === null || Array.isArray(step)) {
+      continue;
+    }
+    const record = step as Record<string, unknown>;
+    const adapterId = record["adapter_id"];
+    const adapterKind = record["adapter_kind"];
+    const roleId = record["role_id"];
+    const artifactType = mockArtifactType(roleId);
+    if (
+      typeof adapterId !== "string" ||
+      adapterKind !== "mock" ||
+      typeof roleId !== "string" ||
+      artifactType === undefined ||
+      adapters.has(adapterId)
+    ) {
+      continue;
+    }
+    adapters.set(
+      adapterId,
+      createMockRoleRuntimeAdapter({
+        adapter_id: adapterId,
+        role_id: roleId as RoleId,
+        artifact_type: artifactType
+      })
+    );
+  }
+  return adapters;
+}
+
+function mockArtifactType(
+  roleId: unknown
+): "plan" | "critique" | "synthesis" | undefined {
+  if (roleId === "planner") {
+    return "plan";
+  }
+  if (roleId === "critic") {
+    return "critique";
+  }
+  if (roleId === "synthesizer") {
+    return "synthesis";
+  }
+  return undefined;
 }
 
 export function handleOneProviderAdapterDryRunCommand(parsed: ParsedCliCommand): CliCommandResult {

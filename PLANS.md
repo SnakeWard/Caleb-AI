@@ -175,6 +175,120 @@ investigate Windows `.git` locking/permissions.
 loudly; every incompatibility is an explicit rule and nothing runs yet. Commit,
 push, and final clean-tree verification are the remaining handoff mechanics.
 
+## ExecPlan - LE-3 Guarded Execution Seam + LE-3-A Acceptance Lock
+
+**Objective:** Execute only LE-2-bridged plans through the existing RA-R1 static
+executor from an explicit human-confirmed CLI seam; require mock bindings and
+end-to-end Ledger records; prove reconstructability and lock the boundary.
+
+**Source Authority:** `docs/protocols/PASS_PROTOCOL_LE3.md`, current user
+authorization, LE-2 at `1199298`, RA-R1, RA-C, L1/L1-A/L1-B, M3, H5, and AUD-2.
+
+**Current State:** Protocol committed and pushed at `fd3663c`. Clean synchronized
+preflight verified at `1199298`, then again after protocol push. LE-3 pre-change
+snapshot is verified. Existing RA-R1 runtime executes static mock sequences and
+accepts an optional record callback; LE-3 must make that callback mandatory without
+editing the executor.
+
+**Scope:** `rotationExecutionSeam` verification/refusal/execution layer; explicit
+`execute-rotation-plan --plan-file --confirm` CLI; mock adapter construction;
+bridge-entry lookup; execution Ledger record mapping; JSONL-only chain
+reconstruction; LE-3 unit/acceptance tests and implementation report; LE-3-A report
+and lock; status/plan/audit records and barrel/CLI wiring.
+
+**Out of Scope:** Live adapters, providers, dynamic sequencing, capability-bearing
+plans, route-selection integration, L1 widening, registry changes, RA-X, UI,
+RA-R1 executor edits, H5/config/package/catalog changes, and historical Ledger
+mutation.
+
+**Files Expected To Change:** New
+`src/logicEngine/rotationExecutionSeam.ts`,
+`tests/logicEngine/rotationExecutionSeam.test.ts`,
+`tests/acceptance/le3GuardedExecutionAcceptance.test.ts`,
+`docs/LE3_GUARDED_EXECUTION_SEAM.md`, later
+`docs/LE3_EXECUTION_BOUNDARY_ACCEPTANCE_REPORT.md` and
+`tests/acceptance/le3ExecutionBoundaryAcceptanceLock.test.ts`; CLI parser/types/
+handlers and Logic Engine barrel; `PLANS.md`, `docs/STATUS_LOG.md`, pass audit
+manifest(s), and append-only snapshot Ledger entries.
+
+**Risk Level:** High — this is the first authorized Role Rotation execution. Risk is
+bounded by human CLI confirmation, bridged-plan Ledger proof, structural
+revalidation, mock-only adapters, mandatory Ledger callbacks, upstream rejection
+of live/capability plans, and no routing consumer.
+
+**Snapshot / Rollback Plan:** LE-3 seam snapshot
+`snap_20260718T205307165Z_000390_milestone` (`le3_execution_seam_prechange`),
+verified at
+`.caleb/snapshots/snap_20260718T205307165Z_000390_milestone/manifest.json` before
+this entry. Create and verify a separate `le3a_lock_prechange` snapshot only after
+the seam implementation validates green. Revert stage commits or restore the
+matching snapshot; historical Ledger remains append-only.
+
+**Implementation Steps:** Commit/push protocol; snapshot; implement total-function
+seam verification and Ledger mapping; wire confirm-gated CLI; add refusal, golden,
+reconstructability, detector, and failure tests; document decision inventory and
+debts; validate/commit/push seam; snapshot LE-3-A; add report and demonstrated
+lock; rerun canonical gates/AUD-2; commit/push and stop.
+
+**Validation Commands:** Focused LE-3 and neighboring LE-2/RA-R1/CLI/L1 tests;
+`node ./node_modules/typescript/bin/tsc --noEmit`; `npm run build`;
+`npx vitest run`; `npm run --silent cli -- list-hollows --json`;
+`npm run --silent cli -- list-hollowcut-hollows --json`; AUD-2 self-smoke against
+the stage manifest and protocol base.
+
+**Acceptance Criteria:** Only digest-proven bridged plans execute; human `--confirm`
+is mandatory; all bindings mock; authorship human/fixture; every invocation plus
+completion/failure is Ledgered; suppressed writes execute zero roles; golden
+P→C→P→C rotation completes; chain reconstructs from JSONL alone; all refusals and
+four named detectors fire; failing Critic halts after Planner; L1 seven and catalogs
+13/9 stay locked; LE-3-A lock-fires proof; canonical validation and audit green;
+clean synchronized remote.
+
+**Progress Log:** Protocol `fd3663c` committed/pushed. Credentials and
+`VITEST_DEBUG_DUMP` unset/empty. Snapshot
+`snap_20260718T205307165Z_000390_milestone` created with 18 files, Ledgered, and
+manifest verified on disk. Read-only audit confirms the existing executor can be
+composed without modification: it validates plans/artifacts, stores artifact JSON
+in the M3 content-addressed store, builds digest-only context refs, halts on first
+failure, and accepts a callback the new seam can require and map into LedgerEntry.
+Implemented the guarded seam, stable bridge proof, start/invocation/terminal Ledger
+mapping, JSONL-only reconstruction, confirm-gated CLI, default mock adapter
+construction, every refusal fixture, golden/failure tests, and the four named
+detectors. Initial focused run passed 3 files / 26 tests; the accompanying
+typecheck found one test-only inference error, corrected before final validation.
+The widened matrix passed 8 files / 100 tests. Canonical typecheck and build exited
+0, and AUD-2 self-smoke was compliant/T2 over the 14-path manifest. The canonical
+suite did not clear its gate: completed attempts passed 3,116/3,120,
+3,119/3,120, and 3,112/3,120. Every failure was a 5-second timeout in unchanged
+tests; no LE-3 test failed. A serial diagnostic passed 47/48 and reproduced the
+AUD-2 CLI timeout at about 6.1 seconds.
+
+**Decision Log:** The seam will write one LedgerEntry per completed role invocation
+and one terminal completion/failure entry. Executor failure details that have no
+invocation record are represented in the terminal seam entry. Bridge proof is a
+matching `runtime_rotation_plan_bridge` completion entry whose
+`derived_plan_digest` equals the stable digest of the supplied plan and whose
+source-plan ref matches plan lineage. `LE1-LEDGER-1` remains deferred: LE-1 is a
+synchronous, pure classification contract, while adding the execution seam's async
+write/failure dependency would broaden that accepted read-only boundary rather
+than cheaply reuse machinery.
+
+**Surprises / Discoveries:** `CODEX.md` still names GOV-1+LE-2 as the current phase
+and forbids execution. The current explicit LE-3 instruction and committed protocol
+are higher authority; `CODEX.md` is left unchanged because LE-3 does not authorize
+that governance edit. The repository's fixed 5-second tests are timing-sensitive
+under the current Windows workload: the same unchanged tests pass or fail depending
+on contention, and the AUD-2 CLI case also exceeded 5 seconds in a serial
+diagnostic. The protocol forbids Vitest/config changes and the LE-3 audit manifest
+does not authorize those old tests, so changing their timeout would be an envelope
+deviation.
+
+**Final Report:** The seam implementation and its passing evidence are committed
+for repository safety with acceptance explicitly pending TIME-1. LE-3 is not yet
+accepted. LE-3-A has not started: no lock snapshot, report, lock test, or verdict
+exists. The authorized continuation is TIME-1 measurement/guard/targeted process-
+spawn timeout budgets, then a canonical rerun and the original LE-3/LE-3-A gates.
+
 ## ExecPlan - RA-R2 Runtime Rotation Plan Artifact Contract
 
 **Objective:** Define RuntimeRotationPlan types, strict validator, fixtures, tests, and contract doc only — no runtime consumption.

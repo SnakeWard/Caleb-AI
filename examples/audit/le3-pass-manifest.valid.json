@@ -1,0 +1,38 @@
+{
+  "pass_id": "LE-3",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LE3_GUARDED_EXECUTION_SEAM.md",
+    "examples/audit/le3-pass-manifest.valid.json",
+    "src/logicEngine/rotationExecutionSeam.ts",
+    "tests/acceptance/le3GuardedExecutionAcceptance.test.ts",
+    "tests/cli/executeRotationPlanCommand.test.ts",
+    "tests/logicEngine/rotationExecutionSeam.test.ts",
+    "tests/logicEngine/rotationExecutionTestHelpers.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/STATUS_LOG.md",
+    "src/cli/cliTypes.ts",
+    "src/cli/commandHandlers.ts",
+    "src/cli/commandParser.ts",
+    "src/logicEngine/index.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "CODEX.md",
+    "src/logicEngine/types/routeInput.ts",
+    "src/logicEngine/routeInputGate.ts",
+    "src/roles/roleContractRegistry.ts",
+    "src/roles/roleHandoffGate.ts",
+    "src/roleRuntime/roleRuntimeExecutor.ts",
+    "src/providers/**",
+    "src/hollows/v1HollowCatalog.ts",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}
