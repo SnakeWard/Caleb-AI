@@ -91,8 +91,9 @@ current locked registry before adopting the second route:
 - Planner→Critic is allowed by `src/roles/roleContractRegistry.ts:80`.
 - Critic→Synthesizer is allowed by `src/roles/roleContractRegistry.ts:104`.
 
-Success-path fixtures MUST use one of these routes and MUST be human-authored,
-mock-bound, side-effect-free, code-mutation-free, and within the RA-R2 cycle bound.
+Success-path fixtures MUST use one of these routes and MUST be human- or
+fixture-authored, mock-bound, side-effect-free, code-mutation-free, and within the
+RA-R2 cycle bound.
 The original `planner_synthesizer` route remains a forbidden-transition rejection
 fixture. Routes containing Analyst remain unknown-role rejection fixtures.
 

@@ -15,6 +15,7 @@
     "PLANS.md",
     "docs/RUNTIME_ROTATION_PLAN_CONTRACT.md",
     "docs/STATUS_LOG.md",
+    "docs/protocols/PASS_PROTOCOL_GOV1_LE2.md",
     "src/logicEngine/index.ts",
     "src/roles/runtimeRotationPlanValidator.ts",
     "src/roles/types/runtimeRotationPlan.ts",

@@ -655,8 +655,11 @@ Validation passed: focused bridge/RA-R2/LE-1 suite 5 files / 57 tests; canonical
 suite 184 files / 3,094 tests; canonical typecheck exit 0; build exit 0; V1 catalog
 13; Hollowcut catalog 9. Full suite created validation snapshot
 `snap_20260718T203939996Z_000389_milestone` (verified on disk). AUD-2 self-smoke
-against base `960ade1` was compliant/T2 across 15 paths with zero violations.
+against base `960ade1` was compliant/T2 across 16 paths with zero violations.
 Credential variables and `VITEST_DEBUG_DUMP` were unset/empty before validation.
+Final record cross-check corrected Amendment A's success-fixture wording from
+human-only to the user-authorized human-or-fixture authorship; the implementation
+already matched the user's authority.
 
 `LE-2 Rotation Plan Bridge: Accepted — RA-R2 plans derive deterministically or refuse loudly; every incompatibility is now a rule; nothing runs yet.`
 

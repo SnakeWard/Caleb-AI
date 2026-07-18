@@ -154,7 +154,9 @@ fixtures, tests, report, and manifest are implemented. Focused validation passed
 files / 57 tests; canonical suite passed 184 files / 3,094 tests; canonical
 typecheck and build exited 0; catalogs are 13/9. The suite created and verified
 `snap_20260718T203939996Z_000389_milestone`. AUD-2 self-smoke is compliant/T2
-across 15 changed paths with zero violations.
+across 16 changed paths with zero violations. Final cross-check corrected the
+protocol wording from human-only to the user-authorized human-or-fixture success
+authorship; implementation already matched that authority.
 
 **Decision Log:** Route additions come only from Amendment A. Registry remains
 authoritative. `planner_critic_synthesizer` is successful at one cycle; additional

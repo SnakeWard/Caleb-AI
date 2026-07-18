@@ -182,7 +182,7 @@ provider, or route-selection consumer.
   disk.
 - Catalogs: V1 13; Hollowcut 9.
 - AUD-2 self-smoke against `examples/audit/le2-pass-manifest.valid.json` and base
-  `960ade1`: compliant, T2 verified, 15 changed paths, zero violations.
+  `960ade1`: compliant, T2 verified, 16 changed paths, zero violations.
 - Credential variables and `VITEST_DEBUG_DUMP`: unset/empty before validation.
 
 `LE-2 Rotation Plan Bridge: Accepted — RA-R2 plans derive deterministically or refuse loudly; every incompatibility is now a rule; nothing runs yet.`
