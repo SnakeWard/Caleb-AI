@@ -75,6 +75,54 @@ Snapshots per stage (`gov1_reconciliation_prechange`, `le2_bridge_prechange`), e
 ### 10. Report format
 House style. Mandatory lines: GOV-1 — push result, stale-doc edits listed, provenance gaps recorded (not backfilled), **the 15-line Deliverable 1 table verbatim**; LE-2 — the eight envelope rules confirmed as implemented-or-deviation-STOP, every detector's test name, determinism and prose-immunity results, ledger-completeness result, AUD-2 self-smoke verdict, L1 seven verbatim, catalogs 13/9, suite counts, canonical tsc exit code. Verdicts: `GOV-1 Governance Reconciliation: Accepted — baseline restored, record debts paid.` and `LE-2 Rotation Plan Bridge: Accepted — RA-R2 plans derive deterministically or refuse loudly; every incompatibility is now a rule; nothing runs yet.`
 
+## Amendments A–C — Authorized Success Route and Acceptance Rebalance
+
+**Authorized by:** Pat, current user instruction, 2026-07-18.
+**Confirmed by:** Codex directly; confirmation was not delegated.
+**Effect:** These amendments resolve the LE-2 pre-stage STOP finding. Everything
+else in this protocol remains unchanged.
+
+### Amendment A — Authorized success routes
+
+LE-2 may add RA-R2 route modes `planner_critic` and
+`planner_critic_synthesizer`. Codex verified both required transitions against the
+current locked registry before adopting the second route:
+
+- Planner→Critic is allowed by `src/roles/roleContractRegistry.ts:80`.
+- Critic→Synthesizer is allowed by `src/roles/roleContractRegistry.ts:104`.
+
+Success-path fixtures MUST use one of these routes and MUST be human-authored,
+mock-bound, side-effect-free, code-mutation-free, and within the RA-R2 cycle bound.
+The original `planner_synthesizer` route remains a forbidden-transition rejection
+fixture. Routes containing Analyst remain unknown-role rejection fixtures.
+
+### Amendment B — Acceptance criteria rebalanced
+
+The bridge MUST demonstrate both faces:
+
+1. At least one complete successful derivation, repeated byte-identically, with
+   correct sequence, `max_invocations`, IDs, lineage and mandatory Ledger record.
+2. Every rejection code and inherited LE-1 validation refusal named by the original
+   protocol.
+
+The eight decision-envelope rules remain unchanged.
+
+### Amendment C — Guarded-execution inheritance record
+
+The LE-2 implementation document's "what the guarded-execution pass inherits"
+section MUST state that Analyst registration and the `planner_synthesizer`
+transition are open design questions deliberately not resolved by LE-2. Plans
+requiring either remain unbridgeable until a dedicated registry pass argues them on
+their merits.
+
+### GOV-1 record and recurring Git hygiene candidate
+
+GOV-1 synchronized the remote at `93316eb`, recorded protocol gaps without
+backfilling them, passed AUD-2 across 19 paths, and ran `git fsck --full` after a
+geometric-repack warning. Repack/multi-pack-index warnings have now recurred and are
+parked as named future hygiene candidate **GIT-HYG-1**: investigate Windows
+`.git` file locking/permissions before the warning becomes operationally material.
+
 ---
 
 ## Standing rules (restated)
