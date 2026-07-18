@@ -44,6 +44,107 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - GOV-1 Governance and Handoff Reconciliation
+
+**Objective:** Restore a clean, synchronized handoff baseline; correct current
+authority/status facts; record missing protocol provenance honestly; pay the P2
+handoff-gate review debt; and adopt the canonical typecheck command.
+
+**Source Authority:** `docs/protocols/PASS_PROTOCOL_GOV1_LE2.md`, current user
+authorization, and `docs/01_CODEX_OPERATING_CONTRACT.md`.
+
+**Current State:** Housekeeping commit `3261ac4` records the sole inherited Ledger
+append. `main` and `origin/main` were synchronized before GOV-1 mutation.
+
+**Scope:** Governance and documentation reconciliation only.
+
+**Out of Scope:** Source, tests, catalogs, role registries, provider paths, routing,
+and runtime behavior.
+
+**Files Expected To Change:** Current governance/status/contract documents,
+`PLANS.md`, `docs/STATUS_LOG.md`, the combined protocol, GOV-1 report and audit
+manifest, plus the snapshot Ledger append.
+
+**Risk Level:** Medium — authority and boundary prose changes, with no runtime code.
+
+**Snapshot / Rollback Plan:** Verified pre-change snapshot
+`snap_20260718T194507575Z_000386_milestone`; restore documentation from it or
+revert the GOV-1 commit. Historical Ledger content remains append-only.
+
+**Implementation Steps:** Reconcile and push inherited state; snapshot; commit the
+protocol; correct current facts; record provenance gaps; publish the P2 table;
+validate; commit and push.
+
+**Validation Commands:** `npx vitest run`;
+`node ./node_modules/typescript/bin/tsc --noEmit`; `npm run build`; catalog CLI
+checks; AUD-2 self-smoke against `examples/audit/gov1-pass-manifest.valid.json`.
+
+**Acceptance Criteria:** Canonical suite/typecheck/build green; catalogs 13/9;
+AUD-2 compliant/T2; local and remote synchronized; P2 table reproduced verbatim.
+
+**Progress Log:** The required preflight push succeeded. A Git geometric-repack
+maintenance error was followed by a clean `git fsck --full` and matching
+local/remote commit IDs. Canonical suite passed 182 files / 3,069 tests; canonical
+typecheck and build exited 0; catalogs are 13/9; AUD-2 self-smoke was compliant/T2
+with zero violations across 19 changed paths.
+
+**Decision Log:** Historical pass reports retain their then-current catalog counts;
+only current normative/status documents are corrected.
+
+**Surprises / Discoveries:** The LE-2 pre-stage compatibility finding below engages
+the combined protocol's STOP rule after GOV-1 completes.
+
+**Final Report:** GOV-1 accepted. Baseline restored, current facts reconciled,
+protocol gaps recorded without backfill, and P2 table reproduced verbatim. LE-2
+stopped before snapshot/implementation on the recorded compatibility deviation.
+
+## ExecPlan - LE-2 RuntimeRotationPlan Bridge
+
+**Objective:** Implement the non-executing, deterministic, ledger-mandatory bridge
+authorized by the combined protocol, or stop if repository reality deviates from
+its pre-approved decision envelope.
+
+**Source Authority:** `docs/protocols/PASS_PROTOCOL_GOV1_LE2.md`, RA-R2, RA-R1,
+RA-C, L1/L1-A/L1-B, and LE-1.
+
+**Current State:** **BLOCKING PRE-STAGE FINDING.** No valid RA-R2 route can produce
+a successful RA-R1 executable plan while honoring the locked fail-closed rules.
+
+**Scope:** A future corrected protocol may authorize the bridge contract,
+implementation, lock tests, documentation, and required barrel export.
+
+**Out of Scope:** Execution, providers, side effects, L1 widening, registry changes,
+and RA-R1 executor changes.
+
+**Files Expected To Change:** None under the current STOP disposition.
+
+**Risk Level:** High if implemented without contract correction; no mutation is
+allowed in the blocked state.
+
+**Snapshot / Rollback Plan:** Do not create the LE-2 snapshot. GOV-1 has its own
+verified rollback snapshot.
+
+**Implementation Steps:** None. Return the compatibility finding to Pat/Fable.
+
+**Validation Commands:** Not applicable until a corrected LE-2 protocol exists.
+
+**Acceptance Criteria:** A corrected decision envelope must define at least one
+RA-R2 route that can pass both registered-role and allowed-transition checks.
+
+**Progress Log:** `planner_synthesizer` requires the registry-forbidden
+Planner→Synthesizer transition. `planner_analyst_synthesizer` and `full_rotation`
+both require the unregistered Analyst role. The existing protocol also requires a
+successful derived-plan determinism path, so an all-rejection implementation would
+not satisfy acceptance.
+
+**Decision Log:** Per the protocol, no registry or RA-R2 route-mode amendment is
+inferred by the implementer.
+
+**Surprises / Discoveries:** The pre-approved individual rejection rules compose to
+make every currently valid RA-R2 route unbridgeable.
+
+**Final Report:** LE-2 blocked before snapshot or implementation; GOV-1 continues.
+
 ## ExecPlan - RA-R2 Runtime Rotation Plan Artifact Contract
 
 **Objective:** Define RuntimeRotationPlan types, strict validator, fixtures, tests, and contract doc only — no runtime consumption.

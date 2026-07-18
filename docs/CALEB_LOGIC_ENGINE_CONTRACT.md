@@ -371,7 +371,7 @@ Forbidden:
 - New Hollows
 - New CLI commands
 - Export/render/media/FFmpeg behavior or changes
-- Any modification to the protected V1 catalog (must remain exactly 12)
+- Any modification to the protected V1 catalog (currently exactly 13 after AUD-1)
 - Any modification to Hollowcut catalog count (must remain exactly 9)
 - Changes to existing Hollow behavior, preview/export behavior, or trust gates
 - Placeholders, stubs, or TODOs presented as complete

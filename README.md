@@ -13,12 +13,13 @@ promotes it, and every action leaves ledger evidence.
 The V1 MVP foundation is accepted and locked (`docs/V1_MVP_ACCEPTANCE_REPORT.md`,
 `docs/V1_MILESTONE_SNAPSHOT.md`). Pass-by-pass history lives in
 [docs/STATUS_LOG.md](docs/STATUS_LOG.md) — status is never appended to this README.
-The forward plan is [docs/CALEB_AI_ROADMAP_TO_LIVE_BOUNDARY.md](docs/CALEB_AI_ROADMAP_TO_LIVE_BOUNDARY.md).
+Committed pass protocols live under `docs/protocols/`; the older roadmap is a
+historical planning artifact and does not authorize work.
 
-What exists today, all local and deterministic:
+What exists today:
 
-- **Hollow Runner + protected V1 catalog** (exactly 12 Hollows: text, validation,
-  provenance, code) with manifest-enforced permissions and V1 safety gates.
+- **Hollow Runner + protected V1 catalog** (exactly 13 Hollows, including the
+  AUD-1 compliance auditor) with manifest-enforced permissions and V1 safety gates.
 - **Verified Return Path (VRP)** — the only trust promoter. Runner output is always
   T0/unverified; VRP promotes clean deterministic results to T2 at most.
 - **JSONL Ledger, Auto Snapshot + Change Guard, Basic Report Builder.**
@@ -28,28 +29,26 @@ What exists today, all local and deterministic:
   **Hollowcut catalog** (9 Hollows) for supplied-state project/timeline validation,
   including `export_readiness_check` — structural readiness only; no export, no
   render, no media file inspection.
-- **Role Artifact Contract Layer, runtime storage contracts, and model-boundary
-  contracts/stubs** — the contract lattice the live adapter is built against.
-- **A live Anthropic adapter** (`src/providers/anthropicLiveAdapter.ts`, Pass
-  M1) — fetch-based, zero dependencies, disabled by default behind a full gate
-  chain (prerequisites, kill switch, caller-granted network permission, human
-  approval, caller-declared credential, mandatory ledger). Records are
-  digest-only; provider output trust is capped at T1. **No live call has been
-  made yet**; default test runs remain fully offline. See
-  `docs/ONE_PROVIDER_ADAPTER_LIVE_IMPLEMENTATION.md`.
+- **Role Artifact Contract Layer, RA-R1 static mock rotation runtime, RA-R2 plan
+  contract, and LE-1 read-only consumption seam.** LE-1 classifies plans but is
+  not wired into routing or execution.
+- **Live Anthropic and xAI adapters** — both completed one explicitly authorized,
+  bounded acceptance call. They remain disabled by default behind the full gate
+  chain; records are digest-only, provider output is capped at T1, and default
+  test runs remain offline.
 
-## What V1 is not
+## What remains outside the current runtime
 
-Orchestration with live models, Role Rotation, the Model API Layer, Hollowcut
-runtime/UI, real media probing, FFmpeg/export, cloud deployment, and 3D UI /
-Thinking Mode are future phases. Boundary docs: `docs/02_V1_PHASE_BOUNDARIES.md`,
+Live-model orchestration, guarded Role Rotation execution, Hollowcut runtime/UI,
+real media probing, FFmpeg/export, cloud deployment, production auth, and 3D UI /
+Thinking Mode remain future work. Boundary docs: `docs/02_V1_PHASE_BOUNDARIES.md`,
 `docs/HOLLOWCUT_BOUNDARY_LOCK.md`, `docs/HOLLOWCUT_EXPORT_RUNTIME_BOUNDARY_PLAN.md`.
 
 ## Validation
 
 ```bash
 npm test
-npm run typecheck
+node ./node_modules/typescript/bin/tsc --noEmit
 npm run build
 ```
 

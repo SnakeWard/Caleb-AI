@@ -592,5 +592,37 @@ seven-entry allowlist unchanged. Seam not wired into routing. Pre-change snapsho
 Suite at implementation close: 182 files / 3,069 tests green. `npx tsc --noEmit`
 and `npm run build`: pass. **STOP — next pass is Pat's call.**
 
+### 2026-07-18 — Pass GOV-1 — Governance and Handoff Reconciliation
+
+GOV-1 reconciled the inherited LE-1 validation Ledger append in standalone commit
+`3261ac4`, pushed the nine previously local commits plus housekeeping, and verified
+local/remote synchronization before mutation. Current authority/status documents
+now record V1 catalog 13, the accepted Anthropic/xAI calls, RA-R1 implementation,
+RA-R2's contract, and LE-1 read-only consumption. Historical pass reports retain
+their then-current facts. The canonical typecheck is now
+`node ./node_modules/typescript/bin/tsc --noEmit`, which completed with exit 0.
+
+Post-protocol provenance debt is recorded, not backfilled: LG-1 (`4ab5b4e`), RA-R2
+(`53f7e37`), AUD-1 (`97b3b8c`), AUD-1 Amendment A2 (`cea7daf`), AUD-2 (`ec8309c`),
+and TRUE-2 (`3711cea`) were executed under chat-issued instruction; protocol not
+committed at the time. The GOV-1 report reproduces the RA-R1-D 15-check Deliverable
+1 table verbatim with file:line citations. Pre-change snapshot:
+`snap_20260718T194507575Z_000386_milestone` (verified on disk). Validation: 182
+files / 3,069 tests green; canonical typecheck exit 0; build exit 0; V1 catalog 13;
+Hollowcut 9. The suite created validation snapshot
+`snap_20260718T195549192Z_000387_milestone` (verified on disk). Final AUD-2 result
+is recorded in `docs/GOV1_GOVERNANCE_RECONCILIATION.md`; commit/push/clean-tree
+verification follows in the completion handoff.
+
+### 2026-07-18 — LE-2 Pre-Stage Finding — STOP
+
+No LE-2 snapshot or implementation was created. Under the combined protocol's
+locked rejection rules, every valid RA-R2 route is unbridgeable: the
+`planner_synthesizer` transition is forbidden by the current handoff registry, and
+the other two route modes require unregistered Analyst. Because LE-2 also requires
+a successful derived-plan determinism path, an all-rejection bridge would violate
+acceptance. Resolution requires a separately authorized RA-R2 or registry amendment,
+or a corrected decision envelope. Per protocol: STOP after GOV-1.
+
 **Convention:** every future pass appends one dated entry here as part of its
 completion report, including pre-change snapshot ID and suite counts at pass close.

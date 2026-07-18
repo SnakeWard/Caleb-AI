@@ -6,9 +6,10 @@ Schema version: `1.0.0`
 
 ## Purpose
 
-The Runtime Rotation Plan is the future authorization artifact for bounded role
-rotation. RA-R2 defines and validates its shape only. **No runtime module
-consumes this contract yet.** Future passes will wire Logic Engine consumption.
+The Runtime Rotation Plan is the authorization artifact for bounded future role
+rotation. RA-R2 defined the type, validator, fixtures, and tests. LE-1 now consumes
+the contract through a read-only Logic Engine classification seam; no runtime
+executes it.
 
 ## Strictness
 
@@ -115,5 +116,6 @@ Located in `examples/roles/`:
 
 ## Runtime consumption
 
-**Not consumed in RA-R2.** No Hollow dispatch, model calls, ledger writes, or
-rotation execution occurs in this pass.
+RA-R2 itself added no consumer. LE-1 later added read-only structural consumption
+through `classifyRotationPlanAtSeam()`. The seam is not wired into routing, performs
+no Hollow dispatch or model call, writes no Ledger entry, and executes no rotation.

@@ -12,7 +12,7 @@ The goal is to establish clear, enforceable principles for any future export-rel
 This plan builds on the existing `hollow.hollowcut.export_readiness_check` (with its contract snapshot) and the Hollowcut supplied-state validation lane.
 
 ## 1. Current State
-- V1 catalog remains locked at exactly 12 Hollows and is protected.
+- V1 catalog remains locked at exactly 13 Hollows after AUD-1 and is protected.
 - Hollowcut catalog is separate from V1 and remains at exactly 9 Hollows (including `hollow.hollowcut.project_state_check`, `hollow.hollowcut.project_timeline_cross_check`, `hollow.hollowcut.export_readiness_check`, `hollow.hollowcut.export_plan_preview`, and the five timeline validation Hollows).
 - `hollow.hollowcut.export_readiness_check` exists, is deterministic, supplied-state-only, and has a stable contract snapshot:
   - `docs/HOLLOWCUT_EXPORT_READINESS_RESULT_CONTRACT.md`
@@ -106,7 +106,7 @@ Any future pass that begins implementing export runtime (even the preview phase)
 
 - Pre-mutation snapshot created with a clear name.
 - Baseline `npm run typecheck && npm run build && npm test` is fully green before edits.
-- No modifications to the protected V1 catalog (remains exactly 12).
+- No modifications to the protected V1 catalog (remains exactly 13).
 - Hollowcut catalog remains exactly 9 (including export_plan_preview) and separate.
 - `export_readiness_check` and its contract artifacts remain the gate.
 - Contract conformance tests (valid/invalid fixtures + `readiness_summary` rules) pass.

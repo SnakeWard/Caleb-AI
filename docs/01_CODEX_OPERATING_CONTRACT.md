@@ -65,10 +65,15 @@ Raw Hollow output MUST start as untrusted. If a model disagrees with a strict de
 Once code exists, Codex MUST run available validation commands before claiming completion:
 
 - `npm test`
-- `npm run typecheck`
+- `node ./node_modules/typescript/bin/tsc --noEmit`
 - `npm run build`
 
 Tests MUST prove existing behavior remains intact, not only that new behavior exists.
+
+The canonical governed-pass typecheck command is
+`node ./node_modules/typescript/bin/tsc --noEmit`. It MUST run to completion and
+its exit code MUST be reported. "Did not complete" is not an acceptable
+validation result.
 
 ## Snapshot Discipline
 

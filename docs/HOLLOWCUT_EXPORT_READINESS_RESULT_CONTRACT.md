@@ -28,7 +28,7 @@ Define the exact fields, types, and semantic rules for the readiness result so t
 - `safe_to_hand_to_future_export` is true **only** when `ready === true && valid === true && blocking_count === 0 && error_count === 0`.
 - Warnings are allowed alongside `ready_with_warnings` / `safe_to_hand_to_future_export` under the existing contract.
 - The Hollow never trusts its own output; VRP + Ledger + Report Builder are the path to durable artifacts.
-- V1 catalog remains exactly 12 and protected. Hollowcut catalog is separate (exactly 9 Hollows, including export_plan_preview).
+- V1 catalog remains exactly 13 after AUD-1 and protected. Hollowcut catalog is separate (exactly 9 Hollows, including export_plan_preview).
 
 ## Result Shape (Top Level)
 ```json

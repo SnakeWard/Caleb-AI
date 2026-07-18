@@ -1,6 +1,6 @@
 # RA-R1 Static Rotation Diagnostic
 
-Status: Diagnostic complete — awaiting Pat and Fable review
+Status: Historical diagnostic — accepted; RA-R1 implementation completed 2026-07-06
 Date: 2026-07-06
 Protocol: `docs/protocols/PASS_PROTOCOL_H8_RAR1D.md` (RA-R1-D section)
 Parent protocol: `docs/protocols/PASS_PROTOCOL_RA_R1.md` (commit `82df49c`)

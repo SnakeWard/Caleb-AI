@@ -27,30 +27,34 @@ Codex MUST preserve these terms: Caleb AI, Orchestration Core, Model API Layer, 
 
 ## Current Authorized Phase
 
-The current authorized phase is a documentation and governance pass only.
+The current authorized work is the combined GOV-1 + LE-2 pass in
+`docs/protocols/PASS_PROTOCOL_GOV1_LE2.md`.
 
-Codex MUST create repository-level governance, source-of-truth, operating, phase-boundary, contract, storage, permission, and test-planning markdown files. Codex MUST NOT implement application code in this pass.
+GOV-1 is limited to governance and handoff reconciliation. LE-2 is limited to a
+non-executing, deterministic RA-R2-to-RA-R1 bridge that derives an executable-plan
+artifact or refuses fail-closed. LE-2 does not authorize Role Rotation execution,
+provider invocation, side effects, role/registry changes, route-input widening, or
+UI work. Any deviation from the protocol's pre-approved decision envelope requires
+a stop and report.
 
 ## What Codex May Do
 
-- Create or update the requested root markdown files.
-- Create or update the requested `docs/` markdown files.
-- Create `docs/` if missing.
-- Copy source documents into `docs/` when needed while leaving originals untouched.
+- Perform the GOV-1 reconciliation work named in the committed combined protocol.
+- Create or update the exact governance, protocol, report, source, test, example,
+  and barrel-export files authorized for LE-2.
+- Run the required snapshots, audits, tests, typecheck, build, Git commits, and
+  pushes for those two stages.
 - Inspect the repository tree and source document locations.
-- Report a diff summary if git is available.
 
 ## What Codex Must Not Do
 
-- MUST NOT install packages.
-- MUST NOT add dependencies.
-- MUST NOT build the Hollow Server yet.
-- MUST NOT build the Model API Layer yet.
-- MUST NOT build Role Rotation yet.
-- MUST NOT build the 3D UI yet.
-- MUST NOT build snapshots yet.
-- MUST NOT modify existing source code unless needed only to add documentation references.
-- MUST NOT create TypeScript source files unless absolutely necessary to preserve an existing repo convention.
+- MUST NOT install packages or add dependencies.
+- MUST NOT execute Role Rotation or wire the bridge into routing.
+- MUST NOT invoke providers or add network paths.
+- MUST NOT modify the L1 allowlist, role/handoff registries, RA-R1 executor,
+  provider modules, H5 traps, M3 boundary, package files, or catalog manifests.
+- MUST NOT build the 3D UI, cloud deployment, production auth, or side-effecting
+  runtime behavior.
 
 ## Snapshot and Rollback Expectations
 

@@ -1,6 +1,9 @@
 # Caleb AI — Roadmap to the Live Boundary and Beyond
 
-Status: PROPOSED (not yet authorized). Each pass below follows existing convention:
+Status: HISTORICAL PLANNING ARTIFACT (partially superseded; not authorization).
+Current status lives in `docs/STATUS_LOG.md`; committed protocols under
+`docs/protocols/` are the pass authorization record. Each pass below follows the
+existing convention:
 diagnostic-first, `<pass_name>_prechange` milestone snapshot before implementation,
 completion report with snapshot addendum, CODEX.md "Current Authorized Phase" updated
 per pass. No pass begins without explicit owner authorization.
@@ -150,7 +153,8 @@ complete ledger chain, and a demo doc records it.
   relative paths only, no traversal, size cap before read.
 - Deterministic (same file bytes → same output) → **T2-eligible**. This makes it the
   first hollow producing verified truth about the real world, not supplied state.
-- Catalog: goes in the **media catalog**. V1 catalog stays exactly 12. Boundary tests
+- Catalog: goes in the **media catalog**. The current V1 catalog is 13 after AUD-1.
+  Boundary tests
   updated deliberately, never loosened.
 
 ### Pass R2 — External Probe Boundary Plan (ffprobe) — DESIGN ONLY

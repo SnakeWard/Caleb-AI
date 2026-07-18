@@ -1,0 +1,36 @@
+{
+  "pass_id": "GOV-1",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/GOV1_GOVERNANCE_RECONCILIATION.md",
+    "docs/protocols/PASS_PROTOCOL_GOV1_LE2.md",
+    "examples/audit/gov1-pass-manifest.valid.json"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "CODEX.md",
+    "README.md",
+    "PLANS.md",
+    "docs/01_CODEX_OPERATING_CONTRACT.md",
+    "docs/CALEB_AI_ROADMAP_TO_LIVE_BOUNDARY.md",
+    "docs/CALEB_LOGIC_ENGINE_CONTRACT.md",
+    "docs/HOLLOWCUT_BOUNDARY_LOCK.md",
+    "docs/HOLLOWCUT_CALEB_BOUNDARY.md",
+    "docs/HOLLOWCUT_EXPORT_READINESS_RESULT_CONTRACT.md",
+    "docs/HOLLOWCUT_EXPORT_RUNTIME_BOUNDARY_PLAN.md",
+    "docs/HOLLOWCUT_IMPLEMENTATION_READINESS_CHECKLIST.md",
+    "docs/HOLLOWCUT_PROJECT_CONTRACT.md",
+    "docs/RA_R1_STATIC_ROTATION_DIAGNOSTIC.md",
+    "docs/RUNTIME_ROTATION_PLAN_CONTRACT.md",
+    "docs/STATUS_LOG.md"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/**",
+    "tests/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}
