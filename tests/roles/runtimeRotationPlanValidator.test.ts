@@ -52,6 +52,29 @@ describe("validateRuntimeRotationPlan", () => {
     expect(validateRuntimeRotationPlan(fixture)).toEqual({ ok: true, errors: [] });
   });
 
+  it("accepts the Amendment A registry-compatible success-route fixtures", async () => {
+    const [plannerCritic, plannerCriticSynthesizer] = await Promise.all([
+      readFile("examples/roles/runtime-rotation-plan.valid.planner-critic.json", "utf8"),
+      readFile(
+        "examples/roles/runtime-rotation-plan.valid.planner-critic-synthesizer.json",
+        "utf8"
+      )
+    ]);
+
+    expect(validateRuntimeRotationPlan(JSON.parse(plannerCritic))).toEqual({ ok: true, errors: [] });
+    expect(validateRuntimeRotationPlan(JSON.parse(plannerCriticSynthesizer))).toEqual({
+      ok: true,
+      errors: []
+    });
+  });
+
+  it("accepts fixture authorship for protocol-governed test plans", () => {
+    expect(validateRuntimeRotationPlan(validPlan({ authored_by: "fixture" }))).toEqual({
+      ok: true,
+      errors: []
+    });
+  });
+
   it("rejects missing or wrong schema_version", () => {
     const missing = validPlan();
     delete missing["schema_version"];

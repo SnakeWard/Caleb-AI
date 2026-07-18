@@ -1,0 +1,37 @@
+{
+  "pass_id": "LE-2",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LE2_ROTATION_PLAN_BRIDGE.md",
+    "examples/audit/le2-pass-manifest.valid.json",
+    "examples/roles/runtime-rotation-plan.valid.planner-critic.json",
+    "examples/roles/runtime-rotation-plan.valid.planner-critic-synthesizer.json",
+    "src/logicEngine/rotationPlanBridge.ts",
+    "tests/logicEngine/rotationPlanBridge.test.ts",
+    "tests/acceptance/le2RotationPlanBridgeAcceptance.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/RUNTIME_ROTATION_PLAN_CONTRACT.md",
+    "docs/STATUS_LOG.md",
+    "src/logicEngine/index.ts",
+    "src/roles/runtimeRotationPlanValidator.ts",
+    "src/roles/types/runtimeRotationPlan.ts",
+    "tests/roles/runtimeRotationPlanValidator.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/logicEngine/types/routeInput.ts",
+    "src/roles/roleContractRegistry.ts",
+    "src/roles/roleHandoffGate.ts",
+    "src/roleRuntime/roleRuntimeExecutor.ts",
+    "src/providers/**",
+    "src/hollows/v1HollowCatalog.ts",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

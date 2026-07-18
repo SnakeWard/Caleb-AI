@@ -22,8 +22,9 @@ do not reject unknown root properties. RA-R2 intentionally diverges.
 
 `authored_by: "model"` is excluded from the type union and rejected with
 `RRP_MODEL_AUTHORED_FORBIDDEN`. Rotation authorization must not originate from
-model output; only `orchestration_core`, `logic_engine`, or `human` may author
-plans.
+model output; only `orchestration_core`, `logic_engine`, `human`, or an explicit
+test `fixture` may author plans. `fixture` was added by LE-2 Amendment A so the
+acceptance route can be represented honestly rather than masquerading as human.
 
 ## max_cycles doctrine bound
 
@@ -49,8 +50,8 @@ RA-R2 validates format only; **no ID generators are added** in this pass.
 | `schema_version` | `"1.0.0"` | required constant |
 | `task_id` | string | `^task_<uuid>$` |
 | `run_id` | string | `^run_<uuid>$` |
-| `authored_by` | enum | `orchestration_core` \| `logic_engine` \| `human`; `model` forbidden |
-| `route_mode` | enum | `planner_synthesizer` \| `planner_analyst_synthesizer` \| `full_rotation` |
+| `authored_by` | enum | `orchestration_core` \| `logic_engine` \| `human` \| `fixture`; `model` forbidden |
+| `route_mode` | enum | `planner_critic` \| `planner_critic_synthesizer` \| `planner_synthesizer` \| `planner_analyst_synthesizer` \| `full_rotation` |
 | `roles_required` | array | non-empty; values from `planner`, `analyst`, `critic`, `synthesizer`; no duplicates; must match `route_mode` set |
 | `hollows_required` | array | may be empty; each `^hollow\.[a-z0-9_]+(\.[a-z0-9_]+)*$`; no duplicates |
 | `gates_required` | array | from `role_handoff_gate`, `approval_gate`, `snapshot_gate`, `final_verification_gate`; no duplicates; `role_handoff_gate` and `final_verification_gate` mandatory |
@@ -66,6 +67,8 @@ RA-R2 validates format only; **no ID generators are added** in this pass.
 
 | `route_mode` | Required role set (order-insensitive) |
 | --- | --- |
+| `planner_critic` | planner, critic |
+| `planner_critic_synthesizer` | planner, critic, synthesizer |
 | `planner_synthesizer` | planner, synthesizer |
 | `planner_analyst_synthesizer` | planner, analyst, synthesizer |
 | `full_rotation` | planner, analyst, critic, synthesizer |
@@ -110,6 +113,8 @@ Located in `examples/roles/`:
 
 - `runtime-rotation-plan.valid.json`
 - `runtime-rotation-plan.valid.minimal.json`
+- `runtime-rotation-plan.valid.planner-critic.json`
+- `runtime-rotation-plan.valid.planner-critic-synthesizer.json`
 - `runtime-rotation-plan.invalid.model-authored.json`
 - `runtime-rotation-plan.invalid.unbounded-cycles.json`
 - `runtime-rotation-plan.invalid.missing-gates.json`
@@ -117,5 +122,9 @@ Located in `examples/roles/`:
 ## Runtime consumption
 
 RA-R2 itself added no consumer. LE-1 later added read-only structural consumption
-through `classifyRotationPlanAtSeam()`. The seam is not wired into routing, performs
-no Hollow dispatch or model call, writes no Ledger entry, and executes no rotation.
+through `classifyRotationPlanAtSeam()`. LE-2 adds
+`bridgeRuntimeRotationPlan()`, a separate non-executing derivation/refusal layer
+that produces a Ledger record before exposing a valid RA-R1 target plan. Neither
+surface is wired into routing; neither dispatches a Hollow, calls a model, or
+executes rotation. LE-1's classification artifact still writes no Ledger entry;
+that debt is named `LE1-LEDGER-1` in the LE-2 report.

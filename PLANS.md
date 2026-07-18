@@ -107,43 +107,71 @@ its pre-approved decision envelope.
 **Source Authority:** `docs/protocols/PASS_PROTOCOL_GOV1_LE2.md`, RA-R2, RA-R1,
 RA-C, L1/L1-A/L1-B, and LE-1.
 
-**Current State:** **BLOCKING PRE-STAGE FINDING.** No valid RA-R2 route can produce
-a successful RA-R1 executable plan while honoring the locked fail-closed rules.
+**Current State:** Accepted implementation. Amendments A–C resolved the pre-stage
+STOP by authorizing `planner_critic` and, after direct registry verification of
+Planner→Critic and Critic→Synthesizer, `planner_critic_synthesizer`. The bridge is
+non-executing, mock-only, deterministic, fail-closed, and Ledger-mandatory.
 
-**Scope:** A future corrected protocol may authorize the bridge contract,
-implementation, lock tests, documentation, and required barrel export.
+**Scope:** Bridge contract and implementation, two authorized RA-R2 success route
+modes/fixtures, required barrel export, unit tests, eight-rule acceptance lock,
+implementation report, status/plan record, and AUD-2 manifest.
 
 **Out of Scope:** Execution, providers, side effects, L1 widening, registry changes,
 and RA-R1 executor changes.
 
-**Files Expected To Change:** None under the current STOP disposition.
+**Files Expected To Change:** `src/logicEngine/rotationPlanBridge.ts`, Logic Engine
+barrel, RA-R2 route types/validator/contract/tests/fixtures, LE-2 unit and
+acceptance tests, LE-2 report/audit manifest, `PLANS.md`, `docs/STATUS_LOG.md`, and
+the append-only snapshot Ledger.
 
-**Risk Level:** High if implemented without contract correction; no mutation is
-allowed in the blocked state.
+**Risk Level:** Medium-high — this is a new contract bridge with mandatory Ledger
+semantics, but it remains non-executing, mock-only, and isolated from routing.
 
-**Snapshot / Rollback Plan:** Do not create the LE-2 snapshot. GOV-1 has its own
-verified rollback snapshot.
+**Snapshot / Rollback Plan:** Verified pre-change snapshot
+`snap_20260718T201841128Z_000388_milestone`; revert the LE-2 commit or restore
+from that snapshot. Historical Ledger content remains append-only.
 
-**Implementation Steps:** None. Return the compatibility finding to Pat/Fable.
+**Implementation Steps:** Record Amendments A–C; verify registry transitions;
+snapshot; extend the RA-R2 route contract; implement total-function bridge and
+mandatory Ledger handoff; add unit/acceptance detectors; document decisions and
+deferrals; run canonical validation and AUD-2 self-smoke; commit and push.
 
-**Validation Commands:** Not applicable until a corrected LE-2 protocol exists.
+**Validation Commands:** Focused bridge/RA-R2/LE-1 suites;
+`node ./node_modules/typescript/bin/tsc --noEmit`; `npx vitest run`;
+`npm run build`; catalog CLI checks; AUD-2 self-smoke against
+`examples/audit/le2-pass-manifest.valid.json`.
 
-**Acceptance Criteria:** A corrected decision envelope must define at least one
-RA-R2 route that can pass both registered-role and allowed-transition checks.
+**Acceptance Criteria:** At least one byte-identical successful derivation with
+exact sequence/limits/IDs/lineage and Ledger entry; every rejection code exercised;
+all eight envelope rules locked; prose immunity; Ledger failure closes; L1 seven,
+registries, execution, providers, and catalogs unchanged; canonical gates green.
 
-**Progress Log:** `planner_synthesizer` requires the registry-forbidden
-Planner→Synthesizer transition. `planner_analyst_synthesizer` and `full_rotation`
-both require the unregistered Analyst role. The existing protocol also requires a
-successful derived-plan determinism path, so an all-rejection implementation would
-not satisfy acceptance.
+**Progress Log:** The original finding was returned and Amendments A–C were
+committed/pushed at `960ade1`. Codex confirmed the amendments directly, not by
+delegation. Both authorized transitions are registry-legal. Snapshot
+`snap_20260718T201841128Z_000388_milestone` was created and verified. Bridge,
+fixtures, tests, report, and manifest are implemented. Focused validation passed 5
+files / 57 tests; canonical suite passed 184 files / 3,094 tests; canonical
+typecheck and build exited 0; catalogs are 13/9. The suite created and verified
+`snap_20260718T203939996Z_000389_milestone`. AUD-2 self-smoke is compliant/T2
+across 15 changed paths with zero violations.
 
-**Decision Log:** Per the protocol, no registry or RA-R2 route-mode amendment is
-inferred by the implementer.
+**Decision Log:** Route additions come only from Amendment A. Registry remains
+authoritative. `planner_critic_synthesizer` is successful at one cycle; additional
+cycles reject because Synthesizer→Planner is not legal. LE-1 artifact writing is
+named-deferred as `LE1-LEDGER-1` because changing the accepted read-only seam would
+add a new callback/failure contract. No execution wiring is introduced.
 
-**Surprises / Discoveries:** The pre-approved individual rejection rules compose to
-make every currently valid RA-R2 route unbridgeable.
+**Surprises / Discoveries:** The initial rejection rules composed to make every
+then-valid route unbridgeable; Amendment A resolved that without changing the
+registry. RA-R2 authors `orchestration_core`/`logic_engine` are not representable in
+RA-R1 and therefore reject at the bridge. Repack/multi-pack-index warnings have
+recurred in consecutive reports; named future hygiene candidate `GIT-HYG-1` should
+investigate Windows `.git` locking/permissions.
 
-**Final Report:** LE-2 blocked before snapshot or implementation; GOV-1 continues.
+**Final Report:** LE-2 accepted. RA-R2 plans now derive deterministically or refuse
+loudly; every incompatibility is an explicit rule and nothing runs yet. Commit,
+push, and final clean-tree verification are the remaining handoff mechanics.
 
 ## ExecPlan - RA-R2 Runtime Rotation Plan Artifact Contract
 

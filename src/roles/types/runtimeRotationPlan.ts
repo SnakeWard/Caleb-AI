@@ -5,20 +5,29 @@ export const RUNTIME_ROTATION_PLAN_SCHEMA_VERSION = "1.0.0" as const;
 
 export type RuntimeRotationPlanSchemaVersion = typeof RUNTIME_ROTATION_PLAN_SCHEMA_VERSION;
 
-export type RuntimeRotationPlanAuthoredBy = "orchestration_core" | "logic_engine" | "human";
+export type RuntimeRotationPlanAuthoredBy =
+  | "orchestration_core"
+  | "logic_engine"
+  | "human"
+  | "fixture";
 
 export const VALID_RUNTIME_ROTATION_PLAN_AUTHORS: readonly RuntimeRotationPlanAuthoredBy[] = [
   "orchestration_core",
   "logic_engine",
-  "human"
+  "human",
+  "fixture"
 ] as const;
 
 export type RuntimeRotationRouteMode =
+  | "planner_critic"
+  | "planner_critic_synthesizer"
   | "planner_synthesizer"
   | "planner_analyst_synthesizer"
   | "full_rotation";
 
 export const VALID_RUNTIME_ROTATION_ROUTE_MODES: readonly RuntimeRotationRouteMode[] = [
+  "planner_critic",
+  "planner_critic_synthesizer",
   "planner_synthesizer",
   "planner_analyst_synthesizer",
   "full_rotation"

@@ -624,5 +624,41 @@ a successful derived-plan determinism path, an all-rejection bridge would violat
 acceptance. Resolution requires a separately authorized RA-R2 or registry amendment,
 or a corrected decision envelope. Per protocol: STOP after GOV-1.
 
+**Amendment disposition (2026-07-18):** Amendments A–C at protocol commit
+`960ade1` resolved this STOP by authorizing `planner_critic` and
+`planner_critic_synthesizer` success routes after Codex directly verified the
+required registry transitions. The original finding remains in the record; LE-2
+resumed under the amended authority.
+
+### 2026-07-18 — Pass LE-2 — Runtime Rotation Plan Bridge
+
+LE-2 is accepted. The new Logic
+Engine bridge derives a deterministic RA-R1 plan from an authorized, human/fixture
+RA-R2 plan or refuses with a structured code. Both success and rejection are
+Ledger-mandatory; suppressed writes fail closed. The bridge is mock-only and has
+no route-selection or execution consumer. Eight named acceptance detectors pin the
+decision envelope, all rejection codes, exact mapping, determinism, prose immunity,
+Ledger completeness, L1 seven, registries, and catalogs. Pre-change snapshot:
+`snap_20260718T201841128Z_000388_milestone` (verified on disk).
+
+Named deferrals: `LE1-LEDGER-1` covers LE-1's still-unwritten classification
+artifact. Analyst registration and Planner→Synthesizer remain open registry design
+questions; affected plans remain unbridgeable. The RA-R2/RA-R1 authorship mismatch,
+live-adapter chain, capability gates, and multi-cycle
+Planner→Critic→Synthesizer boundary also pass forward explicitly. `GIT-HYG-1` is
+parked to investigate recurring Windows `.git` repack/multi-pack-index lock or
+permission warnings. GOV-1's remote was synchronized at `93316eb`, provenance gaps
+were recorded rather than backfilled, AUD-2 was clean across 19 paths, and
+`git fsck --full` was run after the first repack warning.
+
+Validation passed: focused bridge/RA-R2/LE-1 suite 5 files / 57 tests; canonical
+suite 184 files / 3,094 tests; canonical typecheck exit 0; build exit 0; V1 catalog
+13; Hollowcut catalog 9. Full suite created validation snapshot
+`snap_20260718T203939996Z_000389_milestone` (verified on disk). AUD-2 self-smoke
+against base `960ade1` was compliant/T2 across 15 paths with zero violations.
+Credential variables and `VITEST_DEBUG_DUMP` were unset/empty before validation.
+
+`LE-2 Rotation Plan Bridge: Accepted — RA-R2 plans derive deterministically or refuse loudly; every incompatibility is now a rule; nothing runs yet.`
+
 **Convention:** every future pass appends one dated entry here as part of its
 completion report, including pre-change snapshot ID and suite counts at pass close.

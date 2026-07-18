@@ -38,6 +38,8 @@ const REQUIRED_FIELDS = [
 const ALLOWED_FIELDS = new Set<string>(REQUIRED_FIELDS);
 
 const ROUTE_MODE_ROLES: Record<RuntimeRotationRouteMode, readonly RuntimeRotationPlanRole[]> = {
+  planner_critic: ["planner", "critic"],
+  planner_critic_synthesizer: ["planner", "critic", "synthesizer"],
   planner_synthesizer: ["planner", "synthesizer"],
   planner_analyst_synthesizer: ["planner", "analyst", "synthesizer"],
   full_rotation: ["planner", "analyst", "critic", "synthesizer"]
@@ -165,7 +167,7 @@ function validateAuthoredBy(value: unknown, errors: RoleArtifactValidationError[
     errors.push({
       code: "RRP_INVALID_AUTHOR",
       path: "$.authored_by",
-      message: "authored_by must be orchestration_core, logic_engine, or human."
+      message: "authored_by must be orchestration_core, logic_engine, human, or fixture."
     });
   }
 }

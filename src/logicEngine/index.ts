@@ -15,3 +15,4 @@ export * from "./routeLedgerEventValidator.js";
 export * from "./routeLedgerEventBuilder.js";
 export * from "./routeLedgerEventWriter.js";
 export * from "./rotationPlanSeam.js";
+export * from "./rotationPlanBridge.js";
