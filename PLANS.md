@@ -3176,3 +3176,29 @@ guardrails are now a protected surface.`
 **Progress Log (implementation):** Pre-change snapshot `snap_20260707T195956421Z_000380_milestone` (`le1_seam_implementation_prechange`, verified on disk). Added `src/logicEngine/rotationPlanSeam.ts` with 12-branch decision inventory; barrel export in `src/logicEngine/index.ts`. Unit tests (6) + acceptance tests (8): all classification enum values, all detectors, L1 lock verbatim, read-only proof, catalog 13/9. Focused seam tests: 14/14 green. Full suite: 182 files / 3,069 tests green (+2 files, +14 tests). `npx tsc --noEmit`: pass. `npm run build`: pass. Seam not wired into `routeInputGate.ts` or `selectRoute`.
 
 **Final Report:** LE-1 Rotation Plan Consumption Seam: Accepted — the engine can read rotation plans on the record; it cannot run them; the steering boundary is unchanged.
+
+## ExecPlan - LIVE-F7 Handoff Gate Check 11 Modernization + Gate-Refusal Evidence Preservation
+
+**Objective:** Replace legacy check 11 with the authorized closed role-transition/acceptance-status consumption matrix and preserve every handoff-gate refusal as a safe, execution-keyed, reconstructable failed-step Ledger record.
+
+**Source Authority:** `docs/protocols/PASS_PROTOCOL_LIVE_F7.md`; Pat's evidence-commit directive; `docs/ROLE_ARTIFACT_CONSUMPTION_BOUNDARY_CONTRACT.md`; LIVE-F2 execution-identity doctrine; LIVE-F4 two-artifact authority doctrine.
+
+**Starting State:** Evidence commit `a17e134` synchronized on `main`; tree clean at session start. Baseline 200 files / 3,199 tests green; canonical typecheck and build exit 0. V1 catalog 13; Hollowcut catalog 9. Attempt-six terminals present and unchanged. Planner prompt `sha256:f32675859e07243a7cf0cd8e743537f4c975826ea7bf684348ed128792489003`; Critic prompt `sha256:27d169bbc002d2bcdcab89ac6df60f481e6311c015600883ed000a1f8031dd54`.
+
+**Scope:** `src/roles/roleHandoffGate.ts`; role-runtime record types and executor refusal sequencing; execution-keyed Ledger reconstruction; focused role/runtime/logic-engine and acceptance detectors; protocol, report, status, and this ExecPlan. No provider, prompt, normalization, L1 allowlist, catalog, transport, or live-event changes.
+
+**Snapshot / Rollback Plan:** Explicit pre-change snapshot `snap_20260719T203614999Z_000438_milestone` (`LIVE-F7-prechange`), verified on disk with 18 captured files and a Ledger entry. Restore through Change Guard only if authorized; never retro-edit attempt-six evidence.
+
+**Implementation Steps:**
+1. Commit protocol provenance and this ExecPlan.
+2. Encode the exhaustive default-deny consumption matrix and structured check-11 issue.
+3. Append a `gate_evaluation_refused` record before returning from any refused gate evaluation.
+4. Preserve safe issue detail, canonical/T0 lineage, transition identity, and failed-step reconstruction by `execution_id`.
+5. Add T1–T4 detectors plus a fifteen-check coverage map and attempt-six shape replay.
+6. Run focused validation, canonical suite/typecheck/build, catalog and prompt pins, AUD-2 self-smoke, then write the report and close with clean synchronized Git state.
+
+**Validation Commands:** Focused Vitest files for gate/runtime/reconstruction/acceptance; `npx vitest run`; `node ./node_modules/typescript/bin/tsc --noEmit`; `npm run build`; catalog CLI commands; prompt SHA-256 verification; `audit-pass-compliance` self-smoke using the LIVE-F7 manifest.
+
+**Acceptance Criteria:** Exact D2 matrix; only check 11 behavior modernized; other fourteen checks preserved; refusal evidence written before exit and free of payload/free-text; failed step reconstructed from Ledger bytes alone without attempt stitching; V1 13/Hollowcut 9; prompt and L1 pins untouched; no live calls; canonical validation green; report committed and `origin/main` synchronized.
+
+**Progress Log:** Preconditions passed. Baseline suite 200/3,199, typecheck 0, build 0. Explicit snapshot `snap_20260719T203614999Z_000438_milestone` verified. Implementation pending.
