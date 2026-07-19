@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0.0",
+  "pass_id": "TIME-1",
+  "base_commit": "56544f4d67838eae10f3c184504c7a77b9d1d069",
+  "measurement_mode": "serial_pre_adjustment_with_command_line_diagnostic_ceiling",
+  "diagnostic_timeout_ms": 30000,
+  "global_config": {
+    "path": "vitest.config.ts",
+    "sha256": "6141e1903f82b0acc1911446e2949fb3bb4e6bed2bee24f5654ad39db7bca05b"
+  },
+  "adjusted_files": [
+    {
+      "path": "tests/cli/auditPassComplianceCli.test.ts",
+      "pre_adjustment_sha256": "7937168b422e9e975f8b9cd6dce53b34007554c027f0658cd5d0db3e37a1b486",
+      "pre_adjustment_terminal_newline": false,
+      "approved_timeout_token": ", 30_000",
+      "approved_timeout_count": 3
+    },
+    {
+      "path": "tests/changeGuard/guardRunner.test.ts",
+      "pre_adjustment_sha256": "a66e0b4e3752c4735bc228b50ff753cbf6838dd778728f0bf97912b2f62f2cf1",
+      "pre_adjustment_terminal_newline": true,
+      "approved_timeout_token": ", 30_000",
+      "approved_timeout_count": 2
+    },
+    {
+      "path": "tests/acceptance/aud2GitChangesetCollectionSeamAcceptance.test.ts",
+      "pre_adjustment_sha256": "644b4092ba69553ea941e277c1b52e5cafc8ce3f4b0aebed072625704be5c1e2",
+      "pre_adjustment_terminal_newline": false,
+      "approved_timeout_token": ", 30_000",
+      "approved_timeout_count": 1
+    },
+    {
+      "path": "tests/cli/minimalCli.test.ts",
+      "pre_adjustment_sha256": "c5a744836e34bc3bfb990eef897de34025530c9aad3bd690b8290d40c0ef75e3",
+      "pre_adjustment_terminal_newline": true,
+      "approved_timeout_token": ", 30_000",
+      "approved_timeout_count": 1
+    }
+  ],
+  "adjustments": [
+    {
+      "file": "tests/cli/auditPassComplianceCli.test.ts",
+      "test": "audit-pass-compliance CLI > compliant audit returns ok:true with verified T2 hollow result",
+      "serial_pre_adjustment_status": "passed",
+      "serial_duration_ms": 10974,
+      "prior_observed_duration_ms": 6146,
+      "timeout_budget_ms": 30000,
+      "process_spawn_evidence": [
+        { "path": "tests/cli/auditPassComplianceCli.test.ts", "contains": "execFileSync(\"git\"" },
+        { "path": "src/audit/gitChangesetCollector.ts", "contains": "execFileSync(\"git\"" }
+      ]
+    },
+    {
+      "file": "tests/cli/auditPassComplianceCli.test.ts",
+      "test": "audit-pass-compliance CLI > non-compliant audit returns ok:true with compliant false verdict",
+      "serial_pre_adjustment_status": "passed",
+      "serial_duration_ms": 3388,
+      "prior_observed_duration_ms": 5735,
+      "timeout_budget_ms": 30000,
+      "process_spawn_evidence": [
+        { "path": "tests/cli/auditPassComplianceCli.test.ts", "contains": "runPassComplianceAudit({" },
+        { "path": "src/audit/gitChangesetCollector.ts", "contains": "execFileSync(\"git\"" }
+      ]
+    },
+    {
+      "file": "tests/cli/auditPassComplianceCli.test.ts",
+      "test": "audit-pass-compliance CLI > handler returns JSON-serializable payload with --json",
+      "serial_pre_adjustment_status": "passed",
+      "serial_duration_ms": 8225,
+      "timeout_budget_ms": 30000,
+      "process_spawn_evidence": [
+        { "path": "src/cli/commandHandlers.ts", "contains": "runPassComplianceAudit({" },
+        { "path": "src/audit/gitChangesetCollector.ts", "contains": "execFileSync(\"git\"" }
+      ]
+    },
+    {
+      "file": "tests/changeGuard/guardRunner.test.ts",
+      "test": "GuardRunner > runCommand captures stdout",
+      "serial_pre_adjustment_status": "passed",
+      "serial_duration_ms": 727,
+      "timeout_budget_ms": 30000,
+      "process_spawn_evidence": [
+        { "path": "tests/changeGuard/guardRunner.test.ts", "contains": "runner.runCommand({ command: process.execPath" },
+        { "path": "src/changeGuard/guardRunner.ts", "contains": "const child = spawn(" }
+      ]
+    },
+    {
+      "file": "tests/changeGuard/guardRunner.test.ts",
+      "test": "GuardRunner > runCommand captures stderr",
+      "serial_pre_adjustment_status": "passed",
+      "serial_duration_ms": 1093,
+      "timeout_budget_ms": 30000,
+      "process_spawn_evidence": [
+        { "path": "tests/changeGuard/guardRunner.test.ts", "contains": "runner.runCommand({ command: process.execPath" },
+        { "path": "src/changeGuard/guardRunner.ts", "contains": "const child = spawn(" }
+      ]
+    },
+    {
+      "file": "tests/acceptance/aud2GitChangesetCollectionSeamAcceptance.test.ts",
+      "test": "AUD-2 git changeset collection seam acceptance > invokes hollow.audit.pass_compliance_check through registry/runner/VRP path",
+      "serial_pre_adjustment_status": "passed",
+      "serial_duration_ms": 6092,
+      "timeout_budget_ms": 30000,
+      "process_spawn_evidence": [
+        { "path": "tests/acceptance/aud2GitChangesetCollectionSeamAcceptance.test.ts", "contains": "runPassComplianceAudit({" },
+        { "path": "src/audit/gitChangesetCollector.ts", "contains": "execFileSync(\"git\"" }
+      ]
+    },
+    {
+      "file": "tests/cli/minimalCli.test.ts",
+      "test": "minimal CLI > create-milestone-snapshot is recognized as a command (parse level)",
+      "serial_pre_adjustment_status": "passed",
+      "serial_duration_ms": 1435,
+      "prior_observed_duration_ms": 5078,
+      "timeout_budget_ms": 30000,
+      "scope_basis": "authorized_post_pass_scope_extension",
+      "scope_extension_evidence": [
+        { "path": "tests/cli/minimalCli.test.ts", "contains": "runMinimalCli([\"create-milestone-snapshot\"" },
+        { "path": "src/cli/commandHandlers.ts", "contains": "handleCreateMilestoneSnapshotCommand(parsed)" },
+        { "path": "src/changeGuard/snapshotManager.ts", "contains": "createMilestoneSnapshot(" }
+      ]
+    }
+  ]
+}

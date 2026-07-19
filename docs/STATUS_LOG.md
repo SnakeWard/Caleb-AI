@@ -692,3 +692,34 @@ tests. LE-3 is implemented but not accepted. Its verified implementation is
 committed for repository safety with acceptance explicitly pending the separately
 authorized TIME-1 micro-pass. LE-3-A has not started (no snapshot, report, lock
 test, or verdict).
+
+### 2026-07-18 — Pass TIME-1 — Process-Spawn Timeout Budgets (in progress)
+
+LE-3 implementation commit `56544f4` is pushed and synchronized. TIME-1 snapshot
+`snap_20260718T220634787Z_000396_milestone` is Ledgered and verified. Six candidate
+tests passed serially with unchanged assertions under a command-line-only
+diagnostic ceiling. Five are eligible process-spawning tests; their measured
+durations were 10,974 ms, 8,225 ms, 727 ms, 1,093 ms, and 6,092 ms. The measured
+4,276 ms snapshot CLI test was excluded because it is in-process.
+
+TIME-1 initially added a 30-second per-test argument to those five eligible tests.
+A complete affected-file run exposed one additional process-spawning AUD-2 test;
+it passed unchanged at 3,388 ms under the diagnostic ceiling after a 5,735 ms
+contended timeout, so it receives the same measured budget. A
+measurement record plus normalization-hash verifier pins zero assertion changes,
+the unchanged global Vitest config, passing pre-adjustment status, measured
+durations, and process-spawn call-chain evidence. Canonical validation is pending.
+
+The first canonical rerun passed 3,119/3,120. Its sole failure was the in-process
+snapshot CLI test at 5,078 ms. Pat authorized it as the seventh TIME-1 test,
+identified post-pass by canonical re-run. Its unchanged assertion passed alone at
+1,435 ms before adjustment; it receives the same explicit 30-second class and is
+covered by the timeout-only hash guard. `vitest.config.ts` remains untouched.
+
+TIME-1 accepted. The integrity guard reports seven adjusted tests, global config
+unchanged, and assertion changes zero. Typecheck/build exited 0; catalogs are
+13/9; AUD-2 is compliant/T2 across 12 paths with zero violations. A subsequent
+pathological canonical attempt produced 15 timeout-only failures across six files
+in 731.53 seconds; because it included existing 20–30 second budgets and unrelated
+in-process tests, no scope was widened from that sample. A clean unmodified rerun
+then passed 187/187 files and 3,120/3,120 tests in 317.41 seconds, exit 0.

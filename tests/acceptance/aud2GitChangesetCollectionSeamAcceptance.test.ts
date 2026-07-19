@@ -25,7 +25,7 @@ describe("AUD-2 git changeset collection seam acceptance", () => {
     expect(result.verdict.checks.map((check) => check.check_id)).toContain(
       "supplied_state_only_confirmed"
     );
-  });
+  }, 30_000);
 
   it("keeps git collection outside the Hollow implementation", () => {
     const hollowSource = readFileSync("src/hollows/audit/passComplianceCheck.ts", "utf8");

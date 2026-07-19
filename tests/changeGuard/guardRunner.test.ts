@@ -19,14 +19,14 @@ describe("GuardRunner", () => {
     const result = await runner.runCommand({ command: process.execPath, args: ["-e", "console.log('out')"], timeout_ms: 5000 });
 
     expect(result.stdout).toContain("out");
-  });
+  }, 30_000);
 
   it("runCommand captures stderr", async () => {
     const runner = await createRunner();
     const result = await runner.runCommand({ command: process.execPath, args: ["-e", "console.error('err')"], timeout_ms: 5000 });
 
     expect(result.stderr).toContain("err");
-  });
+  }, 30_000);
 
   it("runCommand returns failed status for nonzero exit without throwing", async () => {
     const runner = await createRunner();

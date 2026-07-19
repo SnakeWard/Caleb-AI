@@ -175,6 +175,83 @@ investigate Windows `.git` locking/permissions.
 loudly; every incompatibility is an explicit rule and nothing runs yet. Commit,
 push, and final clean-tree verification are the remaining handoff mechanics.
 
+## ExecPlan - TIME-1 Process-Spawn Timeout Budgets
+
+**Objective:** Replace flaky reliance on Vitest's 5-second in-process default with
+measured, explicit per-test budgets only for the process-spawning tests that
+blocked LE-3's canonical gate, while proving zero assertion/config changes.
+
+**Source Authority:** Pat's explicit TIME-1 go-order,
+`docs/protocols/PASS_PROTOCOL_TIME1.md`, LE-3 implementation commit `56544f4`, and
+the original LE-3 protocol's still-pending acceptance gate.
+
+**Current State:** LE-3 is implemented, committed, pushed, and explicitly not yet
+accepted. Three canonical attempts had only fixed-5-second timeouts in unchanged
+tests. TIME-1 pre-change snapshot `snap_20260718T220634787Z_000396_milestone` is
+Ledgered and verified.
+
+**Scope:** Serial pre-adjustment measurement; six eligible process-spawning test
+budgets plus the explicitly authorized seventh post-pass snapshot CLI extension;
+timeout-only integrity verifier and measurement record; standing-rule
+documentation; status/plan/audit records; canonical validation.
+
+**Out of Scope:** Global Vitest timeout/config, assertion changes, in-process test
+timeouts, production code, providers/network, LE-3 runtime changes, and LE-3-A
+before the canonical gate is green.
+
+**Files Expected To Change:** Three existing process-spawning test files; TIME-1
+protocol/implementation docs, measurement/audit manifests and guard script;
+`PLANS.md`, `docs/STATUS_LOG.md`, and append-only Ledger.
+
+**Risk Level:** Medium — test-governance change with evidence-integrity risk,
+bounded by source normalization hashes, serial pre-adjustment passes, process-call
+proof, and byte-identical global config.
+
+**Snapshot / Rollback Plan:** Restore from verified snapshot
+`snap_20260718T220634787Z_000396_milestone` or revert the TIME-1 commit; historical
+Ledger remains append-only.
+
+**Implementation Steps:** Inventory candidates; serially measure unchanged tests;
+exclude in-process candidates; record hashes/evidence; add only per-test timeout
+arguments; run the timeout-only guard; focused validation; canonical suite;
+typecheck/build/catalogs/AUD-2; commit/push; then record LE-3 acceptance.
+
+**Validation Commands:** `node scripts/verify-time1-timeout-budgets.mjs`; focused
+default-budget Vitest run; `node ./node_modules/typescript/bin/tsc --noEmit`;
+`npm run build`; `npx vitest run`; catalogs; AUD-2 self-smoke against the TIME-1
+manifest with base `56544f4`.
+
+**Acceptance Criteria:** Exactly seven authorized tests have explicit 30-second
+budgets; all passed serially before adjustment; normalized file hashes equal their
+pre-change hashes; assertion changes zero; global config byte-identical; no
+in-process timeout edit; canonical suite green; AUD-2 compliant/T2.
+
+**Progress Log:** The first six measured candidates passed under a command-line-
+only diagnostic ceiling. The snapshot CLI candidate was excluded because it does
+not spawn a process. A complete affected-file run then exposed one more eligible
+AUD-2 path; it passed unchanged at 3,388 ms after timing out at 5,735 ms under
+contention. Six eligible tests are now guarded.
+The first canonical rerun passed 3,119/3,120 and identified the in-process snapshot
+CLI test as its sole timeout at 5,078 ms. Under Pat's explicit scope extension, it
+passed unchanged in isolation at 1,435 ms and became the seventh guarded test.
+
+**Decision Log:** Each eligible test receives 30 seconds of per-test process-
+startup variance headroom. The global default remains unchanged and continues to
+govern all in-process tests.
+
+**Surprises / Discoveries:** A CLI test is not automatically a process-spawning
+test: `create-milestone-snapshot` runs in-process and is therefore excluded despite
+a prior timeout under the initial envelope. The canonical rerun made it the sole
+remaining blocker, and Pat then authorized it explicitly as a named seventh-test
+scope extension without broadening the standing rule.
+
+**Final Report:** TIME-1 accepted. The guard proves seven timeout-only edits,
+zero assertion changes, and byte-identical `vitest.config.ts`. Typecheck/build
+exited 0; catalogs remain 13/9; AUD-2 is compliant/T2 across 12 paths. One
+pathological canonical attempt produced 15 timeout-only failures in 731.53 seconds
+and was not used to widen scope. The clean rerun passed 187/187 files and
+3,120/3,120 tests in 317.41 seconds.
+
 ## ExecPlan - LE-3 Guarded Execution Seam + LE-3-A Acceptance Lock
 
 **Objective:** Execute only LE-2-bridged plans through the existing RA-R1 static

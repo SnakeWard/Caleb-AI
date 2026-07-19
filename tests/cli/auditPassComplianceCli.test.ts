@@ -123,7 +123,7 @@ describe("audit-pass-compliance CLI", () => {
     } finally {
       await rm(repo, { recursive: true, force: true });
     }
-  });
+  }, 30_000);
 
   it("non-compliant audit returns ok:true with compliant false verdict", async () => {
     const result = await runPassComplianceAudit({
@@ -139,7 +139,7 @@ describe("audit-pass-compliance CLI", () => {
     if (result.verdict.compliant === false) {
       expect(result.verdict.status).toBe("violations");
     }
-  });
+  }, 30_000);
 
   it("handler returns JSON-serializable payload with --json", async () => {
     const result = await handleCliCommand(
@@ -157,5 +157,5 @@ describe("audit-pass-compliance CLI", () => {
     expect(serialized.length).toBeGreaterThan(0);
     const parsed = JSON.parse(serialized) as { data?: { hollow?: { hollow_id?: string } } };
     expect(parsed.data?.hollow?.hollow_id).toBe("hollow.audit.pass_compliance_check");
-  });
+  }, 30_000);
 });

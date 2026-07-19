@@ -65,7 +65,7 @@ describe("minimal CLI", () => {
       // 0 or 1 is acceptable (success or safe failure), but not unknown command path.
       expect([0, 1]).toContain(code);
     });
-  });
+  }, 30_000);
 
   it("V1_HOLLOW_MANIFESTS remains exactly 13 (protected)", () => {
     expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);

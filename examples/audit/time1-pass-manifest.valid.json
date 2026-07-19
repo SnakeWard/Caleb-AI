@@ -1,0 +1,29 @@
+{
+  "pass_id": "TIME-1",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/protocols/PASS_PROTOCOL_TIME1.md",
+    "docs/TIME1_PROCESS_SPAWN_TIMEOUT_BUDGETS.md",
+    "examples/audit/time1-pass-manifest.valid.json",
+    "examples/audit/time1-process-spawn-measurements.valid.json",
+    "scripts/verify-time1-timeout-budgets.mjs"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/STATUS_LOG.md",
+    "tests/cli/auditPassComplianceCli.test.ts",
+    "tests/cli/minimalCli.test.ts",
+    "tests/changeGuard/guardRunner.test.ts",
+    "tests/acceptance/aud2GitChangesetCollectionSeamAcceptance.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "vitest.config.ts",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "tests/acceptance/networkEgressProofAcceptance.test.ts",
+    "src/**"
+  ]
+}
