@@ -44,6 +44,96 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - LIVE-F6 Exact Wrapper Normalization
+
+**Objective:** Admit only the evidenced exact whole-document Markdown JSON fence,
+record the applied normalization stage, harden the Planner JSON-only prompt, and
+make speculative normalization structurally forbidden without loosening either
+strict validator.
+
+**Source Authority:** Pat's 2026-07-19 LIVE-F6 authorization with Fable's three
+binding amendments and committed `docs/protocols/PASS_PROTOCOL_LIVE_F6.md` at
+`7b309ca`.
+
+**Current State:** E1 attempt five stored a complete bounded Planner response as
+T0 under digest
+`sha256:679eee9d6bdb9989eb820c155e6dec6ab75b460819794d7fa8c4c6ea34e25b40`
+but halted at `json_parse`. The authorized structural diagnostic proved the raw
+document consists of one exact `json` Markdown fence around a strict JSON object;
+the inner semantic payload passes the unchanged validator with zero issues.
+
+**Scope:** One pure exact-fence normalizer after T0/digest/truncation gates;
+optional safe normalization-stage telemetry through seam records and
+reconstruction; Planner prompt hardening and shared fixture digest updates;
+standing no-speculative-normalization doctrine; exact/unchanged/adversarial/
+near-miss/truncation/payload detectors; offline report, audit, status, and
+snapshot evidence.
+
+**Out of Scope:** Live calls/retries, preamble stripping, fuzzy extraction or
+repair, validator changes, provider transport/fetch/endpoints/headers/
+credentials/request bodies/retries, model/route/registry/budget/CLI/dependency/
+config/global-timeout changes, and historical Ledger rewriting.
+
+**Files Expected To Change:** Pure live-role output normalizer; live runtime
+adapter and execution seam telemetry/reconstruction; Planner prompt and E1/E2
+digest fixtures; exact/near-miss regression fixtures and tests; operating
+contract; LIVE-F6 report; E1 event report; audit manifest; `PLANS.md`,
+`docs/STATUS_LOG.md`, and append-only snapshot Ledger.
+
+**Risk Level:** High — live-content trust boundary and Ledger provenance; all
+network and credential behavior remains excluded.
+
+**Snapshot / Rollback Plan:** Protocol/attempt-five evidence commits `a7f330b`
+and `7b309ca` are pushed. Pre-change snapshot
+`snap_20260719T160902602Z_000433_milestone` is Ledgered and independently verified
+with 18 configured captures. Git `7b309ca` is the complete rollback anchor for
+authorized files outside that fixed snapshot set.
+
+**Implementation Steps:** Implement the pure predicate/unwrap; call it after F5
+truncation and before parse; carry the optional safe stage through failures,
+successes, terminal Ledger records, and reconstruction; harden Planner prompt and
+update both fixtures; add exact, unchanged, adversarial, and four near-miss
+fixtures/detectors; record doctrine; validate/audit; commit/push; STOP.
+
+**Validation Commands:** Focused LIVE-F6/LIVE-F4/LIVE-F5/provider/gate/seam/M3
+tests; canonical `npm test`; governed typecheck; build; catalog listings; AUD-2
+self-smoke; prompt hashes; serialization/redaction, egress, transport-function,
+protected-diff, snapshot, and Git checks.
+
+**Acceptance Criteria:** Exact tagged and untagged fences unwrap only when the
+entire inner document is one valid JSON object; unfenced input is byte-identical;
+preamble/braces-in-prose and all four near misses remain invalid; truncation wins
+before normalization; strict payload/envelope validators are unchanged; applied
+stage is safe and reconstructable; raw T0 remains authoritative; both prompt
+digest generations are reported; forbidden-list doctrine is verbatim; no live
+call or protected transport drift occurs.
+
+**Progress Log:** Attempt-five evidence/protocol is pushed. Baseline passed 198
+files / 3,176 tests in 107.66 seconds; governed typecheck and build exited 0.
+Pre-change snapshot `snap_20260719T160902602Z_000433_milestone` is Ledgered and
+verified. Exact fence normalization, safe stage telemetry/reconstruction,
+Planner prompt hardening, standing doctrine, four near-miss fixtures, and the
+complete detector set are implemented. Focused validation passed 15 files / 119
+tests; canonical passed 200 files / 3,199 tests in 100.89 seconds. Governed
+typecheck/build exited 0; catalogs remain 13/9; AUD-2 is compliant/T2 across 19
+paths with zero violations. Validation snapshot
+`snap_20260719T162427243Z_000435_milestone` is Ledgered and verified.
+
+**Decision Log:** A normalizer is an allowlisted presentation transform, not a
+recovery parser. It may remove only the two proven fence lines and only after the
+whole inner object already proves strictly parseable. Raw bytes remain T0;
+normalization changes neither their digest nor their evidence identity.
+
+**Surprises / Discoveries:** Attempt five's Ledger prompt digest is the rendered,
+task-bound invocation digest, not the fixture's template-file digest. The report
+names both categories so the prompt version record cannot conflate them.
+
+**Final Report:** LIVE-F6 is accepted offline. Exactly one evidenced complete
+Markdown JSON fence may be removed after T0/digest/truncation gates and only when
+the whole inner object already parses. Near misses remain strict failures;
+Planner prompt v2 is digest-pinned in E1/E2; raw T0, validators, transport, and
+Critic remain unchanged. No live call occurred. STOP.
+
 ## ExecPlan - LIVE-F5 Truncation Evidence Preservation
 
 **Objective:** Classify provider budget truncation before JSON parsing, retain

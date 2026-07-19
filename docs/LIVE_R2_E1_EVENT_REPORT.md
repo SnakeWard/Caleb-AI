@@ -185,3 +185,42 @@ to correct future classification and failure-path evidence persistence offline.
 `LIVE-R2 E1 attempt four: STOP — Planner reached Anthropic and exhausted its
 512-token output budget; the observer misclassified truncation as invalid JSON,
 discarded the T0 witness, and correctly halted before Critic.`
+
+## 2026-07-19 E1 attempt five after LIVE-F1 through LIVE-F5
+
+Pat freshly authorized and executed attempt five from a host shell. The Ledger
+contains one execution-keyed bridge/start/terminal chain:
+
+- Execution: `execution_0caeae10-2427-46e2-b2b0-6a8d4e1d00d8`.
+- Bridge: `bridge_a583fa69-5153-4eaf-9562-86e0afb576c7`.
+- Start: `rotation_80800089-79aa-409a-8d9c-18a79e48b140`.
+- Terminal: `rotation_c4c7bb2c-3c73-4ebc-a661-6f3f469eb47f`.
+- Planner: 291 input / 1,139 output / 1,430 total tokens; USD 0.005986;
+  11,305 ms; response identity retained.
+- Critic: not invoked.
+- Failure: `live_observer_artifact_invalid`, observer stage `json_parse`, safe
+  issue `{code: invalid_json, path: $}`.
+- Output and observed-store digest:
+  `sha256:679eee9d6bdb9989eb820c155e6dec6ab75b460819794d7fa8c4c6ea34e25b40`.
+
+LIVE-F5 worked as designed: the response did not hit either truncation signal,
+and the exact normalized bytes survived as digest-bound T0 evidence before the
+parse failure. The terminal record names the raw-output reference, and no output
+text appears in the Ledger.
+
+The authorized LIVE-F6 diagnostic read only the stored T0 structure. The 4,543
+bytes have no BOM, preamble, trailing prose, or outer whitespace. The first line
+is exactly a `json` Markdown fence, the last line is exactly the closing fence,
+and those are the only fence lines. Removing exactly those two complete lines
+yields one strict JSON object. Its closed semantic shape passes the unchanged
+LIVE-F4 payload validator with zero issues. No payload prose was quoted or
+recorded in this report.
+
+This report does not claim a sibling-absence or leaf-cleanup credential proof for
+attempt five: those facts are not present in the safe Ledger chain and were not
+separately supplied for the record. LIVE-F6 remains offline-only and does not
+reinterpret that missing operational evidence.
+
+`LIVE-R2 E1 attempt five: STOP — Planner returned a complete strict semantic
+object inside one exact Markdown JSON fence; T0 evidence survived, strict parsing
+correctly rejected the wrapper, and Critic was not invoked.`

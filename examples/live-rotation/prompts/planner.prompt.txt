@@ -4,6 +4,8 @@ Task statement:
 {{TASK_STATEMENT}}
 
 Return ONLY one JSON object, with no markdown fence and no surrounding prose.
+The first non-whitespace output character MUST be { and the last MUST be }.
+Do not output any backtick character. Do not add a preamble or trailing commentary.
 Return exactly this semantic payload; Caleb constructs the authoritative envelope:
 - summary: non-empty string
 - claims: array of {claim_id, text, evidence_ref_ids: string[]}

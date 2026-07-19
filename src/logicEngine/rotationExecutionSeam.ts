@@ -21,6 +21,7 @@ import type {
   LiveRoleArtifactFailureStage,
   LiveRoleArtifactSafeIssue
 } from "./liveRoleArtifactEnvelope.js";
+import type { LiveRoleOutputNormalizationStage } from "./liveRoleOutputNormalizer.js";
 
 type LiveRotationRuntimeFailureCode =
   | "live_prompt_template_digest_mismatch"
@@ -59,6 +60,7 @@ interface LiveRotationInvocationTelemetry {
   readonly provider_failure_kind: string | null;
   readonly provider_failure_status: string | null;
   readonly provider_failure_retryable: boolean | null;
+  readonly observer_normalization_stage: LiveRoleOutputNormalizationStage | null;
   readonly observer_failure_stage: LiveRoleArtifactFailureStage | null;
   readonly observer_validation_issues: readonly LiveRoleArtifactSafeIssue[];
 }
@@ -166,6 +168,7 @@ export interface ReconstructedRotationLedgerInvocation {
   readonly total_tokens: number | null;
   readonly estimated_spend_usd: number | null;
   readonly provider_response_id: string | null;
+  readonly observer_normalization_stage: LiveRoleOutputNormalizationStage | null;
 }
 
 export interface ReconstructedRotationLedgerChain {
@@ -850,6 +853,7 @@ function buildInvocationLedgerEntry(input: {
           estimated_spend_usd: input.live_telemetry.estimated_spend_usd,
           latency_ms: input.live_telemetry.latency_ms,
           provider_response_id: input.live_telemetry.provider_response_id,
+          observer_normalization_stage: input.live_telemetry.observer_normalization_stage,
           budget: { ...input.live_telemetry.budget }
         })
   };
@@ -970,6 +974,7 @@ function buildTerminalLedgerEntry(input: {
               provider_failure_kind: entry.provider_failure_kind,
               provider_failure_status: entry.provider_failure_status,
               provider_failure_retryable: entry.provider_failure_retryable,
+              observer_normalization_stage: entry.observer_normalization_stage,
               observer_failure_stage: entry.observer_failure_stage,
               observer_validation_issues: entry.observer_validation_issues.map((issue) => ({ ...issue }))
             })),
@@ -1115,6 +1120,7 @@ function parseReconstructedInvocation(
   const provenanceDerivedFrom = optionalProvenanceStringArray(entry, "derived_from");
   const contextRefs = resultContextRefs(entry);
   const lineageRefs = provenanceStringArray(entry, "lineage_refs");
+  const observerNormalizationStage = resultOptionalNormalizationStage(entry);
   if (
     stepIndex === null ||
     roleId === null ||
@@ -1124,6 +1130,7 @@ function parseReconstructedInvocation(
     lineageRefs === null ||
     resultDerivedFrom === null ||
     provenanceDerivedFrom === null ||
+    observerNormalizationStage === undefined ||
     !sameStrings(resultDerivedFrom, provenanceDerivedFrom)
   ) {
     return null;
@@ -1147,8 +1154,22 @@ function parseReconstructedInvocation(
     output_tokens: resultOptionalNumber(entry, "output_tokens"),
     total_tokens: resultOptionalNumber(entry, "total_tokens"),
     estimated_spend_usd: resultOptionalNumber(entry, "estimated_spend_usd"),
-    provider_response_id: resultNullableString(entry, "provider_response_id")
+    provider_response_id: resultNullableString(entry, "provider_response_id"),
+    observer_normalization_stage: observerNormalizationStage
   };
+}
+
+function resultOptionalNormalizationStage(
+  entry: LedgerEntry
+): LiveRoleOutputNormalizationStage | null | undefined {
+  if (!isObject(entry.result)) {
+    return undefined;
+  }
+  const value = entry.result["observer_normalization_stage"];
+  if (value === undefined || value === null) {
+    return null;
+  }
+  return value === "markdown_fence_unwrapped" ? value : undefined;
 }
 
 function resultContextRefs(entry: LedgerEntry): readonly RoleRuntimeContextRef[] | null {

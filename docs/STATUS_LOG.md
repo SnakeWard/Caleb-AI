@@ -937,3 +937,35 @@ occurred.
 LIVE-F5 Truncation Evidence Preservation: Accepted — budget truncation is
 identified before parsing, diagnosable failures retain their T0 witness, and E1
 has enough bounded output room without moving the spend ceiling. STOP.
+
+### 2026-07-19 — LIVE-F6 — exact wrapper normalization
+
+Attempt five stored digest-bound T0 evidence and halted before Critic at
+`json_parse`. The authorized structural diagnostic proved the full response was
+one strict semantic JSON object inside one exact Markdown `json` fence; no
+preamble, trailing prose, truncation, or semantic validation defect existed.
+
+LIVE-F6 adds one pure allowlisted presentation transform after T0 storage,
+digest binding, and F5 truncation detection. It unwraps only an exact complete
+fence whose entire inner document already parses as one JSON object. Applied
+success/later-failure telemetry names `markdown_fence_unwrapped`; raw fenced T0
+remains authoritative and canonical artifacts remain linked by `derived_from`.
+
+The Planner template is hardened from
+`sha256:8407f826668198c871da24fa9db9323c588aa6805d392d317fef6be090884697`
+to `sha256:f32675859e07243a7cf0cd8e743537f4c975826ea7bf684348ed128792489003`
+in both E1 and E2. Critic remains
+`sha256:27d169bbc002d2bcdcab89ac6df60f481e6311c015600883ed000a1f8031dd54`.
+The operating contract records Fable's speculative-normalization forbidden list
+verbatim. Four named near-miss fixtures bind every unwrap condition.
+
+Focused validation passed 15 files / 119 tests; canonical offline validation
+passed 200 files / 3,199 tests in 100.89 seconds. Governed typecheck/build exited
+0 and catalogs remain 13/9. AUD-2 is compliant/T2 across 19 paths with zero
+violations. Validation snapshot `snap_20260719T162427243Z_000435_milestone` is
+Ledgered and verified. No live call or transport/credential/model/route/budget
+change occurred.
+
+LIVE-F6 Exact Wrapper Normalization: Accepted — one exact evidenced presentation
+wrapper may pass without speculative recovery; raw T0, strict validation, and
+reconstructable applied-stage provenance remain intact. STOP.

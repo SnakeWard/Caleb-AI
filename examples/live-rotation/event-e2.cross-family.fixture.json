@@ -51,7 +51,7 @@
         "planner": {
           "template_id": "live_rotation_planner_v1",
           "path": "examples/live-rotation/prompts/planner.prompt.txt",
-          "sha256_digest": "sha256:8407f826668198c871da24fa9db9323c588aa6805d392d317fef6be090884697"
+          "sha256_digest": "sha256:f32675859e07243a7cf0cd8e743537f4c975826ea7bf684348ed128792489003"
         },
         "critic": {
           "template_id": "live_rotation_critic_v1",

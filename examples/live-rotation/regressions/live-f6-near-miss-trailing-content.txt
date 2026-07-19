@@ -1,0 +1,4 @@
+```json
+{"summary":"trailing content"}
+```
+not part of the fenced object

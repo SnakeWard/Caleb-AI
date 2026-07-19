@@ -1,0 +1,44 @@
+{
+  "pass_id": "LIVE-F6",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LIVE_F6_EXACT_WRAPPER_NORMALIZATION_REPORT.md",
+    "examples/audit/live-f6-pass-manifest.valid.json",
+    "examples/live-rotation/regressions/live-f6-near-miss-missing-closing-fence.txt",
+    "examples/live-rotation/regressions/live-f6-near-miss-trailing-content.txt",
+    "examples/live-rotation/regressions/live-f6-near-miss-two-json-objects.txt",
+    "examples/live-rotation/regressions/live-f6-near-miss-wrong-language-tag.txt",
+    "src/logicEngine/liveRoleOutputNormalizer.ts",
+    "tests/acceptance/liveF6ExactWrapperNormalizationAcceptance.test.ts",
+    "tests/logicEngine/liveRoleOutputNormalizer.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/01_CODEX_OPERATING_CONTRACT.md",
+    "docs/LIVE_R2_E1_EVENT_REPORT.md",
+    "docs/STATUS_LOG.md",
+    "examples/live-rotation/event-e1.anthropic.fixture.json",
+    "examples/live-rotation/event-e2.cross-family.fixture.json",
+    "examples/live-rotation/prompts/planner.prompt.txt",
+    "src/logicEngine/liveRotationRuntimeAdapter.ts",
+    "src/logicEngine/rotationExecutionSeam.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/cli/**",
+    "src/modelBoundary/**",
+    "src/providers/**",
+    "src/rawOutput/**",
+    "src/roles/**",
+    "src/logicEngine/liveRoleArtifactEnvelope.ts",
+    "src/logicEngine/liveRotationGateEvidence.ts",
+    "src/logicEngine/rotationPlanBridge.ts",
+    "examples/live-rotation/prompts/critic.prompt.txt",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

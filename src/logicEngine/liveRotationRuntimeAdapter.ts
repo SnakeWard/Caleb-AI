@@ -30,6 +30,10 @@ import {
   type LiveRoleArtifactFailureStage,
   type LiveRoleArtifactSafeIssue
 } from "./liveRoleArtifactEnvelope.js";
+import {
+  normalizeLiveRoleOutput,
+  type LiveRoleOutputNormalizationStage
+} from "./liveRoleOutputNormalizer.js";
 
 export type LiveRotationRuntimeFailureCode =
   | "live_prompt_template_digest_mismatch"
@@ -86,6 +90,7 @@ export interface LiveRotationInvocationTelemetry {
   readonly provider_failure_kind: LiveAdapterFailure["failure_kind"] | null;
   readonly provider_failure_status: LiveAdapterFailure["status"] | null;
   readonly provider_failure_retryable: boolean | null;
+  readonly observer_normalization_stage: LiveRoleOutputNormalizationStage | null;
   readonly observer_failure_stage: LiveRoleArtifactFailureStage | null;
   readonly observer_validation_issues: readonly LiveRoleArtifactSafeIssue[];
 }
@@ -240,6 +245,7 @@ async function invokeRole(
   let observation: StoredObservation | null = null;
   let observedStoreDigest: Sha256Digest | null = null;
   let observerFailure: LiveRotationRuntimeFailureCode | null = null;
+  let observerNormalizationStage: LiveRoleOutputNormalizationStage | null = null;
   let observerFailureStage: LiveRoleArtifactFailureStage | null = null;
   let observerValidationIssues: readonly LiveRoleArtifactSafeIssue[] = [];
   let observationOpen = true;
@@ -280,9 +286,11 @@ async function invokeRole(
       observerValidationIssues = [{ code: "output_truncated", path: "$" }];
       return { ok: false, failure_code: "observer_failure" };
     }
+    const normalized = normalizeLiveRoleOutput(normalizedText);
+    observerNormalizationStage = normalized.normalization_stage;
     let parsed: unknown;
     try {
-      parsed = JSON.parse(normalizedText) as unknown;
+      parsed = JSON.parse(normalized.normalized_text) as unknown;
     } catch {
       observerFailure = "live_observer_artifact_invalid";
       observerFailureStage = "json_parse";
@@ -363,7 +371,7 @@ async function invokeRole(
           failure_kind: result.failure.failure_kind,
           status: result.failure.status,
           retryable: result.failure.retryable
-        }, observerFailureStage, observerValidationIssues)
+        }, observerFailureStage, observerValidationIssues, observerNormalizationStage)
       : telemetryFromFailure(
           runtimeInput,
           binding,
@@ -372,26 +380,51 @@ async function invokeRole(
           observedStoreDigest,
           code,
           observerFailureStage,
-          observerValidationIssues
+          observerValidationIssues,
+          observerNormalizationStage
         );
     tracker.markFailure(code, telemetry);
     return rejected();
   }
   if (result.status !== "response_schema_valid") {
     const code = "live_provider_response_unvalidated";
-    tracker.markFailure(code, telemetryFromResponse(runtimeInput, binding, promptDigest, result.response, null, code));
+    tracker.markFailure(code, telemetryFromResponse(
+      runtimeInput,
+      binding,
+      promptDigest,
+      result.response,
+      null,
+      code,
+      observerNormalizationStage
+    ));
     return rejected();
   }
   if (observation === null) {
     const code = "live_observer_output_missing";
-    tracker.markFailure(code, telemetryFromResponse(runtimeInput, binding, promptDigest, result.response, null, code));
+    tracker.markFailure(code, telemetryFromResponse(
+      runtimeInput,
+      binding,
+      promptDigest,
+      result.response,
+      null,
+      code,
+      observerNormalizationStage
+    ));
     return rejected();
   }
 
   const observed = observation as StoredObservation;
   if (observed.digest !== result.response.output_ref.output_digest) {
     const code = "live_output_digest_mismatch";
-    tracker.markFailure(code, telemetryFromResponse(runtimeInput, binding, promptDigest, result.response, observed.digest, code));
+    tracker.markFailure(code, telemetryFromResponse(
+      runtimeInput,
+      binding,
+      promptDigest,
+      result.response,
+      observed.digest,
+      code,
+      observerNormalizationStage
+    ));
     return rejected();
   }
 
@@ -401,7 +434,8 @@ async function invokeRole(
     promptDigest,
     result.response,
     observed.digest,
-    null
+    null,
+    observerNormalizationStage
   );
   const budgetFailure = tracker.record(telemetry);
   if (budgetFailure !== null) {
@@ -443,7 +477,8 @@ function telemetryFromResponse(
   promptDigest: Sha256Digest,
   response: LiveAdapterResponse,
   observedStoreDigest: Sha256Digest | null,
-  failureCode: LiveRotationRuntimeFailureCode | null
+  failureCode: LiveRotationRuntimeFailureCode | null,
+  observerNormalizationStage: LiveRoleOutputNormalizationStage | null = null
 ): LiveRotationInvocationTelemetry {
   const estimatedSpend = estimateSpend(
     binding.model_id,
@@ -470,6 +505,7 @@ function telemetryFromResponse(
     provider_failure_kind: null,
     provider_failure_status: null,
     provider_failure_retryable: null,
+    observer_normalization_stage: observerNormalizationStage,
     observer_failure_stage: null,
     observer_validation_issues: []
   };
@@ -483,7 +519,8 @@ function telemetryFromFailure(
   observedStoreDigest: Sha256Digest | null,
   failureCode: LiveRotationRuntimeFailureCode,
   observerFailureStage: LiveRoleArtifactFailureStage | null,
-  observerValidationIssues: readonly LiveRoleArtifactSafeIssue[]
+  observerValidationIssues: readonly LiveRoleArtifactSafeIssue[],
+  observerNormalizationStage: LiveRoleOutputNormalizationStage | null
 ): LiveRotationInvocationTelemetry {
   const response = failure.response_telemetry;
   if (response === undefined) {
@@ -494,7 +531,8 @@ function telemetryFromFailure(
       failureCode,
       failure,
       observerFailureStage,
-      observerValidationIssues
+      observerValidationIssues,
+      observerNormalizationStage
     );
   }
   return {
@@ -521,6 +559,7 @@ function telemetryFromFailure(
     provider_failure_kind: failure.failure_kind,
     provider_failure_status: failure.status,
     provider_failure_retryable: failure.retryable,
+    observer_normalization_stage: observerNormalizationStage,
     observer_failure_stage: observerFailureStage,
     observer_validation_issues: observerValidationIssues.map((entry) => ({ ...entry }))
   };
@@ -533,7 +572,8 @@ function emptyTelemetry(
   failureCode: LiveRotationRuntimeFailureCode,
   providerFailure: Pick<LiveAdapterFailure, "failure_kind" | "status" | "retryable"> | null = null,
   observerFailureStage: LiveRoleArtifactFailureStage | null = null,
-  observerValidationIssues: readonly LiveRoleArtifactSafeIssue[] = []
+  observerValidationIssues: readonly LiveRoleArtifactSafeIssue[] = [],
+  observerNormalizationStage: LiveRoleOutputNormalizationStage | null = null
 ): LiveRotationInvocationTelemetry {
   return {
     step_index: input.step_index,
@@ -555,6 +595,7 @@ function emptyTelemetry(
     provider_failure_kind: providerFailure?.failure_kind ?? null,
     provider_failure_status: providerFailure?.status ?? null,
     provider_failure_retryable: providerFailure?.retryable ?? null,
+    observer_normalization_stage: observerNormalizationStage,
     observer_failure_stage: observerFailureStage,
     observer_validation_issues: observerValidationIssues.map((entry) => ({ ...entry }))
   };

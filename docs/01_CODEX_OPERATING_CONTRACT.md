@@ -148,3 +148,17 @@ failures are not evidence that the provider was unavailable, and they do not
 justify retries from the agent sandbox. Human host-shell execution makes
 credential custody, sibling preflight, leaf cleanup, and the one authorized
 network action directly observable by the operator while agents remain offline.
+
+### Speculative-normalization prohibition (adopted Pass LIVE-F6, 2026-07-19)
+
+Model output may receive only a specifically evidenced, bounded, deterministic
+presentation normalization whose complete predicate, unchanged path, failure
+behavior, and safe applied-stage telemetry are detector-locked. Normalization
+MUST NOT search for intended content, guess at repairs, or weaken a validator.
+The following operations are forbidden:
+
+- Searching for arbitrary brace pairs
+- Selecting the first parseable JSON substring
+- Removing trailing prose
+- Repairing commas, quotes, braces, or escapes
+- Validator loosening
