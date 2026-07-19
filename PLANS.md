@@ -360,11 +360,12 @@ diagnostic. The protocol forbids Vitest/config changes and the LE-3 audit manife
 does not authorize those old tests, so changing their timeout would be an envelope
 deviation.
 
-**Final Report:** The seam implementation and its passing evidence are committed
-for repository safety with acceptance explicitly pending TIME-1. LE-3 is not yet
-accepted. LE-3-A has not started: no lock snapshot, report, lock test, or verdict
-exists. The authorized continuation is TIME-1 measurement/guard/targeted process-
-spawn timeout budgets, then a canonical rerun and the original LE-3/LE-3-A gates.
+**Final Report:** LE-3 accepted after TIME-1. The clean canonical rerun passed
+187/187 files and 3,120/3,120 tests, exit 0; typecheck/build exited 0; catalogs are
+13/9; AUD-2 is compliant/T2. Verdict: `LE-3 Guarded Execution Seam: Accepted —
+Caleb rotates: bridged plans only, human-initiated, every step ledgered, the chain
+reconstructs from the record alone.` LE-3-A has not started: no lock snapshot,
+report, lock test, or lock verdict exists.
 
 ## ExecPlan - RA-R2 Runtime Rotation Plan Artifact Contract
 

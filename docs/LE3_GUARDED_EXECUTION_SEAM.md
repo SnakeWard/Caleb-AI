@@ -1,6 +1,6 @@
 # LE-3 Guarded Execution Seam
 
-Status: Implemented; acceptance pending TIME-1
+Status: Accepted
 
 Date: 2026-07-18
 
@@ -190,9 +190,15 @@ the existing 5-second timeout boundary; no LE-3 assertion failed. A serial
 diagnostic over those five files passed 47 of 48 tests and reproduced only the
 AUD-2 CLI timeout (about 6.1 seconds).
 
-The protocol requires a green canonical suite before LE-3-A. No timeout/config
-surface was authorized in LE-3, so no timeout was widened and no out-of-envelope
-test was edited. The implementation is committed with acceptance explicitly
-pending the separately authorized TIME-1 micro-pass. The
-`le3a_lock_prechange` snapshot, acceptance report, and lock test have not yet been
-created.
+The separately authorized TIME-1 micro-pass preserved every assertion, left
+`vitest.config.ts` byte-identical, and supplied measured local budgets to seven
+guarded tests. Its clean canonical rerun passed 187/187 files and 3,120/3,120
+tests, exit 0, in 317.41 seconds. Canonical typecheck and build exited 0; catalogs
+remain 13/9; AUD-2 was compliant/T2.
+
+LE-3 Guarded Execution Seam: Accepted — Caleb rotates: bridged plans only,
+human-initiated, every step ledgered, the chain reconstructs from the record
+alone.
+
+The `le3a_lock_prechange` snapshot, acceptance report, and lock test have not yet
+been created.

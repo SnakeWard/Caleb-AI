@@ -666,7 +666,7 @@ already matched the user's authority.
 **Convention:** every future pass appends one dated entry here as part of its
 completion report, including pre-change snapshot ID and suite counts at pass close.
 
-### 2026-07-18 — Pass LE-3 — Guarded Execution Seam (acceptance pending TIME-1)
+### 2026-07-18 — Pass LE-3 — Guarded Execution Seam (accepted)
 
 Protocol `fd3663c` is committed and pushed. Pre-change snapshot
 `snap_20260718T205307165Z_000390_milestone` was Ledgered and verified on disk
@@ -692,6 +692,13 @@ tests. LE-3 is implemented but not accepted. Its verified implementation is
 committed for repository safety with acceptance explicitly pending the separately
 authorized TIME-1 micro-pass. LE-3-A has not started (no snapshot, report, lock
 test, or verdict).
+
+TIME-1 subsequently cleared the canonical gate without changing any LE-3
+assertion or the global Vitest config. The clean rerun passed 187/187 files and
+3,120/3,120 tests, exit 0, in 317.41 seconds. LE-3 Guarded Execution Seam:
+Accepted — Caleb rotates: bridged plans only, human-initiated, every step ledgered,
+the chain reconstructs from the record alone. LE-3-A remains not yet started at
+this record point.
 
 ### 2026-07-18 — Pass TIME-1 — Process-Spawn Timeout Budgets (in progress)
 
