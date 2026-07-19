@@ -360,12 +360,18 @@ diagnostic. The protocol forbids Vitest/config changes and the LE-3 audit manife
 does not authorize those old tests, so changing their timeout would be an envelope
 deviation.
 
-**Final Report:** LE-3 accepted after TIME-1. The clean canonical rerun passed
-187/187 files and 3,120/3,120 tests, exit 0; typecheck/build exited 0; catalogs are
-13/9; AUD-2 is compliant/T2. Verdict: `LE-3 Guarded Execution Seam: Accepted —
-Caleb rotates: bridged plans only, human-initiated, every step ledgered, the chain
-reconstructs from the record alone.` LE-3-A has not started: no lock snapshot,
-report, lock test, or lock verdict exists.
+**Final Report:** LE-3 accepted after TIME-1. Its clean canonical rerun passed
+187/187 files and 3,120/3,120 tests, exit 0. LE-3-A snapshot
+`snap_20260719T000403360Z_000404_milestone` is Ledgered and verified. The
+docs/test-only lock passed 7/7 tests, its AUD-2 self-smoke was compliant/T2 across
+6 paths with zero violations, and the final canonical suite passed 188/188 files
+and 3,127/3,127 tests, exit 0, in 125.69 seconds. Typecheck/build exited 0 and
+catalogs remain 13/9. The combined report includes the exact verdicts, absence
+clause, detector evidence, JSONL reconstruction, and the verbatim 15-row RA-R1-D
+table. Verdicts: `LE-3 Guarded Execution Seam: Accepted — Caleb rotates: bridged
+plans only, human-initiated, every step ledgered, the chain reconstructs from the
+record alone.` `LE-3-A Execution Boundary Lock: Accepted — the first rotation's
+guardrails are now a protected surface.`
 
 ## ExecPlan - RA-R2 Runtime Rotation Plan Artifact Contract
 

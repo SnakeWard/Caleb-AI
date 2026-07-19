@@ -1,0 +1,25 @@
+{
+  "pass_id": "LE-3-A",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LE3_EXECUTION_BOUNDARY_ACCEPTANCE_REPORT.md",
+    "tests/acceptance/le3ExecutionBoundaryAcceptanceLock.test.ts",
+    "examples/audit/le3a-pass-manifest.valid.json"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/STATUS_LOG.md"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/**",
+    "tests/setup/**",
+    "tests/acceptance/le3GuardedExecutionAcceptance.test.ts",
+    "docs/LE3_GUARDED_EXECUTION_SEAM.md",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

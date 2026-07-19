@@ -700,7 +700,7 @@ Accepted — Caleb rotates: bridged plans only, human-initiated, every step ledg
 the chain reconstructs from the record alone. LE-3-A remains not yet started at
 this record point.
 
-### 2026-07-18 — Pass TIME-1 — Process-Spawn Timeout Budgets (in progress)
+### 2026-07-18 — Pass TIME-1 — Process-Spawn Timeout Budgets (accepted)
 
 LE-3 implementation commit `56544f4` is pushed and synchronized. TIME-1 snapshot
 `snap_20260718T220634787Z_000396_milestone` is Ledgered and verified. Six candidate
@@ -730,3 +730,27 @@ pathological canonical attempt produced 15 timeout-only failures across six file
 in 731.53 seconds; because it included existing 20–30 second budgets and unrelated
 in-process tests, no scope was widened from that sample. A clean unmodified rerun
 then passed 187/187 files and 3,120/3,120 tests in 317.41 seconds, exit 0.
+
+### 2026-07-19 — Pass LE-3-A — Execution Boundary Acceptance Lock (accepted)
+
+Pre-change snapshot `snap_20260719T000403360Z_000404_milestone` is Ledgered and
+verified on disk. LE-3-A is docs/test-only: the combined report carries the exact
+LE-3/LE-3-A verdicts, four detector names, absence clause, validation evidence,
+and the RA-R1-D 15-row Deliverable 1 table verbatim. The lock pins bridged-only,
+human-CLI-only, mandatory-Ledger, mock-only execution and demonstrates an in-memory
+synthetic weakening fires without writing it.
+
+The focused lock passed 1 file / 7 tests. Canonical typecheck and build exited 0;
+catalogs remain 13/9; AUD-2 self-smoke was compliant/T2 across 6 paths with zero
+violations. Two aggregate diagnostics exposed host-contention failures at
+3,124/3,127 and 3,125/3,127; every affected file passed serially and no scope was
+widened. The clean canonical run passed 188/188 files and 3,127/3,127 tests, exit
+0, in 125.69 seconds. The aggregate runs created verified, Ledgered validation
+snapshots `snap_20260719T001810822Z_000405_milestone`,
+`snap_20260719T002757874Z_000406_milestone`, and
+`snap_20260719T003746643Z_000407_milestone`; the last belongs to the accepted
+canonical run.
+
+LE-3-A Execution Boundary Lock: Accepted — the first rotation's guardrails are now
+a protected surface. The combined report carries the required 15-row table, so
+the oldest open report debt is discharged.
