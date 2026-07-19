@@ -779,3 +779,26 @@ seven-entry allowlist.
 LIVE-R1 Live Rotation Gate Chain: Accepted — live bindings are bridgeable with
 evidence and refused without it; budgets bind; nothing is ambient. LIVE-R2 waits
 on Pat's fresh explicit words.
+
+### 2026-07-19 — LIVE-R2 Event E1 — stopped at Planner provider failure
+
+Pat freshly authorized E1 only. Clean/synced preflight at `e1c64ac`; snapshot
+`snap_20260719T041007671Z_000414_milestone` Ledgered and verified. The committed
+E1 fixture bridged with complete live evidence. The Planner provider invocation
+returned no valid response; the seam halted at step 0 with
+`live_provider_invocation_failed`. Critic was not called. Tokens and spend were
+zero. No prompt, model, budget, or code changed and no retry occurred.
+
+Ledger-only reconstruction succeeded for the failed chain using bridge
+`bridge_99b4eefc-c6b4-4742-a1a8-8cd0a05e857c`, start
+`rotation_3dc74e51-7035-4904-bb21-3ab9a7f5c8dc`, and terminal
+`rotation_0617e657-1fb3-40e1-b5f2-33285f461534`. The record cannot diagnose the
+adapter's safe provider failure subclass because the runtime collapses it. The
+generic `API_KEY` also pre-existed in the inherited environment; the invocation
+shell verified it unset afterward, but new subprocesses inherit it again from the
+desktop parent. Both are recorded as findings.
+
+Post-event offline canonical validation passed 191/191 files and 3,135/3,135
+tests; typecheck and build exited 0. AUD-2 self-smoke was compliant/T2 across 5
+changed paths with zero violations. LIVE-R2 is not completed. E2 and any retry
+remain unauthorized pending Pat's next decision.

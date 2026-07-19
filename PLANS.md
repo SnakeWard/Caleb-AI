@@ -44,6 +44,40 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - LIVE-R2 Event E1 First Live Rotation
+
+**Objective:** Execute exactly one authorized single-cycle `planner_critic` event
+with both roles on `claude-haiku-4-5`, then reconstruct and report the event from
+the Ledger without retrying, changing prompts, or authorizing E2.
+
+**Source Of Truth:** `docs/protocols/PASS_PROTOCOL_LIVE_R1_R2.md`; Pat's fresh
+2026-07-19 authorization; committed E1 fixture and prompt templates.
+
+**Scope In:** clean/synced preflight; declared Anthropic credential; verified
+`live_r2_event_prechange` snapshot; one confirm-gated E1 invocation; Ledger-only
+reconstruction; post-event canonical validation; report, audit, commit, push.
+
+**Scope Out:** E2, retries, prompt/model/budget changes, code changes, dynamic
+sequencing, RA-X, display, additional provider calls.
+
+**Snapshot:** `snap_20260719T041007671Z_000414_milestone`, Ledgered and verified
+on disk.
+
+**Progress:** E1 bridged successfully and began execution. The Planner provider
+invocation failed before any valid response, token usage, artifact, or Critic
+call. The seam halted fail-closed. Ledger-only reconstruction returned `ok:true`
+for the failed chain. The invocation shell verified its declared credential was
+unset afterward; new subprocesses still inherit the generic `API_KEY` from the
+Codex parent, recorded as a credential-lifecycle deviation. No retry occurred.
+
+**Validation:** Post-event offline canonical suite 191/191 files and 3,135/3,135
+tests, exit 0. Canonical typecheck exit 0; build exit 0. AUD-2 recorded in the
+event report.
+
+**Final Report:** LIVE-R2 E1 attempted but not completed. The record proves the
+failed boundary, zero spend, and zero continuation; it does not prove a completed
+Planner/Critic exchange. E2 remains unauthorized.
+
 ## ExecPlan - LIVE-R1 Live Rotation Gate Chain
 
 **Objective:** Make live Planner/Critic bindings bridgeable only with complete

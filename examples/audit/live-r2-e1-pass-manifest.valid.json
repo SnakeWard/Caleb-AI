@@ -1,0 +1,23 @@
+{
+  "pass_id": "LIVE-R2-E1",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LIVE_R2_E1_EVENT_REPORT.md",
+    "examples/audit/live-r2-e1-pass-manifest.valid.json"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/STATUS_LOG.md"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/**",
+    "tests/**",
+    "examples/live-rotation/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}
