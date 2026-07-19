@@ -38,6 +38,38 @@ describe("Live Adapter Type Contracts", () => {
   it("valid request example passes", async () => expect(validateLiveAdapterRequest(await request()).ok).toBe(true));
   it("valid response example passes", async () => expect(validateLiveAdapterResponse(await response()).ok).toBe(true));
   it("valid failure example passes", async () => expect(validateLiveAdapterFailure(await failure()).ok).toBe(true));
+  it("accepts additive safe response telemetry only on a structured observer failure", async () => {
+    const item = await failure({
+      failure_kind: "observer_failure",
+      response_telemetry: {
+        provider_response_id: "msg_observer",
+        output_digest: `sha256:${"a".repeat(64)}`,
+        finish_reason: "end_turn",
+        token_usage: { input_tokens: 11, output_tokens: 7, total_tokens: 18, usage_available: true },
+        timing: {
+          started_at: "2026-07-19T00:00:00.000Z",
+          completed_at: "2026-07-19T00:00:01.000Z",
+          latency_ms: 1000,
+          timed_out: false
+        }
+      }
+    });
+    expect(validateLiveAdapterFailure(item)).toEqual({ ok: true, errors: [] });
+    expect(validateLiveAdapterFailure({
+      ...item,
+      response_telemetry: { ...item.response_telemetry, output_digest: "bad" }
+    }).errors).toContainEqual(expect.objectContaining({
+      code: "invalid_output_digest",
+      path: "$.response_telemetry.output_digest"
+    }));
+    expect(validateLiveAdapterFailure({
+      ...item,
+      response_telemetry: { ...item.response_telemetry, raw_output_text: "forbidden" }
+    }).errors).toContainEqual(expect.objectContaining({
+      code: "unexpected_field",
+      path: "$.response_telemetry.raw_output_text"
+    }));
+  });
   it("invalid trust promotion example fails", async () => expect(validateLiveAdapterResponse(await readJson("examples/modelBoundary/live-adapter-response.invalid.trust-promotion.json")).ok).toBe(false));
   it("non-object request fails", () => expect(validateLiveAdapterRequest(null).ok).toBe(false));
   it("non-object response fails", () => expect(validateLiveAdapterResponse(null).ok).toBe(false));

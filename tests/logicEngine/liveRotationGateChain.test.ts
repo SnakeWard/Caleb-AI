@@ -51,20 +51,10 @@ function invocation(): RoleRuntimeAdapterInvokeInput {
 }
 
 function artifactText(): string {
-  const input = invocation();
   return JSON.stringify({
-    schema_version: "0.1.0",
-    artifact_id: "planner_artifact_0",
-    artifact_type: "plan",
-    role_id: "planner",
-    task_id: input.task_id,
-    run_id: input.run_id,
-    trace_id: input.trace_id,
-    context_id: input.context_id,
     summary: "bounded test artifact",
     claims: [], assumptions: [], constraints: [], open_questions: [], recommendations: [],
-    evidence_refs: [], confidence: 0.5, handoff_notes: [], required_next_role: "critic",
-    acceptance_status: "accepted", created_at: "2026-07-19T00:00:00.000Z"
+    evidence_refs: [], confidence: 0.5, handoff_notes: [], acceptance_status: "accepted"
   });
 }
 
@@ -150,6 +140,10 @@ describe("LIVE-R1 gate chain", () => {
     });
     expect((await observerRuntime.adapter.invoke(invocation())).ok).toBe(false);
     expect(observerRuntime.tracker.state().failure_code).toBe("live_observer_artifact_invalid");
+    expect(observerRuntime.tracker.state().invocations[0]).toMatchObject({
+      observer_failure_stage: "json_parse",
+      observer_validation_issues: [{ code: "invalid_json", path: "$" }]
+    });
 
     const evidence = await fixtureEvidence() as Record<string, any>;
     evidence.role_bindings[0].budget.timeout_ms = 5;

@@ -23,3 +23,7 @@ export function createInvocationId(): string {
 export function createExecutionId(): string {
   return `execution_${randomUUID()}`;
 }
+
+export function createArtifactId(): string {
+  return `artifact_${randomUUID()}`;
+}

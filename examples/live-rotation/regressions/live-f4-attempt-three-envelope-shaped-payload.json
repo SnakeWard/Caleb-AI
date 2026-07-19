@@ -1,0 +1,22 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_id": "model_manufactured_attempt_three_shape",
+  "artifact_type": "plan",
+  "role_id": "planner",
+  "task_id": "task_223e4567-e89b-42d3-a456-426614174101",
+  "run_id": "run_223e4567-e89b-42d3-a456-426614174102",
+  "trace_id": "trace_126114d0-10d5-5a69-ab64-392ce6f3a963",
+  "context_id": "context_live_r2_e1",
+  "summary": "Envelope-shaped regression content.",
+  "claims": [],
+  "assumptions": [],
+  "constraints": [],
+  "open_questions": [],
+  "recommendations": [],
+  "evidence_refs": [],
+  "confidence": 0.5,
+  "handoff_notes": [],
+  "required_next_role": "critic",
+  "acceptance_status": "accepted",
+  "created_at": "2026-07-19T13:34:50.000Z"
+}

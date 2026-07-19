@@ -44,6 +44,94 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - LIVE-F4 Runtime Artifact Authority Repair
+
+**Objective:** Make models produce strictly bounded semantic content while Caleb
+constructs authoritative RoleArtifact identity; preserve two-artifact provenance,
+post-response failure telemetry, and safe staged diagnostics.
+
+**Source Authority:** Pat's 2026-07-19 LIVE-F4 authorization with Amendments
+A1–D; committed `docs/protocols/PASS_PROTOCOL_LIVE_F4.md` at `4158061`.
+
+**Current State:** E1 attempt three reached an Anthropic response and halted at
+Planner observer validation. LIVE-F3 proved the runtime expected a complete
+model-manufactured RoleArtifact, discarded field-level errors, and replaced
+parsed billable response metadata with zero fallback telemetry.
+
+**Scope:** Closed semantic payload contract and validator; runtime-owned envelope
+builder and UUID artifact ID; exact required-next-role identity check; T0 raw and
+T1 canonical digest lineage through Role Runtime, Ledger, reconstruction, and M3;
+additive optional failure response telemetry; four safe validation stages;
+attempt-three regression fixture; prompt contract alignment; offline tests,
+report, audit, status, and snapshots.
+
+**Out of Scope:** Live calls/retries, transport behavior, fetch/endpoints/headers,
+credential closures/config, models/budgets, CLI, routes, registries, catalogs,
+dependencies, validator loosening, display, E2, and historical Ledger rewriting.
+
+**Files Expected To Change:** Semantic payload types/validator; live envelope and
+runtime adapter; central ID factory; additive live adapter failure contract and
+Anthropic/xAI result paths; Role Runtime provenance; rotation seam Ledger and
+reconstruction; M3 lineage gate; prompts/digest fixtures; focused tests/report/
+manifest; `PLANS.md`, `docs/STATUS_LOG.md`, and append-only snapshot Ledger.
+
+**Risk Level:** High — trust-boundary, storage-lineage, provider-result contract,
+and Ledger changes, with transport and live execution explicitly excluded.
+
+**Snapshot / Rollback Plan:** Protocol and preserved attempt-three evidence are
+committed/pushed at `4158061`. Pre-change snapshot
+`snap_20260719T140753751Z_000424_milestone` is Ledgered and verified. Because the
+snapshot manager captures its fixed 18-file foundation set, Git commit `4158061`
+is the complete mechanical rollback anchor for LIVE-F4's authorized files.
+
+**Implementation Steps:** Define and validate the semantic payload; construct and
+validate the runtime envelope; carry raw digest provenance into canonical storage
+and Ledger reconstruction; add the M3 digest resolver; add optional safe failure
+telemetry to both observers; preserve it in seam accounting; align prompts; add
+all A1–D fixtures/detectors; validate/audit; commit/push; STOP.
+
+**Validation Commands:** Focused LIVE-F4/provider/M3/Role Runtime/seam tests;
+canonical `npm test`; `node ./node_modules/typescript/bin/tsc --noEmit`;
+`npm run build`; catalog listings; AUD-2 self-smoke; redaction/egress/transport
+diff checks; snapshot verification; final clean/synchronized Git.
+
+**Acceptance Criteria:** Model envelope fields cannot cross the payload gate;
+Caleb-owned identity and next-role values are exact; strict full validator stays
+unchanged; raw/canonical digests are linked and resolvable; HTTP-success observer
+failure records real response metadata and spend; empty telemetry is no-response
+only; all four safe stages fire; attempt three is a permanent regression; no raw
+text or transport/config drift; complete offline validation green.
+
+**Progress Log:** Protocol/evidence commit `4158061` pushed. Pre-change baseline
+passed 195 files / 3,157 tests. Snapshot verified. Semantic validator, runtime
+envelope, artifact UUID, digest lineage, M3 resolver, additive failure telemetry,
+stage diagnostics, prompt alignment, and A1–D detectors are implemented. Focused
+validation passed 8 files / 88 tests; widened regressions passed 14 files / 134
+tests; canonical suite passed 197 files / 3,173 tests in 110.72 seconds.
+Governed typecheck/build exited 0; catalogs remain 13/9. AUD-2 is compliant/T2
+with zero violations. Provider transport hashes are unchanged and egress remains
+two sites. Validation snapshot `snap_20260719T142922696Z_000426_milestone` is
+Ledgered and verified.
+
+**Decision Log:** Provider bytes remain the T0 witness and are stored unchanged.
+The canonical RoleArtifact is a distinct Caleb-authored object. Invocation Ledger
+provenance uses `derived_from` raw digests; the existing ledger-ID lineage resolver
+is not weakened, and a separate M3 digest resolver walks content-addressed T0
+evidence. Failure telemetry is closed, additive, and present only when response
+metadata actually exists.
+
+**Surprises / Discoveries:** Attempt three's exact output bytes and validator
+errors remain unrecoverable by design of the old path. Its permanent fixture
+therefore reproduces the former full-envelope contract shape without fabricating
+provider prose.
+
+**Final Report:** LIVE-F4 is accepted offline. Models can supply only a strict
+semantic payload; Caleb constructs and verifies the authoritative RoleArtifact.
+T0 raw and canonical digests are explicitly linked and reconstructable; observer
+failures after HTTP success retain real response telemetry and safe code/path
+diagnostics. No live call, retry, transport drift, validator loosening, or
+protected-surface change occurred.
+
 ## ExecPlan - LIVE-F2 Execution-Instance Ledger Identity Repair
 
 **Objective:** Give every guarded rotation attempt a unique seam-minted

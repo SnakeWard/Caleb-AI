@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { validateLiveAdapterRequest } from "../modelBoundary/liveAdapterContractValidator.js";
 import type {
   LiveAdapterFailure,
+  LiveAdapterFailureResponseTelemetry,
   LiveAdapterFailureKind,
   LiveAdapterRequest,
   LiveAdapterResponse,
@@ -99,7 +100,8 @@ export function createAnthropicLiveAdapter(
     status: FailureStatus,
     retryable: boolean,
     errors: readonly string[],
-    warnings: readonly string[] = []
+    warnings: readonly string[] = [],
+    responseTelemetry?: LiveAdapterFailureResponseTelemetry
   ): LiveAdapterResult {
     const record: LiveAdapterFailure = {
       schema_version: "0.1.0",
@@ -116,6 +118,13 @@ export function createAnthropicLiveAdapter(
       retryable,
       warnings,
       errors,
+      ...(responseTelemetry === undefined ? {} : {
+        response_telemetry: {
+          ...responseTelemetry,
+          token_usage: { ...responseTelemetry.token_usage },
+          timing: { ...responseTelemetry.timing }
+        }
+      }),
       trust_summary: buildLiveAdapterTrustSummary(false),
       created_at: now().toISOString()
     };
@@ -329,17 +338,34 @@ export function createAnthropicLiveAdapter(
     }
 
     if (deps.normalized_output_observer !== undefined) {
+      const responseTelemetry: LiveAdapterFailureResponseTelemetry = {
+        provider_response_id: typeof body.id === "string" ? body.id : null,
+        output_digest: computeSha256Digest(outputText),
+        finish_reason: stopReason,
+        token_usage: {
+          input_tokens: inputTokens,
+          output_tokens: outputTokens,
+          total_tokens: inputTokens + outputTokens,
+          usage_available: usageAvailable
+        },
+        timing: {
+          started_at: timing.startedAt,
+          completed_at: now().toISOString(),
+          latency_ms: timing.latencyMs,
+          timed_out: false
+        }
+      };
       try {
         const observation = await deps.normalized_output_observer(outputText);
         if (!observation.ok) {
           return failure(request, "observer_failure", "failed", false, [
             "normalized_output_observer_failed"
-          ]);
+          ], [], responseTelemetry);
         }
       } catch {
         return failure(request, "observer_failure", "failed", false, [
           "normalized_output_observer_failed"
-        ]);
+        ], [], responseTelemetry);
       }
     }
 

@@ -869,3 +869,40 @@ widened LIVE-R1/F1 matrix passed 9 / 69; canonical offline validation passed
 195 files / 3,157 tests in 92.77 seconds. Typecheck/build exited 0; catalogs are
 13/9. AUD-2 was compliant/T2 across 19 paths with zero violations. No live call
 or provider/CLI/transport/prompt/config change occurred.
+
+### 2026-07-19 — LIVE-F4 — runtime artifact authority repair
+
+Protocol and the preserved third E1 attempt records are committed/pushed at
+`4158061`. Pre-change snapshot
+`snap_20260719T140753751Z_000424_milestone` is Ledgered and verified. LIVE-F4
+makes the model/provider boundary accept only a closed, recursively bounded
+semantic payload. Caleb now constructs schema/version, UUID artifact identity,
+role/type, task/run/trace/context identity, route-derived next role, time, and
+trace/context references, then passes the unchanged strict RoleArtifact validator
+and an exact invocation-identity gate.
+
+Normalized semantic bytes remain T0 M3 evidence. The canonical runtime-built
+artifact has its own digest, and its invocation Ledger provenance records
+`derived_from` with the raw digest. JSONL reconstruction preserves the link and a
+separate M3 digest-lineage gate walks it without weakening the existing ledger-ID
+lineage resolver.
+
+`LiveAdapterFailure` now has a closed additive response-telemetry block. An
+HTTP-success observer rejection retains provider response ID, digest, token usage,
+timing, and estimated spend; zero fallback telemetry is reserved for calls with
+no response metadata. Four code/path-only diagnostic stages are locked:
+`json_parse`, `payload_validation`, `envelope_validation`, and
+`identity_mismatch`. A permanent attempt-three envelope-shaped fixture is refused
+at the payload gate without inventing the unrecoverable historical prose.
+
+Focused validation passed 8 files / 88 tests; widened regressions passed 14 / 134;
+canonical offline validation passed 197 files / 3,173 tests in 110.72 seconds.
+Typecheck/build exited 0; catalogs remain 13/9; AUD-2 is compliant/T2. Anthropic
+and xAI transport-function hashes are byte-identical to `4158061`, egress remains
+two sites, and protected diffs are empty. Validation snapshot
+`snap_20260719T142922696Z_000426_milestone` is Ledgered and verified. No live call
+or E1 retry occurred.
+
+LIVE-F4 Runtime Artifact Authority: Accepted — models supply bounded semantic
+content; Caleb owns identity, route, time, and reconstructable provenance; a
+billable observer failure can no longer masquerade as zero telemetry. STOP.

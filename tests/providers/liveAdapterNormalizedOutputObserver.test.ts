@@ -67,7 +67,21 @@ describe("Amendment A normalized-output observer", () => {
       normalized_output_observer: () => ({ ok: false, failure_code: "observer_failure" })
     }).invokeLive({ request, prompt_text: "bounded" });
     expect(failed.ok).toBe(false);
-    if (!failed.ok) expect(failed.failure.failure_kind).toBe("observer_failure");
+    if (!failed.ok) {
+      expect(failed.failure.failure_kind).toBe("observer_failure");
+      expect(failed.failure.response_telemetry).toMatchObject({
+        provider_response_id: "msg_observer",
+        finish_reason: "end_turn",
+        token_usage: {
+          input_tokens: 4,
+          output_tokens: 2,
+          total_tokens: 6,
+          usage_available: true
+        }
+      });
+      expect(failed.failure.response_telemetry?.output_digest).toMatch(/^sha256:[a-f0-9]{64}$/);
+      expect(failed.failure.response_telemetry?.timing.latency_ms).toBeGreaterThanOrEqual(0);
+    }
     expect(JSON.stringify(failed)).not.toContain(marker);
   });
 
@@ -102,5 +116,21 @@ describe("Amendment A normalized-output observer", () => {
     expect(observed).not.toContain(reasoningMarker);
     expect(JSON.stringify(result)).not.toContain(marker);
     expect(JSON.stringify(result)).not.toContain(reasoningMarker);
+
+    const failed = await createGrokLiveAdapter(config, gates, {
+      credential_provider: () => "test-only-key",
+      fetch_impl: fetchImpl,
+      normalized_output_observer: () => ({ ok: false, failure_code: "observer_failure" })
+    }).invokeLive({ request, prompt_text: "bounded" });
+    expect(failed.ok).toBe(false);
+    if (!failed.ok) {
+      expect(failed.failure.response_telemetry).toMatchObject({
+        provider_response_id: "chatcmpl_observer",
+        finish_reason: "stop",
+        token_usage: { input_tokens: 4, output_tokens: 2, total_tokens: 6 }
+      });
+    }
+    expect(JSON.stringify(failed)).not.toContain(marker);
+    expect(JSON.stringify(failed)).not.toContain(reasoningMarker);
   });
 });

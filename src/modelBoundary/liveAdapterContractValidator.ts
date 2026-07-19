@@ -7,7 +7,7 @@ import type {
 } from "./types/liveAdapterTypes.js";
 
 const providerKinds = new Set(["openai_compatible", "anthropic_compatible", "google_compatible", "xai_compatible", "local_compatible", "custom_compatible"]);
-const failureKinds = new Set(["adapter_unavailable", "missing_api_key", "invalid_request", "provider_timeout", "provider_rate_limited", "provider_auth_failed", "provider_rejected_request", "provider_malformed_response", "response_validation_failed", "safety_profile_blocked", "network_failure", "unknown_provider_error"]);
+const failureKinds = new Set(["adapter_unavailable", "missing_api_key", "invalid_request", "provider_timeout", "provider_rate_limited", "provider_auth_failed", "provider_rejected_request", "provider_malformed_response", "response_validation_failed", "safety_profile_blocked", "network_failure", "observer_failure", "unknown_provider_error"]);
 const failureStatuses = new Set(["failed", "rejected", "timeout", "rate_limited", "auth_failed", "safety_blocked", "validation_failed", "adapter_unavailable"]);
 const blockedFields = new Set(["raw_prompt_text", "prompt_text", "raw_output_text", "output_text", "api_key", "secret", "env", "environment"]);
 
@@ -21,6 +21,20 @@ function isNonEmptyString(value: unknown): value is string {
 
 function issue(code: string, path: string, message: string): LiveAdapterValidationIssue {
   return { code, path, message, severity: "error" };
+}
+
+function rejectUnexpectedFields(
+  input: Record<string, unknown>,
+  allowed: readonly string[],
+  path: string,
+  errors: LiveAdapterValidationIssue[]
+): void {
+  const allowedSet = new Set(allowed);
+  for (const field of Object.keys(input)) {
+    if (!allowedSet.has(field)) {
+      errors.push(issue("unexpected_field", `${path}.${field}`, `${field} is not allowed in ${path}.`));
+    }
+  }
 }
 
 function rejectBlockedTopLevel(input: Record<string, unknown>, errors: LiveAdapterValidationIssue[]): void {
@@ -97,19 +111,78 @@ function validateTrust(value: unknown, validationStatus: unknown, errors: LiveAd
   if (!Array.isArray(value["notes"])) errors.push(issue("invalid_array", "$.trust_summary.notes", "notes must be an array."));
 }
 
-function validateUsage(value: unknown, errors: LiveAdapterValidationIssue[]): void {
-  if (!isObject(value)) { errors.push(issue("invalid_object", "$.token_usage", "token_usage must be an object.")); return; }
+function validateUsage(value: unknown, errors: LiveAdapterValidationIssue[], path = "$.token_usage"): void {
+  if (!isObject(value)) { errors.push(issue("invalid_object", path, "token_usage must be an object.")); return; }
   for (const field of ["input_tokens", "output_tokens", "total_tokens"]) {
-    if (typeof value[field] !== "number" || value[field] < 0) errors.push(issue("invalid_token_count", `$.token_usage.${field}`, `${field} must be >= 0.`));
+    if (typeof value[field] !== "number" || value[field] < 0) errors.push(issue("invalid_token_count", `${path}.${field}`, `${field} must be >= 0.`));
   }
-  if (typeof value["usage_available"] !== "boolean") errors.push(issue("invalid_boolean", "$.token_usage.usage_available", "usage_available must be boolean."));
+  if (typeof value["usage_available"] !== "boolean") errors.push(issue("invalid_boolean", `${path}.usage_available`, "usage_available must be boolean."));
 }
 
-function validateTiming(value: unknown, errors: LiveAdapterValidationIssue[]): void {
-  if (!isObject(value)) { errors.push(issue("invalid_object", "$.timing", "timing must be an object.")); return; }
-  requireStrings(value, ["started_at", "completed_at"], errors, "$.timing");
-  if (typeof value["latency_ms"] !== "number" || value["latency_ms"] < 0) errors.push(issue("invalid_latency", "$.timing.latency_ms", "latency_ms must be >= 0."));
-  if (typeof value["timed_out"] !== "boolean") errors.push(issue("invalid_boolean", "$.timing.timed_out", "timed_out must be boolean."));
+function validateTiming(value: unknown, errors: LiveAdapterValidationIssue[], path = "$.timing"): void {
+  if (!isObject(value)) { errors.push(issue("invalid_object", path, "timing must be an object.")); return; }
+  requireStrings(value, ["started_at", "completed_at"], errors, path);
+  if (typeof value["latency_ms"] !== "number" || value["latency_ms"] < 0) errors.push(issue("invalid_latency", `${path}.latency_ms`, "latency_ms must be >= 0."));
+  if (typeof value["timed_out"] !== "boolean") errors.push(issue("invalid_boolean", `${path}.timed_out`, "timed_out must be boolean."));
+}
+
+function validateFailureResponseTelemetry(
+  value: unknown,
+  errors: LiveAdapterValidationIssue[]
+): void {
+  if (value === undefined) return;
+  if (!isObject(value)) {
+    errors.push(issue("invalid_object", "$.response_telemetry", "response_telemetry must be an object."));
+    return;
+  }
+  rejectUnexpectedFields(
+    value,
+    ["provider_response_id", "output_digest", "finish_reason", "token_usage", "timing"],
+    "$.response_telemetry",
+    errors
+  );
+  if (value["provider_response_id"] !== null && !isNonEmptyString(value["provider_response_id"])) {
+    errors.push(issue(
+      "invalid_provider_response_id",
+      "$.response_telemetry.provider_response_id",
+      "provider_response_id must be null or a non-empty string."
+    ));
+  }
+  if (
+    typeof value["output_digest"] !== "string" ||
+    !/^sha256:[a-f0-9]{64}$/.test(value["output_digest"])
+  ) {
+    errors.push(issue(
+      "invalid_output_digest",
+      "$.response_telemetry.output_digest",
+      "output_digest must be a SHA-256 digest."
+    ));
+  }
+  if (!isNonEmptyString(value["finish_reason"])) {
+    errors.push(issue(
+      "invalid_finish_reason",
+      "$.response_telemetry.finish_reason",
+      "finish_reason must be a non-empty string."
+    ));
+  }
+  if (isObject(value["token_usage"])) {
+    rejectUnexpectedFields(
+      value["token_usage"],
+      ["input_tokens", "output_tokens", "total_tokens", "usage_available"],
+      "$.response_telemetry.token_usage",
+      errors
+    );
+  }
+  if (isObject(value["timing"])) {
+    rejectUnexpectedFields(
+      value["timing"],
+      ["started_at", "completed_at", "latency_ms", "timed_out"],
+      "$.response_telemetry.timing",
+      errors
+    );
+  }
+  validateUsage(value["token_usage"], errors, "$.response_telemetry.token_usage");
+  validateTiming(value["timing"], errors, "$.response_telemetry.timing");
 }
 
 function validateRetry(value: unknown, path: string, errors: LiveAdapterValidationIssue[]): void {
@@ -176,6 +249,7 @@ export function validateLiveAdapterFailure(input: unknown): LiveAdapterValidatio
   if (typeof input["retryable"] !== "boolean") errors.push(issue("invalid_boolean", "$.retryable", "retryable must be boolean."));
   if (!Array.isArray(input["warnings"])) errors.push(issue("invalid_array", "$.warnings", "warnings must be an array."));
   if (!Array.isArray(input["errors"])) errors.push(issue("invalid_array", "$.errors", "errors must be an array."));
+  validateFailureResponseTelemetry(input["response_telemetry"], errors);
   validateTrust(input["trust_summary"], "raw", errors);
   if (isObject(input["trust_summary"]) && input["trust_summary"]["schema_valid_provider_output_trust_tier"] !== "T0") {
     errors.push(issue("failure_trust_above_t0", "$.trust_summary.schema_valid_provider_output_trust_tier", "failed provider output must remain T0."));

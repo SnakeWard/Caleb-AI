@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import {
+  createArtifactId,
   createExecutionId,
   createInvocationId,
   createLedgerId,
@@ -17,7 +18,8 @@ const ID_FORMAT: Record<string, RegExp> = {
   invocation:
     /^invocation_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
   execution:
-    /^execution_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+    /^execution_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
+  artifact: /^artifact_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 };
 
 const FACTORY_CASES = [
@@ -26,7 +28,8 @@ const FACTORY_CASES = [
   ["createRunId", createRunId, "run"],
   ["createTraceId", createTraceId, "trace"],
   ["createInvocationId", createInvocationId, "invocation"],
-  ["createExecutionId", createExecutionId, "execution"]
+  ["createExecutionId", createExecutionId, "execution"],
+  ["createArtifactId", createArtifactId, "artifact"]
 ] as const;
 
 describe("idFactory", () => {
@@ -56,7 +59,8 @@ describe("idFactory", () => {
         ...Array.from({ length: 20 }, () => freshModule.createRunId()),
         ...Array.from({ length: 20 }, () => freshModule.createTraceId()),
         ...Array.from({ length: 20 }, () => freshModule.createInvocationId()),
-        ...Array.from({ length: 20 }, () => freshModule.createExecutionId())
+        ...Array.from({ length: 20 }, () => freshModule.createExecutionId()),
+        ...Array.from({ length: 20 }, () => freshModule.createArtifactId())
       ];
 
       for (const id of secondBatch) {

@@ -14,6 +14,7 @@ export type RoleRuntimeFailureCode =
   | "adapter_invocation_failed"
   | "raw_storage_failed"
   | "artifact_validation_failed"
+  | "artifact_lineage_invalid"
   | "handoff_gate_blocked"
   | "handoff_gate_invalid"
   | "context_assembly_failed"
@@ -33,6 +34,7 @@ export interface RoleRuntimeInvocationRecord {
   readonly adapter_kind: RotationPlanAdapterKind;
   readonly artifact_digest: Sha256Digest;
   readonly artifact_id: string;
+  readonly derived_from?: readonly Sha256Digest[];
   readonly context_refs: readonly RoleRuntimeContextRef[];
   readonly validation_status: "schema_valid" | "raw_rejected";
   readonly trust_tier: "T1";
@@ -64,6 +66,7 @@ export interface ReconstructedRotationStep {
   readonly role_id: RoleId;
   readonly adapter_id: string;
   readonly artifact_digest: Sha256Digest;
+  readonly derived_from?: readonly Sha256Digest[];
   readonly context_refs: readonly RoleRuntimeContextRef[];
 }
 

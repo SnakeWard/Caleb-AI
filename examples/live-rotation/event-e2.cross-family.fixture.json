@@ -51,12 +51,12 @@
         "planner": {
           "template_id": "live_rotation_planner_v1",
           "path": "examples/live-rotation/prompts/planner.prompt.txt",
-          "sha256_digest": "sha256:2f4b5cf9ba859b70735c8148970fcc536390e8037204c93da0bc28819d5b9973"
+          "sha256_digest": "sha256:8407f826668198c871da24fa9db9323c588aa6805d392d317fef6be090884697"
         },
         "critic": {
           "template_id": "live_rotation_critic_v1",
           "path": "examples/live-rotation/prompts/critic.prompt.txt",
-          "sha256_digest": "sha256:95b5b6fc2e26b8832cd4fee00004574bfa2b8daf8fa764c342a62807d8987594"
+          "sha256_digest": "sha256:27d169bbc002d2bcdcab89ac6df60f481e6311c015600883ed000a1f8031dd54"
         }
       },
       "role_bindings": [

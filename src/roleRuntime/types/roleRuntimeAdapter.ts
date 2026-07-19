@@ -30,6 +30,9 @@ export interface RoleRuntimeAdapterInvokeResult {
   readonly ok: boolean;
   readonly status: "completed" | "failed";
   readonly artifact: unknown;
+  readonly artifact_provenance?: {
+    readonly derived_from: readonly Sha256Digest[];
+  };
   readonly failure_code?: RoleRuntimeAdapterFailureCode;
 }
 

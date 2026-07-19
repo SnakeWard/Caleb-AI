@@ -150,6 +150,11 @@ describe("LIVE-F1 provider failure taxonomy", () => {
     });
     expect(tracker.state().invocations[0]).toMatchObject({
       failure_code: "live_provider_invocation_failed",
+      provider_response_id: null,
+      input_tokens: 0,
+      output_tokens: 0,
+      total_tokens: 0,
+      estimated_spend_usd: 0,
       provider_failure_kind: null,
       provider_failure_status: null,
       provider_failure_retryable: null

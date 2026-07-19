@@ -17,6 +17,10 @@ import type { CalebError } from "../types/invocation.js";
 import type { LedgerEntry } from "../types/ledger.js";
 import type { BridgedExecutablePlan } from "./rotationPlanBridge.js";
 import { validateLiveRotationGateEvidence } from "./liveRotationGateEvidence.js";
+import type {
+  LiveRoleArtifactFailureStage,
+  LiveRoleArtifactSafeIssue
+} from "./liveRoleArtifactEnvelope.js";
 
 type LiveRotationRuntimeFailureCode =
   | "live_prompt_template_digest_mismatch"
@@ -48,11 +52,14 @@ interface LiveRotationInvocationTelemetry {
   readonly total_tokens: number;
   readonly estimated_spend_usd: number;
   readonly latency_ms: number;
+  readonly provider_response_id: string | null;
   readonly budget: { readonly max_tokens: number; readonly timeout_ms: number; readonly max_response_bytes: number };
   readonly failure_code: LiveRotationRuntimeFailureCode | null;
   readonly provider_failure_kind: string | null;
   readonly provider_failure_status: string | null;
   readonly provider_failure_retryable: boolean | null;
+  readonly observer_failure_stage: LiveRoleArtifactFailureStage | null;
+  readonly observer_validation_issues: readonly LiveRoleArtifactSafeIssue[];
 }
 
 interface LiveRotationRuntimeState {
@@ -145,6 +152,7 @@ export interface ReconstructedRotationLedgerInvocation {
   readonly role_id: string;
   readonly adapter_id: string;
   readonly artifact_digest: Sha256Digest;
+  readonly derived_from: readonly Sha256Digest[];
   readonly context_refs: readonly RoleRuntimeContextRef[];
   readonly lineage_refs: readonly string[];
   readonly provider_id: string | null;
@@ -156,6 +164,7 @@ export interface ReconstructedRotationLedgerInvocation {
   readonly output_tokens: number | null;
   readonly total_tokens: number | null;
   readonly estimated_spend_usd: number | null;
+  readonly provider_response_id: string | null;
 }
 
 export interface ReconstructedRotationLedgerChain {
@@ -821,6 +830,7 @@ function buildInvocationLedgerEntry(input: {
     adapter_kind: input.record.adapter_kind,
     artifact_digest: input.record.artifact_digest,
     artifact_id: input.record.artifact_id,
+    derived_from: [...(input.record.derived_from ?? [])],
     context_refs: input.record.context_refs.map((ref) => ({ ...ref })),
     validation_status: input.record.validation_status,
     handoff_gate_status: input.record.handoff_gate_status,
@@ -838,6 +848,7 @@ function buildInvocationLedgerEntry(input: {
           total_tokens: input.live_telemetry.total_tokens,
           estimated_spend_usd: input.live_telemetry.estimated_spend_usd,
           latency_ms: input.live_telemetry.latency_ms,
+          provider_response_id: input.live_telemetry.provider_response_id,
           budget: { ...input.live_telemetry.budget }
         })
   };
@@ -852,7 +863,10 @@ function buildInvocationLedgerEntry(input: {
       result,
       errors: [],
       parent_refs: [input.bridge_entry.ledger_id, input.start_entry.ledger_id, input.plan.plan_id],
-      artifact_refs: [input.record.artifact_id]
+      artifact_refs: [
+        input.record.artifact_id,
+        ...(input.record.derived_from ?? []).map((digest) => `raw-output:${digest}`)
+      ]
     }),
     actor_type: "model",
     actor_id: input.record.role_id,
@@ -863,7 +877,12 @@ function buildInvocationLedgerEntry(input: {
         artifact_id: input.record.artifact_id,
         hash: input.record.artifact_digest,
         algorithm: "sha256"
-      }
+      },
+      ...(input.record.derived_from ?? []).map((digest) => ({
+        artifact_id: `raw-output:${digest}`,
+        hash: digest,
+        algorithm: "sha256" as const
+      }))
     ],
     provenance: {
       execution_seam_version: ROTATION_EXECUTION_SEAM_SCHEMA_VERSION,
@@ -871,7 +890,8 @@ function buildInvocationLedgerEntry(input: {
       bridge_ledger_id: input.bridge_entry.ledger_id,
       derived_plan_digest: input.plan_digest,
       source_runtime_rotation_plan_id: input.plan.source_runtime_rotation_plan_id,
-      lineage_refs: [input.plan.source_runtime_rotation_plan_id, input.plan.plan_id]
+      lineage_refs: [input.plan.source_runtime_rotation_plan_id, input.plan.plan_id],
+      derived_from: [...(input.record.derived_from ?? [])]
     },
     verification_status: "verified",
     trust_tier: "T1"
@@ -936,11 +956,14 @@ function buildTerminalLedgerEntry(input: {
               total_tokens: entry.total_tokens,
               estimated_spend_usd: entry.estimated_spend_usd,
               latency_ms: entry.latency_ms,
+              provider_response_id: entry.provider_response_id,
               budget: { ...entry.budget },
               failure_code: entry.failure_code,
               provider_failure_kind: entry.provider_failure_kind,
               provider_failure_status: entry.provider_failure_status,
-              provider_failure_retryable: entry.provider_failure_retryable
+              provider_failure_retryable: entry.provider_failure_retryable,
+              observer_failure_stage: entry.observer_failure_stage,
+              observer_validation_issues: entry.observer_validation_issues.map((issue) => ({ ...issue }))
             })),
             live_totals: { ...input.live_state.totals },
             live_run_budget: input.plan.live_rotation_gate_evidence === undefined
@@ -1077,6 +1100,8 @@ function parseReconstructedInvocation(
   const roleId = resultString(entry, "role_id");
   const adapterId = resultString(entry, "adapter_id");
   const artifactDigest = resultString(entry, "artifact_digest");
+  const resultDerivedFrom = optionalResultStringArray(entry, "derived_from");
+  const provenanceDerivedFrom = optionalProvenanceStringArray(entry, "derived_from");
   const contextRefs = resultContextRefs(entry);
   const lineageRefs = provenanceStringArray(entry, "lineage_refs");
   if (
@@ -1085,7 +1110,10 @@ function parseReconstructedInvocation(
     adapterId === null ||
     artifactDigest === null ||
     contextRefs === null ||
-    lineageRefs === null
+    lineageRefs === null ||
+    resultDerivedFrom === null ||
+    provenanceDerivedFrom === null ||
+    !sameStrings(resultDerivedFrom, provenanceDerivedFrom)
   ) {
     return null;
   }
@@ -1096,6 +1124,7 @@ function parseReconstructedInvocation(
     role_id: roleId,
     adapter_id: adapterId,
     artifact_digest: artifactDigest,
+    derived_from: provenanceDerivedFrom,
     context_refs: contextRefs,
     lineage_refs: lineageRefs,
     provider_id: resultNullableString(entry, "provider_id"),
@@ -1106,7 +1135,8 @@ function parseReconstructedInvocation(
     input_tokens: resultOptionalNumber(entry, "input_tokens"),
     output_tokens: resultOptionalNumber(entry, "output_tokens"),
     total_tokens: resultOptionalNumber(entry, "total_tokens"),
-    estimated_spend_usd: resultOptionalNumber(entry, "estimated_spend_usd")
+    estimated_spend_usd: resultOptionalNumber(entry, "estimated_spend_usd"),
+    provider_response_id: resultNullableString(entry, "provider_response_id")
   };
 }
 
@@ -1182,6 +1212,33 @@ function resultNullableString(entry: LedgerEntry, key: string): string | null {
   }
   const value = entry.result[key];
   return value === null ? null : typeof value === "string" ? value : null;
+}
+
+function optionalResultStringArray(entry: LedgerEntry, key: string): readonly string[] | null {
+  if (!isObject(entry.result)) {
+    return null;
+  }
+  const value = entry.result[key];
+  if (value === undefined) {
+    return [];
+  }
+  return Array.isArray(value) && value.every((item) => typeof item === "string")
+    ? value
+    : null;
+}
+
+function optionalProvenanceStringArray(entry: LedgerEntry, key: string): readonly string[] | null {
+  const value = entry.provenance[key];
+  if (value === undefined) {
+    return [];
+  }
+  return Array.isArray(value) && value.every((item) => typeof item === "string")
+    ? value
+    : null;
+}
+
+function sameStrings(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
 }
 
 function provenanceStringArray(entry: LedgerEntry, key: string): readonly string[] | null {

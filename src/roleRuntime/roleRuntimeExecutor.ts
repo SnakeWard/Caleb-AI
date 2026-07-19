@@ -2,6 +2,7 @@ import { validateRoleArtifact } from "../roles/roleArtifactValidator.js";
 import { validateRoleHandoffGate } from "../roles/roleHandoffGate.js";
 import type { RoleHandoffEnvelope } from "../roles/types/roleHandoff.js";
 import { ROLE_ARTIFACT_SCHEMA_VERSION } from "../roles/types/roleArtifact.js";
+import { resolveRawOutputDigestReferences } from "../rawOutput/lineageResolutionGate.js";
 import { assembleInertContextText, buildContextRefsFromRecords } from "./contextAssembly.js";
 import { validateStaticRotationPlan } from "./rotationPlanValidator.js";
 import type { RoleRuntimeAdapter } from "./types/roleRuntimeAdapter.js";
@@ -109,6 +110,20 @@ async function runDeclaredSequence(
       });
     }
 
+    const derivedFrom = adapterResult.artifact_provenance?.derived_from ?? [];
+    if (derivedFrom.length > 0) {
+      const lineage = await resolveRawOutputDigestReferences(derivedFrom, store);
+      if (!lineage.ok) {
+        return haltedResult({
+          planId: plan.plan_id,
+          failureCode: "artifact_lineage_invalid",
+          records,
+          completedSteps: records.length,
+          failedStepIndex: step.step_index
+        });
+      }
+    }
+
     const artifactJson = JSON.stringify(adapterResult.artifact);
     const storeResult = await store.store({
       output_text: artifactJson,
@@ -185,6 +200,7 @@ async function runDeclaredSequence(
       adapter_kind: step.adapter_kind,
       artifact_digest: storeResult.record.digest,
       artifact_id: artifactId,
+      ...(derivedFrom.length === 0 ? {} : { derived_from: [...derivedFrom] }),
       context_refs: contextRefs,
       validation_status: "schema_valid",
       trust_tier: "T1",

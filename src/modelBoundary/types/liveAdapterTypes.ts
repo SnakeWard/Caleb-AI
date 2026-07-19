@@ -89,6 +89,14 @@ export interface LiveAdapterTimingSummary {
   readonly timed_out: boolean;
 }
 
+export interface LiveAdapterFailureResponseTelemetry {
+  readonly provider_response_id: string | null;
+  readonly output_digest: string;
+  readonly finish_reason: string;
+  readonly token_usage: LiveAdapterTokenUsage;
+  readonly timing: LiveAdapterTimingSummary;
+}
+
 export interface LiveAdapterRetrySummary {
   readonly attempts: number;
   readonly max_attempts: number;
@@ -180,6 +188,7 @@ export interface LiveAdapterFailure {
   readonly retryable: boolean;
   readonly warnings: readonly string[];
   readonly errors: readonly string[];
+  readonly response_telemetry?: LiveAdapterFailureResponseTelemetry;
   readonly trust_summary: LiveAdapterTrustSummary;
   readonly created_at: string;
 }
