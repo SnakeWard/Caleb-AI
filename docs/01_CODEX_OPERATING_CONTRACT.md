@@ -110,3 +110,23 @@ is not its own.
 Provider credentials MUST NOT be ambient in implementer shells. Codex MUST set
 credentials only for an explicitly authorized live call and MUST unset them
 immediately after. Default validation runs under H5 traps that enforce this.
+
+### Credential-tree doctrine (amended Pass LIVE-F1, 2026-07-19)
+
+Provider credentials may exist only in a **leaf shell** created for one freshly
+authorized live command. They MUST NOT exist in the Codex desktop parent,
+implementer shell, or any sibling process. Declaring an already inherited
+credential name does not make it non-ambient.
+
+Before any live network attempt, Codex MUST start an independent sibling process
+from the same parent environment and verify that every credential-shaped provider
+variable is absent. The check reports names/presence only and MUST NOT read or
+print values. If a sibling sees a credential, STOP before network activity; a
+leaf process deleting its own copy cannot prove that its parent or future siblings
+are clean.
+
+After the sibling check passes, the authorized credential is introduced directly
+into the one-command leaf shell, read only through the sanctioned declared
+credential closure, and removed before that leaf exits. The leaf verifies absence
+after removal without printing the value. A future live event report must record
+both proofs: sibling absence before injection and leaf absence after cleanup.

@@ -44,6 +44,67 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - LIVE-F1 Failure Taxonomy and Credential-Tree Repair
+
+**Objective:** Preserve the live adapter's safe failure taxonomy in seam Ledger
+records and amend credential doctrine with leaf-shell/sibling-process proof.
+
+**Source Authority:** Pat's 2026-07-19 LIVE-F1 authorization and
+`docs/protocols/PASS_PROTOCOL_LIVE_F1.md` at `fb367b7`.
+
+**Current State:** E1 halted safely, but its terminal Ledger retained only
+`live_provider_invocation_failed`; an inherited `API_KEY` passed the declared-name
+trap even though fresh sibling processes inherited it.
+
+**Scope:** Runtime telemetry fields for adapter failure kind/status/retryability;
+seam terminal Ledger serialization; operating-contract doctrine; offline tests,
+acceptance lock, report, audit, status, and snapshot Ledger.
+
+**Out of Scope:** Retries, prompts, models, transports, endpoints, headers,
+credential closures, CLI behavior, live calls, E2, budgets, routes, registries.
+
+**Files Expected To Change:** `src/logicEngine/liveRotationRuntimeAdapter.ts`,
+`src/logicEngine/rotationExecutionSeam.ts`, `docs/01_CODEX_OPERATING_CONTRACT.md`,
+focused tests, LIVE-F1 report/manifest, `PLANS.md`, `docs/STATUS_LOG.md`, Ledger.
+
+**Risk Level:** Medium — Ledger diagnostics and credential governance, with no
+network behavior.
+
+**Snapshot / Rollback Plan:** Snapshot
+`snap_20260719T042829716Z_000416_milestone` is Ledgered and verified. Revert the
+implementation commit if validation fails; never rewrite historical Ledger.
+
+**Implementation Steps:** Add nullable taxonomy fields; populate them only from
+structured failed adapter results; serialize them in terminal live invocation
+telemetry; add redaction/no-continuation detectors; amend and lock doctrine;
+validate, audit, commit, push, STOP.
+
+**Validation Commands:** Focused LIVE-F1 tests; existing LIVE-R1/LE-3 locks;
+canonical offline suite; canonical typecheck; build; AUD-2; Git diff/clean checks.
+
+**Acceptance Criteria:** Exact adapter failure kind/status/retryability survive
+into terminal Ledger; provider prose and secrets do not; Critic is not called;
+thrown/runtime-only failures do not fabricate adapter taxonomy; credential-tree
+rules are locked; provider/CLI/transport diffs are empty.
+
+**Progress Log:** Protocol committed/pushed; snapshot verified. Taxonomy plumbing,
+doctrine amendment, and detectors complete. Focused tests passed 2 files / 7
+tests; canonical offline suite passed 193 files / 3,142 tests; typecheck/build
+exited 0. Provider/CLI and prompt/fixture diffs are empty. AUD-2 self-smoke was
+compliant/T2 across 10 changed paths with zero violations.
+
+**Decision Log:** Preserve taxonomy as evidence beside the unchanged generic
+orchestration halt code. Nullable fields distinguish "no adapter result" from an
+adapter-reported failure.
+
+**Surprises / Discoveries:** No separate Fable text was present in repo or
+attachment cache; Pat's directive is recorded verbatim in the narrow protocol.
+
+**Final Report:** LIVE-F1 accepted. Exact structured provider failure taxonomy
+survives in terminal Ledger telemetry without prose; runtime-only throws remain
+unattributed. The credential-tree doctrine requires sibling absence before leaf
+injection and leaf absence after cleanup. No live call, retry, or transport edit.
+
 ## ExecPlan - LIVE-R2 Event E1 First Live Rotation
 
 **Objective:** Execute exactly one authorized single-cycle `planner_critic` event

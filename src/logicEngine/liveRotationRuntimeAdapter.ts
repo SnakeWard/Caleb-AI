@@ -2,6 +2,7 @@ import { validateRoleArtifact } from "../roles/roleArtifactValidator.js";
 import type { RoleArtifact, RoleArtifactType } from "../roles/types/roleArtifact.js";
 import type { ContentAddressedRawOutputStore } from "../rawOutput/contentAddressedRawOutputStore.js";
 import type {
+  LiveAdapterFailure,
   LiveAdapterNormalizedOutputObserver,
   LiveAdapterResult,
   LiveAdapterResponse
@@ -72,6 +73,9 @@ export interface LiveRotationInvocationTelemetry {
   readonly latency_ms: number;
   readonly budget: LiveRotationInvocationBudget;
   readonly failure_code: LiveRotationRuntimeFailureCode | null;
+  readonly provider_failure_kind: LiveAdapterFailure["failure_kind"] | null;
+  readonly provider_failure_status: LiveAdapterFailure["status"] | null;
+  readonly provider_failure_retryable: boolean | null;
 }
 
 export interface LiveRotationRunTotals {
@@ -299,7 +303,14 @@ async function invokeRole(
       (result.failure.failure_kind === "observer_failure"
         ? "live_observer_failure"
         : "live_provider_invocation_failed");
-    tracker.markFailure(code, emptyTelemetry(runtimeInput, binding, promptDigest, code));
+    tracker.markFailure(
+      code,
+      emptyTelemetry(runtimeInput, binding, promptDigest, code, {
+        failure_kind: result.failure.failure_kind,
+        status: result.failure.status,
+        retryable: result.failure.retryable
+      })
+    );
     return rejected();
   }
   if (result.status !== "response_schema_valid") {
@@ -405,7 +416,10 @@ function telemetryFromResponse(
     estimated_spend_usd: estimatedSpend,
     latency_ms: response.timing.latency_ms,
     budget: { ...binding.budget },
-    failure_code: failureCode
+    failure_code: failureCode,
+    provider_failure_kind: null,
+    provider_failure_status: null,
+    provider_failure_retryable: null
   };
 }
 
@@ -413,7 +427,8 @@ function emptyTelemetry(
   input: RoleRuntimeAdapterInvokeInput,
   binding: LiveRotationRoleBindingEvidence,
   promptDigest: Sha256Digest,
-  failureCode: LiveRotationRuntimeFailureCode
+  failureCode: LiveRotationRuntimeFailureCode,
+  providerFailure: Pick<LiveAdapterFailure, "failure_kind" | "status" | "retryable"> | null = null
 ): LiveRotationInvocationTelemetry {
   return {
     step_index: input.step_index,
@@ -430,7 +445,10 @@ function emptyTelemetry(
     estimated_spend_usd: 0,
     latency_ms: 0,
     budget: { ...binding.budget },
-    failure_code: failureCode
+    failure_code: failureCode,
+    provider_failure_kind: providerFailure?.failure_kind ?? null,
+    provider_failure_status: providerFailure?.status ?? null,
+    provider_failure_retryable: providerFailure?.retryable ?? null
   };
 }
 

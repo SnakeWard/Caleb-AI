@@ -49,6 +49,9 @@ interface LiveRotationInvocationTelemetry {
   readonly latency_ms: number;
   readonly budget: { readonly max_tokens: number; readonly timeout_ms: number; readonly max_response_bytes: number };
   readonly failure_code: LiveRotationRuntimeFailureCode | null;
+  readonly provider_failure_kind: string | null;
+  readonly provider_failure_status: string | null;
+  readonly provider_failure_retryable: boolean | null;
 }
 
 interface LiveRotationRuntimeState {
@@ -777,7 +780,10 @@ function buildTerminalLedgerEntry(input: {
               estimated_spend_usd: entry.estimated_spend_usd,
               latency_ms: entry.latency_ms,
               budget: { ...entry.budget },
-              failure_code: entry.failure_code
+              failure_code: entry.failure_code,
+              provider_failure_kind: entry.provider_failure_kind,
+              provider_failure_status: entry.provider_failure_status,
+              provider_failure_retryable: entry.provider_failure_retryable
             })),
             live_totals: { ...input.live_state.totals },
             live_run_budget: input.plan.live_rotation_gate_evidence === undefined

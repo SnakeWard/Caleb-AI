@@ -1,0 +1,31 @@
+{
+  "pass_id": "LIVE-F1",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LIVE_F1_FAILURE_TAXONOMY_REPORT.md",
+    "examples/audit/live-f1-pass-manifest.valid.json",
+    "tests/acceptance/liveF1FailureTaxonomyAcceptance.test.ts",
+    "tests/logicEngine/liveF1FailureTaxonomy.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/01_CODEX_OPERATING_CONTRACT.md",
+    "docs/STATUS_LOG.md",
+    "src/logicEngine/liveRotationRuntimeAdapter.ts",
+    "src/logicEngine/rotationExecutionSeam.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/providers/**",
+    "src/cli/**",
+    "examples/live-rotation/**",
+    "src/roles/**",
+    "src/logicEngine/rotationPlanBridge.ts",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

@@ -802,3 +802,24 @@ Post-event offline canonical validation passed 191/191 files and 3,135/3,135
 tests; typecheck and build exited 0. AUD-2 self-smoke was compliant/T2 across 5
 changed paths with zero violations. LIVE-R2 is not completed. E2 and any retry
 remain unauthorized pending Pat's next decision.
+
+### 2026-07-19 — LIVE-F1 — failure taxonomy and credential-tree repair
+
+Protocol `fb367b7` is committed/pushed. Snapshot
+`snap_20260719T042829716Z_000416_milestone` is Ledgered and verified. LIVE-F1
+preserves the adapter's structured `failure_kind`, result status, and retryability
+in the seam's terminal live-invocation telemetry while retaining the generic
+`live_provider_invocation_failed` halt. Synthetic auth, network, and rate-limit
+failures preserve exact taxonomy, halt before Critic, and serialize no injected
+provider prose. Thrown invokers leave taxonomy null.
+
+The operating contract now requires provider credentials to exist only in a
+one-command leaf shell. An independent sibling from the same parent must prove
+credential-name absence before injection; a sibling-visible credential is a STOP
+even when declared. Leaf cleanup is separately verified after the call.
+
+Focused LIVE-F1 validation passed 2/2 files and 7/7 tests. The canonical offline
+suite passed 193/193 files and 3,142/3,142 tests; canonical typecheck and build
+exited 0. Provider/CLI and prompt/fixture diffs are empty. No live call or retry
+occurred. AUD-2 self-smoke was compliant/T2 across 10 changed paths with zero
+violations.
