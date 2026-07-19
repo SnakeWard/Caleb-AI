@@ -60,6 +60,46 @@ Per §5 doc. Acceptance: all gate-miss detectors fire; budget fail-closed proven
 
 ---
 
+## Amendment A — 2026-07-19 — Transient normalized-output observer
+
+Amendment A is granted. LIVE-R1 may add a caller-supplied transient output
+observer to the Anthropic and xAI adapter dependency/result plumbing so normalized
+provider output can enter the M3 validation and content-addressed storage path.
+This supersedes the "provider adapter transport code" exclusion for exactly this
+scope. Transport and credential behavior remain frozen under these binding
+conditions:
+
+1. **A1 — Optional and bit-identical when absent.** No observer supplied means
+   exact current digest-only behavior. Existing M1/M2 adapter tests run unchanged
+   and green with zero edits; the proven single-call Anthropic and Grok paths must
+   not know LIVE-R1 happened.
+2. **A2 — Digest binding asserted.** The observer receives the same normalized
+   text the adapter hashes. The M3 store's computed content address must equal the
+   adapter-reported `output_digest`; mismatch fails closed with a distinct code.
+   A synthetic mismatched-observer detector is mandatory.
+3. **A3 — Observer failure is invocation failure.** Throwing or reported observer
+   failure returns a distinct `observer_failure` class (or argued equivalent),
+   halts rotation fail-closed, is Ledgered, and permits no later invocation. There
+   is no digest-only fallback when the observer was supplied.
+4. **A4 — Redaction extends to the observer.** The observer receives normalized
+   output text only: never credentials, headers, or raw wire bodies. Text may
+   enter memory and then the M3 store, but never a result envelope, failure
+   message, or Ledger shape. The M1 serialization sweep is rerun with an observer
+   wired. Grok `reasoning_content` remains excluded from normalized output and
+   therefore never reaches the observer.
+5. **A5 — Result plumbing only.** No fetch sites, endpoints, headers, credential
+   closures, retries, or transport behavior change. The two-call-site egress pin
+   remains verbatim. The report states that transport-function diffs are empty.
+   Authorized adapter changes are limited to types, the two adapters' result
+   paths, tests, and documentation.
+
+Review note: the implementer's amendment request was minimal, explicit about
+non-goals, and honest about the boundary between a gate-only implementation and a
+runnable LIVE-R2 path; that made the authority decision a review rather than a
+negotiation.
+
+---
+
 ## Standing rules (restated)
 
 Envelope deviations = STOP. The live event never starts without Pat's explicit go, stated fresh — no standing authorization exists or is created by this document. Snapshots verified on disk before recording. Credentials in the moment only; the trap is armed and has caught one already. No fabricated references. Canonical commands to completion, exit codes reported. Honest findings are the deliverable, not the embarrassment — the report that says "reality broke X" is worth more than the one that claims perfection. Locked surfaces change only by visible diffs; this pass makes exactly one (the LE-2 lock, rule 1) and locks its own additions. Nothing herein authorizes dynamic sequencing, RA-X, capability-bearing plans, side effects, registry changes, new adapters, new egress sites, or UI. After LIVE-R2: STOP and report — the fork's other road (RA-X) awaits with its preconditions already named, and the findings from reality's first contact with rotation ride into its design.
