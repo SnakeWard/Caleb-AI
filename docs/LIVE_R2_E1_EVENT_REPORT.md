@@ -89,3 +89,65 @@ reconstructable; the completed two-artifact crown assertion is not met.
 
 STOP. E2 remains unauthorized. A retry also requires fresh authority after a
 protocol decision on credential injection and safe provider-failure telemetry.
+
+## 2026-07-19 authorized E1 retry after LIVE-F1
+
+Pat freshly authorized one E1 retry after LIVE-F1. No prompt, model, route,
+transport, retry policy, or budget changed.
+
+### Credential proofs
+
+- Independent pre-injection Codex sibling: zero credential-shaped variables;
+  `API_KEY` absent; `ANTHROPIC_API_KEY` absent.
+- The separate leaf shell's own pre-injection gate passed before it prompted for
+  the credential; the value was never printed or sent through chat.
+- Leaf cleanup: `LEAF_CREDENTIAL_UNSET_AFTER=True`.
+- Independent post-event Codex sibling: zero credential-shaped variables.
+
+The LIVE-F1 credential-tree correction is therefore satisfied for this retry.
+
+### Snapshot and trace
+
+- Fresh snapshot: `snap_20260719T053346308Z_000418_milestone`, Ledgered and
+  verified on disk.
+- Bridge: `bridge_ca29eb4b-0b00-475c-a971-04dcf9e0c2f3`, completed.
+- Execution start: `rotation_dc28062d-8416-434b-83db-ff10be284ebc`.
+- Terminal: `rotation_f1c2afe1-439d-4beb-b6ff-c4952e655c65`, failed at Planner
+  step 0 after approximately 59 ms wall time.
+- Source/derived plan and prompt digests are byte-identical to the first attempt.
+- Output/store/artifact digests: none. Critic was not invoked.
+
+### Preserved failure taxonomy
+
+- Orchestration failure: `live_provider_invocation_failed`.
+- Provider failure kind: `network_failure`.
+- Provider failure status: `failed`.
+- Provider retryability: `true`.
+- Tokens: 0 input / 0 output / 0 total. Spend: USD 0.
+
+LIVE-F1 resolved the earlier diagnostic ambiguity: the adapter did not classify
+this as missing credentials, authentication failure, rate limiting, timeout, or
+provider rejection. No second retry or diagnostic network call was made.
+
+### Reconstruction finding
+
+The raw Ledger unambiguously contains the retry bridge, start, and terminal chain
+listed above. However, `reconstructRotationChainFromLedgerJsonl` accepts only a
+deterministic `plan_id`. Both E1 attempts share that ID, so the helper paired the
+first attempt's bridge/start (`bridge_99b4eefc...` / `rotation_3dc74e51...`) with
+the retry terminal (`rotation_f1c2afe1...`) and returned `ok:true` for a mixed
+chain. This is a false-positive reconstruction result. The retry is manually
+reconstructable from parent references, but the crown assertion through the
+current helper is not satisfied. Fixing attempt correlation requires a separately
+authorized repair; this event does not alter code.
+
+### Post-retry validation and verdict
+
+- Offline canonical suite: 193/193 files, 3,142/3,142 tests, exit 0.
+- Canonical typecheck: exit 0. Build: exit 0.
+- No source, tests, prompts, fixtures, provider code, or configuration changed.
+- AUD-2 self-smoke: compliant/T2 across 5 changed paths, zero violations.
+
+`LIVE-R2 First Live Rotation retry: STOP — credentials were correctly isolated and failure taxonomy was preserved, but the Planner ended in network_failure; no Critic answered, and repeated-plan reconstruction is not attempt-safe.`
+
+E2 and any further E1 attempt remain unauthorized.

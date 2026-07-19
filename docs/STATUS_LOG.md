@@ -823,3 +823,25 @@ suite passed 193/193 files and 3,142/3,142 tests; canonical typecheck and build
 exited 0. Provider/CLI and prompt/fixture diffs are empty. No live call or retry
 occurred. AUD-2 self-smoke was compliant/T2 across 10 changed paths with zero
 violations.
+
+### 2026-07-19 — LIVE-R2 E1 retry — network failure, no continuation
+
+Pat freshly authorized one E1 retry under LIVE-F1. The independent sibling gate
+proved zero credential-shaped variables before injection. A separate leaf shell
+introduced the Anthropic credential only for the command and reported
+`LEAF_CREDENTIAL_UNSET_AFTER=True`; a post-event sibling again reported zero.
+Snapshot `snap_20260719T053346308Z_000418_milestone` is Ledgered and verified.
+
+Bridge `bridge_ca29eb4b-0b00-475c-a971-04dcf9e0c2f3` completed. Planner halted at
+step 0 with orchestration code `live_provider_invocation_failed` and LIVE-F1
+taxonomy `network_failure` / `failed` / `retryable:true`. Tokens and spend were
+zero; Critic was not invoked; no prompt, transport, or code changed; no further
+network call occurred.
+
+Raw parent references reconstruct the retry chain, but the public reconstruction
+helper mixed the first attempt's start with the retry terminal because both share
+the deterministic plan ID. It returned a false-positive `ok:true`; attempt-safe
+reconstruction is a named repair candidate and was not fixed here. Post-event
+offline suite passed 193 files / 3,142 tests; typecheck and build exited 0. E2 and
+all further retries remain unauthorized. AUD-2 self-smoke was compliant/T2
+across 5 changed paths with zero violations.

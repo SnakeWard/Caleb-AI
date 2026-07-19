@@ -139,6 +139,17 @@ event report.
 failed boundary, zero spend, and zero continuation; it does not prove a completed
 Planner/Critic exchange. E2 remains unauthorized.
 
+**Authorized retry rider (2026-07-19):** LIVE-F1 credential proofs passed before
+and after the one authorized retry. Fresh snapshot
+`snap_20260719T053346308Z_000418_milestone` is verified. The retry bridged, then
+Planner failed with preserved taxonomy `network_failure` / `failed` /
+`retryable:true`; zero tokens/spend and no Critic. The raw parent-reference chain
+is complete, but the reconstruction helper mixed the first start with the retry
+terminal because both attempts share a deterministic plan ID. No code fix or
+further network attempt was authorized. Post-event suite 193/3,142, typecheck,
+and build exited green. AUD-2 was compliant/T2 across 5 paths with zero
+violations. Final retry verdict remains STOP.
+
 ## ExecPlan - LIVE-R1 Live Rotation Gate Chain
 
 **Objective:** Make live Planner/Critic bindings bridgeable only with complete
