@@ -3204,3 +3204,23 @@ guardrails are now a protected surface.`
 **Progress Log:** Preconditions passed. Baseline suite 200/3,199, typecheck 0, build 0. Explicit snapshot `snap_20260719T203614999Z_000438_milestone` verified. Implemented the exact 33-transition matrix, structured check-11 issues, pre-return `gate_evaluation_refused` evidence, and execution-keyed failed-step reconstruction. Focused LIVE-F7/identity/LE-3-A validation passed 5 files / 73 tests. Canonical suite passed 201 files / 3,210 tests; governed typecheck and build exited 0. V1/Hollowcut remain 13/9; prompt and L1 pins are unchanged. AUD-2 final self-smoke is compliant/T2 across 12 paths with zero violations.
 
 **Final Report:** `docs/LIVE_F7_HANDOFF_GATE_EVIDENCE_REPORT.md`. LIVE-F7 accepted offline with no deviations and no live call. Attempt seven remains a separate human-host event requiring fresh Pat authorization.
+
+## ExecPlan - PRE-7 Live-Event Runbook Codification + Mock Full-Rotation Rehearsal
+
+**Objective:** Commit the mandatory event-evidence completion step and prove the complete single-cycle E1 Planner/Critic path offline through the real live runtime seam with provider egress mocked.
+
+**Source Authority:** `docs/protocols/PASS_PROTOCOL_PRE_7.md`; `docs/01_CODEX_OPERATING_CONTRACT.md`; LIVE-F4/F5/F7 reports and contracts; Pat's PRE-7 authorization.
+
+**Starting State:** `main` and `origin/main` synchronized at `73da1fb`; tree clean at session start; no credential-shaped variables present. Baseline 201 files / 3,210 tests green; governed typecheck/build exit 0; V1/Hollowcut 13/9; prompt hashes exact.
+
+**Scope:** Append the exact evidence-commit final step to the existing operating-contract live-event section. Add new `rehearsal-*` fixtures and permanent tests that inject Anthropic responses at the pinned fetch site while exercising the production live rotation adapter, F4 envelope, check 11, step 1 Critic, M3 lineage, seam Ledger entries, and execution-keyed reconstruction. Add a step-1 truncation negative case. No live, prompt, gate, L1, bridge, provider-source, transport, or existing live-fixture changes.
+
+**Snapshot / Rollback Plan:** `snap_20260719T234549492Z_000441_milestone` (`PRE-7-prechange`), verified on disk with 18 captured files and a Ledger entry. Restore only through an authorized Change Guard operation.
+
+**Implementation Steps:** Commit protocol/runbook doctrine; inspect and reuse production live adapter injection points; add rehearsal fixtures; add positive `needs_revision` and `accepted` detectors; add step-1 truncation detector; run focused and canonical validation; audit; report; commit and push.
+
+**Validation Commands:** Focused PRE-7 Vitest; `npx vitest run`; `node ./node_modules/typescript/bin/tsc --noEmit`; `npm run build`; catalog/prompt/L1 pins; AUD-2 self-smoke.
+
+**Acceptance Criteria:** Both positive variants complete two steps; Critic executes under mock; both T0/canonical lineages reconstruct; all trust remains T1 or lower; injected fetch counts prove zero real egress and the sentinel detector can fail; step-1 truncation reconstructs with F5/F7 detail; runbook text is exact; protected surfaces unchanged; canonical validation and audit green.
+
+**Progress Log:** Preconditions passed and explicit snapshot verified. Protocol/runbook codification pending commit; rehearsal implementation pending.

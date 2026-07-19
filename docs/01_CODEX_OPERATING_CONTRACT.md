@@ -149,6 +149,10 @@ justify retries from the agent sandbox. Human host-shell execution makes
 credential custody, sibling preflight, leaf cleanup, and the one authorized
 network action directly observable by the operator while agents remain offline.
 
+### Live-event evidence-commit completion rule (amended Pass PRE-7, 2026-07-19)
+
+**Final step (mandatory):** After the unset proof, commit the event's ledger appends as a standalone commit containing only `.caleb/ledger/ledger.jsonl`, with the event label in the commit message (e.g. `LIVE-R2-E1-A7: attempt seven ledger evidence — <n> append-only records, <terminal status summary>`). Verify the diff is pure append before committing. Push and verify synchronization. A live event is not complete until this commit exists on the remote.
+
 ### Speculative-normalization prohibition (adopted Pass LIVE-F6, 2026-07-19)
 
 Model output may receive only a specifically evidenced, bounded, deterministic
