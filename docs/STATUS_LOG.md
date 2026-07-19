@@ -845,3 +845,27 @@ reconstruction is a named repair candidate and was not fixed here. Post-event
 offline suite passed 193 files / 3,142 tests; typecheck and build exited 0. E2 and
 all further retries remain unauthorized. AUD-2 self-smoke was compliant/T2
 across 5 changed paths with zero violations.
+
+### 2026-07-19 — LIVE-F2 — execution-instance Ledger identity repair
+
+Protocol `6a61d90` is committed/pushed. Pre-change snapshot
+`snap_20260719T062326038Z_000420_milestone` is Ledgered and verified. Every
+guarded rotation attempt now mints one central post-H4 `execution_<uuid>` at seam
+entry and carries it in the result and provenance of every attempt Ledger record.
+`plan_id` identifies what; `execution_id` identifies which attempt.
+
+Reconstruction selects identity before record type. Explicit lookup cannot span
+identities; plan-only lookup with multiple attempts returns the distinct
+`reconstruction_ambiguous` refusal. A permanent E1-shaped fixture proves the old
+first-start/last-terminal false-ok and the new refusal. The original E1 Ledger
+records now also return ambiguous. One complete legacy chain remains readable;
+mixed legacy/identified records fail closed.
+
+LE-3-A remains accepted with explicit execution-keyed reconstruction. The
+operating contract now requires the human to execute live events from a host
+shell while agents build and validate offline, citing the E1 credential-tree and
+sandbox/network findings. Focused validation passed 6 files / 59 tests; the
+widened LIVE-R1/F1 matrix passed 9 / 69; canonical offline validation passed
+195 files / 3,157 tests in 92.77 seconds. Typecheck/build exited 0; catalogs are
+13/9. AUD-2 was compliant/T2 across 19 paths with zero violations. No live call
+or provider/CLI/transport/prompt/config change occurred.

@@ -130,3 +130,21 @@ into the one-command leaf shell, read only through the sanctioned declared
 credential closure, and removed before that leaf exits. The leaf verifies absence
 after removal without printing the value. A future live event report must record
 both proofs: sibling absence before injection and leaf absence after cleanup.
+
+### Live-event host-shell doctrine (amended Pass LIVE-F2, 2026-07-19)
+
+Every live provider event MUST be executed by the human operator from a host
+shell. Agents build the command path, validate it offline, prepare bounded
+fixtures, and inspect the resulting safe Ledger records; agents MUST NOT execute
+the live provider command from an agent process or agent sandbox. Fresh human
+authorization remains event-specific and does not transfer execution custody to
+an agent.
+
+The LIVE-R2 E1 attempts establish the reason for this standing boundary. The
+agent process tree exposed an inherited credential-shaped `API_KEY`, so a child
+could not prove sibling or parent cleanliness by deleting its own copy. The E1
+execution attempts also ended in non-diagnostic provider/network failures; those
+failures are not evidence that the provider was unavailable, and they do not
+justify retries from the agent sandbox. Human host-shell execution makes
+credential custody, sibling preflight, leaf cleanup, and the one authorized
+network action directly observable by the operator while agents remain offline.

@@ -1,0 +1,44 @@
+{
+  "pass_id": "LIVE-F2",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LIVE_F2_EXECUTION_IDENTITY_REPORT.md",
+    "examples/audit/live-f2-pass-manifest.valid.json",
+    "tests/acceptance/liveF2ExecutionIdentityAcceptance.test.ts",
+    "tests/fixtures/live-f2/repeated-plan-attempts.false-ok.jsonl",
+    "tests/logicEngine/liveF2ExecutionIdentity.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/01_CODEX_OPERATING_CONTRACT.md",
+    "docs/03_CANONICAL_CONTRACTS.md",
+    "docs/LE3_EXECUTION_BOUNDARY_ACCEPTANCE_REPORT.md",
+    "docs/LEDGER_ID_FORMAT_CONTRACT.md",
+    "docs/STATUS_LOG.md",
+    "src/ledger/idFactory.ts",
+    "src/ledger/index.ts",
+    "src/logicEngine/rotationExecutionSeam.ts",
+    "tests/acceptance/le3ExecutionBoundaryAcceptanceLock.test.ts",
+    "tests/acceptance/le3GuardedExecutionAcceptance.test.ts",
+    "tests/ledger/idFactory.test.ts",
+    "tests/logicEngine/rotationExecutionSeam.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/providers/**",
+    "src/cli/**",
+    "src/modelBoundary/**",
+    "src/rawOutput/**",
+    "src/roleRuntime/**",
+    "src/roles/**",
+    "src/logicEngine/liveRotationRuntimeAdapter.ts",
+    "src/logicEngine/rotationPlanBridge.ts",
+    "examples/live-rotation/**",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

@@ -6,5 +6,6 @@ export {
   createTaskId,
   createRunId,
   createTraceId,
-  createInvocationId
+  createInvocationId,
+  createExecutionId
 } from "./idFactory.js";

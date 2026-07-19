@@ -11,6 +11,7 @@ The following field names MUST be used consistently:
 - `hollow_version`
 - `schema_version`
 - `invocation_id`
+- `execution_id`
 - `task_id`
 - `run_id`
 - `trace_id`
@@ -190,6 +191,11 @@ If a model disagrees with a strict deterministic Hollow on a measurable claim, t
   "trust_tier": "T2"
 }
 ```
+
+Guarded Role Rotation Ledger entries carry `execution_id` in both their bounded
+`result` and `provenance` objects. `plan_id` identifies the plan; `execution_id`
+identifies one attempt to execute it. Reconstruction MUST NOT combine records
+from different execution identities.
 
 ## BusMessageEnvelope
 

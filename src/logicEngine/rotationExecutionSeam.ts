@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 
 import { createLedgerId } from "../ledger/ledgerEntryFactory.js";
+import { createExecutionId } from "../ledger/idFactory.js";
 import { validateLedgerEntry } from "../ledger/ledgerValidation.js";
 import type { ContentAddressedRawOutputStore } from "../rawOutput/contentAddressedRawOutputStore.js";
 import { executeStaticRotation } from "../roleRuntime/roleRuntimeExecutor.js";
@@ -65,7 +66,7 @@ interface SeamLiveRuntimeAdapter extends RoleRuntimeAdapter {
   read_live_state(): LiveRotationRuntimeState;
 }
 
-export const ROTATION_EXECUTION_SEAM_SCHEMA_VERSION = "1.0.0" as const;
+export const ROTATION_EXECUTION_SEAM_SCHEMA_VERSION = "1.1.0" as const;
 
 export type RotationExecutionSeamRefusalCode =
   | "seam_rejected_human_confirmation_required"
@@ -96,6 +97,7 @@ export interface RotationExecutionSeamInput {
   readonly append_ledger_entry: RotationExecutionLedgerAppender;
   readonly now?: () => string;
   readonly ledger_id_factory?: (activity: string, ordinal: number) => string;
+  readonly execution_id_factory?: () => string;
 }
 
 export interface RotationExecutionSeamSuccess {
@@ -103,6 +105,7 @@ export interface RotationExecutionSeamSuccess {
   readonly status: "completed";
   readonly refusal_code: null;
   readonly failure_code: null;
+  readonly execution_id: string;
   readonly bridge_ledger_id: string;
   readonly execution_result: RoleRuntimeExecutionResult;
   readonly ledger_entries: readonly LedgerEntry[];
@@ -113,6 +116,7 @@ export interface RotationExecutionSeamRefusal {
   readonly status: "refused";
   readonly refusal_code: RotationExecutionSeamRefusalCode;
   readonly failure_code: null;
+  readonly execution_id: string;
   readonly bridge_ledger_id: string | null;
   readonly execution_result: null;
   readonly ledger_entries: readonly LedgerEntry[];
@@ -123,6 +127,7 @@ export interface RotationExecutionSeamFailure {
   readonly status: "failed";
   readonly refusal_code: null;
   readonly failure_code: RotationExecutionSeamFailureCode;
+  readonly execution_id: string;
   readonly bridge_ledger_id: string;
   readonly execution_result: RoleRuntimeExecutionResult;
   readonly ledger_entries: readonly LedgerEntry[];
@@ -135,6 +140,7 @@ export type RotationExecutionSeamResult =
 
 export interface ReconstructedRotationLedgerInvocation {
   readonly ledger_id: string;
+  readonly execution_id: string | null;
   readonly step_index: number;
   readonly role_id: string;
   readonly adapter_id: string;
@@ -154,6 +160,7 @@ export interface ReconstructedRotationLedgerInvocation {
 
 export interface ReconstructedRotationLedgerChain {
   readonly plan_id: string;
+  readonly execution_id: string | null;
   readonly source_runtime_rotation_plan_id: string;
   readonly bridge_ledger_id: string;
   readonly execution_start_ledger_id: string;
@@ -166,14 +173,25 @@ export interface ReconstructedRotationLedgerChain {
 }
 
 export type ReconstructRotationLedgerResult =
-  | { readonly ok: true; readonly chain: ReconstructedRotationLedgerChain; readonly errors: readonly [] }
-  | { readonly ok: false; readonly chain: null; readonly errors: readonly string[] };
+  | {
+      readonly ok: true;
+      readonly chain: ReconstructedRotationLedgerChain;
+      readonly refusal_code: null;
+      readonly errors: readonly [];
+    }
+  | {
+      readonly ok: false;
+      readonly chain: null;
+      readonly refusal_code: "reconstruction_ambiguous" | null;
+      readonly errors: readonly string[];
+    };
 
 const RRP_ID_FORMAT = /^rrp_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 export async function executeBridgedRotationAtSeam(
   input: RotationExecutionSeamInput
 ): Promise<RotationExecutionSeamResult> {
+  const executionId = input.execution_id_factory?.() ?? createExecutionId();
   const now = input.now ?? (() => new Date().toISOString());
   const appendedEntries: LedgerEntry[] = [];
   let ledgerOrdinal = 0;
@@ -181,7 +199,7 @@ export async function executeBridgedRotationAtSeam(
     input.ledger_id_factory?.(activity, ledgerOrdinal++) ?? createLedgerId("rotation");
 
   if (typeof input.append_ledger_entry !== "function") {
-    return refusalResult("seam_rejected_ledger_unavailable", null, []);
+    return refusalResult("seam_rejected_ledger_unavailable", executionId, null, []);
   }
 
   if (input.human_confirmed !== true) {
@@ -191,7 +209,8 @@ export async function executeBridgedRotationAtSeam(
       null,
       now,
       nextLedgerId,
-      appendedEntries
+      appendedEntries,
+      executionId
     );
   }
 
@@ -202,7 +221,8 @@ export async function executeBridgedRotationAtSeam(
       null,
       now,
       nextLedgerId,
-      appendedEntries
+      appendedEntries,
+      executionId
     );
   }
 
@@ -216,7 +236,8 @@ export async function executeBridgedRotationAtSeam(
       null,
       now,
       nextLedgerId,
-      appendedEntries
+      appendedEntries,
+      executionId
     );
   }
 
@@ -227,7 +248,8 @@ export async function executeBridgedRotationAtSeam(
       bridgeEntry.ledger_id,
       now,
       nextLedgerId,
-      appendedEntries
+      appendedEntries,
+      executionId
     );
   }
 
@@ -238,7 +260,8 @@ export async function executeBridgedRotationAtSeam(
       bridgeEntry.ledger_id,
       now,
       nextLedgerId,
-      appendedEntries
+      appendedEntries,
+      executionId
     );
   }
 
@@ -251,7 +274,8 @@ export async function executeBridgedRotationAtSeam(
         bridgeEntry.ledger_id,
         now,
         nextLedgerId,
-        appendedEntries
+        appendedEntries,
+        executionId
       );
     }
     if (!hasValidLiveBindings(plan, input.adapters)) {
@@ -261,7 +285,8 @@ export async function executeBridgedRotationAtSeam(
         bridgeEntry.ledger_id,
         now,
         nextLedgerId,
-        appendedEntries
+        appendedEntries,
+        executionId
       );
     }
   } else if (!hasOnlyMockBindings(plan, input.adapters)) {
@@ -271,7 +296,8 @@ export async function executeBridgedRotationAtSeam(
       bridgeEntry.ledger_id,
       now,
       nextLedgerId,
-      appendedEntries
+      appendedEntries,
+      executionId
     );
   }
 
@@ -284,7 +310,8 @@ export async function executeBridgedRotationAtSeam(
       bridgeEntry.ledger_id,
       now,
       nextLedgerId,
-      appendedEntries
+      appendedEntries,
+      executionId
     );
   }
 
@@ -294,10 +321,16 @@ export async function executeBridgedRotationAtSeam(
     planDigest,
     livePlan ? "live" : "mock",
     now(),
-    nextLedgerId("start")
+    nextLedgerId("start"),
+    executionId
   );
   if (!(await appendEntry(input.append_ledger_entry, startEntry))) {
-    return refusalResult("seam_rejected_ledger_unavailable", bridgeEntry.ledger_id, []);
+    return refusalResult(
+      "seam_rejected_ledger_unavailable",
+      executionId,
+      bridgeEntry.ledger_id,
+      []
+    );
   }
   appendedEntries.push(startEntry);
 
@@ -314,7 +347,8 @@ export async function executeBridgedRotationAtSeam(
       plan_digest: planDigest,
       record,
       live_telemetry: liveTelemetry,
-      ledger_id: nextLedgerId(`step_${record.step_index}`)
+      ledger_id: nextLedgerId(`step_${record.step_index}`),
+      execution_id: executionId
     });
     const appended = await appendEntry(input.append_ledger_entry, invocationEntry);
     if (appended) {
@@ -343,7 +377,8 @@ export async function executeBridgedRotationAtSeam(
     live_state: liveState,
     invocation_ledger_ids: invocationLedgerIds,
     timestamp: now(),
-    ledger_id: nextLedgerId("terminal")
+    ledger_id: nextLedgerId("terminal"),
+    execution_id: executionId
   });
   if (!(await appendEntry(input.append_ledger_entry, terminalEntry))) {
     return {
@@ -351,6 +386,7 @@ export async function executeBridgedRotationAtSeam(
       status: "failed",
       refusal_code: null,
       failure_code: "seam_terminal_ledger_write_failed",
+      execution_id: executionId,
       bridge_ledger_id: bridgeEntry.ledger_id,
       execution_result: executionResult,
       ledger_entries: appendedEntries
@@ -364,6 +400,7 @@ export async function executeBridgedRotationAtSeam(
       status: "failed",
       refusal_code: null,
       failure_code: effectiveFailureCode ?? "invalid_rotation_plan",
+      execution_id: executionId,
       bridge_ledger_id: bridgeEntry.ledger_id,
       execution_result: executionResult,
       ledger_entries: appendedEntries
@@ -375,6 +412,7 @@ export async function executeBridgedRotationAtSeam(
     status: "completed",
     refusal_code: null,
     failure_code: null,
+    execution_id: executionId,
     bridge_ledger_id: bridgeEntry.ledger_id,
     execution_result: executionResult,
     ledger_entries: appendedEntries
@@ -385,9 +423,24 @@ export function computeRotationExecutionPlanDigest(plan: unknown): Sha256Digest 
   return `sha256:${createHash("sha256").update(stableStringify(plan)).digest("hex")}`;
 }
 
+function isRotationExecutionActivity(activity: string): boolean {
+  return (
+    activity === "rotation_execution_started" ||
+    activity === "rotation_role_invocation" ||
+    activity === "rotation_execution_completed" ||
+    activity === "rotation_execution_failed" ||
+    activity === "rotation_execution_refused"
+  );
+}
+
+function isRotationTerminalActivity(activity: string): boolean {
+  return activity === "rotation_execution_completed" || activity === "rotation_execution_failed";
+}
+
 export function reconstructRotationChainFromLedgerJsonl(
   contents: string,
-  planId: string
+  planId: string,
+  executionId?: string
 ): ReconstructRotationLedgerResult {
   const parsed: LedgerEntry[] = [];
   const errors: string[] = [];
@@ -410,42 +463,127 @@ export function reconstructRotationChainFromLedgerJsonl(
   });
 
   if (errors.length > 0) {
-    return { ok: false, chain: null, errors };
+    return { ok: false, chain: null, refusal_code: null, errors };
   }
 
-  const start = parsed.find(
-    (entry) => entry.activity === "rotation_execution_started" && resultString(entry, "plan_id") === planId
+  const planEntries = parsed.filter(
+    (entry) => isRotationExecutionActivity(entry.activity) && resultString(entry, "plan_id") === planId
   );
-  const terminal = [...parsed]
-    .reverse()
-    .find(
-      (entry) =>
-        (entry.activity === "rotation_execution_completed" ||
-          entry.activity === "rotation_execution_failed") &&
-        resultString(entry, "plan_id") === planId
+  let selectedExecutionId: string | null;
+  if (executionId !== undefined) {
+    selectedExecutionId = executionId;
+  } else {
+    const identified = new Set(
+      planEntries
+        .map((entry) => resultString(entry, "execution_id"))
+        .filter((value): value is string => value !== null)
     );
-  const invocationCandidates = parsed
-    .filter(
-      (entry) => entry.activity === "rotation_role_invocation" && resultString(entry, "plan_id") === planId
-    )
+    const hasUnidentified = planEntries.some(
+      (entry) => resultString(entry, "execution_id") === null
+    );
+    const legacyAttemptMarkers = planEntries.filter(
+      (entry) =>
+        resultString(entry, "execution_id") === null &&
+        (entry.activity === "rotation_execution_started" ||
+          entry.activity === "rotation_execution_refused")
+    ).length;
+    const legacyTerminals = planEntries.filter(
+      (entry) =>
+        resultString(entry, "execution_id") === null &&
+        isRotationTerminalActivity(entry.activity)
+    ).length;
+
+    if (
+      identified.size > 1 ||
+      (identified.size > 0 && hasUnidentified) ||
+      (identified.size === 0 && (legacyAttemptMarkers > 1 || legacyTerminals > 1))
+    ) {
+      return {
+        ok: false,
+        chain: null,
+        refusal_code: "reconstruction_ambiguous",
+        errors: ["reconstruction_ambiguous"]
+      };
+    }
+    selectedExecutionId = identified.values().next().value ?? null;
+  }
+
+  const selectedEntries = planEntries.filter(
+    (entry) => resultString(entry, "execution_id") === selectedExecutionId
+  );
+  const starts = selectedEntries.filter(
+    (entry) => entry.activity === "rotation_execution_started"
+  );
+  const terminals = selectedEntries.filter((entry) => isRotationTerminalActivity(entry.activity));
+  if (starts.length !== 1 || terminals.length !== 1) {
+    return {
+      ok: false,
+      chain: null,
+      refusal_code: null,
+      errors: ["rotation_chain_incomplete"]
+    };
+  }
+  const start = starts[0] as LedgerEntry;
+  const terminal = terminals[0] as LedgerEntry;
+  const invocationCandidates = selectedEntries
+    .filter((entry) => entry.activity === "rotation_role_invocation")
     .map(parseReconstructedInvocation);
   const invocations = invocationCandidates
     .filter((entry): entry is ReconstructedRotationLedgerInvocation => entry !== null)
     .sort((left, right) => left.step_index - right.step_index);
 
-  if (
-    start === undefined ||
-    terminal === undefined ||
-    invocationCandidates.some((entry) => entry === null)
-  ) {
-    return { ok: false, chain: null, errors: ["rotation_chain_incomplete"] };
+  if (invocationCandidates.some((entry) => entry === null)) {
+    return {
+      ok: false,
+      chain: null,
+      refusal_code: null,
+      errors: ["rotation_chain_incomplete"]
+    };
   }
 
   const sourcePlanId = resultString(start, "source_runtime_rotation_plan_id");
   const bridgeLedgerId = resultString(start, "bridge_ledger_id");
   const completedSteps = resultNumber(terminal, "completed_steps");
-  if (sourcePlanId === null || bridgeLedgerId === null || completedSteps === null) {
-    return { ok: false, chain: null, errors: ["rotation_chain_terminal_invalid"] };
+  const terminalInvocationIds = resultStringArray(terminal, "invocation_ledger_ids");
+  const invocationLedgerIds = invocations.map((entry) => entry.ledger_id);
+  const identityValid = selectedEntries.every((entry) => {
+    const resultExecutionId = resultString(entry, "execution_id");
+    const provenanceExecutionId = provenanceString(entry, "execution_id");
+    return selectedExecutionId === null
+      ? resultExecutionId === null && provenanceExecutionId === null
+      : resultExecutionId === selectedExecutionId &&
+          provenanceExecutionId === selectedExecutionId;
+  });
+  const lineageValid =
+    identityValid &&
+    sourcePlanId !== null &&
+    bridgeLedgerId !== null &&
+    completedSteps !== null &&
+    terminalInvocationIds !== null &&
+    resultString(terminal, "source_runtime_rotation_plan_id") === sourcePlanId &&
+    resultString(terminal, "bridge_ledger_id") === bridgeLedgerId &&
+    start.parent_refs.includes(bridgeLedgerId) &&
+    terminal.parent_refs.includes(bridgeLedgerId) &&
+    terminal.parent_refs.includes(start.ledger_id) &&
+    invocationLedgerIds.length === terminalInvocationIds.length &&
+    completedSteps === invocationLedgerIds.length &&
+    invocationLedgerIds.every((id, index) => terminalInvocationIds[index] === id) &&
+    invocationLedgerIds.every((id) => terminal.parent_refs.includes(id)) &&
+    selectedEntries
+      .filter((entry) => entry.activity === "rotation_role_invocation")
+      .every(
+        (entry) =>
+          entry.parent_refs.includes(bridgeLedgerId) &&
+          entry.parent_refs.includes(start.ledger_id) &&
+          entry.parent_refs.includes(planId)
+      );
+  if (!lineageValid) {
+    return {
+      ok: false,
+      chain: null,
+      refusal_code: null,
+      errors: ["rotation_chain_terminal_invalid"]
+    };
   }
 
   const failedStepIndex = resultNullableNumber(terminal, "failed_step_index");
@@ -454,6 +592,7 @@ export function reconstructRotationChainFromLedgerJsonl(
     ok: true,
     chain: {
       plan_id: planId,
+      execution_id: selectedExecutionId,
       source_runtime_rotation_plan_id: sourcePlanId,
       bridge_ledger_id: bridgeLedgerId,
       execution_start_ledger_id: start.ledger_id,
@@ -464,6 +603,7 @@ export function reconstructRotationChainFromLedgerJsonl(
       failure_code: failureCode,
       invocations
     },
+    refusal_code: null,
     errors: []
   };
 }
@@ -474,18 +614,27 @@ async function appendRefusal(
   bridgeLedgerId: string | null,
   now: () => string,
   nextLedgerId: (activity: string) => string,
-  appendedEntries: LedgerEntry[]
+  appendedEntries: LedgerEntry[],
+  executionId: string
 ): Promise<RotationExecutionSeamRefusal> {
-  const entry = buildRefusalLedgerEntry(input.plan, code, bridgeLedgerId, now(), nextLedgerId("refusal"));
+  const entry = buildRefusalLedgerEntry(
+    input.plan,
+    code,
+    bridgeLedgerId,
+    now(),
+    nextLedgerId("refusal"),
+    executionId
+  );
   if (!(await appendEntry(input.append_ledger_entry, entry))) {
-    return refusalResult("seam_rejected_ledger_unavailable", bridgeLedgerId, []);
+    return refusalResult("seam_rejected_ledger_unavailable", executionId, bridgeLedgerId, []);
   }
   appendedEntries.push(entry);
-  return refusalResult(code, bridgeLedgerId, appendedEntries);
+  return refusalResult(code, executionId, bridgeLedgerId, appendedEntries);
 }
 
 function refusalResult(
   code: RotationExecutionSeamRefusalCode,
+  executionId: string,
   bridgeLedgerId: string | null,
   entries: readonly LedgerEntry[]
 ): RotationExecutionSeamRefusal {
@@ -494,6 +643,7 @@ function refusalResult(
     status: "refused",
     refusal_code: code,
     failure_code: null,
+    execution_id: executionId,
     bridge_ledger_id: bridgeLedgerId,
     execution_result: null,
     ledger_entries: entries
@@ -627,12 +777,14 @@ function buildExecutionStartEntry(
   planDigest: Sha256Digest,
   adapterKind: "mock" | "live",
   timestamp: string,
-  ledgerId: string
+  ledgerId: string,
+  executionId: string
 ): LedgerEntry {
   return baseLedgerEntry({
     ledger_id: ledgerId,
     timestamp,
     plan,
+    execution_id: executionId,
     activity: "rotation_execution_started",
     status: "running",
     result: {
@@ -659,6 +811,7 @@ function buildInvocationLedgerEntry(input: {
   readonly record: RoleRuntimeInvocationRecord;
   readonly live_telemetry: LiveRotationInvocationTelemetry | null;
   readonly ledger_id: string;
+  readonly execution_id: string;
 }): LedgerEntry {
   const result: JsonObject = {
     plan_id: input.plan.plan_id,
@@ -693,6 +846,7 @@ function buildInvocationLedgerEntry(input: {
       ledger_id: input.ledger_id,
       timestamp: input.record.created_at,
       plan: input.plan,
+      execution_id: input.execution_id,
       activity: "rotation_role_invocation",
       status: "completed",
       result,
@@ -713,6 +867,7 @@ function buildInvocationLedgerEntry(input: {
     ],
     provenance: {
       execution_seam_version: ROTATION_EXECUTION_SEAM_SCHEMA_VERSION,
+      execution_id: input.execution_id,
       bridge_ledger_id: input.bridge_entry.ledger_id,
       derived_plan_digest: input.plan_digest,
       source_runtime_rotation_plan_id: input.plan.source_runtime_rotation_plan_id,
@@ -733,6 +888,7 @@ function buildTerminalLedgerEntry(input: {
   readonly invocation_ledger_ids: readonly string[];
   readonly timestamp: string;
   readonly ledger_id: string;
+  readonly execution_id: string;
 }): LedgerEntry {
   const failed = !input.execution_result.ok;
   const failureCode = input.failure_code_override;
@@ -751,6 +907,7 @@ function buildTerminalLedgerEntry(input: {
     ledger_id: input.ledger_id,
     timestamp: input.timestamp,
     plan: input.plan,
+    execution_id: input.execution_id,
     activity: failed ? "rotation_execution_failed" : "rotation_execution_completed",
     status: failed ? "failed" : "completed",
     result: {
@@ -806,7 +963,8 @@ function buildRefusalLedgerEntry(
   code: RotationExecutionSeamRefusalCode,
   bridgeLedgerId: string | null,
   timestamp: string,
-  ledgerId: string
+  ledgerId: string,
+  executionId: string
 ): LedgerEntry {
   const planRecord = isObject(plan) ? plan : {};
   const taskId = readString(planRecord, "task_id") ?? "task_le3_refusal";
@@ -828,6 +986,7 @@ function buildRefusalLedgerEntry(
     status: "rejected",
     result: {
       plan_id: planId,
+      execution_id: executionId,
       source_runtime_rotation_plan_id: sourcePlanId,
       bridge_ledger_id: bridgeLedgerId,
       refusal_code: code,
@@ -845,6 +1004,7 @@ function buildRefusalLedgerEntry(
     artifact_hashes: [],
     provenance: {
       execution_seam_version: ROTATION_EXECUTION_SEAM_SCHEMA_VERSION,
+      execution_id: executionId,
       human_initiated_only: true
     },
     retryable: false,
@@ -859,6 +1019,7 @@ function baseLedgerEntry(input: {
   readonly ledger_id: string;
   readonly timestamp: string;
   readonly plan: BridgedExecutablePlan;
+  readonly execution_id: string;
   readonly activity: string;
   readonly status: "running" | "completed" | "failed";
   readonly result: JsonValue;
@@ -878,12 +1039,15 @@ function baseLedgerEntry(input: {
     actor_version: ROTATION_EXECUTION_SEAM_SCHEMA_VERSION,
     activity: input.activity,
     status: input.status,
-    result: input.result,
+    result: isObject(input.result)
+      ? { ...input.result, execution_id: input.execution_id }
+      : input.result,
     warnings: [],
     errors: input.errors,
     artifact_hashes: [],
     provenance: {
       execution_seam_version: ROTATION_EXECUTION_SEAM_SCHEMA_VERSION,
+      execution_id: input.execution_id,
       source_runtime_rotation_plan_id: input.plan.source_runtime_rotation_plan_id,
       lineage_refs: [input.plan.source_runtime_rotation_plan_id, input.plan.plan_id]
     },
@@ -927,6 +1091,7 @@ function parseReconstructedInvocation(
   }
   return {
     ledger_id: entry.ledger_id,
+    execution_id: resultString(entry, "execution_id"),
     step_index: stepIndex,
     role_id: roleId,
     adapter_id: adapterId,
@@ -985,6 +1150,16 @@ function resultNumber(entry: LedgerEntry, key: string): number | null {
   return typeof value === "number" && Number.isInteger(value) ? value : null;
 }
 
+function resultStringArray(entry: LedgerEntry, key: string): readonly string[] | null {
+  if (!isObject(entry.result)) {
+    return null;
+  }
+  const value = entry.result[key];
+  return Array.isArray(value) && value.every((item) => typeof item === "string")
+    ? value
+    : null;
+}
+
 function resultNullableNumber(entry: LedgerEntry, key: string): number | null {
   if (!isObject(entry.result)) {
     return null;
@@ -1014,6 +1189,11 @@ function provenanceStringArray(entry: LedgerEntry, key: string): readonly string
   return Array.isArray(value) && value.every((item) => typeof item === "string")
     ? value
     : null;
+}
+
+function provenanceString(entry: LedgerEntry, key: string): string | null {
+  const value = entry.provenance[key];
+  return typeof value === "string" ? value : null;
 }
 
 function readString(record: Record<string, unknown>, key: string): string | null {

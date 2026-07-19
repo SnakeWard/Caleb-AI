@@ -41,6 +41,7 @@ async function invoke(
     },
     now: () => LE3_NOW,
     ledger_id_factory: (activity, ordinal) => `rotation_${activity}_${ordinal}`,
+    execution_id_factory: () => "execution_55555555-5555-4555-8555-555555555555",
     ...overrides
   });
   return { result, appended, plan: fixture.plan, bridge_entry: fixture.bridge_entry };
@@ -55,8 +56,12 @@ function expectSingleRefusal(
   expect(result.status).toBe("refused");
   expect(result.refusal_code).toBe(code);
   expect(result.execution_result).toBeNull();
+  expect(result.execution_id).toBe("execution_55555555-5555-4555-8555-555555555555");
   expect(appended).toHaveLength(1);
   expect(appended[0]?.activity).toBe("rotation_execution_refused");
+  expect((appended[0]?.result as Record<string, unknown>)["execution_id"]).toBe(
+    result.execution_id
+  );
   expect(validateLedgerEntry(appended[0]).valid).toBe(true);
 }
 
@@ -82,6 +87,13 @@ describe("rotationExecutionSeam", () => {
       "rotation_execution_completed"
     ]);
     expect(appended.every((entry) => validateLedgerEntry(entry).valid)).toBe(true);
+    expect(
+      appended.every(
+        (entry) =>
+          (entry.result as Record<string, unknown>)["execution_id"] === result.execution_id &&
+          entry.provenance["execution_id"] === result.execution_id
+      )
+    ).toBe(true);
     expect(appended[1]?.parent_refs).toContain(plan.plan_id);
   });
 
@@ -199,7 +211,11 @@ describe("rotationExecutionSeam", () => {
     const { result, appended, bridge_entry, plan } = await invoke();
     expect(result.ok).toBe(true);
     const jsonl = [bridge_entry, ...appended].map((entry) => JSON.stringify(entry)).join("\n");
-    const reconstructed = reconstructRotationChainFromLedgerJsonl(jsonl, plan.plan_id);
+    const reconstructed = reconstructRotationChainFromLedgerJsonl(
+      jsonl,
+      plan.plan_id,
+      result.execution_id
+    );
     expect(reconstructed.ok).toBe(true);
     if (!reconstructed.ok) {
       return;
@@ -214,5 +230,6 @@ describe("rotationExecutionSeam", () => {
       reconstructed.chain.invocations[0]?.artifact_digest
     );
     expect(reconstructed.chain.final_status).toBe("completed");
+    expect(reconstructed.chain.execution_id).toBe(result.execution_id);
   });
 });

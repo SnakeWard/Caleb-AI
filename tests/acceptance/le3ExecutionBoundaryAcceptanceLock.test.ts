@@ -100,6 +100,19 @@ describe("LE-3-A execution boundary acceptance lock", () => {
     }
   });
 
+  it("pins reconstructability to one LIVE-F2 execution identity", async () => {
+    const acceptance = await readFile(ACCEPTANCE_PATH, "utf8");
+    const seam = await readFile(SEAM_PATH, "utf8");
+    const report = await readFile(REPORT_PATH, "utf8");
+
+    expect(acceptance).toContain("fixture.plan.plan_id,\n      result.execution_id");
+    expect(seam).toContain('refusal_code: "reconstruction_ambiguous"');
+    expect(seam).toContain("provenanceExecutionId === selectedExecutionId");
+    expect(report).toContain(
+      "the LE-3-A reconstructability\npin remains accepted under execution-keyed lookup"
+    );
+  });
+
   it("pins the RA-R1-D 15-row table verbatim", async () => {
     const report = await readFile(REPORT_PATH, "utf8");
     const diagnostic = await readFile(DIAGNOSTIC_PATH, "utf8");

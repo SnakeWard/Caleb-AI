@@ -1,13 +1,15 @@
 # Ledger ID Format Contract (LG-1)
 
-Status: Accepted  
-Date: 2026-07-07
+- Status: Accepted
+- Date: 2026-07-07
+- Amended: LIVE-F2, 2026-07-19
 
 ## Scope
 
-This contract governs the five correlation ID kinds produced for Hollow invocation,
-Verified Return Path evidence, and their ledger entries. Snapshot IDs and live
-provider adapter IDs are governed separately and are unchanged by LG-1.
+This contract governs the correlation and execution ID kinds produced for Hollow
+invocation, Verified Return Path evidence, their ledger entries, and guarded Role
+Rotation attempts. Snapshot IDs and live provider adapter IDs are governed
+separately.
 
 ## ID kinds
 
@@ -18,6 +20,7 @@ provider adapter IDs are governed separately and are unchanged by LG-1.
 | `createRunId()` | `run_<uuid>` | `run_...` |
 | `createTraceId()` | `trace_<uuid>` | `trace_...` |
 | `createInvocationId()` | `invocation_<uuid>` | `invocation_...` |
+| `createExecutionId()` | `execution_<uuid>` | `execution_...` |
 
 `<uuid>` is a lowercase RFC-4122 UUID from Node built-in `crypto.randomUUID()`.
 
@@ -44,10 +47,18 @@ Within one Hollow invocation run:
 - Evidence provenance carries `source_invocation_id` equal to the invocation's
   `invocation_id`.
 
+Within guarded Role Rotation (LIVE-F2):
+
+- Every seam entry mints one `execution_id`.
+- `plan_id` identifies what is executed; `execution_id` identifies which attempt.
+- Every Ledger record produced by that attempt carries the same `execution_id` in
+  its bounded result and provenance.
+- Reconstruction keys by `execution_id` and never combines attempt identities.
+
 ## Implementation
 
-Factory: `src/ledger/idFactory.ts`  
-Wired from: `src/hollows/runner.ts`, `src/ledger/ledgerEntryFactory.ts`
+- Factory: `src/ledger/idFactory.ts`
+- Wired from: `src/hollows/runner.ts`, `src/ledger/ledgerEntryFactory.ts`
 
 ## Out of scope
 

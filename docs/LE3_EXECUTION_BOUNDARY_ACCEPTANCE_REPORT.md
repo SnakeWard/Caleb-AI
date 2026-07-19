@@ -52,6 +52,13 @@ with runtime objects discarded, the acceptance suite reconstructed role order,
 invocation IDs, context digests, artifact digests, completed count, terminal
 status, and lineage exactly.
 
+LIVE-F2 execution-identity addendum (2026-07-19): the LE-3-A reconstructability
+pin remains accepted under execution-keyed lookup. The acceptance fixture passes
+its seam-minted `execution_id`; every selected start, invocation, and terminal
+record must carry that identity in both result and provenance. A plan-only lookup
+with multiple attempts now refuses `reconstruction_ambiguous` instead of joining
+the first attempt's start to a later attempt's terminal.
+
 Fail-closed result: passed. A failing Critic halted after the first Planner,
 Ledgered `adapter_invocation_failed`, and executed no later role.
 

@@ -44,6 +44,80 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - LIVE-F2 Execution-Instance Ledger Identity Repair
+
+**Objective:** Give every guarded rotation attempt a unique seam-minted
+`execution_id`, reconstruct by that identity, and permanently prevent the E1
+first-start/last-terminal false-positive.
+
+**Source Authority:** Pat's 2026-07-19 LIVE-F2 authorization and committed
+`docs/protocols/PASS_PROTOCOL_LIVE_F2.md` at `6a61d90`.
+
+**Current State:** Two LIVE-R2 E1 attempts share one deterministic `plan_id`.
+The pre-LIVE-F2 helper selected the first matching start and last matching
+terminal and incorrectly returned `ok:true` across attempt boundaries.
+
+**Scope:** Central post-H4 execution ID factory; seam identity propagation;
+identity-keyed reconstruction and ambiguity refusal; historical regression
+fixture; LE-3/LE-3-A reconstructability lock; human host-shell operating
+doctrine; offline tests, report, audit, status, and snapshot Ledger.
+
+**Out of Scope:** Live calls, provider adapters/transports, fetch, endpoints,
+headers, credential closures, retries, prompts, models, budgets, CLI behavior,
+configuration, routes, registries, and E2.
+
+**Files Expected To Change:** Central ID factory/barrel/contract/tests;
+`src/logicEngine/rotationExecutionSeam.ts`; LIVE-F2 fixture and focused tests;
+LE-3 acceptance/lock/report; operating contract; LIVE-F2 report/manifest;
+`PLANS.md`, `docs/STATUS_LOG.md`, and the append-only snapshot Ledger.
+
+**Risk Level:** Medium — execution identity and Ledger reconstruction change,
+with no provider or transport behavior.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot
+`snap_20260719T062326038Z_000420_milestone` is Ledgered and verified on disk.
+Revert the implementation commit or restore captured files if validation fails;
+never rewrite historical Ledger content.
+
+**Implementation Steps:** Commit/push protocol; snapshot; add the central ID;
+mint once at seam entry; carry identity through every result/Ledger path;
+select one reconstruction identity before start/invocation/terminal lookup;
+add the false-ok fixture and ambiguity/cross-identity detectors; amend LE-3-A
+and host-shell doctrine; validate/audit; commit/push; STOP.
+
+**Validation Commands:** Focused ID/seam/LIVE-F2/LE-3/LE-3-A tests; canonical
+offline suite; canonical governed-pass typecheck; build; AUD-2 self-smoke;
+prohibited provider/CLI/prompt/config diff checks; final clean/synchronized Git.
+
+**Acceptance Criteria:** Repeated attempts have distinct IDs; every attempt
+record carries one exact ID in result and provenance; explicit reconstruction
+never spans identities; plan-only multi-attempt lookup refuses
+`reconstruction_ambiguous`; the permanent fixture catches the historical
+false-ok; single legacy chains remain readable; LE-3-A remains green; live
+execution belongs to the human host shell; prohibited diffs are empty.
+
+**Progress Log:** Protocol committed/pushed and snapshot verified. Central ID,
+seam propagation, identity-first reconstruction, legacy compatibility, the E1
+regression fixture, operating-contract amendment, and LE-3/LE-3-A locks are
+implemented. Focused validation passed 6 files / 59 tests; widened LIVE-R1/F1
+regressions passed 9 / 69; canonical offline validation passed 195 files / 3,157
+tests in 92.77 seconds. Typecheck/build exited 0; catalogs remain 13/9. AUD-2
+is compliant/T2 across 19 paths with zero violations.
+
+**Decision Log:** `plan_id` remains the deterministic description of what to
+execute. `execution_id` is a UUID attempt identity minted before the first seam
+gate. Result and provenance independently carry it. Plan-only lookup is retained
+only for a provably single attempt; ambiguity is a named refusal, never a guess.
+
+**Surprises / Discoveries:** None beyond the already recorded E1 false-positive.
+The old helper's first/last selection was isolated to reconstruction and required
+no provider, CLI, transport, prompt, or registry change.
+
+**Final Report:** LIVE-F2 is accepted offline. Attempts have independent UUID
+identities; multi-attempt plan-only reconstruction refuses rather than guessing;
+LE-3-A remains locked. Canonical tests, typecheck, build, catalogs, and AUD-2 are
+green. No live call or provider/CLI/transport/prompt/config change occurred.
+
 ## ExecPlan - LIVE-F1 Failure Taxonomy and Credential-Tree Repair
 
 **Objective:** Preserve the live adapter's safe failure taxonomy in seam Ledger

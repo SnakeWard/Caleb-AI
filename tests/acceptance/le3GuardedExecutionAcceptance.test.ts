@@ -57,7 +57,8 @@ async function executeIntoJsonl(options: {
         ? ledger.append(entry).then(() => true)
         : options.append_override(entry, ledger),
     now: () => LE3_NOW,
-    ledger_id_factory: (activity, ordinal) => `rotation_acceptance_${activity}_${ordinal}`
+    ledger_id_factory: (activity, ordinal) => `rotation_acceptance_${activity}_${ordinal}`,
+    execution_id_factory: () => "execution_66666666-6666-4666-8666-666666666666"
   });
   return { fixture, root, ledgerPath, ledger, store, result };
 }
@@ -106,7 +107,11 @@ describe("LE-3 guarded execution seam acceptance", () => {
     const { fixture, ledgerPath, result } = await executeIntoJsonl();
     expect(result.ok).toBe(true);
     const contents = await readFile(ledgerPath, "utf8");
-    const reconstructed = reconstructRotationChainFromLedgerJsonl(contents, fixture.plan.plan_id);
+    const reconstructed = reconstructRotationChainFromLedgerJsonl(
+      contents,
+      fixture.plan.plan_id,
+      result.execution_id
+    );
     expect(reconstructed.ok).toBe(true);
     if (!reconstructed.ok || !result.ok) {
       return;
@@ -132,6 +137,7 @@ describe("LE-3 guarded execution seam acceptance", () => {
     ).toBe(true);
     expect(reconstructed.chain.completed_steps).toBe(4);
     expect(reconstructed.chain.final_status).toBe("completed");
+    expect(reconstructed.chain.execution_id).toBe(result.execution_id);
   });
 
   it("bridged-plans-only: raw RA-R2, hand-built RA-R1, and missing bridge evidence all refuse", async () => {

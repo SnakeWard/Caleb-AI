@@ -19,3 +19,7 @@ export function createTraceId(): string {
 export function createInvocationId(): string {
   return `invocation_${randomUUID()}`;
 }
+
+export function createExecutionId(): string {
+  return `execution_${randomUUID()}`;
+}
