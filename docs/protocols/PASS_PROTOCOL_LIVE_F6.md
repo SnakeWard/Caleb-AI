@@ -1,6 +1,6 @@
 # Caleb AI — Pass Protocol LIVE-F6
 
-**Authorized by:** Pat, 2026-07-19  
+**Authorized by:** Pat, 2026-07-19
 **Origin:** LIVE-R2 E1 attempt five, executed by Pat from a host leaf shell under
 LIVE-F1 through LIVE-F5, returned a complete bounded Planner response that was
 stored as T0 evidence but failed at `json_parse`.
