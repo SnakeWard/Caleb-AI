@@ -11,7 +11,7 @@ import { reconstructChainFromRecords } from "../../src/roleRuntime/contextAssemb
 import { createMockRoleRuntimeAdapter } from "../../src/roleRuntime/mockRoleRuntimeAdapter.js";
 import { executeStaticRotation } from "../../src/roleRuntime/roleRuntimeExecutor.js";
 import type { RoleRuntimeAdapter } from "../../src/roleRuntime/types/roleRuntimeAdapter.js";
-import type { RoleRuntimeInvocationRecord } from "../../src/roleRuntime/types/roleRuntimeTypes.js";
+import type { RoleRuntimeLedgerRecord } from "../../src/roleRuntime/types/roleRuntimeTypes.js";
 import {
   createIsolatedRawOutputStore,
   goldenPlannerCriticAdapters,
@@ -355,7 +355,7 @@ describe("RA-R1 static rotation acceptance", () => {
       plan: goldenPlannerCriticPlan(),
       adapters,
       store,
-      appendRecord: async (record: RoleRuntimeInvocationRecord) => record.step_index === 0
+      appendRecord: async (record: RoleRuntimeLedgerRecord) => record.step_index === 0
     });
 
     expect(result.ok).toBe(false);

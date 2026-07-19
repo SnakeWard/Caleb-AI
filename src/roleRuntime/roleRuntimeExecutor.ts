@@ -1,5 +1,8 @@
 import { validateRoleArtifact } from "../roles/roleArtifactValidator.js";
-import { validateRoleHandoffGate } from "../roles/roleHandoffGate.js";
+import {
+  validateRoleHandoffGate,
+  type RoleHandoffGateError
+} from "../roles/roleHandoffGate.js";
 import type { RoleHandoffEnvelope } from "../roles/types/roleHandoff.js";
 import { ROLE_ARTIFACT_SCHEMA_VERSION } from "../roles/types/roleArtifact.js";
 import { resolveRawOutputDigestReferences } from "../rawOutput/lineageResolutionGate.js";
@@ -10,6 +13,8 @@ import type {
   RoleRuntimeExecutionResult,
   RoleRuntimeExecutorInput,
   RoleRuntimeFailureCode,
+  RoleRuntimeGateEvaluationRefusedRecord,
+  RoleRuntimeGateRefusalIssue,
   RoleRuntimeInvocationRecord
 } from "./types/roleRuntimeTypes.js";
 import type { StaticRotationPlan } from "./types/staticRotationPlan.js";
@@ -177,12 +182,51 @@ async function runDeclaredSequence(
       });
       handoffGateStatus = gateResult.status;
       if (!gateResult.allowed) {
+        const failureCode = gateResult.status === "invalid"
+          ? "handoff_gate_invalid"
+          : "handoff_gate_blocked";
+        const refusedRecord: RoleRuntimeGateEvaluationRefusedRecord = {
+          record_type: "gate_evaluation_refused",
+          record_id: `${plan.plan_id}.step_${step.step_index}.gate_refusal`,
+          plan_id: plan.plan_id,
+          task_id: plan.task_id,
+          run_id: plan.run_id,
+          trace_id: plan.trace_id,
+          context_id: plan.context_id,
+          step_index: step.step_index,
+          source_role: step.role_id,
+          target_role: nextStep.role_id,
+          adapter_id: step.adapter_id,
+          adapter_kind: step.adapter_kind,
+          stage: "handoff_gate",
+          terminal_status: failureCode,
+          artifact_digest: storeResult.record.digest,
+          artifact_id: artifactId,
+          ...(derivedFrom.length === 0 ? {} : { derived_from: [...derivedFrom] }),
+          validation_status: "schema_valid",
+          trust_tier: "T1",
+          issues: gateResult.errors.map((error) =>
+            toSafeGateRefusalIssue(error, step.role_id, nextStep.role_id)
+          ),
+          created_at: now()
+        };
+        const appendOk = await appendRecord(refusedRecord);
+        if (!appendOk) {
+          return haltedResult({
+            planId: plan.plan_id,
+            failureCode: "ledger_record_write_failed",
+            records,
+            completedSteps: records.length,
+            failedStepIndex: step.step_index
+          });
+        }
         return haltedResult({
           planId: plan.plan_id,
-          failureCode: gateResult.status === "invalid" ? "handoff_gate_invalid" : "handoff_gate_blocked",
+          failureCode,
           records,
           completedSteps: records.length,
-          failedStepIndex: step.step_index
+          failedStepIndex: step.step_index,
+          failedStepRecord: refusedRecord
         });
       }
     }
@@ -231,7 +275,8 @@ async function runDeclaredSequence(
     completed_steps: records.length,
     failed_step_index: null,
     failure_code: null,
-    records
+    records,
+    failed_step_record: null
   };
 }
 
@@ -241,6 +286,7 @@ function haltedResult(args: {
   records: RoleRuntimeInvocationRecord[];
   completedSteps?: number;
   failedStepIndex?: number;
+  failedStepRecord?: RoleRuntimeGateEvaluationRefusedRecord;
   status?: "failed" | "halted";
 }): RoleRuntimeExecutionResult {
   return {
@@ -250,8 +296,70 @@ function haltedResult(args: {
     completed_steps: args.completedSteps ?? args.records.length,
     failed_step_index: args.failedStepIndex ?? null,
     failure_code: args.failureCode,
-    records: args.records
+    records: args.records,
+    failed_step_record: args.failedStepRecord ?? null
   };
+}
+
+function toSafeGateRefusalIssue(
+  error: RoleHandoffGateError,
+  sourceRole: StaticRotationPlan["sequence"][number]["role_id"],
+  targetRole: StaticRotationPlan["sequence"][number]["role_id"]
+): RoleRuntimeGateRefusalIssue {
+  if (error.code === "acceptance_status_not_consumable") {
+    return {
+      check_index: error.check_index,
+      code: error.code,
+      path: error.path,
+      expected: [...error.expected],
+      actual: error.actual,
+      transition: { ...error.transition }
+    };
+  }
+  return {
+    check_index: classifiedCheckIndex(error),
+    code: error.code,
+    path: error.path,
+    expected: null,
+    actual: null,
+    transition: {
+      source_role: sourceRole,
+      target_role: targetRole
+    }
+  };
+}
+
+function classifiedCheckIndex(error: Exclude<
+  RoleHandoffGateError,
+  { readonly code: "acceptance_status_not_consumable" }
+>): number | null {
+  switch (error.code) {
+    case "invalid_handoff_envelope":
+      return error.path.startsWith("$.registry[") ? 3 : 1;
+    case "invalid_source_artifact":
+      return 2;
+    case "unknown_source_role":
+      return 4;
+    case "unknown_target_role":
+      return 5;
+    case "disallowed_target_role":
+      return 6;
+    case "artifact_role_mismatch":
+      return 7;
+    case "handoff_artifact_ref_mismatch":
+      return 8;
+    case "required_next_role_mismatch":
+      return 9;
+    case "identity_mismatch":
+      return 10;
+    case "handoff_status_blocks_handoff":
+      return 12;
+    case "forbidden_content_detected":
+      return error.path.startsWith("$.handoff") ? 13 : 14;
+    case "embedded_trace_not_allowed":
+    case "embedded_context_not_allowed":
+      return 15;
+  }
 }
 
 function readPlanId(plan: unknown): string {

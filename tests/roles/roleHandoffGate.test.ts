@@ -7,6 +7,7 @@ import { V1_HOLLOW_MANIFESTS } from "../../src/hollows/v1HollowCatalog.js";
 import {
   getRoleContract,
   listRoleContracts,
+  ROLE_HANDOFF_CONSUMPTION_MATRIX,
   validateRoleHandoffGate,
   type RegisteredRoleContract
 } from "../../src/roles/index.js";
@@ -156,11 +157,11 @@ describe("validateRoleHandoffGate", () => {
   });
 
   it("rejects blocked artifact status", () => {
-    expectBlockedWith("artifact_status_blocks_handoff", validHandoff(), validArtifact({ acceptance_status: "blocked" }));
+    expectBlockedWith("acceptance_status_not_consumable", validHandoff(), validArtifact({ acceptance_status: "blocked" }));
   });
 
   it("rejects rejected artifact status", () => {
-    expectBlockedWith("artifact_status_blocks_handoff", validHandoff(), validArtifact({ acceptance_status: "rejected" }));
+    expectBlockedWith("acceptance_status_not_consumable", validHandoff(), validArtifact({ acceptance_status: "rejected" }));
   });
 
   it("pending handoff returns blocked and allowed false", () => {
@@ -202,10 +203,63 @@ describe("validateRoleHandoffGate", () => {
 
   it("needs_revision to non-recovery/non-human target is blocked", () => {
     expectBlockedWith(
-      "artifact_status_blocks_handoff",
+      "acceptance_status_not_consumable",
       validHandoff(),
       validArtifact({ acceptance_status: "needs_revision" })
     );
+  });
+
+  it("allows needs_revision Planner output to be consumed by Critic as T1 context", () => {
+    const result = validateRoleHandoffGate({
+      handoff: validHandoff({ target_role: "critic" }),
+      source_artifact: validArtifact({
+        required_next_role: "critic",
+        acceptance_status: "needs_revision"
+      })
+    });
+
+    expect(result).toEqual({ allowed: true, status: "allowed", errors: [] });
+  });
+
+  it("emits only the closed structured check-11 issue for an unconsumable status", () => {
+    const result = validateRoleHandoffGate({
+      handoff: validHandoff({ target_role: "critic" }),
+      source_artifact: validArtifact({
+        required_next_role: "critic",
+        acceptance_status: "blocked"
+      })
+    });
+
+    expect(result.errors).toEqual([
+      {
+        code: "acceptance_status_not_consumable",
+        check_index: 11,
+        path: "$.source_artifact.acceptance_status",
+        expected: ["accepted", "needs_revision"],
+        actual: "blocked",
+        transition: { source_role: "planner", target_role: "critic" }
+      }
+    ]);
+    expect(JSON.stringify(result.errors)).not.toContain("message");
+  });
+
+  it("keeps the check-11 matrix closed and default-deny", () => {
+    expect(Object.keys(ROLE_HANDOFF_CONSUMPTION_MATRIX)).toHaveLength(33);
+    const result = validateRoleHandoffGate({
+      handoff: validHandoff({ target_role: "reporter" }),
+      source_artifact: validArtifact({
+        required_next_role: "reporter",
+        acceptance_status: "needs_revision"
+      })
+    });
+    expect(result.errors).toContainEqual({
+      code: "acceptance_status_not_consumable",
+      check_index: 11,
+      path: "$.source_artifact.acceptance_status",
+      expected: [],
+      actual: "needs_revision",
+      transition: { source_role: "planner", target_role: "reporter" }
+    });
   });
 
   it("rejects identity mismatch across task_id", () => {
@@ -237,6 +291,14 @@ describe("validateRoleHandoffGate", () => {
 
   it("rejects forbidden fields such as chain_of_thought", () => {
     expectBlockedWith("forbidden_content_detected", validHandoff(), validArtifact({ chain_of_thought: "private" }));
+  });
+
+  it("rejects forbidden raw-input fields in the handoff envelope", () => {
+    expectBlockedWith(
+      "forbidden_content_detected",
+      validHandoff({ input_payload: { sentinel: true } }),
+      validArtifact()
+    );
   });
 
   it("preserves underlying validator paths enough to debug", () => {

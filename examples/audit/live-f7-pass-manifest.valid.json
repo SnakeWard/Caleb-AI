@@ -1,0 +1,37 @@
+{
+  "pass_id": "LIVE-F7",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LIVE_F7_HANDOFF_GATE_EVIDENCE_REPORT.md",
+    "examples/audit/live-f7-pass-manifest.valid.json",
+    "tests/acceptance/liveF7HandoffGateEvidenceAcceptance.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/STATUS_LOG.md",
+    "src/logicEngine/rotationExecutionSeam.ts",
+    "src/roleRuntime/roleRuntimeExecutor.ts",
+    "src/roleRuntime/types/roleRuntimeTypes.ts",
+    "src/roles/roleHandoffGate.ts",
+    "tests/acceptance/raR1StaticRotationAcceptance.test.ts",
+    "tests/roles/roleHandoffGate.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/cli/**",
+    "src/modelBoundary/**",
+    "src/providers/**",
+    "src/rawOutput/**",
+    "src/logicEngine/liveRoleArtifactEnvelope.ts",
+    "src/logicEngine/liveRoleOutputNormalizer.ts",
+    "src/logicEngine/liveRotationGateEvidence.ts",
+    "src/logicEngine/rotationPlanBridge.ts",
+    "examples/live-rotation/prompts/**",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

@@ -9,6 +9,7 @@ import {
 } from "./roleArtifactValidator.js";
 import type {
   RoleArtifact,
+  RoleAcceptanceStatus,
   RoleArtifactValidationError,
   RoleId
 } from "./types/roleArtifact.js";
@@ -25,18 +26,85 @@ export type RoleHandoffGateErrorCode =
   | "artifact_role_mismatch"
   | "handoff_artifact_ref_mismatch"
   | "required_next_role_mismatch"
-  | "artifact_status_blocks_handoff"
+  | "acceptance_status_not_consumable"
   | "handoff_status_blocks_handoff"
   | "identity_mismatch"
   | "forbidden_content_detected"
   | "embedded_trace_not_allowed"
   | "embedded_context_not_allowed";
 
-export interface RoleHandoffGateError {
-  readonly code: RoleHandoffGateErrorCode;
+type RoleHandoffGateMessageErrorCode = Exclude<
+  RoleHandoffGateErrorCode,
+  "acceptance_status_not_consumable"
+>;
+
+export interface RoleHandoffGateMessageError {
+  readonly code: RoleHandoffGateMessageErrorCode;
   readonly path: string;
   readonly message: string;
 }
+
+export interface RoleHandoffAcceptanceStatusIssue {
+  readonly code: "acceptance_status_not_consumable";
+  readonly check_index: 11;
+  readonly path: "$.source_artifact.acceptance_status";
+  readonly expected: readonly RoleAcceptanceStatus[];
+  readonly actual: RoleAcceptanceStatus;
+  readonly transition: {
+    readonly source_role: RoleId;
+    readonly target_role: RoleId;
+  };
+}
+
+export type RoleHandoffGateError =
+  | RoleHandoffGateMessageError
+  | RoleHandoffAcceptanceStatusIssue;
+
+export type RoleHandoffTransitionKey = `${RoleId}->${RoleId}`;
+
+const ACCEPTED_ONLY = Object.freeze(["accepted"] as const);
+const ACCEPTED_OR_NEEDS_REVISION = Object.freeze([
+  "accepted",
+  "needs_revision"
+] as const);
+
+export const ROLE_HANDOFF_CONSUMPTION_MATRIX = Object.freeze({
+  "planner->implementer": ACCEPTED_ONLY,
+  "planner->verifier": ACCEPTED_ONLY,
+  "planner->critic": ACCEPTED_OR_NEEDS_REVISION,
+  "planner->human_operator": ACCEPTED_OR_NEEDS_REVISION,
+  "implementer->verifier": ACCEPTED_ONLY,
+  "implementer->critic": ACCEPTED_ONLY,
+  "implementer->synthesizer": ACCEPTED_ONLY,
+  "implementer->human_operator": ACCEPTED_OR_NEEDS_REVISION,
+  "verifier->critic": ACCEPTED_ONLY,
+  "verifier->synthesizer": ACCEPTED_ONLY,
+  "verifier->reporter": ACCEPTED_ONLY,
+  "verifier->human_operator": ACCEPTED_OR_NEEDS_REVISION,
+  "critic->planner": ACCEPTED_ONLY,
+  "critic->implementer": ACCEPTED_ONLY,
+  "critic->verifier": ACCEPTED_ONLY,
+  "critic->synthesizer": ACCEPTED_ONLY,
+  "critic->recovery": ACCEPTED_OR_NEEDS_REVISION,
+  "critic->human_operator": ACCEPTED_OR_NEEDS_REVISION,
+  "synthesizer->reporter": ACCEPTED_ONLY,
+  "synthesizer->verifier": ACCEPTED_ONLY,
+  "synthesizer->human_operator": ACCEPTED_OR_NEEDS_REVISION,
+  "reporter->human_operator": ACCEPTED_OR_NEEDS_REVISION,
+  "recovery->planner": ACCEPTED_ONLY,
+  "recovery->implementer": ACCEPTED_ONLY,
+  "recovery->verifier": ACCEPTED_ONLY,
+  "recovery->human_operator": ACCEPTED_OR_NEEDS_REVISION,
+  "human_operator->planner": ACCEPTED_ONLY,
+  "human_operator->implementer": ACCEPTED_ONLY,
+  "human_operator->verifier": ACCEPTED_ONLY,
+  "human_operator->critic": ACCEPTED_ONLY,
+  "human_operator->synthesizer": ACCEPTED_ONLY,
+  "human_operator->reporter": ACCEPTED_ONLY,
+  "human_operator->recovery": ACCEPTED_OR_NEEDS_REVISION
+} as const satisfies Partial<
+  Record<RoleHandoffTransitionKey, readonly RoleAcceptanceStatus[]>
+>);
 
 export interface RoleHandoffGateResult {
   readonly allowed: boolean;
@@ -216,20 +284,31 @@ function validateAcceptanceStatus(
   artifact: RoleArtifact,
   errors: RoleHandoffGateError[]
 ): void {
-  if (artifact.acceptance_status === "accepted") {
-    return;
-  }
-  if (
-    artifact.acceptance_status === "needs_revision" &&
-    (handoff.target_role === "recovery" || handoff.target_role === "human_operator")
-  ) {
+  const transition = `${handoff.source_role}->${handoff.target_role}` as RoleHandoffTransitionKey;
+  const expected = readConsumableAcceptanceStatuses(transition);
+  if (expected.includes(artifact.acceptance_status)) {
     return;
   }
   errors.push({
-    code: "artifact_status_blocks_handoff",
+    code: "acceptance_status_not_consumable",
+    check_index: 11,
     path: "$.source_artifact.acceptance_status",
-    message: `source_artifact.acceptance_status '${artifact.acceptance_status}' blocks this handoff.`
+    expected,
+    actual: artifact.acceptance_status,
+    transition: {
+      source_role: handoff.source_role,
+      target_role: handoff.target_role
+    }
   });
+}
+
+function readConsumableAcceptanceStatuses(
+  transition: RoleHandoffTransitionKey
+): readonly RoleAcceptanceStatus[] {
+  const matrix = ROLE_HANDOFF_CONSUMPTION_MATRIX as Partial<
+    Record<RoleHandoffTransitionKey, readonly RoleAcceptanceStatus[]>
+  >;
+  return matrix[transition] ?? [];
 }
 
 function validateHandoffStatus(status: RoleHandoffStatus, errors: RoleHandoffGateError[]): void {

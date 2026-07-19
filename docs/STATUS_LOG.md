@@ -969,3 +969,30 @@ change occurred.
 LIVE-F6 Exact Wrapper Normalization: Accepted — one exact evidenced presentation
 wrapper may pass without speculative recovery; raw T0, strict validation, and
 reconstructable applied-stage provenance remain intact. STOP.
+
+### 2026-07-19 — LIVE-F7 — handoff consumption matrix and refusal evidence
+
+Attempt six reached a valid F4 Planner artifact twice and halted before Critic
+because legacy check 11 allowed `needs_revision` only toward Recovery or the
+Human Operator. LIVE-F7 replaces that branch with a closed 33-transition
+consumption matrix. Planner -> Critic now consumes `accepted` or
+`needs_revision` strictly as T1 context; all legacy accepted, recovery, and
+human allowances remain explicit; `blocked`, `rejected`, undeclared
+transitions, and unlisted statuses remain default-deny.
+
+Gate refusal now appends `gate_evaluation_refused` before returning. Its
+execution-keyed Ledger shape retains every refused classified check, canonical
+artifact digest/ID, and raw T0 `derived_from` lineage without payload prose or
+gate free-text. Reconstruction returns the failed step from JSONL alone and
+continues to refuse multi-attempt ambiguity. A terminal-write throw detector
+proves the gate evidence survives later failure.
+
+Focused validation passed 5 files / 73 tests; canonical validation passed 201
+files / 3,210 tests. Governed typecheck/build exited 0; catalogs remain 13/9;
+prompt digests and the seven-entry L1 allowlist are unchanged. AUD-2 is
+compliant/T2 across 12 paths with zero violations. No live call, credential,
+provider, transport, prompt, normalization, or route change occurred.
+
+LIVE-F7 Handoff Gate Modernization and Refusal Evidence: Accepted offline — the
+gate now follows RA-C consumption doctrine and cannot lose its refusal witness.
+E1 attempt seven remains separately authorized. STOP.

@@ -1,5 +1,8 @@
 import type { ISODateTimeString, Sha256Digest } from "../../types/common.js";
-import type { RoleHandoffGateStatus } from "../../roles/roleHandoffGate.js";
+import type {
+  RoleHandoffGateErrorCode,
+  RoleHandoffGateStatus
+} from "../../roles/roleHandoffGate.js";
 import type { RoleId } from "../../roles/types/roleArtifact.js";
 import type { ContentAddressedRawOutputStore } from "../../rawOutput/contentAddressedRawOutputStore.js";
 import type { RoleRuntimeAdapter, RoleRuntimeContextRef } from "./roleRuntimeAdapter.js";
@@ -43,6 +46,46 @@ export interface RoleRuntimeInvocationRecord {
   readonly created_at: ISODateTimeString;
 }
 
+export interface RoleRuntimeGateRefusalIssue {
+  readonly check_index: number | null;
+  readonly code: RoleHandoffGateErrorCode;
+  readonly path: string;
+  readonly expected: readonly string[] | null;
+  readonly actual: string | null;
+  readonly transition: {
+    readonly source_role: RoleId;
+    readonly target_role: RoleId;
+  };
+}
+
+export interface RoleRuntimeGateEvaluationRefusedRecord {
+  readonly record_type: "gate_evaluation_refused";
+  readonly record_id: string;
+  readonly plan_id: string;
+  readonly task_id: string;
+  readonly run_id: string;
+  readonly trace_id: string;
+  readonly context_id: string;
+  readonly step_index: number;
+  readonly source_role: RoleId;
+  readonly target_role: RoleId;
+  readonly adapter_id: string;
+  readonly adapter_kind: RotationPlanAdapterKind;
+  readonly stage: "handoff_gate";
+  readonly terminal_status: "handoff_gate_blocked" | "handoff_gate_invalid";
+  readonly artifact_digest: Sha256Digest;
+  readonly artifact_id: string;
+  readonly derived_from?: readonly Sha256Digest[];
+  readonly validation_status: "schema_valid";
+  readonly trust_tier: "T1";
+  readonly issues: readonly RoleRuntimeGateRefusalIssue[];
+  readonly created_at: ISODateTimeString;
+}
+
+export type RoleRuntimeLedgerRecord =
+  | RoleRuntimeInvocationRecord
+  | RoleRuntimeGateEvaluationRefusedRecord;
+
 export interface RoleRuntimeExecutionResult {
   readonly ok: boolean;
   readonly status: RoleRuntimeExecutionStatus;
@@ -51,6 +94,7 @@ export interface RoleRuntimeExecutionResult {
   readonly failed_step_index: number | null;
   readonly failure_code: RoleRuntimeFailureCode | null;
   readonly records: readonly RoleRuntimeInvocationRecord[];
+  readonly failed_step_record: RoleRuntimeGateEvaluationRefusedRecord | null;
 }
 
 export interface RoleRuntimeExecutorInput {
@@ -58,7 +102,7 @@ export interface RoleRuntimeExecutorInput {
   readonly adapters: ReadonlyMap<string, RoleRuntimeAdapter>;
   readonly store: ContentAddressedRawOutputStore;
   readonly now?: () => ISODateTimeString;
-  readonly appendRecord?: (record: RoleRuntimeInvocationRecord) => boolean | Promise<boolean>;
+  readonly appendRecord?: (record: RoleRuntimeLedgerRecord) => boolean | Promise<boolean>;
 }
 
 export interface ReconstructedRotationStep {
