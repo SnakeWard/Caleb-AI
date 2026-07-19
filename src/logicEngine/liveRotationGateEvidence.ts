@@ -1,7 +1,7 @@
 import type { RuntimeRotationPlanRole, RuntimeRotationRouteMode } from "../roles/types/runtimeRotationPlan.js";
 
 export const LIVE_ROTATION_GATE_EVIDENCE_SCHEMA_VERSION = "1.0.0" as const;
-export const LIVE_ROTATION_MAX_ROLE_TOKENS = 512;
+export const LIVE_ROTATION_MAX_ROLE_TOKENS = 1536;
 export const LIVE_ROTATION_MAX_TIMEOUT_MS = 30_000;
 export const LIVE_ROTATION_MAX_RESPONSE_BYTES = 1024 * 1024;
 export const LIVE_ROTATION_MAX_TOTAL_TOKENS = 8192;

@@ -92,6 +92,12 @@ describe("LIVE-R1 gate chain", () => {
   it("accepts only the complete closed evidence envelope and rejects every gate class", async () => {
     const valid = await fixtureEvidence();
     expect(validateLiveRotationGateEvidence(valid, requirements).ok).toBe(true);
+    expect((valid as Record<string, any>).role_bindings.map((entry: any) => entry.budget.max_tokens)).toEqual([1536, 1536]);
+    expect((valid as Record<string, any>).run_budget).toEqual({
+      max_total_invocations: 2,
+      max_total_tokens: 8192,
+      max_spend_usd: 0.05
+    });
     const mutations: Array<(copy: Record<string, any>) => void> = [
       (copy) => { delete copy.explicit_opt_in; },
       (copy) => { delete copy.explicit_live_request; },
@@ -99,9 +105,10 @@ describe("LIVE-R1 gate chain", () => {
       (copy) => { copy.approved_by = ""; },
       (copy) => { copy.role_bindings[0].provider_id = "xai"; },
       (copy) => { copy.role_bindings[0].model_id = "grok-3-mini"; },
-      (copy) => { copy.role_bindings[0].budget.max_tokens = 513; },
+      (copy) => { copy.role_bindings[0].budget.max_tokens = 1537; },
       (copy) => { copy.role_bindings[0].budget.timeout_ms = 30001; },
       (copy) => { copy.run_budget.max_total_invocations = 3; },
+      (copy) => { copy.run_budget.max_total_tokens = 8193; },
       (copy) => { copy.run_budget.max_spend_usd = 0.051; },
       (copy) => { copy.prompt_templates.planner.path = "uncommitted.prompt.txt"; },
       (copy) => { copy.unknown_gate = true; }
@@ -116,7 +123,11 @@ describe("LIVE-R1 gate chain", () => {
   it("stores the exact observed bytes and requires the store digest to match the adapter digest", async () => {
     const text = artifactText();
     const successRuntime = await runtime(async (input) => {
-      expect((await input.normalized_output_observer(text)).ok).toBe(true);
+      expect((await input.normalized_output_observer(text, {
+        output_digest: computeSha256Digest(text),
+        finish_reason: "end_turn",
+        output_tokens: 20
+      })).ok).toBe(true);
       return response(computeSha256Digest(text));
     });
     expect((await successRuntime.adapter.invoke(invocation())).ok).toBe(true);
@@ -125,7 +136,11 @@ describe("LIVE-R1 gate chain", () => {
     expect(state.invocations[0]?.output_digest).toBe(computeSha256Digest(text));
 
     const mismatchRuntime = await runtime(async (input) => {
-      await input.normalized_output_observer(text);
+      await input.normalized_output_observer(text, {
+        output_digest: computeSha256Digest(text),
+        finish_reason: "end_turn",
+        output_tokens: 20
+      });
       return response(computeSha256Digest(`${text}x`));
     });
     expect((await mismatchRuntime.adapter.invoke(invocation())).ok).toBe(false);
@@ -135,7 +150,11 @@ describe("LIVE-R1 gate chain", () => {
   it("turns observer refusal and slow providers into distinct fail-closed invocation failures", async () => {
     const text = artifactText();
     const observerRuntime = await runtime(async (input) => {
-      await input.normalized_output_observer("not-json");
+      await input.normalized_output_observer("not-json", {
+        output_digest: computeSha256Digest("not-json"),
+        finish_reason: "end_turn",
+        output_tokens: 1
+      });
       return { ok: false, status: "failed", issues: [], failure: { failure_kind: "observer_failure" } } as unknown as LiveAdapterResult;
     });
     expect((await observerRuntime.adapter.invoke(invocation())).ok).toBe(false);

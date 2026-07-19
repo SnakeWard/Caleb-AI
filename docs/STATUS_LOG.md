@@ -906,3 +906,34 @@ or E1 retry occurred.
 LIVE-F4 Runtime Artifact Authority: Accepted — models supply bounded semantic
 content; Caleb owns identity, route, time, and reconstructable provenance; a
 billable observer failure can no longer masquerade as zero telemetry. STOP.
+
+### 2026-07-19 — LIVE-F5 — truncation evidence preservation
+
+Attempt four reached Anthropic, used 291 input and exactly 512 output tokens,
+spent USD 0.002851, and halted before Critic as `json_parse`. Its Ledger output
+digest survived, but `observed_store_digest` is null and metadata-only checks
+confirmed the T0 content/record objects are absent. The unrecoverable bytes were
+not read, printed, invented, or backfilled. Protocol/evidence commit `c2bc73d` is
+pushed. Pre-change snapshot
+`snap_20260719T150613825Z_000429_milestone` is Ledgered and verified.
+
+LIVE-F5 passes adapter-computed digest, finish reason, and output-token count as
+safe observer metadata. Bounded normalized bytes now enter M3 as T0 before
+content validation; store and adapter digests must match. `max_tokens` reason or
+token-count equality produces `live_observer_output_truncated` with stage
+`output_truncated` before JSON parse. Failure telemetry and the terminal Ledger
+retain the observed digest/raw-output reference while output prose stays absent.
+
+E1 Planner/Critic budgets are 1,536 each, run tokens are 8,192, and spend stays
+USD 0.05. E2, prompts, models, route, transport, credentials, and strict
+validators are unchanged. Focused validation passed 5 files / 15 tests; widened
+regressions passed 11 / 115; canonical passed 198 files / 3,176 tests in 95.44
+seconds. Typecheck/build exited 0; catalogs remain 13/9; AUD-2 is compliant/T2.
+Transport hashes are byte-identical to `c2bc73d`, egress remains two sites, and
+protected diffs are empty. Validation snapshot
+`snap_20260719T151925913Z_000431_milestone` is Ledgered and verified. No live call
+occurred.
+
+LIVE-F5 Truncation Evidence Preservation: Accepted — budget truncation is
+identified before parsing, diagnosable failures retain their T0 witness, and E1
+has enough bounded output room without moving the spend ceiling. STOP.

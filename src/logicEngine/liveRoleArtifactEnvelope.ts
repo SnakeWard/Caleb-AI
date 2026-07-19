@@ -10,6 +10,7 @@ import type { LiveRoleSemanticPayload } from "../roles/types/liveRoleSemanticPay
 import type { RoleRuntimeAdapterInvokeInput } from "../roleRuntime/types/roleRuntimeAdapter.js";
 
 export type LiveRoleArtifactFailureStage =
+  | "output_truncated"
   | "json_parse"
   | "payload_validation"
   | "envelope_validation"

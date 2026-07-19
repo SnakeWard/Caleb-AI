@@ -38,6 +38,7 @@ export type LiveRotationRuntimeFailureCode =
   | "live_provider_response_unvalidated"
   | "live_observer_failure"
   | "live_observer_artifact_invalid"
+  | "live_observer_output_truncated"
   | "live_observer_storage_failed"
   | "live_observer_output_missing"
   | "live_output_digest_mismatch"
@@ -237,17 +238,46 @@ async function invokeRole(
   const promptText = renderPrompt(template.template_text, runtimeInput, config.evidence.task_statement);
   const promptDigest = computeSha256Digest(promptText) as Sha256Digest;
   let observation: StoredObservation | null = null;
+  let observedStoreDigest: Sha256Digest | null = null;
   let observerFailure: LiveRotationRuntimeFailureCode | null = null;
   let observerFailureStage: LiveRoleArtifactFailureStage | null = null;
   let observerValidationIssues: readonly LiveRoleArtifactSafeIssue[] = [];
   let observationOpen = true;
 
-  const normalizedOutputObserver: LiveAdapterNormalizedOutputObserver = async (normalizedText) => {
+  const normalizedOutputObserver: LiveAdapterNormalizedOutputObserver = async (
+    normalizedText,
+    metadata
+  ) => {
     if (!observationOpen) {
       return { ok: false, failure_code: "observer_failure" };
     }
     if (new TextEncoder().encode(normalizedText).byteLength > binding.budget.max_response_bytes) {
       observerFailure = "live_response_bytes_exceeded";
+      return { ok: false, failure_code: "observer_failure" };
+    }
+    const createdAt = config.now?.() ?? new Date().toISOString();
+    const stored = await config.store.store({
+      output_text: normalizedText,
+      provider_id: binding.provider_id,
+      model_id: binding.model_id,
+      created_at: createdAt
+    });
+    if (!stored.ok || stored.record === undefined) {
+      observerFailure = "live_observer_storage_failed";
+      return { ok: false, failure_code: "observer_failure" };
+    }
+    observedStoreDigest = stored.record.digest;
+    if (stored.record.digest !== metadata.output_digest) {
+      observerFailure = "live_output_digest_mismatch";
+      return { ok: false, failure_code: "observer_failure" };
+    }
+    if (
+      metadata.finish_reason === "max_tokens" ||
+      metadata.output_tokens === binding.budget.max_tokens
+    ) {
+      observerFailure = "live_observer_output_truncated";
+      observerFailureStage = "output_truncated";
+      observerValidationIssues = [{ code: "output_truncated", path: "$" }];
       return { ok: false, failure_code: "observer_failure" };
     }
     let parsed: unknown;
@@ -266,7 +296,6 @@ async function invokeRole(
       observerValidationIssues = payloadValidation.issues.map(({ code, path }) => ({ code, path }));
       return { ok: false, failure_code: "observer_failure" };
     }
-    const createdAt = config.now?.() ?? new Date().toISOString();
     const artifact = buildLiveRoleArtifact({
       payload: parsed as LiveRoleSemanticPayload,
       invocation: runtimeInput,
@@ -280,16 +309,6 @@ async function invokeRole(
       observerFailure = "live_observer_artifact_invalid";
       observerFailureStage = envelopeValidation.detail.stage;
       observerValidationIssues = envelopeValidation.detail.issues;
-      return { ok: false, failure_code: "observer_failure" };
-    }
-    const stored = await config.store.store({
-      output_text: normalizedText,
-      provider_id: binding.provider_id,
-      model_id: binding.model_id,
-      created_at: createdAt
-    });
-    if (!stored.ok || stored.record === undefined) {
-      observerFailure = "live_observer_storage_failed";
       return { ok: false, failure_code: "observer_failure" };
     }
     observation = {
@@ -350,7 +369,7 @@ async function invokeRole(
           binding,
           promptDigest,
           result.failure,
-          (observation as StoredObservation | null)?.digest ?? null,
+          observedStoreDigest,
           code,
           observerFailureStage,
           observerValidationIssues

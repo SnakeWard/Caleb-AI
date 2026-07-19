@@ -29,6 +29,7 @@ type LiveRotationRuntimeFailureCode =
   | "live_provider_response_unvalidated"
   | "live_observer_failure"
   | "live_observer_artifact_invalid"
+  | "live_observer_output_truncated"
   | "live_observer_storage_failed"
   | "live_observer_output_missing"
   | "live_output_digest_mismatch"
@@ -912,6 +913,13 @@ function buildTerminalLedgerEntry(input: {
 }): LedgerEntry {
   const failed = !input.execution_result.ok;
   const failureCode = input.failure_code_override;
+  const rawOutputRefs = failed
+    ? input.live_state?.invocations.flatMap((entry) =>
+        entry.observed_store_digest === null
+          ? []
+          : [`raw-output:${entry.observed_store_digest}`]
+      ) ?? []
+    : [];
   const errors: CalebError[] =
     failed && failureCode !== null
       ? [
@@ -977,7 +985,10 @@ function buildTerminalLedgerEntry(input: {
       input.start_entry.ledger_id,
       ...input.invocation_ledger_ids
     ],
-    artifact_refs: input.execution_result.records.map((record) => record.artifact_id)
+    artifact_refs: [
+      ...input.execution_result.records.map((record) => record.artifact_id),
+      ...rawOutputRefs
+    ]
   });
 }
 

@@ -1,6 +1,6 @@
 # Caleb AI — Pass Protocol LIVE-F5
 
-**Authorized by:** Pat, 2026-07-19  
+**Authorized by:** Pat, 2026-07-19
 **Origin:** LIVE-R2 E1 attempt four, executed by Pat from a host leaf shell under
 LIVE-F1 through LIVE-F4, reached Anthropic and consumed the complete 512-token
 Planner output budget. The normalized output observer classified the incomplete

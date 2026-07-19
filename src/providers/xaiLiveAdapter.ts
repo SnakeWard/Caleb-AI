@@ -338,9 +338,10 @@ export function createGrokLiveAdapter(
     }
 
     if (deps.normalized_output_observer !== undefined) {
+      const outputDigest = computeSha256Digest(outputText);
       const responseTelemetry: LiveAdapterFailureResponseTelemetry = {
         provider_response_id: typeof body.id === "string" ? body.id : null,
-        output_digest: computeSha256Digest(outputText),
+        output_digest: outputDigest,
         finish_reason: finishReason,
         token_usage: {
           input_tokens: inputTokens,
@@ -356,7 +357,11 @@ export function createGrokLiveAdapter(
         }
       };
       try {
-        const observation = await deps.normalized_output_observer(outputText);
+        const observation = await deps.normalized_output_observer(outputText, {
+          output_digest: outputDigest,
+          finish_reason: finishReason,
+          output_tokens: outputTokens
+        });
         if (!observation.ok) {
           return failure(request, "observer_failure", "failed", false, [
             "normalized_output_observer_failed"

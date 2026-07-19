@@ -1,0 +1,15 @@
+{
+  "schema_version": "live-f5-regression.1.0.0",
+  "case_id": "synthetic_output_truncated_before_json_parse",
+  "historical_attempt_four_bytes": "unrecoverable",
+  "fixture_is_synthetic": true,
+  "normalized_output_text": "{\"summary\":\"live-f5-synthetic-truncation-marker\",\"claims\":[",
+  "provider_finish_reason": "max_tokens",
+  "output_tokens": 1536,
+  "max_tokens": 1536,
+  "expected_stage": "output_truncated",
+  "expected_issue": {
+    "code": "output_truncated",
+    "path": "$"
+  }
+}

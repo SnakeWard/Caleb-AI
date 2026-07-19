@@ -151,3 +151,37 @@ authorized repair; this event does not alter code.
 `LIVE-R2 First Live Rotation retry: STOP — credentials were correctly isolated and failure taxonomy was preserved, but the Planner ended in network_failure; no Critic answered, and repeated-plan reconstruction is not attempt-safe.`
 
 E2 and any further E1 attempt remain unauthorized.
+
+## 2026-07-19 E1 attempt four after LIVE-F1 through LIVE-F4
+
+Pat freshly authorized and executed attempt four from a host shell under the
+standing live-event doctrine. The repository Ledger contains one new,
+execution-keyed bridge/start/terminal chain:
+
+- Execution: `execution_73c1f247-f3db-4f58-b283-c5b9158bfaa5`.
+- Bridge: `bridge_10ba5573-0eae-4cc7-8658-1922bf07950c`.
+- Start: `rotation_46bb3c7c-462b-4675-b27f-37a3d2e4945c`.
+- Terminal: `rotation_4e25e9bc-3cc2-4f8d-b314-717a49d24c42`.
+- Planner: 291 input / 512 output / 803 total tokens; USD 0.002851;
+  5,897 ms; response identity retained.
+- Critic: not invoked.
+- Failure: `live_observer_artifact_invalid`, observer stage `json_parse`, safe
+  issue `{code: invalid_json, path: $}`.
+
+The Planner used exactly its 512-token output budget. That is sufficient evidence
+of truncation under the subsequently authorized LIVE-F5 rule even though the old
+terminal shape did not retain the provider stop reason. Attempt four therefore
+exposed a classification error: a budget-truncated document was reported as
+malformed JSON.
+
+The Ledger retained output digest
+`sha256:2a699062d4920fcda79c85962634b856be2a3757fdc0d82b60ee36d79e5ef812`
+but recorded `observed_store_digest: null`. A metadata-only filesystem check
+confirmed that neither the matching content file nor its T0 record exists in the
+live role-rotation content-addressed store. The output bytes were not read,
+printed, or recovered; they are unavailable for backfill. LIVE-F5 was authorized
+to correct future classification and failure-path evidence persistence offline.
+
+`LIVE-R2 E1 attempt four: STOP — Planner reached Anthropic and exhausted its
+512-token output budget; the observer misclassified truncation as invalid JSON,
+discarded the T0 witness, and correctly halted before Critic.`

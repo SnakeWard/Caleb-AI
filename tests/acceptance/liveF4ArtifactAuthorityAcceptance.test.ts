@@ -39,6 +39,7 @@ import type {
 } from "../../src/roleRuntime/types/roleRuntimeAdapter.js";
 import { validateRoleArtifact } from "../../src/roles/roleArtifactValidator.js";
 import type { LiveRoleSemanticPayload } from "../../src/roles/types/liveRoleSemanticPayload.js";
+import type { Sha256Digest } from "../../src/types/common.js";
 import type { LedgerEntry } from "../../src/types/ledger.js";
 
 const roots: string[] = [];
@@ -148,7 +149,11 @@ describe("LIVE-F4 artifact authority acceptance", () => {
       const text = rawTexts[calls];
       if (text === undefined) throw new Error("Unexpected provider call.");
       calls += 1;
-      expect((await input.normalized_output_observer(text)).ok).toBe(true);
+      expect((await input.normalized_output_observer(text, {
+        output_digest: computeSha256Digest(text),
+        finish_reason: "end_turn",
+        output_tokens: 1
+      })).ok).toBe(true);
       return {
         ok: true,
         status: "response_schema_valid",
@@ -363,11 +368,20 @@ describe("LIVE-F4 artifact authority acceptance", () => {
       observer_failure_stage: "json_parse",
       observer_validation_issues: [{ code: "invalid_json", path: "$" }]
     });
-    expect(recorded.output_digest).toBe(computeSha256Digest(outputMarker));
+    const outputDigest = computeSha256Digest(outputMarker) as Sha256Digest;
+    expect(recorded.output_digest).toBe(outputDigest);
+    expect(recorded.observed_store_digest).toBe(outputDigest);
     expect(recorded.estimated_spend_usd).toBeGreaterThan(0);
     expect((terminal.result as Record<string, any>).live_totals.total_tokens).toBe(18);
     expect(JSON.stringify(terminal)).not.toContain(outputMarker);
-    expect(terminal.artifact_refs).toEqual([]);
+    expect(terminal.artifact_refs).toEqual([`raw-output:${outputDigest}`]);
+    expect(await store.read(outputDigest)).toMatchObject({
+      ok: true,
+      status: "found",
+      digest: outputDigest,
+      content: outputMarker,
+      record: { raw_output_trust_tier: "T0" }
+    });
   });
 
   it("records attempt-three's envelope shape as payload_validation with code/path only", async () => {
@@ -381,7 +395,11 @@ describe("LIVE-F4 artifact authority acceptance", () => {
       "utf8"
     );
     const invoker: LiveRotationProviderInvoker = async (input) => {
-      expect((await input.normalized_output_observer(text)).ok).toBe(false);
+      expect((await input.normalized_output_observer(text, {
+        output_digest: computeSha256Digest(text),
+        finish_reason: "end_turn",
+        output_tokens: 1
+      })).ok).toBe(false);
       return {
         ok: false,
         status: "failed",

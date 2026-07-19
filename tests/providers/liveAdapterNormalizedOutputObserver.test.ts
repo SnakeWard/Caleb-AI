@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import type { LiveAdapterNormalizedOutputMetadata } from "../../src/modelBoundary/types/liveAdapterTypes.js";
+
 import {
   buildAnthropicLiveAdapterRequest,
   buildGrokLiveAdapterRequest,
@@ -9,6 +11,7 @@ import {
   DEFAULT_GROK_LIVE_ADAPTER_CONFIG,
   evaluateOneProviderAdapterLivePrerequisites
 } from "../../src/providers/index.js";
+import { computeSha256Digest } from "../../src/providers/liveAdapterShared.js";
 
 const prereqs = evaluateOneProviderAdapterLivePrerequisites({
   repo_root_confirmed: true,
@@ -52,13 +55,23 @@ describe("Amendment A normalized-output observer", () => {
     };
     const request = buildAnthropicLiveAdapterRequest({ prompt_text: "bounded", config });
     let observed = "";
+    let observedMetadata: LiveAdapterNormalizedOutputMetadata | null = null;
     const success = await createAnthropicLiveAdapter(config, gates, {
       credential_provider: () => "test-only-key",
       fetch_impl: fetchImpl,
-      normalized_output_observer: (text) => { observed = text; return { ok: true }; }
+      normalized_output_observer: (text, metadata) => {
+        observed = text;
+        observedMetadata = metadata;
+        return { ok: true };
+      }
     }).invokeLive({ request, prompt_text: "bounded" });
     expect(success.ok).toBe(true);
     expect(observed).toBe(marker);
+    expect(observedMetadata).toEqual({
+      output_digest: computeSha256Digest(marker),
+      finish_reason: "end_turn",
+      output_tokens: 2
+    });
     expect(JSON.stringify(success)).not.toContain(marker);
 
     const failed = await createAnthropicLiveAdapter(config, gates, {
@@ -106,13 +119,23 @@ describe("Amendment A normalized-output observer", () => {
     };
     const request = buildGrokLiveAdapterRequest({ prompt_text: "bounded", config });
     let observed = "";
+    let observedMetadata: LiveAdapterNormalizedOutputMetadata | null = null;
     const result = await createGrokLiveAdapter(config, gates, {
       credential_provider: () => "test-only-key",
       fetch_impl: fetchImpl,
-      normalized_output_observer: (text) => { observed = text; return { ok: true }; }
+      normalized_output_observer: (text, metadata) => {
+        observed = text;
+        observedMetadata = metadata;
+        return { ok: true };
+      }
     }).invokeLive({ request, prompt_text: "bounded" });
     expect(result.ok).toBe(true);
     expect(observed).toBe(marker);
+    expect(observedMetadata).toEqual({
+      output_digest: computeSha256Digest(marker),
+      finish_reason: "stop",
+      output_tokens: 2
+    });
     expect(observed).not.toContain(reasoningMarker);
     expect(JSON.stringify(result)).not.toContain(marker);
     expect(JSON.stringify(result)).not.toContain(reasoningMarker);

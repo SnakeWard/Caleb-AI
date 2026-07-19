@@ -44,6 +44,90 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - LIVE-F5 Truncation Evidence Preservation
+
+**Objective:** Classify provider budget truncation before JSON parsing, retain
+bounded normalized bytes as T0 evidence on observer failures, and amend E1 token
+budgets without changing its spend cap or execution shape.
+
+**Source Authority:** Pat's 2026-07-19 LIVE-F5 authorization and committed
+`docs/protocols/PASS_PROTOCOL_LIVE_F5.md` at `c2bc73d`.
+
+**Current State:** E1 attempt four consumed exactly its 512-token Planner budget
+and halted as `json_parse`. Safe Ledger telemetry survived, including output
+digest, usage, spend, timing, and response ID. `observed_store_digest` is null,
+and digest-addressed T0 content/record files were verified absent without reading
+or reproducing the historical output.
+
+**Scope:** Safe completion metadata at the normalized-output observer boundary;
+pre-parse T0 storage and digest binding; distinct `output_truncated` stage and
+runtime failure; terminal raw-output reference; E1 role budgets 1,536 each and
+run total 8,192 with USD 0.05 unchanged; synthetic truncation fixture; focused
+tests/report/audit/status/snapshots.
+
+**Out of Scope:** Live calls/retries, historical output reconstruction, E2 budget
+changes, prompts/models/routes/registries, transport/fetch/endpoints/headers/
+credentials/retries, strict validator changes, CLI/dependencies/config/global
+timeouts, and historical Ledger rewriting.
+
+**Files Expected To Change:** Live adapter observer type; Anthropic/xAI normalized
+success observer calls; live runtime adapter; safe stage type; rotation terminal
+Ledger artifact references; live gate budget ceiling; E1 fixture; provider/gate/
+runtime/seam acceptance tests; synthetic regression; LIVE-F5 report/audit
+manifest; `PLANS.md`, `docs/STATUS_LOG.md`, protocol whitespace correction, and
+append-only snapshot Ledger.
+
+**Risk Level:** High — live trust boundary, raw-evidence persistence, budget
+policy, and Ledger provenance; live execution and transport remain excluded.
+
+**Snapshot / Rollback Plan:** Protocol and attempt-four evidence are committed
+and pushed at `c2bc73d`. Pre-change snapshot
+`snap_20260719T150613825Z_000429_milestone` is Ledgered and verified with 18
+configured captures. Git `c2bc73d` is the full mechanical rollback anchor for
+authorized files outside that fixed snapshot capture set.
+
+**Implementation Steps:** Extend observer metadata; store normalized bytes before
+content validation; bind adapter/store digests; classify either truncation signal
+before parse; retain raw digest/ref in terminal failure records; amend E1/gate
+budgets; add regression fixture/detectors; validate/audit; commit/push; STOP.
+
+**Validation Commands:** Focused LIVE-F5/LIVE-F4/provider/gate/seam/M3 tests;
+canonical `npm test`; `node ./node_modules/typescript/bin/tsc --noEmit`;
+`npm run build`; catalog listings; AUD-2 self-smoke; prompt hashes; serialization,
+egress, transport-function, and protected-diff proofs; snapshot/Git checks.
+
+**Acceptance Criteria:** Both truncation signals preempt JSON parse; ordinary
+invalid JSON remains `json_parse`; bounded observer failures retain exact T0
+bytes with independently matching digest and Ledger reference; digest mismatch
+fails distinctly; Planner truncation halts before Critic with real telemetry; E1
+accepts 1,536/1,536 and 8,192 while refusing higher ceilings; USD 0.05 unchanged;
+no raw serialization, transport drift, validator loosening, or live call.
+
+**Progress Log:** Attempt-four evidence/protocol commit `c2bc73d` pushed. Baseline
+passed 197 files / 3,173 tests in 86.72 seconds; governed typecheck and build
+exited 0. Pre-change snapshot `snap_20260719T150613825Z_000429_milestone` is
+Ledgered and verified. Truncation metadata/stage, pre-parse T0 persistence,
+failure Ledger refs, digest binding, E1 budgets, and permanent regressions are
+implemented. Focused validation passed 5 files / 15 tests; widened regression
+passed 11 / 115; canonical passed 198 files / 3,176 tests in 95.44 seconds.
+Governed typecheck/build exited 0; catalogs remain 13/9; AUD-2 is compliant/T2;
+transport hashes and protected surfaces are unchanged. Validation snapshot
+`snap_20260719T151925913Z_000431_milestone` is Ledgered and verified.
+
+**Decision Log:** The observer metadata is safe structured data only. T0 storage
+precedes semantic interpretation; an invalid payload is retained as untrusted
+evidence, never promoted. E1 run tokens become 8,192 because the run includes
+input/context tokens as well as two 1,536-token output ceilings. E2 stays fixed.
+
+**Surprises / Discoveries:** LIVE-F4 stored T0 only after all semantic/envelope
+checks passed, so its two-artifact provenance held on success but not on the
+diagnostic observer-failure path. Attempt four's bytes cannot be backfilled.
+
+**Final Report:** LIVE-F5 is accepted offline. Truncation is classified before
+JSON parse, every bounded validation failure retains its raw T0 witness and safe
+Ledger reference, and E1 budgets are 1,536/1,536 with 8,192 run tokens and the
+USD 0.05 spend cap unchanged. No live call or transport/prompt/model/E2 change.
+
 ## ExecPlan - LIVE-F4 Runtime Artifact Authority Repair
 
 **Objective:** Make models produce strictly bounded semantic content while Caleb

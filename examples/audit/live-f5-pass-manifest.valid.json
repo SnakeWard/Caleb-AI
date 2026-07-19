@@ -1,0 +1,46 @@
+{
+  "pass_id": "LIVE-F5",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LIVE_F5_TRUNCATION_EVIDENCE_REPORT.md",
+    "examples/audit/live-f5-pass-manifest.valid.json",
+    "examples/live-rotation/regressions/live-f5-output-truncated.fixture.json",
+    "tests/acceptance/liveF5TruncationEvidenceAcceptance.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/LIVE_R2_E1_EVENT_REPORT.md",
+    "docs/STATUS_LOG.md",
+    "docs/protocols/PASS_PROTOCOL_LIVE_F5.md",
+    "examples/live-rotation/event-e1.anthropic.fixture.json",
+    "src/logicEngine/liveRoleArtifactEnvelope.ts",
+    "src/logicEngine/liveRotationGateEvidence.ts",
+    "src/logicEngine/liveRotationRuntimeAdapter.ts",
+    "src/logicEngine/rotationExecutionSeam.ts",
+    "src/modelBoundary/types/liveAdapterTypes.ts",
+    "src/providers/anthropicLiveAdapter.ts",
+    "src/providers/xaiLiveAdapter.ts",
+    "tests/acceptance/liveF4ArtifactAuthorityAcceptance.test.ts",
+    "tests/logicEngine/liveRotationGateChain.test.ts",
+    "tests/providers/liveAdapterNormalizedOutputObserver.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/cli/**",
+    "src/logicEngine/rotationPlanBridge.ts",
+    "src/modelBoundary/liveAdapterContractValidator.ts",
+    "src/rawOutput/**",
+    "src/roles/roleArtifactValidator.ts",
+    "src/roles/liveRoleSemanticPayloadValidator.ts",
+    "src/roles/roleContractRegistry.ts",
+    "src/roles/roleHandoffGate.ts",
+    "examples/live-rotation/event-e2.cross-family.fixture.json",
+    "examples/live-rotation/prompts/**",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

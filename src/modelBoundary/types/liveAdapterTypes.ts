@@ -213,8 +213,15 @@ export type LiveAdapterNormalizedOutputObservation =
   | { readonly ok: true }
   | { readonly ok: false; readonly failure_code: "observer_failure" };
 
+export interface LiveAdapterNormalizedOutputMetadata {
+  readonly output_digest: string;
+  readonly finish_reason: string;
+  readonly output_tokens: number;
+}
+
 export type LiveAdapterNormalizedOutputObserver = (
-  normalized_output_text: string
+  normalized_output_text: string,
+  metadata: LiveAdapterNormalizedOutputMetadata
 ) =>
   | LiveAdapterNormalizedOutputObservation
   | Promise<LiveAdapterNormalizedOutputObservation>;
