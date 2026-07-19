@@ -1,0 +1,50 @@
+{
+  "pass_id": "LIVE-R1",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LIVE_ROTATION_GATE_CHAIN.md",
+    "docs/LIVE_R1_GATE_CHAIN_ACCEPTANCE_REPORT.md",
+    "examples/audit/live-r1-pass-manifest.valid.json",
+    "examples/live-rotation/**",
+    "src/cli/liveCredentialEnvironment.ts",
+    "src/logicEngine/liveRotationGateEvidence.ts",
+    "src/logicEngine/liveRotationRuntimeAdapter.ts",
+    "tests/acceptance/liveR1GateChainAcceptance.test.ts",
+    "tests/logicEngine/liveRotationGateChain.test.ts",
+    "tests/providers/liveAdapterNormalizedOutputObserver.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/STATUS_LOG.md",
+    "docs/protocols/PASS_PROTOCOL_LIVE_R1_R2.md",
+    "src/cli/cliTypes.ts",
+    "src/cli/commandHandlers.ts",
+    "src/cli/commandParser.ts",
+    "src/logicEngine/index.ts",
+    "src/logicEngine/rotationExecutionSeam.ts",
+    "src/logicEngine/rotationPlanBridge.ts",
+    "src/modelBoundary/types/liveAdapterTypes.ts",
+    "src/providers/anthropicLiveAdapter.ts",
+    "src/providers/anthropicLiveAdapterTypes.ts",
+    "src/providers/xaiLiveAdapter.ts",
+    "src/providers/xaiLiveAdapterTypes.ts",
+    "src/roleRuntime/types/roleRuntimeAdapter.ts",
+    "tests/acceptance/le2RotationPlanBridgeAcceptance.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "CODEX.md",
+    "src/logicEngine/types/routeInput.ts",
+    "src/logicEngine/routeInputGate.ts",
+    "src/roles/roleContractRegistry.ts",
+    "src/roles/roleHandoffGate.ts",
+    "src/roleRuntime/roleRuntimeExecutor.ts",
+    "src/hollows/v1HollowCatalog.ts",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

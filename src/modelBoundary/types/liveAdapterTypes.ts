@@ -30,6 +30,7 @@ export type LiveAdapterFailureKind =
   | "provider_rejected_request"
   | "provider_malformed_response"
   | "response_validation_failed"
+  | "observer_failure"
   | "safety_profile_blocked"
   | "network_failure"
   | "unknown_provider_error";
@@ -198,3 +199,13 @@ export interface LiveAdapterValidationResult {
   readonly ok: boolean;
   readonly errors: readonly LiveAdapterValidationIssue[];
 }
+
+export type LiveAdapterNormalizedOutputObservation =
+  | { readonly ok: true }
+  | { readonly ok: false; readonly failure_code: "observer_failure" };
+
+export type LiveAdapterNormalizedOutputObserver = (
+  normalized_output_text: string
+) =>
+  | LiveAdapterNormalizedOutputObservation
+  | Promise<LiveAdapterNormalizedOutputObservation>;

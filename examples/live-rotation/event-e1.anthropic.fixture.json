@@ -1,0 +1,89 @@
+{
+  "schema_version": "live-r1.0.0",
+  "event_id": "LIVE-R2-E1",
+  "carrier": {
+    "record_kind": "contract_validated_task_frame",
+    "record_id": "route_input.live_r2_e1",
+    "source": "logic_engine",
+    "validated_at": "2026-07-19T00:00:00.000Z",
+    "lineage_refs": ["rrp_223e4567-e89b-42d3-a456-426614174100"],
+    "task_frame": {
+      "task_id": "task_223e4567-e89b-42d3-a456-426614174101",
+      "run_id": "run_223e4567-e89b-42d3-a456-426614174102",
+      "trace_id": "trace_live_r2_e1_source",
+      "task_type": "planning",
+      "description": "LIVE-R2 E1 governed Planner/Critic exchange",
+      "input_summary": "Bounded host-contention triage protocol task",
+      "requested_by": "Pat",
+      "requires_code_mutation": false,
+      "created_at": "2026-07-19T00:00:00.000Z"
+    },
+    "validation": {
+      "validator": "validateTaskFrameInput",
+      "valid": true
+    }
+  },
+  "runtime_rotation_plan": {
+    "runtime_rotation_plan_id": "rrp_223e4567-e89b-42d3-a456-426614174100",
+    "schema_version": "1.0.0",
+    "task_id": "task_223e4567-e89b-42d3-a456-426614174101",
+    "run_id": "run_223e4567-e89b-42d3-a456-426614174102",
+    "authored_by": "human",
+    "route_mode": "planner_critic",
+    "roles_required": ["planner", "critic"],
+    "hollows_required": [],
+    "gates_required": ["role_handoff_gate", "final_verification_gate"],
+    "max_cycles": 1,
+    "stop_criteria": ["one declared Planner/Critic cycle only"],
+    "side_effect_policy": "none",
+    "code_mutation_policy": "none",
+    "snapshot_requirement": false,
+    "ledger_policy": "record_all_passes",
+    "created_at": "2026-07-19T00:00:00.000Z",
+    "live_rotation_gate_evidence": {
+      "schema_version": "1.0.0",
+      "explicit_opt_in": true,
+      "explicit_live_request": true,
+      "network_permission": true,
+      "approved_by": "Pat",
+      "task_statement": "Design a concise protocol for distinguishing host-contention test failures from deterministic code defects in Caleb AI.",
+      "prompt_templates": {
+        "planner": {
+          "template_id": "live_rotation_planner_v1",
+          "path": "examples/live-rotation/prompts/planner.prompt.txt",
+          "sha256_digest": "sha256:2f4b5cf9ba859b70735c8148970fcc536390e8037204c93da0bc28819d5b9973"
+        },
+        "critic": {
+          "template_id": "live_rotation_critic_v1",
+          "path": "examples/live-rotation/prompts/critic.prompt.txt",
+          "sha256_digest": "sha256:95b5b6fc2e26b8832cd4fee00004574bfa2b8daf8fa764c342a62807d8987594"
+        }
+      },
+      "role_bindings": [
+        {
+          "role_id": "planner",
+          "provider_id": "anthropic",
+          "adapter_id": "anthropic_live_adapter",
+          "model_id": "claude-haiku-4-5",
+          "budget": { "max_tokens": 512, "timeout_ms": 30000, "max_response_bytes": 1048576 }
+        },
+        {
+          "role_id": "critic",
+          "provider_id": "anthropic",
+          "adapter_id": "anthropic_live_adapter",
+          "model_id": "claude-haiku-4-5",
+          "budget": { "max_tokens": 512, "timeout_ms": 30000, "max_response_bytes": 1048576 }
+        }
+      ],
+      "run_budget": {
+        "max_total_invocations": 2,
+        "max_total_tokens": 4096,
+        "max_spend_usd": 0.05
+      }
+    }
+  },
+  "adapter_bindings": [
+    { "role_id": "planner", "adapter_id": "anthropic_live_adapter", "adapter_kind": "live" },
+    { "role_id": "critic", "adapter_id": "anthropic_live_adapter", "adapter_kind": "live" }
+  ]
+}

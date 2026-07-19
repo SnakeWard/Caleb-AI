@@ -287,13 +287,26 @@ describe("LE-2 rotation plan bridge acceptance", () => {
     expectLedgerEntry(entries, "completed");
   });
 
-  it("Envelope 8: live bindings and all inherited LE-1 failures reject; scope locks remain intact", async () => {
+  it("Envelope 8: evidence-gated live bindings re-admit visibly; evidence-free live and inherited failures reject", async () => {
     const successPlan = await fixture(
       "examples/roles/runtime-rotation-plan.valid.planner-critic.json"
     );
     await expectRejection(successPlan, "bridge_rejected_live_adapter_unavailable", {
       adapter_bindings: bindings(successPlan, "live")
     });
+
+    const liveWrapper = await fixture("examples/live-rotation/event-e1.anthropic.fixture.json");
+    const livePlan = liveWrapper["runtime_rotation_plan"] as Record<string, unknown>;
+    const live = await invoke(livePlan, {
+      carrier: liveWrapper["carrier"] as ContractValidatedTaskFrameRouteInput,
+      adapter_bindings: liveWrapper["adapter_bindings"] as RotationPlanBridgeAdapterBinding[]
+    });
+    expect(live.result.ok).toBe(true);
+    if (live.result.ok) {
+      expect(live.result.derived_plan.sequence.map((step) => step.adapter_kind)).toEqual(["live", "live"]);
+      expect(live.result.derived_plan.live_rotation_gate_evidence?.explicit_opt_in).toBe(true);
+    }
+    expectLedgerEntry(live.entries, "completed");
 
     const modelPlan = await fixture("examples/roles/runtime-rotation-plan.invalid.model-authored.json");
     await expectRejection(modelPlan, "bridge_rejected_authorship");

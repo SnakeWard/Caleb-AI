@@ -754,3 +754,28 @@ canonical run.
 LE-3-A Execution Boundary Lock: Accepted — the first rotation's guardrails are now
 a protected surface. The combined report carries the required 15-row table, so
 the oldest open report debt is discharged.
+
+### 2026-07-19 — Pass LIVE-R1 — Live Rotation Gate Chain (accepted)
+
+Protocol `b090c26` and Amendment A `98521ec` are pushed. Pre-change snapshot
+`snap_20260719T023049028Z_000408_milestone` is Ledgered and verified. LIVE-R1
+visibly amends LE-2 Envelope 8: live bindings derive only with closed evidence;
+the evidence-free `bridge_rejected_live_adapter_unavailable` wall remains.
+
+Optional normalized-output observers now bind adapter digests independently to
+M3 content addresses. Observer, digest, response-size, timeout, token,
+invocation, and spend failures halt fail-closed. Results, failures, CLI output,
+and Ledger records contain digests/telemetry but not output prose. Grok
+`reasoning_content` remains excluded. Existing Anthropic/Grok adapter test files
+were unchanged; extracted transport request diffs were empty; egress remains two
+sites. No live call occurred.
+
+Focused LIVE-R1 validation passed 4 files / 16 tests. Canonical typecheck and
+build exited 0. The offline canonical suite passed 191/191 files and
+3,135/3,135 tests, exit 0. Catalogs remain 13/9. AUD-2 self-smoke was
+compliant/T2 across 28 changed paths with zero violations. L1 remains the exact
+seven-entry allowlist.
+
+LIVE-R1 Live Rotation Gate Chain: Accepted — live bindings are bridgeable with
+evidence and refused without it; budgets bind; nothing is ambient. LIVE-R2 waits
+on Pat's fresh explicit words.

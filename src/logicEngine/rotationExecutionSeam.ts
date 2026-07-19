@@ -15,6 +15,52 @@ import type { JsonObject, JsonValue, Sha256Digest } from "../types/common.js";
 import type { CalebError } from "../types/invocation.js";
 import type { LedgerEntry } from "../types/ledger.js";
 import type { BridgedExecutablePlan } from "./rotationPlanBridge.js";
+import { validateLiveRotationGateEvidence } from "./liveRotationGateEvidence.js";
+
+type LiveRotationRuntimeFailureCode =
+  | "live_prompt_template_digest_mismatch"
+  | "live_provider_invocation_failed"
+  | "live_role_timeout_budget_exceeded"
+  | "live_provider_response_unvalidated"
+  | "live_observer_failure"
+  | "live_observer_artifact_invalid"
+  | "live_observer_storage_failed"
+  | "live_observer_output_missing"
+  | "live_output_digest_mismatch"
+  | "live_response_bytes_exceeded"
+  | "live_role_token_budget_exceeded"
+  | "live_total_invocation_budget_exceeded"
+  | "live_total_token_budget_exceeded"
+  | "live_total_spend_budget_exceeded";
+
+interface LiveRotationInvocationTelemetry {
+  readonly step_index: number;
+  readonly role_id: "planner" | "critic";
+  readonly provider_id: string;
+  readonly adapter_id: string;
+  readonly model_id: string;
+  readonly prompt_digest: Sha256Digest;
+  readonly output_digest: Sha256Digest | null;
+  readonly observed_store_digest: Sha256Digest | null;
+  readonly input_tokens: number;
+  readonly output_tokens: number;
+  readonly total_tokens: number;
+  readonly estimated_spend_usd: number;
+  readonly latency_ms: number;
+  readonly budget: { readonly max_tokens: number; readonly timeout_ms: number; readonly max_response_bytes: number };
+  readonly failure_code: LiveRotationRuntimeFailureCode | null;
+}
+
+interface LiveRotationRuntimeState {
+  readonly invocations: readonly LiveRotationInvocationTelemetry[];
+  readonly totals: { readonly invocations: number; readonly total_tokens: number; readonly estimated_spend_usd: number };
+  readonly failure_code: LiveRotationRuntimeFailureCode | null;
+}
+
+interface SeamLiveRuntimeAdapter extends RoleRuntimeAdapter {
+  readonly adapter_kind: "live";
+  read_live_state(): LiveRotationRuntimeState;
+}
 
 export const ROTATION_EXECUTION_SEAM_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -25,10 +71,13 @@ export type RotationExecutionSeamRefusalCode =
   | "seam_rejected_authorship"
   | "seam_rejected_non_mock_binding"
   | "seam_rejected_mock_adapter_unavailable"
+  | "seam_rejected_live_gate_evidence"
+  | "seam_rejected_live_adapter_unavailable"
   | "seam_rejected_ledger_unavailable";
 
 export type RotationExecutionSeamFailureCode =
   | RoleRuntimeFailureCode
+  | LiveRotationRuntimeFailureCode
   | "seam_terminal_ledger_write_failed";
 
 export type RotationExecutionLedgerAppender = (
@@ -89,6 +138,15 @@ export interface ReconstructedRotationLedgerInvocation {
   readonly artifact_digest: Sha256Digest;
   readonly context_refs: readonly RoleRuntimeContextRef[];
   readonly lineage_refs: readonly string[];
+  readonly provider_id: string | null;
+  readonly model_id: string | null;
+  readonly prompt_digest: Sha256Digest | null;
+  readonly output_digest: Sha256Digest | null;
+  readonly observed_store_digest: Sha256Digest | null;
+  readonly input_tokens: number | null;
+  readonly output_tokens: number | null;
+  readonly total_tokens: number | null;
+  readonly estimated_spend_usd: number | null;
 }
 
 export interface ReconstructedRotationLedgerChain {
@@ -181,7 +239,29 @@ export async function executeBridgedRotationAtSeam(
     );
   }
 
-  if (!hasOnlyMockBindings(plan, input.adapters)) {
+  const livePlan = plan.sequence.some((step) => step.adapter_kind === "live");
+  if (livePlan) {
+    if (plan.live_rotation_gate_evidence === undefined) {
+      return appendRefusal(
+        input,
+        "seam_rejected_non_mock_binding",
+        bridgeEntry.ledger_id,
+        now,
+        nextLedgerId,
+        appendedEntries
+      );
+    }
+    if (!hasValidLiveBindings(plan, input.adapters)) {
+      return appendRefusal(
+        input,
+        "seam_rejected_live_gate_evidence",
+        bridgeEntry.ledger_id,
+        now,
+        nextLedgerId,
+        appendedEntries
+      );
+    }
+  } else if (!hasOnlyMockBindings(plan, input.adapters)) {
     return appendRefusal(
       input,
       "seam_rejected_non_mock_binding",
@@ -195,7 +275,9 @@ export async function executeBridgedRotationAtSeam(
   if (!hasAllDeclaredAdapters(plan, input.adapters)) {
     return appendRefusal(
       input,
-      "seam_rejected_mock_adapter_unavailable",
+      livePlan
+        ? "seam_rejected_live_adapter_unavailable"
+        : "seam_rejected_mock_adapter_unavailable",
       bridgeEntry.ledger_id,
       now,
       nextLedgerId,
@@ -203,7 +285,14 @@ export async function executeBridgedRotationAtSeam(
     );
   }
 
-  const startEntry = buildExecutionStartEntry(plan, bridgeEntry, planDigest, now(), nextLedgerId("start"));
+  const startEntry = buildExecutionStartEntry(
+    plan,
+    bridgeEntry,
+    planDigest,
+    livePlan ? "live" : "mock",
+    now(),
+    nextLedgerId("start")
+  );
   if (!(await appendEntry(input.append_ledger_entry, startEntry))) {
     return refusalResult("seam_rejected_ledger_unavailable", bridgeEntry.ledger_id, []);
   }
@@ -211,12 +300,17 @@ export async function executeBridgedRotationAtSeam(
 
   const invocationLedgerIds: string[] = [];
   const appendRecord = async (record: RoleRuntimeInvocationRecord): Promise<boolean> => {
+    const liveState = readLiveRuntimeState(input.adapters);
+    const liveTelemetry = liveState?.invocations.find(
+      (entry) => entry.step_index === record.step_index
+    ) ?? null;
     const invocationEntry = buildInvocationLedgerEntry({
       plan,
       bridge_entry: bridgeEntry,
       start_entry: startEntry,
       plan_digest: planDigest,
       record,
+      live_telemetry: liveTelemetry,
       ledger_id: nextLedgerId(`step_${record.step_index}`)
     });
     const appended = await appendEntry(input.append_ledger_entry, invocationEntry);
@@ -234,12 +328,16 @@ export async function executeBridgedRotationAtSeam(
     now,
     appendRecord
   });
+  const liveState = readLiveRuntimeState(input.adapters);
+  const effectiveFailureCode = liveState?.failure_code ?? executionResult.failure_code;
 
   const terminalEntry = buildTerminalLedgerEntry({
     plan,
     bridge_entry: bridgeEntry,
     start_entry: startEntry,
     execution_result: executionResult,
+    failure_code_override: effectiveFailureCode,
+    live_state: liveState,
     invocation_ledger_ids: invocationLedgerIds,
     timestamp: now(),
     ledger_id: nextLedgerId("terminal")
@@ -262,7 +360,7 @@ export async function executeBridgedRotationAtSeam(
       ok: false,
       status: "failed",
       refusal_code: null,
-      failure_code: executionResult.failure_code ?? "invalid_rotation_plan",
+      failure_code: effectiveFailureCode ?? "invalid_rotation_plan",
       bridge_ledger_id: bridgeEntry.ledger_id,
       execution_result: executionResult,
       ledger_entries: appendedEntries
@@ -472,6 +570,47 @@ function hasOnlyMockBindings(
   return [...adapters.values()].every((adapter) => adapter.adapter_kind === "mock");
 }
 
+function isLiveRotationRoleRuntimeAdapter(
+  adapter: RoleRuntimeAdapter | undefined
+): adapter is SeamLiveRuntimeAdapter {
+  return adapter?.adapter_kind === "live" &&
+    typeof (adapter as Partial<SeamLiveRuntimeAdapter>).read_live_state === "function";
+}
+
+function hasValidLiveBindings(
+  plan: BridgedExecutablePlan,
+  adapters: ReadonlyMap<string, RoleRuntimeAdapter>
+): boolean {
+  if (
+    plan.sequence.length === 0 ||
+    plan.sequence.some((step) => step.adapter_kind !== "live") ||
+    plan.bridge_provenance.adapter_bindings.some((binding) => binding.adapter_kind !== "live") ||
+    [...adapters.values()].some((adapter) => adapter.adapter_kind !== "live")
+  ) {
+    return false;
+  }
+  const roles = plan.live_rotation_gate_evidence?.role_bindings.map((binding) => binding.role_id) ?? [];
+  const validation = validateLiveRotationGateEvidence(plan.live_rotation_gate_evidence, {
+    route_mode: plan.route_mode,
+    roles_required: roles,
+    max_cycles: plan.max_cycles,
+    sequence_length: plan.sequence.length,
+    adapter_bindings: plan.bridge_provenance.adapter_bindings
+  });
+  return validation.ok && [...adapters.values()].every(isLiveRotationRoleRuntimeAdapter);
+}
+
+function readLiveRuntimeState(
+  adapters: ReadonlyMap<string, RoleRuntimeAdapter>
+): LiveRotationRuntimeState | null {
+  for (const adapter of adapters.values()) {
+    if (isLiveRotationRoleRuntimeAdapter(adapter)) {
+      return adapter.read_live_state();
+    }
+  }
+  return null;
+}
+
 function hasAllDeclaredAdapters(
   plan: BridgedExecutablePlan,
   adapters: ReadonlyMap<string, RoleRuntimeAdapter>
@@ -483,6 +622,7 @@ function buildExecutionStartEntry(
   plan: BridgedExecutablePlan,
   bridgeEntry: LedgerEntry,
   planDigest: Sha256Digest,
+  adapterKind: "mock" | "live",
   timestamp: string,
   ledgerId: string
 ): LedgerEntry {
@@ -499,7 +639,8 @@ function buildExecutionStartEntry(
       source_runtime_rotation_plan_id: plan.source_runtime_rotation_plan_id,
       sequence_length: plan.sequence.length,
       human_confirmed: true,
-      adapter_kind: "mock"
+      adapter_kind: adapterKind,
+      live_gate_evidence_present: adapterKind === "live"
     },
     errors: [],
     parent_refs: [bridgeEntry.ledger_id, plan.source_runtime_rotation_plan_id],
@@ -513,6 +654,7 @@ function buildInvocationLedgerEntry(input: {
   readonly start_entry: LedgerEntry;
   readonly plan_digest: Sha256Digest;
   readonly record: RoleRuntimeInvocationRecord;
+  readonly live_telemetry: LiveRotationInvocationTelemetry | null;
   readonly ledger_id: string;
 }): LedgerEntry {
   const result: JsonObject = {
@@ -526,7 +668,22 @@ function buildInvocationLedgerEntry(input: {
     context_refs: input.record.context_refs.map((ref) => ({ ...ref })),
     validation_status: input.record.validation_status,
     handoff_gate_status: input.record.handoff_gate_status,
-    failure_code: input.record.failure_code
+    failure_code: input.record.failure_code,
+    ...(input.live_telemetry === null
+      ? {}
+      : {
+          provider_id: input.live_telemetry.provider_id,
+          model_id: input.live_telemetry.model_id,
+          prompt_digest: input.live_telemetry.prompt_digest,
+          output_digest: input.live_telemetry.output_digest,
+          observed_store_digest: input.live_telemetry.observed_store_digest,
+          input_tokens: input.live_telemetry.input_tokens,
+          output_tokens: input.live_telemetry.output_tokens,
+          total_tokens: input.live_telemetry.total_tokens,
+          estimated_spend_usd: input.live_telemetry.estimated_spend_usd,
+          latency_ms: input.live_telemetry.latency_ms,
+          budget: { ...input.live_telemetry.budget }
+        })
   };
   return {
     ...baseLedgerEntry({
@@ -568,12 +725,14 @@ function buildTerminalLedgerEntry(input: {
   readonly bridge_entry: LedgerEntry;
   readonly start_entry: LedgerEntry;
   readonly execution_result: RoleRuntimeExecutionResult;
+  readonly failure_code_override: RotationExecutionSeamFailureCode | null;
+  readonly live_state: LiveRotationRuntimeState | null;
   readonly invocation_ledger_ids: readonly string[];
   readonly timestamp: string;
   readonly ledger_id: string;
 }): LedgerEntry {
   const failed = !input.execution_result.ok;
-  const failureCode = input.execution_result.failure_code;
+  const failureCode = input.failure_code_override;
   const errors: CalebError[] =
     failed && failureCode !== null
       ? [
@@ -599,7 +758,32 @@ function buildTerminalLedgerEntry(input: {
       failed_step_index: input.execution_result.failed_step_index,
       failure_code: failureCode,
       invocation_ledger_ids: [...input.invocation_ledger_ids],
-      record_ids: input.execution_result.records.map((record) => record.record_id)
+      record_ids: input.execution_result.records.map((record) => record.record_id),
+      ...(input.live_state === null
+        ? {}
+        : {
+            live_invocations: input.live_state.invocations.map((entry) => ({
+              step_index: entry.step_index,
+              role_id: entry.role_id,
+              provider_id: entry.provider_id,
+              adapter_id: entry.adapter_id,
+              model_id: entry.model_id,
+              prompt_digest: entry.prompt_digest,
+              output_digest: entry.output_digest,
+              observed_store_digest: entry.observed_store_digest,
+              input_tokens: entry.input_tokens,
+              output_tokens: entry.output_tokens,
+              total_tokens: entry.total_tokens,
+              estimated_spend_usd: entry.estimated_spend_usd,
+              latency_ms: entry.latency_ms,
+              budget: { ...entry.budget },
+              failure_code: entry.failure_code
+            })),
+            live_totals: { ...input.live_state.totals },
+            live_run_budget: input.plan.live_rotation_gate_evidence === undefined
+              ? null
+              : { ...input.plan.live_rotation_gate_evidence.run_budget }
+          })
     },
     errors,
     parent_refs: [
@@ -742,7 +926,16 @@ function parseReconstructedInvocation(
     adapter_id: adapterId,
     artifact_digest: artifactDigest,
     context_refs: contextRefs,
-    lineage_refs: lineageRefs
+    lineage_refs: lineageRefs,
+    provider_id: resultNullableString(entry, "provider_id"),
+    model_id: resultNullableString(entry, "model_id"),
+    prompt_digest: resultNullableString(entry, "prompt_digest"),
+    output_digest: resultNullableString(entry, "output_digest"),
+    observed_store_digest: resultNullableString(entry, "observed_store_digest"),
+    input_tokens: resultOptionalNumber(entry, "input_tokens"),
+    output_tokens: resultOptionalNumber(entry, "output_tokens"),
+    total_tokens: resultOptionalNumber(entry, "total_tokens"),
+    estimated_spend_usd: resultOptionalNumber(entry, "estimated_spend_usd")
   };
 }
 
@@ -794,6 +987,14 @@ function resultNullableNumber(entry: LedgerEntry, key: string): number | null {
   return value === null ? null : typeof value === "number" && Number.isInteger(value) ? value : null;
 }
 
+function resultOptionalNumber(entry: LedgerEntry, key: string): number | null {
+  if (!isObject(entry.result)) {
+    return null;
+  }
+  const value = entry.result[key];
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
 function resultNullableString(entry: LedgerEntry, key: string): string | null {
   if (!isObject(entry.result)) {
     return null;
@@ -822,6 +1023,8 @@ function refusalMessage(code: RotationExecutionSeamRefusalCode): string {
     seam_rejected_authorship: "The source plan author is not human or fixture.",
     seam_rejected_non_mock_binding: "Only mock role adapter bindings may execute in LE-3.",
     seam_rejected_mock_adapter_unavailable: "A declared mock role adapter is unavailable.",
+    seam_rejected_live_gate_evidence: "Live bindings require complete revalidated LIVE-R1 gate evidence.",
+    seam_rejected_live_adapter_unavailable: "A declared live role adapter is unavailable.",
     seam_rejected_ledger_unavailable: "Mandatory Ledger persistence is unavailable."
   };
   return messages[code];

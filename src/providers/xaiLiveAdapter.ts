@@ -232,7 +232,7 @@ export function createGrokLiveAdapter(
       }
 
       if (response.ok) {
-        return normalizeSuccess(request, rawBody, {
+        return await normalizeSuccess(request, rawBody, {
           startedAt,
           latencyMs: Date.now() - startedMs,
           attempts,
@@ -263,7 +263,7 @@ export function createGrokLiveAdapter(
     );
   }
 
-  function normalizeSuccess(
+  async function normalizeSuccess(
     request: LiveAdapterRequest,
     rawBody: string,
     timing: {
@@ -272,7 +272,7 @@ export function createGrokLiveAdapter(
       readonly attempts: number;
       readonly maxAttempts: number;
     }
-  ): LiveAdapterResult {
+  ): Promise<LiveAdapterResult> {
     let parsed: unknown;
     try {
       parsed = JSON.parse(rawBody);
@@ -326,6 +326,21 @@ export function createGrokLiveAdapter(
     }
     if (message !== null && typeof message.reasoning_content === "string") {
       warnings.push("provider_reasoning_content_excluded_from_digest");
+    }
+
+    if (deps.normalized_output_observer !== undefined) {
+      try {
+        const observation = await deps.normalized_output_observer(outputText);
+        if (!observation.ok) {
+          return failure(request, "observer_failure", "failed", false, [
+            "normalized_output_observer_failed"
+          ]);
+        }
+      } catch {
+        return failure(request, "observer_failure", "failed", false, [
+          "normalized_output_observer_failed"
+        ]);
+      }
     }
 
     const record: LiveAdapterResponse = {

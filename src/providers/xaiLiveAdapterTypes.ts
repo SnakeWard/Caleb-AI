@@ -1,5 +1,6 @@
 import type {
   LiveAdapterProviderNeutralLimits,
+  LiveAdapterNormalizedOutputObserver,
   LiveAdapterRequest,
   LiveAdapterResult
 } from "../modelBoundary/types/liveAdapterTypes.js";
@@ -46,6 +47,7 @@ export interface GrokLiveAdapterGateEvidence {
 
 export interface GrokLiveAdapterDeps {
   readonly credential_provider: GrokCredentialProvider | null;
+  readonly normalized_output_observer?: LiveAdapterNormalizedOutputObserver;
   readonly fetch_impl?: typeof fetch;
   readonly now?: () => Date;
 }

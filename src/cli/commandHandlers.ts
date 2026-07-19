@@ -54,7 +54,12 @@ import {
   evaluateOneProviderAdapterLivePrerequisites,
   GROK_LIVE_ADAPTER_ID
 } from "../providers/index.js";
-import type { LiveAdapterRequest, LiveAdapterResult } from "../modelBoundary/types/liveAdapterTypes.js";
+import { computeSha256Digest } from "../providers/liveAdapterShared.js";
+import type {
+  LiveAdapterNormalizedOutputObserver,
+  LiveAdapterRequest,
+  LiveAdapterResult
+} from "../modelBoundary/types/liveAdapterTypes.js";
 import type { AnthropicLiveAdapterConfig } from "../providers/anthropicLiveAdapterTypes.js";
 import type { GrokLiveAdapterConfig } from "../providers/xaiLiveAdapterTypes.js";
 import { runPassComplianceAudit } from "../audit/passComplianceAuditCommand.js";
@@ -63,6 +68,19 @@ import { createMockRoleRuntimeAdapter } from "../roleRuntime/mockRoleRuntimeAdap
 import type { RoleRuntimeAdapter } from "../roleRuntime/types/roleRuntimeAdapter.js";
 import type { RoleId } from "../roles/types/roleArtifact.js";
 import { executeBridgedRotationAtSeam } from "../logicEngine/rotationExecutionSeam.js";
+import { bridgeRuntimeRotationPlan } from "../logicEngine/rotationPlanBridge.js";
+import type { ContractValidatedTaskFrameRouteInput } from "../logicEngine/types/routeInput.js";
+import type {
+  LiveRotationGateEvidence,
+  LiveRotationProviderId,
+  LiveRotationRoleBindingEvidence
+} from "../logicEngine/liveRotationGateEvidence.js";
+import {
+  createLiveRotationRoleRuntimeAdapter,
+  LiveRotationRunBudgetTracker,
+  type LiveRotationPromptTemplate,
+  type LiveRotationProviderInvoker
+} from "../logicEngine/liveRotationRuntimeAdapter.js";
 import type {
   CliCommandName,
   CliCommandResult,
@@ -71,6 +89,10 @@ import type {
   ReportFormat,
   RunHollowCliOptions
 } from "./cliTypes.js";
+import {
+  countUndeclaredCredentialShapedEnvironmentNames,
+  unsetDeclaredEnvironmentNames
+} from "./liveCredentialEnvironment.js";
 
 const MAX_INPUT_FILE_BYTES = 1024 * 1024;
 const MAX_HOLLOWCUT_PROJECT_FILE_BYTES = 1024 * 1024;
@@ -113,6 +135,8 @@ export async function handleCliCommand(parsed: ParsedCliCommand): Promise<CliCom
       return handleLogicExecuteCommand(parsed);
     case "execute-rotation-plan":
       return handleExecuteRotationPlanCommand(parsed);
+    case "execute-live-rotation":
+      return handleExecuteLiveRotationCommand(parsed);
     case "one-provider-adapter-dry-run":
       return handleOneProviderAdapterDryRunCommand(parsed);
     case "run-one-provider-adapter-live":
@@ -207,12 +231,13 @@ export function handleHelpCommand(): CliCommandResult {
       "caleb route-decision (--input-json <json> | --input-file <file>) [--json] [--write-ledger] [--ledger-path <path>]",
       "caleb logic-execute --id <hollow_id> (--input-json <json> | --input-file <file>) (--hollow-input-json <json> | --hollow-input-file <file>) [--approved-by <actor>] [--files-to-capture-json <json> | --files-to-capture-file <file>] [--json] [--include-context] [--include-trace] [--write-ledger] [--ledger-path <path>]",
       "caleb execute-rotation-plan --plan-file <bridged-plan.json> --confirm [--ledger-path <path>] [--json]",
+      "caleb execute-live-rotation --fixture-file <fixture.json> --confirm --credential-env-var <ENV_NAME|provider=ENV_NAME,...> --approved-by <actor> [--ledger-path <path>] [--json]",
       "caleb one-provider-adapter-dry-run [--explicit-opt-in true|false] [--explicit-live-request true|false] [--json]",
       "caleb run-one-provider-adapter-live --explicit-opt-in true --explicit-live-request true --network-permission true --kill-switch-open true --credential-env-var <ENV_VAR_NAME> --approved-by <actor> --prompt-file <file> --write-ledger [--adapter-id anthropic_live_adapter|grok_live_adapter] [--ledger-path <path>] [--model <model_id>] [--max-output-tokens <n>] [--timeout-ms <n>] [--expected-output-sha256 <hex>] [--json]",
       "caleb audit-pass-compliance --manifest <path> [--base-ref <git-ref>] --json"
     ],
     note:
-      "Media commands are explicit and separate from the accepted V1 catalog. Hollowcut project inspection validates project JSON only; it does not render, export, mutate, write Ledger entries, or assign trust. route-decision is a dry-run diagnostic: it classifies signals, selects a route, and builds a work graph without executing any model calls. logic-execute dispatches exactly one V1 Hollow for hollow_only routes through the Verified Return Path. execute-rotation-plan is human-confirmed, mock-only, bridged-plan-only, and always Ledgered. --files-to-capture-json and --files-to-capture-file supply a JSON array of project-relative file paths to snapshot before dispatch; required when requires_code_mutation is true."
+      "Media commands are explicit and separate from the accepted V1 catalog. Hollowcut project inspection validates project JSON only; it does not render, export, mutate, write Ledger entries, or assign trust. route-decision is a dry-run diagnostic: it classifies signals, selects a route, and builds a work graph without executing any model calls. logic-execute dispatches exactly one V1 Hollow for hollow_only routes through the Verified Return Path. execute-rotation-plan is human-confirmed, mock-only, bridged-plan-only, and always Ledgered. execute-live-rotation is separately confirm-gated, evidence-gated, budgeted, and always Ledgered; it is not used by tests or CI. --files-to-capture-json and --files-to-capture-file supply a JSON array of project-relative file paths to snapshot before dispatch; required when requires_code_mutation is true."
   });
 }
 
@@ -312,6 +337,343 @@ export async function handleExecuteRotationPlanCommand(
     `Rotation completed with ${result.execution_result.completed_steps} role invocations.`,
     data
   );
+}
+
+interface LiveRotationFixtureFile {
+  readonly carrier: ContractValidatedTaskFrameRouteInput;
+  readonly runtime_rotation_plan: unknown;
+  readonly adapter_bindings: readonly {
+    readonly role_id: "planner" | "critic";
+    readonly adapter_id: string;
+    readonly adapter_kind: "live";
+  }[];
+}
+
+interface ScopedCredentialHandle {
+  readonly provider: () => string | undefined;
+  dispose(): void;
+}
+
+export async function handleExecuteLiveRotationCommand(
+  parsed: ParsedCliCommand
+): Promise<CliCommandResult> {
+  const command = "execute-live-rotation" as const;
+  const fixtureFile = stringFlag(parsed, "fixture_file");
+  const credentialSpec = stringFlag(parsed, "credential_env_var");
+  const approvedBy = stringFlag(parsed, "approved_by");
+  if (
+    fixtureFile === undefined ||
+    credentialSpec === undefined ||
+    approvedBy === undefined ||
+    parsed.flags.confirm !== true
+  ) {
+    return errorResult(command, "Live rotation requires fixture, confirmation, credentials, and approver.", [
+      { code: "live_rotation_cli_gate_incomplete", message: "Required live-rotation command gates are incomplete." }
+    ]);
+  }
+
+  const fixtureResult = await readLiveRotationFixture(fixtureFile);
+  if (!fixtureResult.ok) {
+    return errorResult(command, "Live rotation fixture is invalid.", fixtureResult.errors);
+  }
+
+  const ledgerPath = stringFlag(parsed, "ledger_path") ?? DEFAULT_ROTATION_LEDGER_PATH;
+  const ledger = new JsonlLedger(ledgerPath);
+  const bridge = await bridgeRuntimeRotationPlan({
+    carrier: fixtureResult.fixture.carrier,
+    runtime_rotation_plan: fixtureResult.fixture.runtime_rotation_plan,
+    adapter_bindings: fixtureResult.fixture.adapter_bindings,
+    append_ledger_entry: async (entry) => {
+      await ledger.append(entry);
+      return true;
+    }
+  });
+  if (!bridge.ok || bridge.outcome !== "derived") {
+    const code = bridge.rejection_code ?? "live_rotation_bridge_failed";
+    return errorResult(command, `Live rotation bridge refused: ${code}.`, [
+      { code, message: "The live rotation fixture did not pass the bridge gate." }
+    ]);
+  }
+
+  const evidence = bridge.derived_plan.live_rotation_gate_evidence;
+  if (evidence === undefined || evidence.approved_by !== approvedBy) {
+    return errorResult(command, "Named approver does not match committed gate evidence.", [
+      { code: "live_rotation_approver_mismatch", message: "--approved-by must exactly match the fixture evidence." }
+    ]);
+  }
+
+  const requiredProviders = [...new Set(evidence.role_bindings.map((binding) => binding.provider_id))];
+  const declaration = parseCredentialDeclarations(credentialSpec, requiredProviders);
+  if (!declaration.ok) {
+    return errorResult(command, "Credential declarations are invalid.", declaration.errors);
+  }
+  const ambientCount = countUndeclaredCredentialShapedEnvironmentNames(declaration.declared_names);
+  if (ambientCount > 0) {
+    return errorResult(command, "Ambient credential trap fired before any credential value read.", [
+      {
+        code: "live_rotation_ambient_credentials_detected",
+        message: `${ambientCount} undeclared credential-shaped environment variable(s) are present.`
+      }
+    ]);
+  }
+
+  const handles = new Map<LiveRotationProviderId, ScopedCredentialHandle>();
+  try {
+    for (const provider of requiredProviders) {
+      const envName = declaration.by_provider.get(provider);
+      if (envName === undefined) {
+        return errorResult(command, "Required provider credential declaration is missing.", [
+          { code: "live_rotation_credential_declaration_missing", message: `No credential source declared for ${provider}.` }
+        ]);
+      }
+      const handle = createScopedCredentialHandle(envName);
+      if (handle.provider() === undefined || handle.provider()?.length === 0) {
+        handle.dispose();
+        return errorResult(command, "A declared credential is unavailable.", [
+          { code: "live_rotation_credential_unavailable", message: `Declared credential for ${provider} is unavailable.` }
+        ]);
+      }
+      handles.set(provider, handle);
+    }
+
+    const templates = await loadLiveRotationPromptTemplates(evidence);
+    if (!templates.ok) {
+      return errorResult(command, "Committed prompt template integrity check failed.", templates.errors);
+    }
+
+    const artifactRoot = ledgerPath === DEFAULT_ROTATION_LEDGER_PATH
+      ? ".caleb/artifacts/raw-output/live-role-rotation"
+      : join(dirname(ledgerPath), "live-rotation-artifacts");
+    const store = new ContentAddressedRawOutputStore({ root_dir: artifactRoot });
+    const tracker = new LiveRotationRunBudgetTracker(evidence.run_budget);
+    const adapters = new Map<string, RoleRuntimeAdapter>();
+    for (const adapterId of new Set(evidence.role_bindings.map((binding) => binding.adapter_id))) {
+      const bindings = evidence.role_bindings.filter((binding) => binding.adapter_id === adapterId);
+      const binding = bindings[0];
+      if (binding === undefined) {
+        continue;
+      }
+      const credential = handles.get(binding.provider_id);
+      if (credential === undefined) {
+        continue;
+      }
+      adapters.set(adapterId, createLiveRotationRoleRuntimeAdapter({
+        adapter_id: adapterId,
+        evidence,
+        bindings,
+        prompt_templates: templates.templates,
+        store,
+        invoke_provider: createLiveRotationProviderInvoker(binding, credential.provider, approvedBy)
+      }, tracker));
+    }
+
+    const result = await executeBridgedRotationAtSeam({
+      plan: bridge.derived_plan,
+      human_confirmed: true,
+      bridge_ledger_entries: [bridge.ledger_entry],
+      adapters,
+      store,
+      append_ledger_entry: async (entry) => {
+        await ledger.append(entry);
+        return true;
+      }
+    });
+    const state = tracker.state();
+    const data = {
+      status: result.status,
+      refusal_code: result.refusal_code,
+      failure_code: result.failure_code,
+      bridge_ledger_id: result.bridge_ledger_id,
+      ledger_path: ledgerPath,
+      completed_steps: result.execution_result?.completed_steps ?? 0,
+      role_order: result.execution_result?.records.map((record) => record.role_id) ?? [],
+      invocations: state.invocations,
+      totals: state.totals,
+      run_budget: evidence.run_budget,
+      output_text_returned: false,
+      human_confirmed: true
+    };
+    if (!result.ok) {
+      const code = result.refusal_code ?? result.failure_code ?? "live_rotation_execution_failed";
+      return errorResult(command, `Live rotation ended fail-closed: ${code}.`, [
+        { code, message: "Guarded live rotation did not complete." }
+      ], data);
+    }
+    return okResult(command, "Guarded live rotation completed.", data);
+  } finally {
+    for (const handle of handles.values()) {
+      handle.dispose();
+    }
+    unsetDeclaredEnvironmentNames(declaration.declared_names);
+    handles.clear();
+  }
+}
+
+function createLiveRotationProviderInvoker(
+  binding: LiveRotationRoleBindingEvidence,
+  credentialProvider: () => string | undefined,
+  approvedBy: string
+): LiveRotationProviderInvoker {
+  return async (input) => {
+    const prerequisites = evaluateOneProviderAdapterLivePrerequisites({
+      repo_root_confirmed: true,
+      explicit_opt_in: true,
+      explicit_live_request: true,
+      provider_adapter_allowlisted: ALLOWLISTED_LIVE_ADAPTER_IDS.includes(binding.adapter_id),
+      live_harness_allowlisted: true,
+      credential_source_declared_by_caller: true,
+      credential_auto_read: false,
+      network_permission_granted_by_caller: true,
+      explicit_live_command_or_flag: true,
+      dry_run_report_completed: true,
+      default_tests_non_live: true,
+      default_acceptance_non_live: true,
+      default_ci_non_live: true,
+      provider_output_trust_ceiling: "T1",
+      vrp_evidence_required_for_T2: true,
+      created_at: new Date().toISOString()
+    });
+    const gateEvidence = {
+      prerequisites_evaluation: prerequisites,
+      kill_switch_open: true,
+      network_permission_granted_by_caller: true,
+      approved_by: approvedBy
+    };
+    if (binding.provider_id === "xai") {
+      const config: GrokLiveAdapterConfig = {
+        ...DEFAULT_GROK_LIVE_ADAPTER_CONFIG,
+        model: binding.model_id,
+        max_response_bytes: binding.budget.max_response_bytes,
+        limits: {
+          ...DEFAULT_GROK_LIVE_ADAPTER_CONFIG.limits,
+          max_output_tokens: binding.budget.max_tokens,
+          timeout_ms: binding.budget.timeout_ms,
+          retry_count: 0
+        }
+      };
+      const request = buildGrokLiveAdapterRequest({
+        prompt_text: input.prompt_text,
+        config,
+        task_id: input.task_id,
+        run_id: input.run_id,
+        request_id: `live_rotation_request_${randomUUID()}`
+      });
+      return createGrokLiveAdapter(config, gateEvidence, {
+        credential_provider: credentialProvider,
+        normalized_output_observer: input.normalized_output_observer
+      }).invokeLive({ request, prompt_text: input.prompt_text });
+    }
+    const config: AnthropicLiveAdapterConfig = {
+      ...DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG,
+      model: binding.model_id,
+      max_response_bytes: binding.budget.max_response_bytes,
+      limits: {
+        ...DEFAULT_ANTHROPIC_LIVE_ADAPTER_CONFIG.limits,
+        max_output_tokens: binding.budget.max_tokens,
+        timeout_ms: binding.budget.timeout_ms,
+        retry_count: 0
+      }
+    };
+    const request = buildAnthropicLiveAdapterRequest({
+      prompt_text: input.prompt_text,
+      config,
+      task_id: input.task_id,
+      run_id: input.run_id,
+      request_id: `live_rotation_request_${randomUUID()}`
+    });
+    return createAnthropicLiveAdapter(config, gateEvidence, {
+      credential_provider: credentialProvider,
+      normalized_output_observer: input.normalized_output_observer
+    }).invokeLive({ request, prompt_text: input.prompt_text });
+  };
+}
+
+async function readLiveRotationFixture(path: string): Promise<
+  | { readonly ok: true; readonly fixture: LiveRotationFixtureFile }
+  | { readonly ok: false; readonly errors: readonly CliErrorShape[] }
+> {
+  try {
+    const fileInfo = await stat(path);
+    if (!fileInfo.isFile() || fileInfo.size > MAX_INPUT_FILE_BYTES) {
+      return { ok: false, errors: [{ code: "live_rotation_fixture_size", message: "Fixture must be a file no larger than 1 MB." }] };
+    }
+    const parsed = JSON.parse(await readFile(path, "utf8")) as unknown;
+    if (!isCliRecord(parsed) || !isCliRecord(parsed["carrier"]) || !Array.isArray(parsed["adapter_bindings"])) {
+      return { ok: false, errors: [{ code: "live_rotation_fixture_shape", message: "Fixture wrapper shape is invalid." }] };
+    }
+    return { ok: true, fixture: parsed as unknown as LiveRotationFixtureFile };
+  } catch (error) {
+    return { ok: false, errors: [{
+      code: "live_rotation_fixture_unreadable",
+      message: error instanceof Error ? error.message : "Fixture could not be read."
+    }] };
+  }
+}
+
+function parseCredentialDeclarations(
+  spec: string,
+  requiredProviders: readonly LiveRotationProviderId[]
+):
+  | { readonly ok: true; readonly by_provider: ReadonlyMap<LiveRotationProviderId, string>; readonly declared_names: ReadonlySet<string> }
+  | { readonly ok: false; readonly errors: readonly CliErrorShape[] } {
+  const byProvider = new Map<LiveRotationProviderId, string>();
+  const pieces = spec.split(",").map((part) => part.trim()).filter(Boolean);
+  if (pieces.length === 1 && !pieces[0]?.includes("=") && requiredProviders.length === 1) {
+    byProvider.set(requiredProviders[0] as LiveRotationProviderId, pieces[0] as string);
+  } else {
+    for (const piece of pieces) {
+      const [provider, envName, extra] = piece.split("=");
+      if (extra !== undefined || (provider !== "anthropic" && provider !== "xai") || envName === undefined) {
+        return { ok: false, errors: [{ code: "live_rotation_credential_spec_invalid", message: "Use provider=ENV_NAME declarations." }] };
+      }
+      byProvider.set(provider, envName);
+    }
+  }
+  const envNameFormat = /^[A-Za-z_][A-Za-z0-9_]*$/;
+  if (
+    requiredProviders.some((provider) => !byProvider.has(provider)) ||
+    [...byProvider.keys()].some((provider) => !requiredProviders.includes(provider)) ||
+    [...byProvider.values()].some((name) => !envNameFormat.test(name))
+  ) {
+    return { ok: false, errors: [{ code: "live_rotation_credential_spec_mismatch", message: "Credential declarations must exactly cover required providers with valid environment names." }] };
+  }
+  return { ok: true, by_provider: byProvider, declared_names: new Set(byProvider.values()) };
+}
+
+async function loadLiveRotationPromptTemplates(evidence: LiveRotationGateEvidence): Promise<
+  | { readonly ok: true; readonly templates: ReadonlyMap<"planner" | "critic", LiveRotationPromptTemplate> }
+  | { readonly ok: false; readonly errors: readonly CliErrorShape[] }
+> {
+  const templates = new Map<"planner" | "critic", LiveRotationPromptTemplate>();
+  for (const role of ["planner", "critic"] as const) {
+    const ref = evidence.prompt_templates[role];
+    try {
+      const templateText = (await readFile(ref.path, "utf8")).replaceAll("\r\n", "\n");
+      if (computeSha256Digest(templateText) !== ref.sha256_digest) {
+        return { ok: false, errors: [{ code: "live_rotation_prompt_digest_mismatch", message: `${role} prompt template digest does not match evidence.` }] };
+      }
+      templates.set(role, { role_id: role, template_text: templateText, expected_digest: ref.sha256_digest });
+    } catch (error) {
+      return { ok: false, errors: [{ code: "live_rotation_prompt_unreadable", message: error instanceof Error ? error.message : "Prompt template could not be read." }] };
+    }
+  }
+  return { ok: true, templates };
+}
+
+function createScopedCredentialHandle(credentialEnvVar: string): ScopedCredentialHandle {
+  let credential = createDeclaredCredentialProvider(credentialEnvVar)();
+  return {
+    provider: () => credential,
+    dispose: () => { credential = undefined; }
+  };
+}
+
+function createDeclaredCredentialProvider(credentialEnvVar: string): () => string | undefined {
+  return () => process.env[credentialEnvVar];
+}
+
+function isCliRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function createCliRotationAdapters(plan: unknown): Map<string, RoleRuntimeAdapter> {
@@ -663,7 +1025,7 @@ export async function handleRunOneProviderAdapterLiveCommand(
     // The only environment read on the live path, and only because the
     // caller explicitly declared the variable name via --credential-env-var.
     credential_provider:
-      credentialEnvVar === undefined ? null : () => process.env[credentialEnvVar]
+      credentialEnvVar === undefined ? null : createDeclaredCredentialProvider(credentialEnvVar)
   };
 
   let result: LiveAdapterResult;

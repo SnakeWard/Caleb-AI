@@ -236,7 +236,7 @@ export function createAnthropicLiveAdapter(
       }
 
       if (response.ok) {
-        return normalizeSuccess(request, rawBody, {
+        return await normalizeSuccess(request, rawBody, {
           startedAt,
           latencyMs: Date.now() - startedMs,
           attempts,
@@ -267,7 +267,7 @@ export function createAnthropicLiveAdapter(
     );
   }
 
-  function normalizeSuccess(
+  async function normalizeSuccess(
     request: LiveAdapterRequest,
     rawBody: string,
     timing: {
@@ -276,7 +276,7 @@ export function createAnthropicLiveAdapter(
       readonly attempts: number;
       readonly maxAttempts: number;
     }
-  ): LiveAdapterResult {
+  ): Promise<LiveAdapterResult> {
     let parsed: unknown;
     try {
       parsed = JSON.parse(rawBody);
@@ -326,6 +326,21 @@ export function createAnthropicLiveAdapter(
     }
     if (!schemaValid) {
       warnings.push("provider_response_shape_unexpected_treated_as_raw");
+    }
+
+    if (deps.normalized_output_observer !== undefined) {
+      try {
+        const observation = await deps.normalized_output_observer(outputText);
+        if (!observation.ok) {
+          return failure(request, "observer_failure", "failed", false, [
+            "normalized_output_observer_failed"
+          ]);
+        }
+      } catch {
+        return failure(request, "observer_failure", "failed", false, [
+          "normalized_output_observer_failed"
+        ]);
+      }
     }
 
     const record: LiveAdapterResponse = {

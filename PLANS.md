@@ -44,6 +44,87 @@ An ExecPlan is a living document. Codex MUST update it when reality differs from
 
 Implementation MUST NOT exceed the approved phase boundary. A future-phase document is not permission to implement future-phase work early.
 
+## ExecPlan - LIVE-R1 Live Rotation Gate Chain
+
+**Objective:** Make live Planner/Critic bindings bridgeable only with complete
+structural gate evidence; enforce per-role and run budgets at the LE-3 seam; pass
+normalized provider output through the Amendment A checked observer into the M3
+content-addressed store; and preserve the offline default before any live event.
+
+**Source Authority:** Current user authorization; Amendment A in
+`docs/protocols/PASS_PROTOCOL_LIVE_R1_R2.md`; the accepted LE-2/LE-3 contracts;
+and `docs/01_CODEX_OPERATING_CONTRACT.md`.
+
+**Current State:** Protocol commit `b090c26` and Amendment A commit `98521ec` are
+pushed. LE-2 rejects all live bindings. LE-3 executes only mock bindings. The
+Anthropic and xAI adapters expose digest-only result envelopes and have exactly
+two pinned egress call sites.
+
+**Scope:** Structural live-rotation evidence and validator; visible LE-2 lock
+amendment; derived-plan evidence echo; live adapter result observer; checked M3
+storage/digest binding; live-compatible LE-3 seam adapters and budgets; explicit
+confirm-gated CLI path; offline fixtures/tests; acceptance documentation and
+AUD-2 evidence.
+
+**Out of Scope:** LIVE-R2 calls, credential use during LIVE-R1, new providers or
+egress sites, transport/auth/retry changes, dynamic sequencing, RA-X, L1 or role
+registry changes, capabilities/side effects, UI, package/config/catalog changes,
+and provider prose in CLI/Ledger output.
+
+**Files Expected To Change:** Provider live-result types and the two adapter result
+paths; Logic Engine gate/bridge/seam modules and barrels; the narrow Role Runtime
+adapter-kind interface; CLI parser/types/handler/help; LIVE-R1 examples, tests,
+docs, status/plan/audit records; the LE-2 acceptance lock; and the append-only
+snapshot Ledger.
+
+**Risk Level:** High — live-provider authorization, credentials, budgets, raw model
+output, storage, and Ledger boundaries meet in one gate chain.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot
+`snap_20260719T023049028Z_000408_milestone`, Ledgered and verified on disk. Revert
+the LIVE-R1 implementation commit and restore captured files if validation fails;
+never rewrite historical Ledger entries.
+
+**Implementation Steps:** Add Amendment A observer types/result behavior; validate
+gate evidence; amend LE-2 derivation; build checked live Role Runtime adapters and
+budget tracker; extend the seam and CLI; add E1/E2 fixtures/templates; add gate,
+observer, budget, redaction, lock, and default-offline detectors; document; audit;
+run canonical validation; commit/push; stop before LIVE-R2.
+
+**Validation Commands:** Existing Anthropic/Grok adapter tests unchanged; focused
+LIVE-R1/LE-2/LE-3/CLI/H5 tests; `node ./node_modules/typescript/bin/tsc --noEmit`;
+`npm run build`; `npx vitest run`; both catalog CLI commands; AUD-2 self-smoke
+against the LIVE-R1 manifest; final clean/synchronized Git check.
+
+**Acceptance Criteria:** Evidence-free live plans retain
+`bridge_rejected_live_adapter_unavailable`; complete evidence derives live steps;
+every gate miss refuses; observer absence preserves old behavior; observer/store
+digest mismatch and observer failure halt distinctly and Ledgered; budgets halt
+fail-closed; serialization contains no output prose/credentials/reasoning content;
+egress pin remains exactly two; L1 seven and catalogs 13/9; canonical validation
+and AUD-2 green; no LIVE-R2 call.
+
+**Progress Log:** Protocol and amendment are pushed. Credential baseline was clean.
+Pre-change snapshot `snap_20260719T023049028Z_000408_milestone` is verified.
+Implementation and the visible LE-2 lock amendment are complete. Focused LIVE-R1
+validation passed 4 files / 16 tests. Canonical typecheck and build exited 0;
+the offline canonical suite exited 0 at 191 files / 3,135 tests. AUD-2 self-smoke
+was compliant/T2 across 28 changed paths with zero violations. The two historical
+adapter suites have zero edits; extracted transport request diffs are empty.
+
+**Decision Log:** The observer is optional and asynchronous; it receives normalized
+text only. The provider result remains digest-only. Live adapters enter RA-R1
+through a seam-owned compatibility adapter; executor behavior stays unchanged.
+
+**Surprises / Discoveries:** Initial inspection found the provider result contracts
+discard normalized text, making M3 storage and Critic context impossible without
+the narrowly authorized Amendment A observer.
+
+**Final Report:** LIVE-R1 accepted. Live bindings bridge only with complete
+evidence; budgets and observer/store digest binding fail closed; credentials are
+declared rather than ambient; no live call occurred. LIVE-R2 is not authorized by
+this record and awaits Pat's fresh explicit words.
+
 ## ExecPlan - GOV-1 Governance and Handoff Reconciliation
 
 **Objective:** Restore a clean, synchronized handoff baseline; correct current

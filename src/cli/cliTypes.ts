@@ -15,6 +15,7 @@ export type CliCommandName =
   | "route-decision"
   | "logic-execute"
   | "execute-rotation-plan"
+  | "execute-live-rotation"
   | "one-provider-adapter-dry-run"
   | "run-one-provider-adapter-live"
   | "audit-pass-compliance";

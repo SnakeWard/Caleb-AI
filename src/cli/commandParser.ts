@@ -17,6 +17,7 @@ const COMMANDS = new Set<CliCommandName>([
   "route-decision",
   "logic-execute",
   "execute-rotation-plan",
+  "execute-live-rotation",
   "one-provider-adapter-dry-run",
   "run-one-provider-adapter-live",
   "audit-pass-compliance"
@@ -48,7 +49,8 @@ const VALUE_FLAGS = new Set([
   "--adapter-id",
   "--manifest",
   "--base-ref",
-  "--plan-file"
+  "--plan-file",
+  "--fixture-file"
 ]);
 
 const BOOLEAN_FLAGS = new Set([
@@ -94,6 +96,7 @@ const FLAG_TO_KEY: Record<string, string> = {
   "--manifest": "manifest",
   "--base-ref": "base_ref",
   "--plan-file": "plan_file",
+  "--fixture-file": "fixture_file",
   "--confirm": "confirm"
 };
 
@@ -349,6 +352,42 @@ export function parseCliArgs(argv: readonly string[]): ParsedCliCommand {
     }
   }
 
+  if (command === "execute-live-rotation") {
+    if (flags.fixture_file === undefined || typeof flags.fixture_file !== "string" || flags.fixture_file.trim().length === 0) {
+      errors.push({
+        code: "missing_fixture_file",
+        message: "execute-live-rotation requires --fixture-file <live-rotation-fixture.json>."
+      });
+    }
+    if (flags.confirm !== true) {
+      errors.push({
+        code: "confirmation_required",
+        message: "execute-live-rotation requires explicit --confirm human authority."
+      });
+    }
+    if (flags.credential_env_var === undefined || typeof flags.credential_env_var !== "string") {
+      errors.push({
+        code: "credential_source_required",
+        message: "execute-live-rotation requires --credential-env-var <provider=ENV_NAME>."
+      });
+    }
+    if (flags.approved_by === undefined || typeof flags.approved_by !== "string") {
+      errors.push({
+        code: "approver_required",
+        message: "execute-live-rotation requires --approved-by <actor>."
+      });
+    }
+    const allowed = new Set(["fixture_file", "confirm", "credential_env_var", "approved_by", "ledger_path", "json"]);
+    for (const flagKey of Object.keys(flags)) {
+      if (!allowed.has(flagKey)) {
+        errors.push({
+          code: "unsupported_flag",
+          message: `execute-live-rotation does not support --${flagKey.replace(/_/g, "-")}.`
+        });
+      }
+    }
+  }
+
   if (command === "list-hollowcut-hollows") {
     // Read-only command: reject write flags for safety and clarity
     for (const flagKey of ["write_ledger", "write_report", "ledger_path", "report_dir", "report_format"]) {
@@ -476,7 +515,7 @@ export function parseCliArgs(argv: readonly string[]): ParsedCliCommand {
     flags,
     errors,
     output_format: flags.json === true ? "json" : "text",
-    ...(command === "route-decision" || command === "logic-execute" || command === "execute-rotation-plan"
+    ...(command === "route-decision" || command === "logic-execute" || command === "execute-rotation-plan" || command === "execute-live-rotation"
       ? {}
       : {
           catalog:

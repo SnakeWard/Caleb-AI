@@ -35,6 +35,6 @@ export interface RoleRuntimeAdapterInvokeResult {
 
 export interface RoleRuntimeAdapter {
   readonly adapter_id: string;
-  readonly adapter_kind: "mock";
+  readonly adapter_kind: RotationPlanAdapterKind;
   invoke(input: RoleRuntimeAdapterInvokeInput): Promise<RoleRuntimeAdapterInvokeResult>;
 }

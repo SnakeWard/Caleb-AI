@@ -17,10 +17,14 @@ import {
   type RotationPlanAuthoredBy,
   type StaticRotationPlan
 } from "../roleRuntime/types/staticRotationPlan.js";
-import type { ISODateTimeString, JsonObject, Sha256Digest } from "../types/common.js";
+import type { ISODateTimeString, JsonObject, JsonValue, Sha256Digest } from "../types/common.js";
 import type { CalebError } from "../types/invocation.js";
 import type { LedgerEntry } from "../types/ledger.js";
 import type { ContractValidatedTaskFrameRouteInput } from "./types/routeInput.js";
+import {
+  validateLiveRotationGateEvidence,
+  type LiveRotationGateEvidence
+} from "./liveRotationGateEvidence.js";
 
 export const ROTATION_PLAN_BRIDGE_SCHEMA_VERSION = "1.0.0" as const;
 
@@ -67,6 +71,7 @@ export interface BridgedExecutablePlan extends StaticRotationPlan {
   readonly gate_obligations: BridgedPlanGateObligations;
   readonly ledger_mandatory: true;
   readonly bridge_provenance: BridgedPlanProvenance;
+  readonly live_rotation_gate_evidence?: LiveRotationGateEvidence;
 }
 
 export type RotationPlanBridgeLedgerAppender = (
@@ -149,6 +154,7 @@ type BridgeCandidate = DerivedCandidate | RejectedCandidate;
 interface BindingValidationSuccess {
   readonly ok: true;
   readonly bindings: readonly RotationPlanBridgeAdapterBinding[];
+  readonly live_gate_evidence: LiveRotationGateEvidence | null;
 }
 
 interface BindingValidationFailure {
@@ -228,7 +234,8 @@ export function createBridgedExecutorHandoff(
 function deriveBridgeCandidate(input: RotationPlanBridgeInput): BridgeCandidate {
   const sourcePlanDigest = digestValue(input.runtime_rotation_plan);
   const sourcePlanRef = readStringField(input.runtime_rotation_plan, "runtime_rotation_plan_id");
-  const validation = validateRuntimeRotationPlan(input.runtime_rotation_plan);
+  const validationTarget = withoutLiveRotationGateEvidence(input.runtime_rotation_plan);
+  const validation = validateRuntimeRotationPlan(validationTarget);
 
   if (!validation.ok) {
     const codes = validation.errors.map((error) => error.code);
@@ -251,7 +258,7 @@ function deriveBridgeCandidate(input: RotationPlanBridgeInput): BridgeCandidate 
     return rejected("bridge_rejected_invalid_schema", sourcePlanRef, sourcePlanDigest, codes);
   }
 
-  const plan = input.runtime_rotation_plan as RuntimeRotationPlan;
+  const plan = validationTarget as RuntimeRotationPlan;
 
   if (plan.authored_by !== "human" && plan.authored_by !== "fixture") {
     return rejected(
@@ -314,7 +321,16 @@ function deriveBridgeCandidate(input: RotationPlanBridgeInput): BridgeCandidate 
     );
   }
 
-  const bindingValidation = validateBindings(input.adapter_bindings, plan.roles_required);
+  const bindingValidation = validateBindings(
+    input.adapter_bindings,
+    plan.roles_required,
+    plan.route_mode,
+    plan.max_cycles,
+    expandedRoles.length,
+    isObject(input.runtime_rotation_plan)
+      ? input.runtime_rotation_plan["live_rotation_gate_evidence"]
+      : undefined
+  );
   if (!bindingValidation.ok) {
     return rejected(
       bindingValidation.code,
@@ -325,7 +341,11 @@ function deriveBridgeCandidate(input: RotationPlanBridgeInput): BridgeCandidate 
   }
 
   const planAuthoredBy: RotationPlanAuthoredBy = plan.authored_by;
-  const structuralSource = buildStructuralSource(plan, bindingValidation.bindings);
+  const structuralSource = buildStructuralSource(
+    plan,
+    bindingValidation.bindings,
+    bindingValidation.live_gate_evidence
+  );
   const structuralDigest = digestValue(structuralSource);
   const bindingByRole = new Map(bindingValidation.bindings.map((binding) => [binding.role_id, binding]));
   const sequence = expandedRoles.map((role, stepIndex) => {
@@ -337,7 +357,7 @@ function deriveBridgeCandidate(input: RotationPlanBridgeInput): BridgeCandidate 
       step_index: stepIndex,
       role_id: role as RoleId,
       adapter_id: binding.adapter_id,
-      adapter_kind: "mock" as const
+      adapter_kind: binding.adapter_kind
     };
   });
 
@@ -370,7 +390,10 @@ function deriveBridgeCandidate(input: RotationPlanBridgeInput): BridgeCandidate 
       source_plan_digest: sourcePlanDigest,
       inert_stop_criteria: [...plan.stop_criteria],
       adapter_bindings: bindingValidation.bindings.map((binding) => ({ ...binding }))
-    }
+    },
+    ...(bindingValidation.live_gate_evidence === null
+      ? {}
+      : { live_rotation_gate_evidence: bindingValidation.live_gate_evidence })
   };
 
   const targetValidation = validateStaticRotationPlan(derivedPlan);
@@ -393,7 +416,9 @@ function deriveBridgeCandidate(input: RotationPlanBridgeInput): BridgeCandidate 
       `max_cycles:${plan.max_cycles}`,
       `sequence_length:${sequence.length}`,
       "registry_transitions_allowed",
-      "mock_bindings_only",
+      bindingValidation.live_gate_evidence === null
+        ? "mock_bindings_only"
+        : "live_bindings_gate_evidence_verified",
       "ledger_mandatory"
     ]
   };
@@ -401,7 +426,11 @@ function deriveBridgeCandidate(input: RotationPlanBridgeInput): BridgeCandidate 
 
 function validateBindings(
   bindings: readonly RotationPlanBridgeAdapterBinding[],
-  roles: readonly RuntimeRotationPlanRole[]
+  roles: readonly RuntimeRotationPlanRole[],
+  routeMode: RuntimeRotationRouteMode,
+  maxCycles: number,
+  sequenceLength: number,
+  liveEvidence: unknown
 ): BindingValidationSuccess | BindingValidationFailure {
   if (!Array.isArray(bindings)) {
     return {
@@ -461,13 +490,6 @@ function validateBindings(
     }
   }
 
-  if (liveBindingPresent) {
-    return {
-      ok: false,
-      code: "bridge_rejected_live_adapter_unavailable",
-      structural_inputs: ["live_adapter_binding_present"]
-    };
-  }
   if (errors.length > 0 || normalized.length !== roles.length) {
     return {
       ok: false,
@@ -476,11 +498,37 @@ function validateBindings(
     };
   }
 
+  if (liveBindingPresent) {
+    const evidenceValidation = validateLiveRotationGateEvidence(liveEvidence, {
+      route_mode: routeMode,
+      roles_required: roles,
+      max_cycles: maxCycles,
+      sequence_length: sequenceLength,
+      adapter_bindings: normalized
+    });
+    if (evidenceValidation.ok) {
+      const roleOrder = new Map(roles.map((role, index) => [role, index]));
+      normalized.sort((left, right) => {
+        return (roleOrder.get(left.role_id) ?? 0) - (roleOrder.get(right.role_id) ?? 0);
+      });
+      return {
+        ok: true,
+        bindings: normalized,
+        live_gate_evidence: evidenceValidation.evidence
+      };
+    }
+    return {
+      ok: false,
+      code: "bridge_rejected_live_adapter_unavailable",
+      structural_inputs: evidenceValidation.issues.map((entry) => entry.code)
+    };
+  }
+
   const roleOrder = new Map(roles.map((role, index) => [role, index]));
   normalized.sort((left, right) => {
     return (roleOrder.get(left.role_id) ?? 0) - (roleOrder.get(right.role_id) ?? 0);
   });
-  return { ok: true, bindings: normalized };
+  return { ok: true, bindings: normalized, live_gate_evidence: null };
 }
 
 function expandRoles(
@@ -524,7 +572,8 @@ function buildGateObligations(
 
 function buildStructuralSource(
   plan: RuntimeRotationPlan,
-  bindings: readonly RotationPlanBridgeAdapterBinding[]
+  bindings: readonly RotationPlanBridgeAdapterBinding[],
+  liveGateEvidence: LiveRotationGateEvidence | null
 ): JsonObject {
   return {
     runtime_rotation_plan_id: plan.runtime_rotation_plan_id,
@@ -542,7 +591,10 @@ function buildStructuralSource(
     snapshot_requirement: plan.snapshot_requirement,
     ledger_policy: plan.ledger_policy,
     created_at: plan.created_at,
-    adapter_bindings: bindings.map((binding) => ({ ...binding }))
+    adapter_bindings: bindings.map((binding) => ({ ...binding })),
+    ...(liveGateEvidence === null
+      ? {}
+      : { live_rotation_gate_evidence: liveGateEvidence as unknown as JsonValue })
   };
 }
 
@@ -651,7 +703,7 @@ function rejectionMessage(code: RotationPlanBridgeRejectionCode): string {
     bridge_rejected_unknown_role: "Plan requires a role absent from the current registry.",
     bridge_rejected_forbidden_transition: "Plan requires a transition forbidden by the current registry.",
     bridge_rejected_ungated_capability: "Plan declares side-effect or code-mutation capability unavailable to LE-2.",
-    bridge_rejected_live_adapter_unavailable: "Live role adapters are unavailable to LE-2."
+    bridge_rejected_live_adapter_unavailable: "Live role adapters require complete LIVE-R1 gate evidence."
   };
   return messages[code];
 }
@@ -662,6 +714,14 @@ function readStringField(input: unknown, field: string): string | null {
   }
   const value = input[field];
   return typeof value === "string" ? value : null;
+}
+
+function withoutLiveRotationGateEvidence(value: unknown): unknown {
+  if (!isObject(value) || !("live_rotation_gate_evidence" in value)) {
+    return value;
+  }
+  const { live_rotation_gate_evidence: _evidence, ...runtimePlan } = value;
+  return runtimePlan;
 }
 
 function readMatchingField(
