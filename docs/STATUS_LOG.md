@@ -1067,3 +1067,29 @@ PRE-7 Full-Rotation Rehearsal: Accepted offline — step index 1 executes throug
 the real path under mock, and a second-step failure is fully reconstructable.
 Attempt seven remains unauthorized pending fresh Pat event authority and host-
 shell execution under the committed runbook.
+
+### 2026-07-19 — LIVE-F9 — Critic bounds and Ledger byte integrity accepted
+
+LIVE-F9 raises only E1 Critic `max_tokens` from 1,536 to 2,048. Planner remains
+at 1,536; run ceilings remain 2 invocations / 8,192 tokens / $0.05. The Critic
+prompt now requires exact JSON boundaries, all ten semantic fields, explicit
+cardinality limits, and 160/200-character field bounds. Its new digest is
+`sha256:8074e98c3317f24cfe4f5bd1b94e9328ffe75e1f390a81f776badb759d3b8e8f`;
+Planner remains `sha256:f32675859e07243a7cf0cd8e743537f4c975826ea7bf684348ed128792489003`.
+
+The observer was already fixture-driven. The live-evidence ceiling is now role-
+specific so Critic accepts 2,048 while Planner still refuses 1,537. PRE-7's
+negative rehearsal derives its equality boundary from the resolved budget.
+`.gitattributes` resolves `.caleb/ledger/**` as `-text`, closing Git EOL rewrite
+exposure without establishing a broader repository policy.
+
+T1-T6 pass; focused validation passed 6 files / 37 tests. Canonical validation
+passed 204 files / 3,230 tests after a serial masking guard proved one initial
+H5 timeout was contention-only (1/1 in 95 ms); no timeout/assertion changed.
+Typecheck/build exited 0; catalogs remain 13/9; AUD-2 is compliant/T2 across 16
+paths with zero violations. L1, matrix/checks, bridge, Planner prompt, validator,
+normalizer, F8 evidence, transports, and providers are unchanged. Validation
+snapshot `snap_20260720T045723805Z_000454_milestone` is Ledgered.
+
+LIVE-F9 is accepted offline. Attempt eight remains unauthorized pending Pat's
+fresh event-specific words and host-shell execution under the runbook.

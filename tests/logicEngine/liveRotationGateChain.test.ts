@@ -92,7 +92,7 @@ describe("LIVE-R1 gate chain", () => {
   it("accepts only the complete closed evidence envelope and rejects every gate class", async () => {
     const valid = await fixtureEvidence();
     expect(validateLiveRotationGateEvidence(valid, requirements).ok).toBe(true);
-    expect((valid as Record<string, any>).role_bindings.map((entry: any) => entry.budget.max_tokens)).toEqual([1536, 1536]);
+    expect((valid as Record<string, any>).role_bindings.map((entry: any) => entry.budget.max_tokens)).toEqual([1536, 2048]);
     expect((valid as Record<string, any>).run_budget).toEqual({
       max_total_invocations: 2,
       max_total_tokens: 8192,
@@ -106,6 +106,7 @@ describe("LIVE-R1 gate chain", () => {
       (copy) => { copy.role_bindings[0].provider_id = "xai"; },
       (copy) => { copy.role_bindings[0].model_id = "grok-3-mini"; },
       (copy) => { copy.role_bindings[0].budget.max_tokens = 1537; },
+      (copy) => { copy.role_bindings[1].budget.max_tokens = 2049; },
       (copy) => { copy.role_bindings[0].budget.timeout_ms = 30001; },
       (copy) => { copy.run_budget.max_total_invocations = 3; },
       (copy) => { copy.run_budget.max_total_tokens = 8193; },

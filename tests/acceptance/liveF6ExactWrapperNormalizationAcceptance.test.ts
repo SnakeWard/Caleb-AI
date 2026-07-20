@@ -269,7 +269,7 @@ describe("LIVE-F6 exact wrapper normalization acceptance", () => {
       "sha256:8407f826668198c871da24fa9db9323c588aa6805d392d317fef6be090884697"
     );
     expect(criticDigest).toBe(
-      "sha256:27d169bbc002d2bcdcab89ac6df60f481e6311c015600883ed000a1f8031dd54"
+      "sha256:8074e98c3317f24cfe4f5bd1b94e9328ffe75e1f390a81f776badb759d3b8e8f"
     );
     expect(planner).toContain("The first non-whitespace output character MUST be {");
     expect(planner).toContain("Do not output any backtick character.");

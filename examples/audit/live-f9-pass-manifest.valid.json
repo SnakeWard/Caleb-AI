@@ -1,0 +1,43 @@
+{
+  "pass_id": "LIVE-F9",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    ".gitattributes",
+    "docs/LIVE_F9_CRITIC_BUDGET_PROMPT_LEDGER_INTEGRITY_REPORT.md",
+    "examples/audit/live-f9-pass-manifest.valid.json",
+    "tests/acceptance/liveF9CriticBudgetPromptLedgerIntegrityAcceptance.test.ts",
+    "tests/fixtures/live-f9/critic-prompt.pre-live-f9.txt"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/STATUS_LOG.md",
+    "examples/live-rotation/event-e1.anthropic.fixture.json",
+    "examples/live-rotation/event-e2.cross-family.fixture.json",
+    "examples/live-rotation/prompts/critic.prompt.txt",
+    "src/logicEngine/liveRotationGateEvidence.ts",
+    "tests/acceptance/liveF5TruncationEvidenceAcceptance.test.ts",
+    "tests/acceptance/liveF6ExactWrapperNormalizationAcceptance.test.ts",
+    "tests/acceptance/pre7MockFullRotationRehearsalAcceptance.test.ts",
+    "tests/logicEngine/liveRotationGateChain.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/cli/**",
+    "src/modelBoundary/**",
+    "src/providers/**",
+    "src/rawOutput/**",
+    "src/roles/roleHandoffGate.ts",
+    "src/roles/liveRoleSemanticPayloadValidator.ts",
+    "src/logicEngine/liveRoleArtifactEnvelope.ts",
+    "src/logicEngine/liveRoleOutputNormalizer.ts",
+    "src/logicEngine/routeInputGate.ts",
+    "src/logicEngine/rotationPlanBridge.ts",
+    "examples/live-rotation/prompts/planner.prompt.txt",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

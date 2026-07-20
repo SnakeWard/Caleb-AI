@@ -1,7 +1,8 @@
 import type { RuntimeRotationPlanRole, RuntimeRotationRouteMode } from "../roles/types/runtimeRotationPlan.js";
 
 export const LIVE_ROTATION_GATE_EVIDENCE_SCHEMA_VERSION = "1.0.0" as const;
-export const LIVE_ROTATION_MAX_ROLE_TOKENS = 1536;
+export const LIVE_ROTATION_MAX_ROLE_TOKENS = 2048;
+export const LIVE_ROTATION_MAX_PLANNER_TOKENS = 1536;
 export const LIVE_ROTATION_MAX_TIMEOUT_MS = 30_000;
 export const LIVE_ROTATION_MAX_RESPONSE_BYTES = 1024 * 1024;
 export const LIVE_ROTATION_MAX_TOTAL_TOKENS = 8192;
@@ -247,7 +248,7 @@ function validateRoleBindings(
     if (bridgeBinding?.adapter_kind !== "live" || bridgeBinding.adapter_id !== adapterId) {
       issues.push(issue("live_bridge_binding_mismatch", path, "Gate evidence must match the live bridge binding."));
     }
-    const budget = validateInvocationBudget(entry["budget"], `${path}.budget`, issues);
+    const budget = validateInvocationBudget(entry["budget"], `${path}.budget`, roleId, issues);
     if (budget !== null) {
       normalized.push({
         role_id: roleId,
@@ -269,6 +270,7 @@ function validateRoleBindings(
 function validateInvocationBudget(
   value: unknown,
   path: string,
+  roleId: RuntimeRotationPlanRole,
   issues: LiveRotationGateEvidenceIssue[]
 ): LiveRotationInvocationBudget | null {
   if (!isRecord(value)) {
@@ -279,8 +281,11 @@ function validateInvocationBudget(
   const maxTokens = positiveInteger(value["max_tokens"], `${path}.max_tokens`, issues);
   const timeoutMs = positiveInteger(value["timeout_ms"], `${path}.timeout_ms`, issues);
   const maxResponseBytes = positiveInteger(value["max_response_bytes"], `${path}.max_response_bytes`, issues);
-  if (maxTokens !== null && maxTokens > LIVE_ROTATION_MAX_ROLE_TOKENS) {
-    issues.push(issue("live_role_token_budget_exceeded", `${path}.max_tokens`, `max_tokens cannot exceed ${LIVE_ROTATION_MAX_ROLE_TOKENS}.`));
+  const maxRoleTokens = roleId === "planner"
+    ? LIVE_ROTATION_MAX_PLANNER_TOKENS
+    : LIVE_ROTATION_MAX_ROLE_TOKENS;
+  if (maxTokens !== null && maxTokens > maxRoleTokens) {
+    issues.push(issue("live_role_token_budget_exceeded", `${path}.max_tokens`, `max_tokens cannot exceed ${maxRoleTokens}.`));
   }
   if (timeoutMs !== null && timeoutMs > LIVE_ROTATION_MAX_TIMEOUT_MS) {
     issues.push(issue("live_role_timeout_budget_exceeded", `${path}.timeout_ms`, `timeout_ms cannot exceed ${LIVE_ROTATION_MAX_TIMEOUT_MS}.`));

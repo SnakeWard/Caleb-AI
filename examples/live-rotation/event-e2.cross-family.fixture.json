@@ -56,7 +56,7 @@
         "critic": {
           "template_id": "live_rotation_critic_v1",
           "path": "examples/live-rotation/prompts/critic.prompt.txt",
-          "sha256_digest": "sha256:27d169bbc002d2bcdcab89ac6df60f481e6311c015600883ed000a1f8031dd54"
+          "sha256_digest": "sha256:8074e98c3317f24cfe4f5bd1b94e9328ffe75e1f390a81f776badb759d3b8e8f"
         }
       },
       "role_bindings": [

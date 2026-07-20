@@ -58,6 +58,7 @@ interface RehearsalRun {
   readonly payload_texts: readonly string[];
   readonly injected_fetch_calls: number;
   readonly real_egress_attempts: number;
+  readonly critic_budget_max_tokens: number;
 }
 
 async function loadText(name: string): Promise<string> {
@@ -158,6 +159,12 @@ async function runRehearsal(input: {
     loadText(input.planner_fixture),
     loadText(input.critic_fixture)
   ]);
+  const criticBudgetMaxTokens = evidence.role_bindings.find(
+    (binding) => binding.role_id === "critic"
+  )?.budget.max_tokens;
+  if (criticBudgetMaxTokens === undefined) {
+    throw new Error("PRE-7 rehearsal Critic budget is missing.");
+  }
   const responseFixtures: readonly ProviderResponseFixture[] = [
     {
       provider_response_id: `msg_pre7_${input.execution_id.slice(-3)}_planner`,
@@ -171,7 +178,7 @@ async function runRehearsal(input: {
       text: payloadTexts[1],
       stop_reason: input.critic_truncated === true ? "max_tokens" : "end_turn",
       input_tokens: 97,
-      output_tokens: input.critic_truncated === true ? 1536 : 137
+      output_tokens: input.critic_truncated === true ? criticBudgetMaxTokens : 137
     }
   ];
 
@@ -278,7 +285,8 @@ async function runRehearsal(input: {
     ledger_entries: parseLedgerBytes(ledgerBytes),
     payload_texts: payloadTexts,
     injected_fetch_calls: injectedFetchCalls,
-    real_egress_attempts: realEgressAttempts
+    real_egress_attempts: realEgressAttempts,
+    critic_budget_max_tokens: criticBudgetMaxTokens
   };
 }
 
@@ -429,10 +437,10 @@ describe("PRE-7 mock full-rotation rehearsal", () => {
       stage: "output_truncated",
       taxonomy: "live_observer_output_truncated",
       input_tokens: 97,
-      output_tokens: 1536,
-      total_tokens: 1633,
+      output_tokens: run.critic_budget_max_tokens,
+      total_tokens: 97 + run.critic_budget_max_tokens,
       stop_reason: "max_tokens",
-      budget: { max_tokens: 1536 },
+      budget: { max_tokens: run.critic_budget_max_tokens },
       t0_digest: rawDigest,
       observer_normalization_stage: null
     });
@@ -458,10 +466,10 @@ describe("PRE-7 mock full-rotation rehearsal", () => {
           stage: "output_truncated",
           taxonomy: "live_observer_output_truncated",
           input_tokens: 97,
-          output_tokens: 1536,
-          total_tokens: 1633,
+          output_tokens: run.critic_budget_max_tokens,
+          total_tokens: 97 + run.critic_budget_max_tokens,
           stop_reason: "max_tokens",
-          budget: { max_tokens: 1536 },
+          budget: { max_tokens: run.critic_budget_max_tokens },
           t0_digest: rawDigest,
           observer_normalization_stage: null
         }

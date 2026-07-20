@@ -237,7 +237,7 @@ describe("LIVE-F5 truncation evidence preservation", () => {
   it("halts E1 before Critic, Ledgers the retained T0 ref, and preserves billable telemetry", async () => {
     const fixture = await loadFixture();
     const { bridge, evidence, templates } = await bridgedFixture();
-    expect(evidence.role_bindings.map((binding) => binding.budget.max_tokens)).toEqual([1536, 1536]);
+    expect(evidence.role_bindings.map((binding) => binding.budget.max_tokens)).toEqual([1536, 2048]);
     expect(evidence.run_budget).toEqual({
       max_total_invocations: 2,
       max_total_tokens: 8192,

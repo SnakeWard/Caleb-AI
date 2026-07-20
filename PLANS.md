@@ -3345,4 +3345,10 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Acceptance Criteria:** T1-T6 pass; new Critic digest is byte-derived and fully pinned; Planner unchanged; E1 fixture has exactly one value change; 2,048 equality truncates while 1,536/end-turn does not; validator schema unchanged; Ledger attribute resolves `text: unset`; canonical validation/AUD-2 green; clean synchronized remote; no live call.
 
-**Progress Log:** Section 2 passed. Pre-change snapshot `snap_20260720T044005823Z_000451_milestone` verified. Implementation pending.
+**Progress Log:** Section 2 passed. Pre-change snapshot `snap_20260720T044005823Z_000451_milestone` verified. Added Ledger `-text` protection; hardened the Critic prompt and re-pinned its digest; raised only E1 Critic to 2,048; kept Planner at 1,536 through a role-specific evidence ceiling; made PRE-7 equality generic; and added T1-T6. Focused validation passed 6 files / 37 tests. The first canonical attempt hit only an existing H5 5-second timeout under contention; its serial masking guard passed 1/1 in 95 ms, and a clean-process canonical rerun passed 204 files / 3,230 tests. Typecheck/build exited 0, catalogs remain 13/9, protected diffs are empty, and AUD-2 is compliant/T2 across 16 paths with zero violations. Validation snapshot `snap_20260720T045723805Z_000454_milestone` is Ledgered.
+
+**Decision Log:** Prompt list/string bounds remain instructions, not schema policy. Production truncation detection was already budget-driven. The validator's prior global 1,536 evidence ceiling was the only required plumbing change; it is now role-specific (Planner 1,536, Critic 2,048), preserving the narrower Planner boundary.
+
+**Surprises / Discoveries:** Git's EOL threat was closed exactly at `.caleb/ledger/**`; no broader EOL-policy question surfaced. The transient H5 canonical timeout was not reproducible serially and required no TIME-1 scope change.
+
+**Final Report:** `docs/LIVE_F9_CRITIC_BUDGET_PROMPT_LEDGER_INTEGRITY_REPORT.md`. LIVE-F9 is accepted offline; attempt eight remains unauthorized pending Pat's fresh event-specific words and host-shell execution.
