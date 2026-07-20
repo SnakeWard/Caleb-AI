@@ -3224,3 +3224,70 @@ guardrails are now a protected surface.`
 **Acceptance Criteria:** Both positive variants complete two steps; Critic executes under mock; both T0/canonical lineages reconstruct; all trust remains T1 or lower; injected fetch counts prove zero real egress and the sentinel detector can fail; step-1 truncation reconstructs with F5/F7 detail; runbook text is exact; protected surfaces unchanged; canonical validation and audit green.
 
 **Progress Log:** Preconditions passed and explicit snapshot verified. Protocol/runbook codification pending commit; rehearsal implementation pending.
+
+## ExecPlan - LIVE-F8 Adapter-Stage Failure Evidence + Reconstruction
+
+**Objective:** Close the fifth telemetry-collapse citation by ledgering a bounded
+`role_invocation_failed` record before every adapter-stage return and reconstructing
+that failed step by execution identity from Ledger bytes alone.
+
+**Source Authority:** Pat's 2026-07-19 LIVE-F8 authorization;
+`docs/protocols/PASS_PROTOCOL_LIVE_F8.md`; PRE-7 Section 9 STOP; LIVE-F1, F4, F5,
+and F7 failure-taxonomy, raw-evidence, and sequencing doctrine.
+
+**Starting State:** `main` and `origin/main` synchronized at `5925e35`; tree clean
+before baseline. Canonical baseline passed 201 files / 3,210 tests; governed
+typecheck and build exited 0; V1/Hollowcut catalogs are 13/9; Planner and Critic
+prompt hashes match their protocol pins; no provider credentials are present.
+
+**Scope:** Add a sibling adapter-failure runtime record carrying only safe
+taxonomy/telemetry and T0 identity; append it before executor exit; serialize it
+through the existing seam; extend execution-keyed reconstruction; add T1-T6
+detectors, report, audit manifest, status, snapshots, and append-only Ledger
+evidence.
+
+**Out of Scope:** Gate/refusal refactor; gate matrix or fifteen-check changes;
+validator or normalization changes; prompts; L1; LE-3 bridge; transport/provider
+egress; existing live fixtures or historical Ledger edits; live calls.
+
+**Files Expected To Change:** Role runtime adapter/result and execution record
+types; live runtime adapter failure-evidence plumbing; executor; rotation seam
+serialization/reconstruction; LIVE-F8 tests/report/audit manifest; protocol,
+`PLANS.md`, `docs/STATUS_LOG.md`, and append-only snapshot Ledger.
+
+**Risk Level:** High — failure-evidence contract, sequencing, redaction, and
+execution-keyed reconstruction. Success behavior must remain byte-identical.
+
+**Snapshot / Rollback Plan:** Protocol/plan commit is the authority anchor.
+Create and verify a named LIVE-F8 pre-change Change Guard snapshot before source
+mutation. Git `5925e35` remains the pre-pass rollback anchor; no historical
+Ledger line may be changed.
+
+**Implementation Steps:** Commit protocol/plan and baseline snapshot record;
+create explicit pre-change snapshot; trace all adapter-result evidence ownership;
+add the bounded sibling record and pre-return append; extend seam Ledger mapping
+and reconstruction; add T1-T6 known-violation detectors; run focused validation,
+canonical suite/typecheck/build, catalogs/hashes/L1 pins, AUD-2; write report and
+status; snapshot, commit, push, verify clean synchronization; STOP.
+
+**Validation Commands:** Focused role-runtime/seam/LIVE-F8 Vitest; `npm test`;
+`node ./node_modules/typescript/bin/tsc --noEmit`; `npm run build`; catalog CLI
+commands; SHA-256 prompt verification; AUD-2 self-smoke; Git protected-surface
+and append-only Ledger checks.
+
+**Acceptance Criteria:** T1-T6 pass; failure evidence exists before terminal;
+stage/taxonomy/usage/budget/stop/T0 values are preserved without prose; any step
+index reconstructs; historical absence stays null; success reconstruction is
+byte-identical with no failure record; protected surfaces unchanged; canonical
+validation and audit green.
+
+**Progress Log:** Section 2 passed at the exact required baseline. Protocol and
+authority commit pending; implementation not started.
+
+**Decision Log:** The new record remains a sibling of F7 gate refusal evidence.
+Terminal telemetry remains unchanged and coexists with the reconstructable
+per-step evidence record.
+
+**Surprises / Discoveries:** None at plan creation.
+
+**Final Report:** Pending.
