@@ -131,6 +131,10 @@ credential closure, and removed before that leaf exits. The leaf verifies absenc
 after removal without printing the value. A future live event report must record
 both proofs: sibling absence before injection and leaf absence after cleanup.
 
+### Live-event authorization record (amended Pass AUTH-2, 2026-07-20)
+
+**Authorization record (mandatory, before execution):** Pat states the event-specific authorization in his own words — format: `Pat, authorized and ran test for <event label>, <event description>` or equivalent naming the event. The implementer seat appends the entry to `docs/LIVE_EVENT_AUTHORIZATIONS.md` immediately, before the command runs. The entry commits either standalone pre-run or, at latest, within the event's evidence commit. The CLI's `human_confirmed` boolean does not satisfy this step; a flag proves a confirmation occurred, only recorded words prove who authorized what.
+
 ### Live-event host-shell doctrine (amended Pass LIVE-F2, 2026-07-19)
 
 Every live provider event MUST be executed by the human operator from a host

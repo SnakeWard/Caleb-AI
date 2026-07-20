@@ -3377,10 +3377,10 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Acceptance Criteria:** The register has exactly the prescribed fields and honest timing/provenance for A1-A8; A7/A8 extraction absence is reported verbatim; every labeled evidence commit in history has an entry; the known-missing-entry fixture fails; no existing runbook step changes; no source/live/credential/Ledger-history mutation; canonical validation and audit green.
 
-**Progress Log:** Extraction completed before mutation and found no committed A7/A8 sentence. AUTH-2 protocol committed/pushed at `a8707cd`. Prechange snapshot `snap_20260720T145701939Z_000455_milestone` verified. Baseline passed 204 files / 3,230 tests. Register, runbook amendment, and detector pending.
+**Progress Log:** Extraction completed before mutation and found no committed A7/A8 sentence. AUTH-2 protocol committed/pushed at `a8707cd`. Prechange snapshot `snap_20260720T145701939Z_000455_milestone` verified. Baseline passed 204 files / 3,230 tests. Added the eight-entry append-only register, exact pre-execution runbook paragraph, and one permanent parser/history detector with a missing-A8 known violation. Focused validation passed 1 file / 1 test; canonical passed 205 files / 3,231 tests; typecheck/build exited 0; catalogs remain 13/9; prompt pins and L1 are unchanged; AUD-2 is compliant/T2 across 8 paths with zero violations. Validation snapshot `snap_20260720T150350612Z_000457_milestone` is Ledgered.
 
 **Decision Log:** A7 and A8 will be labeled `post-run retroactive` exactly as the protocol requires after the negative committed-file extraction. A1-A6 use Pat's verbatim pre-run conversation statements and retain `conversation record with reviewer` provenance rather than claiming a committed first record.
 
 **Surprises / Discoveries:** A8 is the first completed two-role live rotation and is already committed as evidence at `e30e420`; its authorization words still require the honest retroactive register label because they are absent from committed pre-run records.
 
-**Final Report:** Pending `docs/AUTH_2_LIVE_EVENT_AUTHORIZATION_REGISTER_REPORT.md`.
+**Final Report:** `docs/AUTH_2_LIVE_EVENT_AUTHORIZATION_REGISTER_REPORT.md`. AUTH-2 is accepted with no deviations. E2 remains unauthorized and will be the first event entered under the mandatory pre-execution rule.

@@ -1093,3 +1093,27 @@ snapshot `snap_20260720T045723805Z_000454_milestone` is Ledgered.
 
 LIVE-F9 is accepted offline. Attempt eight remains unauthorized pending Pat's
 fresh event-specific words and host-shell execution under the runbook.
+
+### 2026-07-20 — AUTH-2 — live-event authorization register accepted
+
+AUTH-2 searched committed files and history before mutation. Neither Pat's A7
+sentence nor the relayed A8 sentence was present in any committed file, so both
+entries are honestly labeled post-run retroactive. A1-A6 preserve Pat's exact
+pre-run conversation words. All eight entries carry the prescribed seven fields,
+evidence commit, and terminal outcome in the new append-only register.
+
+The operating runbook now requires Pat's event-specific words to be appended to
+the register before execution; `human_confirmed` alone is explicitly
+insufficient. No other runbook step changed. The permanent detector parses the
+field shape, matches labeled Ledger evidence commits A6-A8 to their registered
+hashes, and catches an in-memory missing-A8 violation.
+
+Focused validation passed 1 file / 1 test; canonical passed 205 files / 3,231
+tests; governed typecheck/build exited 0. Catalogs remain 13/9; prompt digests
+are unchanged; L1 is untouched; AUD-2 is compliant/T2 across 8 paths with zero
+violations. No source, live call, credential, fixture, or historical Ledger byte
+changed. Validation snapshot `snap_20260720T150350612Z_000457_milestone` is an
+append-only record.
+
+AUTH-2 is accepted. E2 remains unauthorized pending Pat's separate words and
+will be the first event registered under the pre-execution rule.

@@ -1,0 +1,26 @@
+{
+  "pass_id": "AUTH-2",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/AUTH_2_LIVE_EVENT_AUTHORIZATION_REGISTER_REPORT.md",
+    "docs/LIVE_EVENT_AUTHORIZATIONS.md",
+    "examples/audit/auth-2-pass-manifest.valid.json",
+    "tests/acceptance/auth2LiveEventAuthorizationRegisterAcceptance.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/01_CODEX_OPERATING_CONTRACT.md",
+    "docs/STATUS_LOG.md"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/**",
+    "examples/live-rotation/**",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}
