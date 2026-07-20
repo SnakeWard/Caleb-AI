@@ -89,15 +89,14 @@ describe("SEAT-E2-PREP seat doctrine, E2 budget parity, and two-key runbook", ()
     expect(previous).not.toContain(D2_TEXT);
   });
 
-  it("T2 pins E2 Critic at 2048, keeps E1 Critic at 2048, and leaves Planner budgets unchanged", async () => {
+  it("T2 pins E2 Planner 1536 / Critic 2048 and E1 unchanged 1536 / 2048 (SEAT-E2-PREP-A1)", async () => {
     const e1 = JSON.parse(await readFile(E1_PATH, "utf8")) as Record<string, any>;
     const e2 = JSON.parse(await readFile(E2_PATH, "utf8")) as Record<string, any>;
 
-    expect(roleBudget(e1, "critic")).toBe(2048);
-    expect(roleBudget(e2, "critic")).toBe(2048);
     expect(roleBudget(e1, "planner")).toBe(1536);
-    // E2 Planner residual LIVE-R1 value; D4 forbade non-Critic fixture edits.
-    expect(roleBudget(e2, "planner")).toBe(512);
+    expect(roleBudget(e1, "critic")).toBe(2048);
+    expect(roleBudget(e2, "planner")).toBe(1536);
+    expect(roleBudget(e2, "critic")).toBe(2048);
     expect(LIVE_ROTATION_MAX_PLANNER_TOKENS).toBe(1536);
     expect(LIVE_ROTATION_MAX_ROLE_TOKENS).toBe(2048);
   });

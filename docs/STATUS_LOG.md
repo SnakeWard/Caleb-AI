@@ -1134,3 +1134,12 @@ Prechange snapshot `snap_20260720T154224647Z_000459_milestone`. Validation
 snapshot `snap_20260720T154832305Z_000461_milestone`. Canonical suite 206 files /
 3,236 tests exit 0; typecheck/build 0; catalogs 13/9; AUD-2 compliant/T2 across
 11 paths with zero violations. Full report: `docs/SEAT_E2_PREP_REPORT.md`.
+
+### 2026-07-20 — SEAT-E2-PREP-A1 — E2 Planner budget parity
+
+Amendment A1 (Pat-authorized): E2 fixture Planner `max_tokens` 512 → 1,536 only
+(matches F5/E1; three live Planner outputs exceeded 512). T2 amended to pin
+E2 Planner 1,536 / Critic 2,048 with E1 unchanged; T3 still refuses 1,537/2,049
+on the E2 path. Exactly one fixture value changed. Prompts/L1/src untouched.
+Prechange `snap_20260720T155219984Z_000462_milestone`. Report amendment in
+`docs/SEAT_E2_PREP_REPORT.md`.

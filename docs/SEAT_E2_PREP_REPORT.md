@@ -87,7 +87,8 @@ Created `docs/IMPLEMENTER_SEAT_RECORD.md` with:
 | Fixture | Planner `max_tokens` | Critic `max_tokens` |
 | --- | --- | --- |
 | E1 (unchanged) | 1,536 | 2,048 |
-| E2 (this pass) | 512 (unchanged) | **2,048** (was **512**) |
+| E2 (SEAT-E2-PREP base) | 512 (then residual LIVE-R1) | **2,048** (was **512**) |
+| E2 (after SEAT-E2-PREP-A1) | **1,536** (was **512**) | 2,048 (unchanged in A1) |
 
 **Ceiling finding (governed-by-role confirmed):**  
 `src/logicEngine/liveRotationGateEvidence.ts` uses role-specific ceilings
@@ -97,6 +98,32 @@ validates; 2,049 refuses with `live_role_token_budget_exceeded`; Planner 1,537
 refuses. **No runtime plumbing fix required.** Existing LIVE-R1/F9 gate-chain
 detectors already exercise Planner 1537 / Critic 2049 on the E1 path; T3 maps
 the same ceilings onto the E2 fixture path.
+
+### Amendment A1 — E2 Planner budget parity (SEAT-E2-PREP-A1)
+
+**Authorized by:** Pat (T4), binding on his relay.  
+**Prechange snapshot:** `snap_20260720T155219984Z_000462_milestone`
+
+**D4-A:** In the E2 fixture only: Planner `max_tokens` **512 → 1,536**, matching
+F5 doctrine and E1. No other fixture field changes.
+
+**Rationale on record:** three live Planner outputs (986–1,017 tokens) exceed
+512; attempt four proved 512 truncates; running E2 at 512 would re-buy a solved
+finding.
+
+**Fixture diff (exactly one changed value):**
+
+| Path | Field | Before | After |
+| --- | --- | --- | --- |
+| `examples/live-rotation/event-e2.cross-family.fixture.json` | `role_bindings[planner].budget.max_tokens` | `512` | `1536` |
+
+**Detector T2 amended:** E2 resolves Planner **1,536** / Critic **2,048**; E1
+unchanged **1,536** / **2,048**. T3 continues to re-prove refusal edges at
+Planner **1,537** and Critic **2,049** on the E2 path.
+
+**A1 validation:** focused SEAT-E2-PREP + gate-chain **2 files / 8 tests** exit 0;
+canonical **206 files / 3,236 tests** exit 0; `tsc --noEmit` exit 0; digests
+unchanged (Planner/Critic pins above); L1 not touched.
 
 ### D5 — Two-key runbook addendum (verbatim as committed)
 
@@ -208,10 +235,14 @@ L1 route-input allowlist and related surfaces were **not touched**.
 
 ## Honest deviations
 
-1. **E2 Critic start value.** Protocol D4 text said Critic `1,536 → 2,048`. On disk, E2 Critic was still the residual LIVE-R1 value **512** (F5/F9 raised only E1). Changed **512 → 2,048** to achieve Critic parity with E1. No other E2 fixture field changed.
-2. **E2 Planner budget.** Protocol T2 wording expected Planner **1,536 in both** fixtures. E2 Planner remains **512** (unchanged this pass per D4 "nothing else in the fixture changes"). Detector T2 asserts E1 Planner 1,536 and E2 Planner 512.
-3. **Baseline full-suite contention.** First canonical baseline run reported 2 timeout failures under load; focused re-run green. Same class as prior passes; not treated as product regression.
+1. **E2 Critic start value (base pass).** Protocol D4 text said Critic `1,536 → 2,048`. On disk, E2 Critic was still the residual LIVE-R1 value **512** (F5/F9 raised only E1). Changed **512 → 2,048** to achieve Critic parity with E1.
+2. **E2 Planner budget (base pass → A1).** Base SEAT-E2-PREP left E2 Planner at **512** per D4 "nothing else changes." That residual is **superseded by A1**: Planner **512 → 1,536** under D4-A so E2 matches F5 doctrine and E1. Base-pass honest deviation #2 is closed by this amendment, not rewritten out of history.
+3. **Baseline full-suite contention (base pass).** First canonical baseline run reported 2 timeout failures under load; focused re-run green. Same class as prior passes; not treated as product regression.
 4. **Pat external network-policy verification.** Seat record field is explicitly *Not yet reported by Pat* — required non-blank; not fabricated.
+
+### Honest deviations (SEAT-E2-PREP-A1)
+
+**Honest deviations: none.** A1 is a single authorized fixture field change plus T2 amendment; no protocol improvisation.
 
 ## Roadmap boundary
 
@@ -220,3 +251,5 @@ This pass does **not** authorize E2. On acceptance: E2 (Anthropic Planner, Grok/
 ## Verdict
 
 SEAT-E2-PREP: seat doctrine codified, ENV-1 record established, E2 Critic budget parity locked, two-key runbook locked — **ready for Pat review**. E2 remains unauthorized.
+
+SEAT-E2-PREP-A1: E2 Planner budget parity locked at **1,536** / Critic **2,048**. E2 remains unauthorized.

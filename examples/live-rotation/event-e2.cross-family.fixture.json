@@ -65,7 +65,7 @@
           "provider_id": "anthropic",
           "adapter_id": "anthropic_live_adapter",
           "model_id": "claude-haiku-4-5",
-          "budget": { "max_tokens": 512, "timeout_ms": 30000, "max_response_bytes": 1048576 }
+          "budget": { "max_tokens": 1536, "timeout_ms": 30000, "max_response_bytes": 1048576 }
         },
         {
           "role_id": "critic",
