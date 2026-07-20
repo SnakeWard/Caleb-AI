@@ -3352,3 +3352,35 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 **Surprises / Discoveries:** Git's EOL threat was closed exactly at `.caleb/ledger/**`; no broader EOL-policy question surfaced. The transient H5 canonical timeout was not reproducible serially and required no TIME-1 scope change.
 
 **Final Report:** `docs/LIVE_F9_CRITIC_BUDGET_PROMPT_LEDGER_INTEGRITY_REPORT.md`. LIVE-F9 is accepted offline; attempt eight remains unauthorized pending Pat's fresh event-specific words and host-shell execution.
+
+## ExecPlan - AUTH-2 Live-Event Authorization Register
+
+**Objective:** Make Pat's event-specific authorization words durable by creating an append-only live-event authorization register, adding the mandatory pre-execution register step to the operating runbook, and detector-locking register coverage against labeled LIVE-R2 E1 evidence commits.
+
+**Source Authority:** Pat's relay of `docs/protocols/PASS_PROTOCOL_AUTH_2.md`; `docs/01_CODEX_OPERATING_CONTRACT.md`; the committed LIVE-R2 E1 evidence history; AUTH-2's pre-mutation extraction result.
+
+**Current State:** `main` and `origin/main` synchronized at A8 evidence commit `e30e420`, then AUTH-2 protocol authority commit `a8707cd`; tree clean before AUTH-2 snapshot. No credential-shaped variables were present. Baseline passed 204 files / 3,230 tests. The committed-tree and historical-content extraction found neither the A7 sentence `I authorized attempt Seven.` nor the relayed A8 sentence in any committed file.
+
+**Scope:** Documentation and tests only: the authorization register, the exact normative runbook insertion, one acceptance detector, AUTH-2 report/audit/status/plan records, and append-only snapshot Ledger evidence.
+
+**Out of Scope:** Source/runtime/CLI changes; live calls; credentials; Ledger backfill or historical editing; changing any existing runbook step; provenance beautification; E2 authorization.
+
+**Files Expected To Change:** `docs/LIVE_EVENT_AUTHORIZATIONS.md`; `docs/01_CODEX_OPERATING_CONTRACT.md`; one AUTH-2 acceptance test; AUTH-2 report and audit manifest; `PLANS.md`; `docs/STATUS_LOG.md`; append-only `.caleb/ledger/ledger.jsonl`. The protocol file is already committed.
+
+**Risk Level:** Medium — authorization provenance must remain exact and retroactive timing must not be upgraded.
+
+**Snapshot / Rollback Plan:** Prechange snapshot `snap_20260720T145701939Z_000455_milestone` (`AUTH-2-prechange`) captured 18 files, wrote one Ledger record, and was verified before register/runbook/test mutation. Git commit `a8707cd` is the protocol rollback anchor. No historical Ledger or register entry may be rewritten.
+
+**Implementation Steps:** Preserve extraction findings; map A1-A8 exact words, evidence commits, and terminal outcomes; create the exact seven-field register entries; insert the normative runbook paragraph immediately before host-shell execution doctrine; add the one-test parser/history/known-violation detector; run focused and canonical validation, typecheck, build, catalogs, prompt/L1 pins, and AUD-2; report, commit, push, verify synchronization; STOP.
+
+**Validation Commands:** Focused AUTH-2 Vitest; `npm test`; `node ./node_modules/typescript/bin/tsc --noEmit`; `npm run build`; V1/Hollowcut catalog CLI commands; prompt SHA-256 checks; L1 protected diff; AUD-2 self-smoke; Git clean/synchronization checks.
+
+**Acceptance Criteria:** The register has exactly the prescribed fields and honest timing/provenance for A1-A8; A7/A8 extraction absence is reported verbatim; every labeled evidence commit in history has an entry; the known-missing-entry fixture fails; no existing runbook step changes; no source/live/credential/Ledger-history mutation; canonical validation and audit green.
+
+**Progress Log:** Extraction completed before mutation and found no committed A7/A8 sentence. AUTH-2 protocol committed/pushed at `a8707cd`. Prechange snapshot `snap_20260720T145701939Z_000455_milestone` verified. Baseline passed 204 files / 3,230 tests. Register, runbook amendment, and detector pending.
+
+**Decision Log:** A7 and A8 will be labeled `post-run retroactive` exactly as the protocol requires after the negative committed-file extraction. A1-A6 use Pat's verbatim pre-run conversation statements and retain `conversation record with reviewer` provenance rather than claiming a committed first record.
+
+**Surprises / Discoveries:** A8 is the first completed two-role live rotation and is already committed as evidence at `e30e420`; its authorization words still require the honest retroactive register label because they are absent from committed pre-run records.
+
+**Final Report:** Pending `docs/AUTH_2_LIVE_EVENT_AUTHORIZATION_REGISTER_REPORT.md`.
