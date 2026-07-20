@@ -76,3 +76,12 @@ live-event runbook.
 - Register entry created: 2026-07-20, AUTH-2 (for backfill)
 - Evidence commit: e30e4200fbc8eac19e9f7ec8f3255de072f70694
 - Outcome: "completed"
+
+## LIVE-R2-E2-A1
+- Authorization: "I Pat authorize. Make it so."
+- Stated by: Pat (T4)
+- Stated when: post-run retroactive, 2026-07-20
+- Recorded where first: conversation record with reviewer
+- Register entry created: 2026-07-20, post-event
+- Evidence commit: 873276c767fa32783a820a69499d87215c82f798
+- Outcome: "completed"

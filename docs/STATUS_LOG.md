@@ -1152,3 +1152,12 @@ $0.05 unchanged. T2 asserts E2/E1 run budgets 8192/2/0.05. Runtime enforces
 fixture-declared run ceiling; validator absolute max remains constant 8192.
 Prechange `snap_20260720T164313189Z_000464_milestone`. Report in
 `docs/SEAT_E2_PREP_REPORT.md`.
+
+### 2026-07-20 — AUTH-3 — E2-A1 register + authorization echo
+
+AUTH-3 appends post-run retroactive LIVE-R2-E2-A1 register entry (Pat:
+"I Pat authorize. Make it so."; evidence `873276c`; outcome completed) and adds
+the implementer-seat authorization-echo requirement to the operating-contract
+runbook step so the AUTH-2 rule cannot stay paper-only on the next event.
+Detector extended for E2 labels and `post-event` creation tags. Report:
+`docs/AUTH_3_E2_A1_REGISTER_AND_ECHO_REPORT.md`.

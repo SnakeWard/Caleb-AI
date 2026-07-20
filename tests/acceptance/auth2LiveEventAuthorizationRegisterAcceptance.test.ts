@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 
 const REGISTER_PATH = "docs/LIVE_EVENT_AUTHORIZATIONS.md";
-const EVENT_LABEL_PATTERN = /^LIVE-R2-E1-A\d+$/;
+const EVENT_LABEL_PATTERN = /^LIVE-R2-E\d+-A\d+$/;
 const FIELD_NAMES = [
   "Authorization",
   "Stated by",
@@ -29,7 +29,7 @@ function parseRegister(text: string): readonly RegisterEntry[] {
   const lines = text.replaceAll("\r\n", "\n").split("\n");
   const entries: RegisterEntry[] = [];
   for (let index = 0; index < lines.length; index += 1) {
-    const heading = /^## (LIVE-R2-E1-A\d+)$/.exec(lines[index] ?? "");
+    const heading = /^## (LIVE-R2-E\d+-A\d+)$/.exec(lines[index] ?? "");
     if (heading === null) continue;
     const label = heading[1] ?? "";
     const fields = new Map<string, string>();
@@ -61,7 +61,7 @@ function labeledLedgerEvidenceCommits(): readonly LabeledEvidenceCommit[] {
   );
   return output.split(/\r?\n/).flatMap((line) => {
     const [commit = "", subject = ""] = line.split("\t", 2);
-    const match = /\b(LIVE-R2-E1-A\d+)\b/.exec(subject);
+    const match = /\b(LIVE-R2-E\d+-A\d+)\b/.exec(subject);
     return match === null ? [] : [{ label: match[1] ?? "", commit }];
   });
 }
@@ -93,7 +93,7 @@ function validateRegister(
       /^(implementer session context only|conversation record with reviewer|.+:\d+)$/
     );
     expect(entry.fields.get("Register entry created")).toMatch(
-      /^\d{4}-\d{2}-\d{2}, (AUTH-2 \(for backfill\)|[A-Z0-9-]+)$/
+      /^\d{4}-\d{2}-\d{2}, (AUTH-2 \(for backfill\)|post-event|[A-Z0-9-]+)$/
     );
     expect(entry.fields.get("Evidence commit")).toMatch(/^[0-9a-f]{40}$/);
     expect(entry.fields.get("Outcome")).toMatch(/^".+"$/);
@@ -116,15 +116,23 @@ describe("AUTH-2 live-event authorization register", () => {
     const register = await readFile(REGISTER_PATH, "utf8");
     const history = labeledLedgerEvidenceCommits();
     expect(history.map((entry) => entry.label)).toEqual([
+      "LIVE-R2-E2-A1",
       "LIVE-R2-E1-A8",
       "LIVE-R2-E1-A7",
       "LIVE-R2-E1-A6"
     ]);
     expect(validateRegister(register, history)).toEqual([]);
 
-    const knownViolation = register.replace(/\n## LIVE-R2-E1-A8[\s\S]*$/, "");
+    const knownViolation = register.replace(/\n## LIVE-R2-E2-A1[\s\S]*$/, "");
     expect(validateRegister(knownViolation, history)).toContain(
-      "missing_history_entry:LIVE-R2-E1-A8"
+      "missing_history_entry:LIVE-R2-E2-A1"
     );
   }, 30_000);
+
+  it("AUTH-3 locks the implementer-seat echo line on the authorization runbook step", async () => {
+    const contract = await readFile("docs/01_CODEX_OPERATING_CONTRACT.md", "utf8");
+    expect(contract).toContain(
+      "The implementer seat echoes the pending authorization requirement back to the operator at event start; the operator does not proceed to execution until the register entry is appended."
+    );
+  });
 });

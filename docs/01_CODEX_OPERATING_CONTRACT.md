@@ -166,9 +166,9 @@ powershell -NoProfile -Command if ($env:ANTHROPIC_API_KEY) { Write-Output PRESEN
 powershell -NoProfile -Command if ($env:XAI_API_KEY) { Write-Output PRESENT } else { Write-Output ABSENT }
 ```
 
-### Live-event authorization record (amended Pass AUTH-2, 2026-07-20)
+### Live-event authorization record (amended Pass AUTH-2, 2026-07-20; AUTH-3, 2026-07-20)
 
-**Authorization record (mandatory, before execution):** Pat states the event-specific authorization in his own words — format: `Pat, authorized and ran test for <event label>, <event description>` or equivalent naming the event. The implementer seat appends the entry to `docs/LIVE_EVENT_AUTHORIZATIONS.md` immediately, before the command runs. The entry commits either standalone pre-run or, at latest, within the event's evidence commit. The CLI's `human_confirmed` boolean does not satisfy this step; a flag proves a confirmation occurred, only recorded words prove who authorized what.
+**Authorization record (mandatory, before execution):** Pat states the event-specific authorization in his own words — format: `Pat, authorized and ran test for <event label>, <event description>` or equivalent naming the event. The implementer seat appends the entry to `docs/LIVE_EVENT_AUTHORIZATIONS.md` immediately, before the command runs. The entry commits either standalone pre-run or, at latest, within the event's evidence commit. The CLI's `human_confirmed` boolean does not satisfy this step; a flag proves a confirmation occurred, only recorded words prove who authorized what. The implementer seat echoes the pending authorization requirement back to the operator at event start; the operator does not proceed to execution until the register entry is appended.
 
 ### Live-event host-shell doctrine (amended Pass LIVE-F2, 2026-07-19)
 
