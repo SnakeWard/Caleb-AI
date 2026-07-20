@@ -3282,12 +3282,22 @@ byte-identical with no failure record; protected surfaces unchanged; canonical
 validation and audit green.
 
 **Progress Log:** Section 2 passed at the exact required baseline. Protocol and
-authority commit pending; implementation not started.
+authority were committed at `90eadb6`. Pre-change snapshot
+`snap_20260720T001213891Z_000443_milestone` captured 18 files and was Ledgered.
+Source mutation did not begin: the complete failure-flow audit found that a
+rejected/thrown `adapter.invoke()` bypasses the returned-failure branch and also
+bypasses seam terminal construction. Section 9 STOP invoked.
 
 **Decision Log:** The new record remains a sibling of F7 gate refusal evidence.
 Terminal telemetry remains unchanged and coexists with the reconstructable
 per-step evidence record.
 
-**Surprises / Discoveries:** None at plan creation.
+**Surprises / Discoveries:** A thrown adapter invocation is a separate
+evidence-losing exit from the diagnosed `{ ok: false }` path. The executor and
+seam both await without a catch boundary, so the attempt loses per-step evidence,
+failed-step reconstruction, terminal evidence, and live-state capture. This is a
+candidate sixth telemetry-collapse citation and requires Pat's disposition.
 
-**Final Report:** Pending.
+**Final Report:** `docs/LIVE_F8_ADAPTER_FAILURE_EVIDENCE_STOP_REPORT.md`.
+LIVE-F8 stopped under Section 9 before source mutation. The fifth citation
+remains open; PRE-7 and attempt seven remain blocked.

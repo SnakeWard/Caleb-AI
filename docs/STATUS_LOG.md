@@ -996,3 +996,21 @@ provider, transport, prompt, normalization, or route change occurred.
 LIVE-F7 Handoff Gate Modernization and Refusal Evidence: Accepted offline — the
 gate now follows RA-C consumption doctrine and cannot lose its refusal witness.
 E1 attempt seven remains separately authorized. STOP.
+
+### 2026-07-19 — LIVE-F8 — Section 9 STOP at thrown adapter boundary
+
+LIVE-F8 passed its exact 201-file / 3,210-test baseline, typecheck/build, 13/9
+catalog, prompt-hash, credential-absence, Git, and PRE-7 runbook preconditions.
+Protocol authority was committed at `90eadb6`; pre-change snapshot
+`snap_20260720T001213891Z_000443_milestone` captured 18 files and was Ledgered.
+
+Before source mutation, the complete executor/seam trace found a distinct
+evidence-losing path beyond the diagnosed returned adapter failure. A rejected
+or thrown `adapter.invoke()` bypasses the `ok: false` branch because the executor
+has no catch boundary; the seam likewise never reaches live-state capture or
+terminal construction. This loses the attempt boundary, not only the failed-step
+record, and is a candidate sixth telemetry-collapse citation.
+
+LIVE-F8 stopped under Section 9 for Pat's disposition. No source, test, prompt,
+fixture, gate, matrix, L1, LE-3, provider, transport, or historical Ledger line
+changed. PRE-7 and E1 attempt seven remain blocked.
