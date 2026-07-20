@@ -1,0 +1,30 @@
+{
+  "pass_id": "SEAT-E2-PREP",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/IMPLEMENTER_SEAT_RECORD.md",
+    "docs/SEAT_E2_PREP_REPORT.md",
+    "docs/protocols/PASS_PROTOCOL_SEAT_E2_PREP.md",
+    "examples/audit/seat-e2-prep-pass-manifest.valid.json",
+    "tests/acceptance/seatE2PrepAcceptance.test.ts",
+    "tests/fixtures/seat-e2-prep/operating-contract.pre-seat-e2-prep.md"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/01_CODEX_OPERATING_CONTRACT.md",
+    "docs/STATUS_LOG.md",
+    "examples/live-rotation/event-e2.cross-family.fixture.json"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/**",
+    "examples/live-rotation/prompts/**",
+    "examples/live-rotation/event-e1.anthropic.fixture.json",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

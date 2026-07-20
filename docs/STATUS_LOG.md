@@ -1117,3 +1117,20 @@ append-only record.
 
 AUTH-2 is accepted. E2 remains unauthorized pending Pat's separate words and
 will be the first event registered under the pre-execution rule.
+
+### 2026-07-20 — SEAT-E2-PREP — seat doctrine + E2 readiness (Grok seat calibration)
+
+First Grok Build TUI implementer-seat pass after SEAT-ONBOARD-1. Codified
+implementer seat binding and the honest-deviations rule into the operating
+contract; created append-only `docs/IMPLEMENTER_SEAT_RECORD.md` (Codex seat-physics
+correction + Grok tenure + doctrine); raised E2 Critic `max_tokens` from residual
+512 to 2,048 for Critic parity with E1 (E2 Planner remains 512 per D4); added
+two-key cross-family credential lifecycle with quote-free sibling-check form;
+locked T1–T5 detectors. Role ceilings already govern by role (Critic 2048 /
+Planner 1536) — no runtime plumbing change. Prompts/L1/src runtime untouched.
+E2 itself remains unauthorized.
+
+Prechange snapshot `snap_20260720T154224647Z_000459_milestone`. Validation
+snapshot `snap_20260720T154832305Z_000461_milestone`. Canonical suite 206 files /
+3,236 tests exit 0; typecheck/build 0; catalogs 13/9; AUD-2 compliant/T2 across
+11 paths with zero violations. Full report: `docs/SEAT_E2_PREP_REPORT.md`.

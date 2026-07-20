@@ -1,17 +1,8 @@
 # Codex Operating Contract
 
-## Implementer Seat Binding
-
-This contract binds the **implementer seat**, whichever agent and host currently
-hold it. Agent name, model family, and host product are non-promoters: they
-confer no trust tier, no phase authority, and no exemption from these rules.
-Every seat holder MUST complete a SEAT-ONBOARD disclosure before its first pass
-in the seat. The historical filename `01_CODEX_OPERATING_CONTRACT.md` may stand;
-a rename is optional housekeeping and is not required for binding.
-
 ## Codex Identity in This Repo
 
-Codex is the implementation pen for Caleb AI. Codex performs careful source-guided implementation work, but it does not redefine the architecture. When another agent holds the implementer seat, the seat-binding clause above remains the authority; "Codex" in this document names the seat's historical pen, not a host monopoly.
+Codex is the implementation pen for Caleb AI. Codex performs careful source-guided implementation work, but it does not redefine the architecture.
 
 ## Caleb AI Doctrine
 
@@ -100,12 +91,6 @@ Codex MUST report:
 - Known issues
 - Recommended next pass
 
-## Honest Deviations (adopted Pass SEAT-E2-PREP, 2026-07-20)
-
-**Honest deviations.** Any departure from a governing protocol — scope, sequence, method, or outcome — is reported as a deviation in the pass report, plainly labeled, whether or not it was beneficial. "Honest deviations: none" is an affirmative mandatory line; silence is not equivalent to "none". A deviation honestly reported is reviewable material; a deviation discovered unreported is a contract violation regardless of the deviation's merit. Deviations that survive review become gates.
-
-A recap is not a report. The seat MUST STOP on any protocol deviation rather than improvise.
-
 ## Protocol Provenance Discipline (adopted post-G1/G2, first instance H5)
 
 Every pass protocol MUST be committed to `docs/protocols/` before or with the
@@ -145,26 +130,6 @@ into the one-command leaf shell, read only through the sanctioned declared
 credential closure, and removed before that leaf exits. The leaf verifies absence
 after removal without printing the value. A future live event report must record
 both proofs: sibling absence before injection and leaf absence after cleanup.
-
-### Two-key credential lifecycle for cross-family events (adopted Pass SEAT-E2-PREP, 2026-07-20)
-
-For cross-family live events (more than one provider family on the same event),
-the credential lifecycle runs **per key**. Sibling-process presence checks run
-for **each** variable — `ANTHROPIC_API_KEY` and `XAI_API_KEY` (G2 convention for
-the xAI adapter's caller-declared credential-env name) — and each MUST report
-ABSENT before any key is set. Then set both keys in the authorized leaf, complete
-the AUTH-2 authorization-register entry, execute the event from the human host
-shell, `Remove-Item` both variables from the leaf environment, verify ABSENT for
-both, and close the window. Unset proofs for **both** keys ride the event
-evidence.
-
-**Committed quote-free sibling-check form** (field-proven; quoted `-Command`
-forms fail Windows native argument passing in some hosts):
-
-```
-powershell -NoProfile -Command if ($env:ANTHROPIC_API_KEY) { Write-Output PRESENT } else { Write-Output ABSENT }
-powershell -NoProfile -Command if ($env:XAI_API_KEY) { Write-Output PRESENT } else { Write-Output ABSENT }
-```
 
 ### Live-event authorization record (amended Pass AUTH-2, 2026-07-20)
 

@@ -72,7 +72,7 @@
           "provider_id": "xai",
           "adapter_id": "grok_live_adapter",
           "model_id": "grok-3-mini",
-          "budget": { "max_tokens": 512, "timeout_ms": 30000, "max_response_bytes": 1048576 }
+          "budget": { "max_tokens": 2048, "timeout_ms": 30000, "max_response_bytes": 1048576 }
         }
       ],
       "run_budget": {

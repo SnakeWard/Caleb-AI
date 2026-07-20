@@ -3384,3 +3384,35 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 **Surprises / Discoveries:** A8 is the first completed two-role live rotation and is already committed as evidence at `e30e420`; its authorization words still require the honest retroactive register label because they are absent from committed pre-run records.
 
 **Final Report:** `docs/AUTH_2_LIVE_EVENT_AUTHORIZATION_REGISTER_REPORT.md`. AUTH-2 is accepted with no deviations. E2 remains unauthorized and will be the first event entered under the mandatory pre-execution rule.
+
+## ExecPlan - SEAT-E2-PREP Seat Doctrine Codification + E2 Readiness
+
+**Objective:** Codify implementer seat binding and honest-deviations into the operating contract; create ENV-1 seat record; raise E2 Critic budget to 2,048 for parity; add two-key cross-family credential runbook; detector-lock T1–T5. Grok seat calibration pass. Does not authorize E2.
+
+**Source Authority:** Pat's relay of `docs/protocols/PASS_PROTOCOL_SEAT_E2_PREP.md`; SEAT-ONBOARD-1 disclosure; `docs/01_CODEX_OPERATING_CONTRACT.md`; LIVE-F9 role ceilings; AUTH-2 register step.
+
+**Current State:** `main`/`origin/main` synchronized at AUTH-2 tip `c7cd2dc`; tree clean; credentials ABSENT; baseline 205 files / 3,231 tests (first full run had 2 load-timeout flakes; focused re-run green); typecheck/build 0; catalogs 13/9; prompt digests pinned.
+
+**Scope:** Docs/fixtures/tests only. Contract D1/D2/D5; seat record; E2 Critic max_tokens only; T1–T5 acceptance detectors; report/audit/status/plan; append-only snapshot Ledger evidence.
+
+**Out of Scope:** Runtime behavior changes (unless ceiling plumbing required — not required); prompt edits; L1/gate/LE-3; live calls; credentials; E2 authorization; register invention; network tool use; writes outside workspace.
+
+**Files Expected To Change:** `docs/01_CODEX_OPERATING_CONTRACT.md`; `docs/IMPLEMENTER_SEAT_RECORD.md`; `docs/protocols/PASS_PROTOCOL_SEAT_E2_PREP.md`; `examples/live-rotation/event-e2.cross-family.fixture.json`; `tests/acceptance/seatE2PrepAcceptance.test.ts`; fixture pre-pass copy; report; AUD-2 manifest; `PLANS.md`; `docs/STATUS_LOG.md`; `.caleb/ledger/ledger.jsonl`.
+
+**Risk Level:** Medium — doctrine text must be exact; E2 budget edit must not touch other fixture fields; seat-physics correction must not beautify history.
+
+**Snapshot / Rollback Plan:** Prechange `snap_20260720T154224647Z_000459_milestone` verified on disk before mutation. Protocol file commits with the work. No historical Ledger rewrite.
+
+**Implementation Steps:** Section 2 verify; snapshot; protocol; contract D1/D2/D5; seat record; E2 Critic 2048; T1–T5; focused + canonical validation; typecheck; build; catalogs; digests; AUD-2; report; commit; push; STOP.
+
+**Validation Commands:** Focused SEAT-E2-PREP Vitest; `npx vitest run`; `node ./node_modules/typescript/bin/tsc --noEmit`; `npm run build`; catalog CLI; prompt digests; AUD-2 self-smoke; clean tree + remote sync.
+
+**Acceptance Criteria:** D1–D5 present; T1–T5 pass including known-violation fixtures; E2 Critic 2048; ceilings role-governed without src change or with minimal table fix only; catalogs 13/9; digests unchanged; L1 untouched; honest deviations line present; no live/network/credential/outside-root write.
+
+**Progress Log:** Section 2 passed with documented contention flake re-check. Prechange snapshot verified. Contract seat-binding + honest-deviations + two-key runbook committed. Seat record created. E2 Critic raised 512→2048 (residual LIVE-R1 start, not 1536). Focused T1–T5 5/5 green. Canonical validation, AUD-2, and final counts recorded in the SEAT-E2-PREP report.
+
+**Decision Log:** E2 Critic parity targets E1 Critic 2048; E2 Planner left at 512 per D4. Role ceilings already role-specific from LIVE-F9 — no src edit. Pat external network verification left explicit "not yet reported" rather than blank or invented.
+
+**Surprises / Discoveries:** E2 budgets were still LIVE-R1 512/512; protocol text assumed Critic 1536. Nested PowerShell `$(...)` credential checks mangled in this host; single-quoted -Command succeeded.
+
+**Final Report:** `docs/SEAT_E2_PREP_REPORT.md`.
