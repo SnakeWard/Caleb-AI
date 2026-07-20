@@ -1,8 +1,11 @@
 # LIVE-F8 Adapter Failure Evidence — Section 9 STOP Report
 
-**Pass:** LIVE-F8  
-**Date:** 2026-07-19  
-**Authorization:** Pat (T4), remote authorization  
+**Pass:** LIVE-F8
+
+**Date:** 2026-07-19
+
+**Authorization:** Pat (T4), remote authorization
+
 **Result:** STOP before source mutation
 
 ## Outcome
