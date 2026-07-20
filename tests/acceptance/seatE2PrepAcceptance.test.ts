@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   LIVE_ROTATION_MAX_PLANNER_TOKENS,
   LIVE_ROTATION_MAX_ROLE_TOKENS,
+  LIVE_ROTATION_MAX_TOTAL_TOKENS,
   validateLiveRotationGateEvidence
 } from "../../src/logicEngine/liveRotationGateEvidence.js";
 
@@ -89,16 +90,33 @@ describe("SEAT-E2-PREP seat doctrine, E2 budget parity, and two-key runbook", ()
     expect(previous).not.toContain(D2_TEXT);
   });
 
-  it("T2 pins E2 Planner 1536 / Critic 2048 and E1 unchanged 1536 / 2048 (SEAT-E2-PREP-A1)", async () => {
+  it("T2 pins E2 role and run budgets; E1 unchanged (SEAT-E2-PREP-A1/A2)", async () => {
     const e1 = JSON.parse(await readFile(E1_PATH, "utf8")) as Record<string, any>;
     const e2 = JSON.parse(await readFile(E2_PATH, "utf8")) as Record<string, any>;
+    const e1Run = e1.runtime_rotation_plan.live_rotation_gate_evidence.run_budget;
+    const e2Run = e2.runtime_rotation_plan.live_rotation_gate_evidence.run_budget;
 
     expect(roleBudget(e1, "planner")).toBe(1536);
     expect(roleBudget(e1, "critic")).toBe(2048);
     expect(roleBudget(e2, "planner")).toBe(1536);
     expect(roleBudget(e2, "critic")).toBe(2048);
+    // A2: E2 run-token ceiling parity with E1 (fixture-declared; runtime sums against fixture).
+    expect(e2Run).toEqual({
+      max_total_invocations: 2,
+      max_total_tokens: 8192,
+      max_spend_usd: 0.05
+    });
+    expect(e1Run).toEqual({
+      max_total_invocations: 2,
+      max_total_tokens: 8192,
+      max_spend_usd: 0.05
+    });
     expect(LIVE_ROTATION_MAX_PLANNER_TOKENS).toBe(1536);
     expect(LIVE_ROTATION_MAX_ROLE_TOKENS).toBe(2048);
+    // Absolute allow-ceiling for declared run max_total_tokens is a constant (8192);
+    // runtime enforcement uses the fixture value, not a forced constant default.
+    expect(LIVE_ROTATION_MAX_TOTAL_TOKENS).toBe(8192);
+    expect(e2Run.max_total_tokens).toBe(LIVE_ROTATION_MAX_TOTAL_TOKENS);
   });
 
   it("T3 confirms role ceilings govern E2 Critic 2048 and refuse Critic 2049 / Planner 1537", async () => {

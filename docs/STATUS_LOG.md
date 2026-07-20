@@ -1143,3 +1143,12 @@ E2 Planner 1,536 / Critic 2,048 with E1 unchanged; T3 still refuses 1,537/2,049
 on the E2 path. Exactly one fixture value changed. Prompts/L1/src untouched.
 Prechange `snap_20260720T155219984Z_000462_milestone`. Report amendment in
 `docs/SEAT_E2_PREP_REPORT.md`.
+
+### 2026-07-20 — SEAT-E2-PREP-A2 — E2 run-token ceiling parity
+
+Amendment A2 (Pat-authorized): E2 fixture `max_total_tokens` 4096 → 8192 only
+(matches E1; A8 completed rotation was 4,110 tokens). Invocations 2 and spend
+$0.05 unchanged. T2 asserts E2/E1 run budgets 8192/2/0.05. Runtime enforces
+fixture-declared run ceiling; validator absolute max remains constant 8192.
+Prechange `snap_20260720T164313189Z_000464_milestone`. Report in
+`docs/SEAT_E2_PREP_REPORT.md`.

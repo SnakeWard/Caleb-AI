@@ -244,6 +244,48 @@ L1 route-input allowlist and related surfaces were **not touched**.
 
 **Honest deviations: none.** A1 is a single authorized fixture field change plus T2 amendment; no protocol improvisation.
 
+### Amendment A2 — E2 run-token ceiling parity (SEAT-E2-PREP-A2)
+
+**Authorized by:** Pat (T4), binding on his relay.  
+**Prechange snapshot:** `snap_20260720T164313189Z_000464_milestone`
+
+**D4-B:** In the E2 fixture only: `run_budget.max_total_tokens` **4096 → 8192**,
+matching E1. Spend cap `$0.05` and `max_total_invocations` **2** unchanged.
+
+**Rationale on record:** A8's completed rotation totaled **4,110** tokens
+(1,339 Planner + 2,771 Critic, input+output as the runtime sums); **4,096**
+cannot contain a same-shape success.
+
+**Fixture diff (exactly one changed value):**
+
+| Path | Field | Before | After |
+| --- | --- | --- | --- |
+| `examples/live-rotation/event-e2.cross-family.fixture.json` | `run_budget.max_total_tokens` | `4096` | `8192` |
+
+**Detector:** T2 amended to assert E2 run budget resolves
+`8192` / `2` invocations / `$0.05`; E1 unchanged at the same triple.
+
+**Run-ceiling governance finding:**  
+- **Gate validator** (`liveRotationGateEvidence.ts`): absolute allow-ceiling
+  `LIVE_ROTATION_MAX_TOTAL_TOKENS = 8192` — a declared fixture value **may not
+  exceed** that constant (8193 refuses). It does **not** force every fixture to
+  8192; E2 previously declared 4096 legally under the same constant.  
+- **Runtime** (`LiveRotationRunBudgetTracker.record`): fail-closed when
+  cumulative `total_tokens` exceeds **`evidence.run_budget.max_total_tokens`**
+  from the fixture — **fixture-governed**, not a forced constant default.
+
+So: ceiling **literal** is a max-allow constant; **enforced run limit** is the
+fixture field (F9-pattern: constant caps declaration; fixture sets the binding
+value). No `src/` change required.
+
+**A2 validation:** focused SEAT-E2-PREP + gate-chain **2 files / 8 tests** exit 0;
+canonical **206 files / 3,236 tests** exit 0; `tsc --noEmit` exit 0; digests
+unchanged; L1 not touched.
+
+### Honest deviations (SEAT-E2-PREP-A2)
+
+**Honest deviations: none.**
+
 ## Roadmap boundary
 
 This pass does **not** authorize E2. On acceptance: E2 (Anthropic Planner, Grok/xAI Critic) awaits Pat's separate event-specific words, recorded in `docs/LIVE_EVENT_AUTHORIZATIONS.md` **before** the wire per AUTH-2, executed from Pat's host shell under the two-key runbook committed here.
