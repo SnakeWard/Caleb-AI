@@ -3211,11 +3211,11 @@ guardrails are now a protected surface.`
 
 **Source Authority:** `docs/protocols/PASS_PROTOCOL_PRE_7.md`; `docs/01_CODEX_OPERATING_CONTRACT.md`; LIVE-F4/F5/F7 reports and contracts; Pat's PRE-7 authorization.
 
-**Starting State:** `main` and `origin/main` synchronized at `73da1fb`; tree clean at session start; no credential-shaped variables present. Baseline 201 files / 3,210 tests green; governed typecheck/build exit 0; V1/Hollowcut 13/9; prompt hashes exact.
+**Starting State:** PRE-7 restarted from Section 2 under Pat's authorization after LIVE-F8. `main` and `origin/main` synchronized at `6ac5bfe08761cf588f913dd9af8d3c4d12b22347`; tree clean at restart session start; no credential-shaped variables present. Post-F8 baseline 202 files / 3,220 tests green; governed typecheck/build exit 0; V1/Hollowcut 13/9; prompt hashes exact; PRE-7 runbook codification present from `5925e35`.
 
 **Scope:** Append the exact evidence-commit final step to the existing operating-contract live-event section. Add new `rehearsal-*` fixtures and permanent tests that inject Anthropic responses at the pinned fetch site while exercising the production live rotation adapter, F4 envelope, check 11, step 1 Critic, M3 lineage, seam Ledger entries, and execution-keyed reconstruction. Add a step-1 truncation negative case. No live, prompt, gate, L1, bridge, provider-source, transport, or existing live-fixture changes.
 
-**Snapshot / Rollback Plan:** `snap_20260719T234549492Z_000441_milestone` (`PRE-7-prechange`), verified on disk with 18 captured files and a Ledger entry. Restore only through an authorized Change Guard operation.
+**Snapshot / Rollback Plan:** Restart snapshot `snap_20260720T032512227Z_000448_milestone` (`PRE-7-restart-post-F8-prechange`), verified on disk with 18 captured files and a Ledger entry before restart implementation edits. The canonical baseline also created the expected isolated CLI-test snapshot record `snap_20260720T032220137Z_000447_milestone`; both Ledger changes are append-only. Restore only through an authorized Change Guard operation.
 
 **Implementation Steps:** Commit protocol/runbook doctrine; inspect and reuse production live adapter injection points; add rehearsal fixtures; add positive `needs_revision` and `accepted` detectors; add step-1 truncation detector; run focused and canonical validation; audit; report; commit and push.
 
@@ -3223,7 +3223,7 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Both positive variants complete two steps; Critic executes under mock; both T0/canonical lineages reconstruct; all trust remains T1 or lower; injected fetch counts prove zero real egress and the sentinel detector can fail; step-1 truncation reconstructs with F5/F7 detail; runbook text is exact; protected surfaces unchanged; canonical validation and audit green.
 
-**Progress Log:** Preconditions passed and explicit snapshot verified. Protocol/runbook codification pending commit; rehearsal implementation pending.
+**Progress Log:** Restart Section 2 preconditions passed at the post-F8 baseline and snapshot `snap_20260720T032512227Z_000448_milestone` was verified before implementation. Protocol/runbook codification was already committed and synchronized from the first PRE-7 phase. Added only new `rehearsal-*` semantic fixtures, the permanent production-path Anthropic injected-fetch rehearsal, its AUD-2 manifest, and handoff records. Both Planner statuses pass check 11 and execute Critic; the step-1 truncation retains T0 and reconstructs through LIVE-F8. Focused validation passed 1 file / 4 tests; canonical passed 203 files / 3,224 tests; typecheck/build exited 0; catalogs remain 13/9; prompt/L1/protected surfaces are unchanged; AUD-2 is compliant/T2 across 10 paths with zero violations. Honest deviations: none.
 
 ## ExecPlan - LIVE-F8 Adapter-Stage Failure Evidence + Reconstruction
 

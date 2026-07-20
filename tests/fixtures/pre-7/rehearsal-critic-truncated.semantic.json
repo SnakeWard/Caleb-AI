@@ -1,0 +1,22 @@
+{
+  "summary": "PRE-7-CRITIC-TRUNCATION-SENTINEL semantic payload retained only as T0 evidence.",
+  "claims": [
+    {
+      "claim_id": "pre7_critic_truncated_claim",
+      "text": "This otherwise valid payload is rejected because provider telemetry proves truncation.",
+      "evidence_ref_ids": []
+    }
+  ],
+  "assumptions": [],
+  "constraints": [
+    "Truncation classification precedes JSON or semantic validation."
+  ],
+  "open_questions": [],
+  "recommendations": [
+    "Preserve the T0 bytes and reconstruct the failed second step."
+  ],
+  "evidence_refs": [],
+  "confidence": 0.5,
+  "handoff_notes": [],
+  "acceptance_status": "needs_revision"
+}

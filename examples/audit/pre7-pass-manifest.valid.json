@@ -1,0 +1,28 @@
+{
+  "pass_id": "PRE-7",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/PRE_7_MOCK_FULL_ROTATION_REHEARSAL_REPORT.md",
+    "examples/audit/pre7-pass-manifest.valid.json",
+    "tests/acceptance/pre7MockFullRotationRehearsalAcceptance.test.ts",
+    "tests/fixtures/pre-7/rehearsal-critic-truncated.semantic.json",
+    "tests/fixtures/pre-7/rehearsal-critic-valid.semantic.json",
+    "tests/fixtures/pre-7/rehearsal-planner-accepted.semantic.json",
+    "tests/fixtures/pre-7/rehearsal-planner-needs-revision.semantic.json"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/STATUS_LOG.md"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/**",
+    "examples/live-rotation/**",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

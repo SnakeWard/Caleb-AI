@@ -1,0 +1,22 @@
+{
+  "summary": "PRE-7 rehearsal critic valid semantic payload.",
+  "claims": [
+    {
+      "claim_id": "pre7_critic_valid_claim",
+      "text": "The proposed classifier preserves the distinction between time-budget failure and assertion failure.",
+      "evidence_ref_ids": []
+    }
+  ],
+  "assumptions": [],
+  "constraints": [
+    "The global in-process timeout remains unchanged."
+  ],
+  "open_questions": [],
+  "recommendations": [
+    "Accept the protocol when serial passage and zero assertion edits are both recorded."
+  ],
+  "evidence_refs": [],
+  "confidence": 0.88,
+  "handoff_notes": [],
+  "acceptance_status": "accepted"
+}

@@ -1,0 +1,28 @@
+{
+  "summary": "PRE-7 rehearsal planner needs-revision semantic payload.",
+  "claims": [
+    {
+      "claim_id": "pre7_planner_needs_revision_claim",
+      "text": "The proposed protocol should separate contention symptoms from deterministic defects.",
+      "evidence_ref_ids": []
+    }
+  ],
+  "assumptions": [
+    "The rehearsal is offline and provider egress is injected."
+  ],
+  "constraints": [
+    "Keep the protocol bounded and evidence-led."
+  ],
+  "open_questions": [
+    "Which serial measurement best distinguishes host contention?"
+  ],
+  "recommendations": [
+    "Measure the isolated process-spawning test before classifying the failure."
+  ],
+  "evidence_refs": [],
+  "confidence": 0.82,
+  "handoff_notes": [
+    "Critic should test whether the classification rule can mask assertion failures."
+  ],
+  "acceptance_status": "needs_revision"
+}

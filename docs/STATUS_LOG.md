@@ -1039,3 +1039,31 @@ paths with zero violations. Validation snapshot
 LIVE-F8 Adapter Failure Evidence: Accepted offline — telemetry-collapse
 citations five and six are closed. PRE-7 may restart from Section 2; attempt
 seven remains unauthorized pending PRE-7 acceptance and fresh Pat authority.
+
+### 2026-07-19 — PRE-7 restart — full mock rotation accepted
+
+PRE-7 restarted from Section 2 against synchronized post-F8 commit `6ac5bfe`.
+The starting suite passed 202 files / 3,220 tests; typecheck/build exited 0;
+catalogs were 13/9; prompt hashes, L1, credential absence, and runbook canon all
+matched their pins. Restart snapshot
+`snap_20260720T032512227Z_000448_milestone` was created before implementation.
+
+The new permanent rehearsal drives the production E1 bridge and execution path
+with Anthropic fetch injected offline. Both Planner `needs_revision` and
+`accepted` pass the modernized gate and execute Critic at step 1. Both
+two-artifact lineages, successful terminals, and unique execution-keyed chains
+reconstruct from test-scoped JSONL bytes alone. A step-1 Critic truncation now
+retains T0, emits LIVE-F8 failure evidence, and reconstructs with full bounded
+detail. Non-vacuous detectors prove no model trust promotion and zero real
+egress.
+
+Focused validation passed 1 file / 4 tests; canonical passed 203 files / 3,224
+tests; governed typecheck/build exited 0. V1/Hollowcut remain 13/9; prompts, L1,
+gate/matrix/checks, bridge, normalization, providers/transport, live fixtures,
+and config are untouched. AUD-2 is compliant/T2 across 10 paths with zero
+violations. Ledger changes are three append-only snapshot records.
+
+PRE-7 Full-Rotation Rehearsal: Accepted offline — step index 1 executes through
+the real path under mock, and a second-step failure is fully reconstructable.
+Attempt seven remains unauthorized pending fresh Pat event authority and host-
+shell execution under the committed runbook.

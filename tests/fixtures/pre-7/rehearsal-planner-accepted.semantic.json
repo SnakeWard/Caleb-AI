@@ -1,0 +1,26 @@
+{
+  "summary": "PRE-7 rehearsal planner accepted semantic payload.",
+  "claims": [
+    {
+      "claim_id": "pre7_planner_accepted_claim",
+      "text": "Serial isolation plus unchanged assertions provides a bounded contention classifier.",
+      "evidence_ref_ids": []
+    }
+  ],
+  "assumptions": [
+    "Process-spawn variance is measured independently from in-process work."
+  ],
+  "constraints": [
+    "Do not change assertions while diagnosing timeout-only failures."
+  ],
+  "open_questions": [],
+  "recommendations": [
+    "Record the serial duration beside any explicit process-spawn timeout budget."
+  ],
+  "evidence_refs": [],
+  "confidence": 0.9,
+  "handoff_notes": [
+    "Critic should verify that the masking guard remains explicit."
+  ],
+  "acceptance_status": "accepted"
+}
