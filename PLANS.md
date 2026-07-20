@@ -3324,3 +3324,25 @@ compliant/T2 across 17 paths with zero violations. Validation snapshot
 `docs/LIVE_F8_ADAPTER_FAILURE_EVIDENCE_REPORT.md`. Citations five and six are
 closed; no candidate citation-seven escape surfaced; PRE-7 may restart from its
 Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority.
+
+## ExecPlan - LIVE-F9 Critic Budget, Prompt Bounds, and Ledger Byte Integrity
+
+**Objective:** Raise only the E1 Critic output ceiling to 2,048, harden the Critic semantic-payload prompt with explicit structural and numeric bounds, re-pin its digest, and prevent Git EOL rewriting under `.caleb/ledger/**`.
+
+**Source Authority:** `docs/protocols/PASS_PROTOCOL_LIVE_F9.md`; Pat's explicit LIVE-F9 authorization; accepted attempt-seven diagnostic; F4/F5/F6/F8 doctrine.
+
+**Starting State:** `main` and `origin/main` synchronized at attempt-seven evidence commit `9c1bcccd42c55a781a0f1a65a07792c1ce902d8b`; tree clean before baseline; no credential-shaped variables. Baseline 203 files / 3,224 tests green; canonical typecheck/build exit 0; V1/Hollowcut 13/9; Planner/Critic template hashes match the protocol pins. Attempt-seven Ledger history is untouched.
+
+**Scope:** Root `.gitattributes`; Critic prompt and its digest references; E1 Critic `max_tokens` only; LIVE-F9 detectors/old-prompt fixture; generic PRE-7 truncation rehearsal; protocol/report/audit/status/plan records; append-only snapshot Ledger evidence. No provider, transport, validator, normalizer, gate/matrix/check, L1, bridge, Planner prompt/budget, run-budget, or historical Ledger edits.
+
+**Risk Level:** High — live prompt/budget evidence and append-only Ledger byte preservation, without live execution.
+
+**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260720T044005823Z_000451_milestone` (`LIVE-F9-prechange`) captured 18 files and was verified on disk before implementation mutation. Baseline test snapshot `snap_20260720T043746253Z_000450_milestone` is also an expected append-only record. Restore through Change Guard only if authorized; never rewrite historical Ledger bytes.
+
+**Implementation Steps:** Add Ledger `-text` attribute; harden Critic prompt and compute digest; update all non-historical pins; change only E1 Critic max tokens; verify equality plumbing is fixture-driven; add T1-T6 known-violation detectors and generic rehearsal boundary; run focused/canonical validation, catalogs, hashes, AUD-2, protected diffs; report, snapshot, commit, push, STOP.
+
+**Validation Commands:** Focused LIVE-F9/PRE-7/F5/F6 tests; `npm test`; `node ./node_modules/typescript/bin/tsc --noEmit`; `npm run build`; catalogs; prompt hashes; `git check-attr`; old-digest sweep; AUD-2 self-smoke; Ledger append-only and protected-surface diffs.
+
+**Acceptance Criteria:** T1-T6 pass; new Critic digest is byte-derived and fully pinned; Planner unchanged; E1 fixture has exactly one value change; 2,048 equality truncates while 1,536/end-turn does not; validator schema unchanged; Ledger attribute resolves `text: unset`; canonical validation/AUD-2 green; clean synchronized remote; no live call.
+
+**Progress Log:** Section 2 passed. Pre-change snapshot `snap_20260720T044005823Z_000451_milestone` verified. Implementation pending.
