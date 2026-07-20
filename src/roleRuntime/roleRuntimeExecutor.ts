@@ -8,13 +8,22 @@ import { ROLE_ARTIFACT_SCHEMA_VERSION } from "../roles/types/roleArtifact.js";
 import { resolveRawOutputDigestReferences } from "../rawOutput/lineageResolutionGate.js";
 import { assembleInertContextText, buildContextRefsFromRecords } from "./contextAssembly.js";
 import { validateStaticRotationPlan } from "./rotationPlanValidator.js";
-import type { RoleRuntimeAdapter } from "./types/roleRuntimeAdapter.js";
+import {
+  ROLE_RUNTIME_ADAPTER_FAILURE_STAGES,
+  ROLE_RUNTIME_ADAPTER_FAILURE_TAXONOMIES,
+  ROLE_RUNTIME_ADAPTER_STOP_REASONS,
+  type RoleRuntimeAdapter,
+  type RoleRuntimeAdapterFailureEvidence,
+  type RoleRuntimeAdapterInvokeResult
+} from "./types/roleRuntimeAdapter.js";
 import type {
   RoleRuntimeExecutionResult,
   RoleRuntimeExecutorInput,
   RoleRuntimeFailureCode,
+  RoleRuntimeFailedStepRecord,
   RoleRuntimeGateEvaluationRefusedRecord,
   RoleRuntimeGateRefusalIssue,
+  RoleRuntimeInvocationFailedRecord,
   RoleRuntimeInvocationRecord
 } from "./types/roleRuntimeTypes.js";
 import type { StaticRotationPlan } from "./types/staticRotationPlan.js";
@@ -91,27 +100,73 @@ async function runDeclaredSequence(
       });
     }
 
-    const adapterResult = await adapter.invoke({
-      plan_id: plan.plan_id,
-      task_id: plan.task_id,
-      run_id: plan.run_id,
-      trace_id: plan.trace_id,
-      context_id: plan.context_id,
-      step_index: step.step_index,
-      role_id: step.role_id,
-      adapter_id: step.adapter_id,
-      adapter_kind: step.adapter_kind,
-      context_text: contextAssembly.context_text,
-      context_refs: contextRefs
-    });
-
-    if (!adapterResult.ok) {
+    let adapterResult: RoleRuntimeAdapterInvokeResult;
+    try {
+      adapterResult = await adapter.invoke({
+        plan_id: plan.plan_id,
+        task_id: plan.task_id,
+        run_id: plan.run_id,
+        trace_id: plan.trace_id,
+        context_id: plan.context_id,
+        step_index: step.step_index,
+        role_id: step.role_id,
+        adapter_id: step.adapter_id,
+        adapter_kind: step.adapter_kind,
+        context_text: contextAssembly.context_text,
+        context_refs: contextRefs
+      });
+    } catch (error: unknown) {
+      const failedRecord = buildInvocationFailedRecord(
+        plan,
+        step,
+        exceptionFailureEvidence(error),
+        now()
+      );
+      if (!(await appendRecord(failedRecord))) {
+        return haltedResult({
+          planId: plan.plan_id,
+          failureCode: "ledger_record_write_failed",
+          records,
+          completedSteps: records.length,
+          failedStepIndex: step.step_index
+        });
+      }
       return haltedResult({
         planId: plan.plan_id,
         failureCode: "adapter_invocation_failed",
         records,
         completedSteps: records.length,
-        failedStepIndex: step.step_index
+        failedStepIndex: step.step_index,
+        failedStepRecord: failedRecord
+      });
+    }
+
+    if (!adapterResult.ok) {
+      const failedRecord = buildInvocationFailedRecord(
+        plan,
+        step,
+        sanitizeFailureEvidence(
+          adapterResult.failure_evidence,
+          adapterResult.failure_code ?? null
+        ),
+        now()
+      );
+      if (!(await appendRecord(failedRecord))) {
+        return haltedResult({
+          planId: plan.plan_id,
+          failureCode: "ledger_record_write_failed",
+          records,
+          completedSteps: records.length,
+          failedStepIndex: step.step_index
+        });
+      }
+      return haltedResult({
+        planId: plan.plan_id,
+        failureCode: "adapter_invocation_failed",
+        records,
+        completedSteps: records.length,
+        failedStepIndex: step.step_index,
+        failedStepRecord: failedRecord
       });
     }
 
@@ -286,7 +341,7 @@ function haltedResult(args: {
   records: RoleRuntimeInvocationRecord[];
   completedSteps?: number;
   failedStepIndex?: number;
-  failedStepRecord?: RoleRuntimeGateEvaluationRefusedRecord;
+  failedStepRecord?: RoleRuntimeFailedStepRecord;
   status?: "failed" | "halted";
 }): RoleRuntimeExecutionResult {
   return {
@@ -299,6 +354,138 @@ function haltedResult(args: {
     records: args.records,
     failed_step_record: args.failedStepRecord ?? null
   };
+}
+
+function buildInvocationFailedRecord(
+  plan: StaticRotationPlan,
+  step: StaticRotationPlan["sequence"][number],
+  evidence: RoleRuntimeAdapterFailureEvidence,
+  createdAt: string
+): RoleRuntimeInvocationFailedRecord {
+  return {
+    record_type: "role_invocation_failed",
+    record_id: `${plan.plan_id}.step_${step.step_index}.adapter_failure`,
+    plan_id: plan.plan_id,
+    task_id: plan.task_id,
+    run_id: plan.run_id,
+    trace_id: plan.trace_id,
+    context_id: plan.context_id,
+    step_index: step.step_index,
+    role_id: step.role_id,
+    adapter_id: step.adapter_id,
+    adapter_kind: step.adapter_kind,
+    stage: evidence.stage,
+    taxonomy: evidence.taxonomy,
+    error_name: evidence.error_name,
+    input_tokens: evidence.input_tokens,
+    output_tokens: evidence.output_tokens,
+    total_tokens: evidence.total_tokens,
+    stop_reason: evidence.stop_reason,
+    budget: evidence.budget === null ? null : { ...evidence.budget },
+    t0_digest: evidence.t0_digest,
+    observer_normalization_stage: evidence.observer_normalization_stage,
+    trust_tier: "T0",
+    created_at: createdAt
+  };
+}
+
+function exceptionFailureEvidence(error: unknown): RoleRuntimeAdapterFailureEvidence {
+  return {
+    stage: "invocation_exception",
+    taxonomy: null,
+    error_name: safeErrorConstructorName(error),
+    input_tokens: null,
+    output_tokens: null,
+    total_tokens: null,
+    stop_reason: null,
+    budget: null,
+    t0_digest: null,
+    observer_normalization_stage: null
+  };
+}
+
+function sanitizeFailureEvidence(
+  evidence: RoleRuntimeAdapterFailureEvidence | undefined,
+  fallbackTaxonomy: string | null
+): RoleRuntimeAdapterFailureEvidence {
+  const source = evidence as unknown as Record<string, unknown> | undefined;
+  return {
+    stage: isAllowedString(source?.["stage"], ROLE_RUNTIME_ADAPTER_FAILURE_STAGES)
+      ? source["stage"]
+      : null,
+    taxonomy: isAllowedString(source?.["taxonomy"], ROLE_RUNTIME_ADAPTER_FAILURE_TAXONOMIES)
+      ? source["taxonomy"]
+      : isAllowedString(fallbackTaxonomy, ROLE_RUNTIME_ADAPTER_FAILURE_TAXONOMIES)
+        ? fallbackTaxonomy
+        : null,
+    error_name: safeEvidenceErrorName(source?.["error_name"]),
+    input_tokens: safeCount(source?.["input_tokens"]),
+    output_tokens: safeCount(source?.["output_tokens"]),
+    total_tokens: safeCount(source?.["total_tokens"]),
+    stop_reason: isAllowedString(source?.["stop_reason"], ROLE_RUNTIME_ADAPTER_STOP_REASONS)
+      ? source["stop_reason"]
+      : null,
+    budget: safeBudget(source?.["budget"]),
+    t0_digest: isSha256Digest(source?.["t0_digest"]) ? source["t0_digest"] : null,
+    observer_normalization_stage:
+      source?.["observer_normalization_stage"] === "markdown_fence_unwrapped"
+        ? "markdown_fence_unwrapped"
+        : null
+  };
+}
+
+function safeErrorConstructorName(error: unknown): string {
+  try {
+    if (typeof error === "object" && error !== null) {
+      const constructorName = (error as { constructor?: { name?: unknown } }).constructor?.name;
+      return safeEvidenceErrorName(constructorName) ?? "Error";
+    }
+  } catch {
+    return "Error";
+  }
+  return "Error";
+}
+
+function safeEvidenceErrorName(value: unknown): string | null {
+  return typeof value === "string" && /^[A-Za-z_$][A-Za-z0-9_$]{0,63}$/.test(value)
+    ? value
+    : null;
+}
+
+function isAllowedString<const T extends readonly string[]>(
+  value: unknown,
+  allowed: T
+): value is T[number] {
+  return typeof value === "string" && (allowed as readonly string[]).includes(value);
+}
+
+function safeCount(value: unknown): number | null {
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0 ? value : null;
+}
+
+function safeBudget(value: unknown): RoleRuntimeAdapterFailureEvidence["budget"] {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    return null;
+  }
+  const budget = value as Record<string, unknown>;
+  const maxTokens = safePositiveInteger(budget["max_tokens"]);
+  const timeoutMs = safePositiveInteger(budget["timeout_ms"]);
+  const maxResponseBytes = safePositiveInteger(budget["max_response_bytes"]);
+  return maxTokens === null || timeoutMs === null || maxResponseBytes === null
+    ? null
+    : {
+        max_tokens: maxTokens,
+        timeout_ms: timeoutMs,
+        max_response_bytes: maxResponseBytes
+      };
+}
+
+function safePositiveInteger(value: unknown): number | null {
+  return typeof value === "number" && Number.isSafeInteger(value) && value > 0 ? value : null;
+}
+
+function isSha256Digest(value: unknown): value is `sha256:${string}` {
+  return typeof value === "string" && /^sha256:[0-9a-f]{64}$/.test(value);
 }
 
 function toSafeGateRefusalIssue(

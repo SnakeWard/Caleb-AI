@@ -6,11 +6,22 @@ import { validateLedgerEntry } from "../ledger/ledgerValidation.js";
 import type { ContentAddressedRawOutputStore } from "../rawOutput/contentAddressedRawOutputStore.js";
 import { executeStaticRotation } from "../roleRuntime/roleRuntimeExecutor.js";
 import { validateStaticRotationPlan } from "../roleRuntime/rotationPlanValidator.js";
-import type { RoleRuntimeAdapter, RoleRuntimeContextRef } from "../roleRuntime/types/roleRuntimeAdapter.js";
+import {
+  ROLE_RUNTIME_ADAPTER_FAILURE_STAGES,
+  ROLE_RUNTIME_ADAPTER_FAILURE_TAXONOMIES,
+  ROLE_RUNTIME_ADAPTER_STOP_REASONS,
+  type RoleRuntimeAdapter,
+  type RoleRuntimeAdapterFailureBudget,
+  type RoleRuntimeAdapterFailureStage,
+  type RoleRuntimeAdapterFailureTaxonomy,
+  type RoleRuntimeAdapterStopReason,
+  type RoleRuntimeContextRef
+} from "../roleRuntime/types/roleRuntimeAdapter.js";
 import type {
   RoleRuntimeExecutionResult,
   RoleRuntimeFailureCode,
   RoleRuntimeGateEvaluationRefusedRecord,
+  RoleRuntimeInvocationFailedRecord,
   RoleRuntimeInvocationRecord,
   RoleRuntimeLedgerRecord
 } from "../roleRuntime/types/roleRuntimeTypes.js";
@@ -199,7 +210,51 @@ export interface ReconstructedRotationFailedStep {
   readonly derived_from: readonly Sha256Digest[];
   readonly issues: readonly ReconstructedRotationGateRefusalIssue[];
   readonly lineage_refs: readonly string[];
+  readonly role_id?: undefined;
+  readonly adapter_id?: undefined;
+  readonly adapter_kind?: undefined;
+  readonly taxonomy?: undefined;
+  readonly error_name?: undefined;
+  readonly input_tokens?: undefined;
+  readonly output_tokens?: undefined;
+  readonly total_tokens?: undefined;
+  readonly stop_reason?: undefined;
+  readonly budget?: undefined;
+  readonly t0_digest?: undefined;
+  readonly observer_normalization_stage?: undefined;
 }
+
+export interface ReconstructedRotationInvocationFailedStep {
+  readonly ledger_id: string;
+  readonly execution_id: string | null;
+  readonly record_id: string;
+  readonly step_index: number;
+  readonly role_id: string;
+  readonly adapter_id: string;
+  readonly adapter_kind: "mock" | "live";
+  readonly stage: RoleRuntimeAdapterFailureStage | null;
+  readonly taxonomy: RoleRuntimeAdapterFailureTaxonomy | null;
+  readonly error_name: string | null;
+  readonly input_tokens: number | null;
+  readonly output_tokens: number | null;
+  readonly total_tokens: number | null;
+  readonly stop_reason: RoleRuntimeAdapterStopReason | null;
+  readonly budget: RoleRuntimeAdapterFailureBudget | null;
+  readonly t0_digest: Sha256Digest | null;
+  readonly observer_normalization_stage: LiveRoleOutputNormalizationStage | null;
+  readonly lineage_refs: readonly string[];
+  readonly source_role?: undefined;
+  readonly target_role?: undefined;
+  readonly terminal_status?: undefined;
+  readonly artifact_digest?: undefined;
+  readonly artifact_id?: undefined;
+  readonly derived_from?: undefined;
+  readonly issues?: undefined;
+}
+
+export type ReconstructedRotationAnyFailedStep =
+  | ReconstructedRotationFailedStep
+  | ReconstructedRotationInvocationFailedStep;
 
 export interface ReconstructedRotationLedgerChain {
   readonly plan_id: string;
@@ -213,7 +268,7 @@ export interface ReconstructedRotationLedgerChain {
   readonly failed_step_index: number | null;
   readonly failure_code: string | null;
   readonly invocations: readonly ReconstructedRotationLedgerInvocation[];
-  readonly failed_step: ReconstructedRotationFailedStep | null;
+  readonly failed_step: ReconstructedRotationAnyFailedStep | null;
 }
 
 export type ReconstructRotationLedgerResult =
@@ -380,6 +435,7 @@ export async function executeBridgedRotationAtSeam(
 
   const invocationLedgerIds: string[] = [];
   const gateEvaluationLedgerIds: string[] = [];
+  const roleInvocationFailureLedgerIds: string[] = [];
   const appendRecord = async (record: RoleRuntimeLedgerRecord): Promise<boolean> => {
     if (isGateEvaluationRefusedRecord(record)) {
       const gateEntry = buildGateEvaluationRefusedLedgerEntry({
@@ -395,6 +451,23 @@ export async function executeBridgedRotationAtSeam(
       if (appended) {
         appendedEntries.push(gateEntry);
         gateEvaluationLedgerIds.push(gateEntry.ledger_id);
+      }
+      return appended;
+    }
+    if (isRoleInvocationFailedRecord(record)) {
+      const failureEntry = buildRoleInvocationFailedLedgerEntry({
+        plan,
+        bridge_entry: bridgeEntry,
+        start_entry: startEntry,
+        plan_digest: planDigest,
+        record,
+        ledger_id: nextLedgerId(`role_failure_${record.step_index}`),
+        execution_id: executionId
+      });
+      const appended = await appendEntry(input.append_ledger_entry, failureEntry);
+      if (appended) {
+        appendedEntries.push(failureEntry);
+        roleInvocationFailureLedgerIds.push(failureEntry.ledger_id);
       }
       return appended;
     }
@@ -439,6 +512,7 @@ export async function executeBridgedRotationAtSeam(
     live_state: liveState,
     invocation_ledger_ids: invocationLedgerIds,
     gate_evaluation_ledger_ids: gateEvaluationLedgerIds,
+    role_invocation_failure_ledger_ids: roleInvocationFailureLedgerIds,
     timestamp: now(),
     ledger_id: nextLedgerId("terminal"),
     execution_id: executionId
@@ -488,6 +562,12 @@ function isGateEvaluationRefusedRecord(
   return "record_type" in record && record.record_type === "gate_evaluation_refused";
 }
 
+function isRoleInvocationFailedRecord(
+  record: RoleRuntimeLedgerRecord
+): record is RoleRuntimeInvocationFailedRecord {
+  return "record_type" in record && record.record_type === "role_invocation_failed";
+}
+
 export function computeRotationExecutionPlanDigest(plan: unknown): Sha256Digest {
   return `sha256:${createHash("sha256").update(stableStringify(plan)).digest("hex")}`;
 }
@@ -496,6 +576,7 @@ function isRotationExecutionActivity(activity: string): boolean {
   return (
     activity === "rotation_execution_started" ||
     activity === "rotation_role_invocation" ||
+    activity === "role_invocation_failed" ||
     activity === "gate_evaluation_refused" ||
     activity === "rotation_execution_completed" ||
     activity === "rotation_execution_failed" ||
@@ -601,16 +682,27 @@ export function reconstructRotationChainFromLedgerJsonl(
   const invocations = invocationCandidates
     .filter((entry): entry is ReconstructedRotationLedgerInvocation => entry !== null)
     .sort((left, right) => left.step_index - right.step_index);
-  const failedStepCandidates = selectedEntries
+  const gateFailedStepCandidates = selectedEntries
     .filter((entry) => entry.activity === "gate_evaluation_refused")
     .map(parseReconstructedFailedStep);
-  const failedSteps = failedStepCandidates.filter(
+  const roleFailedStepCandidates = selectedEntries
+    .filter((entry) => entry.activity === "role_invocation_failed")
+    .map(parseReconstructedInvocationFailedStep);
+  const gateFailedSteps = gateFailedStepCandidates.filter(
     (entry): entry is ReconstructedRotationFailedStep => entry !== null
   );
+  const roleFailedSteps = roleFailedStepCandidates.filter(
+    (entry): entry is ReconstructedRotationInvocationFailedStep => entry !== null
+  );
+  const failedSteps: ReconstructedRotationAnyFailedStep[] = [
+    ...gateFailedSteps,
+    ...roleFailedSteps
+  ];
 
   if (
     invocationCandidates.some((entry) => entry === null) ||
-    failedStepCandidates.some((entry) => entry === null) ||
+    gateFailedStepCandidates.some((entry) => entry === null) ||
+    roleFailedStepCandidates.some((entry) => entry === null) ||
     failedSteps.length > 1
   ) {
     return {
@@ -635,7 +727,8 @@ export function reconstructRotationChainFromLedgerJsonl(
   );
   const invocationLedgerIds = invocations.map((entry) => entry.ledger_id);
   const failedStep = failedSteps[0] ?? null;
-  const gateEvaluationLedgerIds = failedSteps.map((entry) => entry.ledger_id);
+  const gateEvaluationLedgerIds = gateFailedSteps.map((entry) => entry.ledger_id);
+  const roleInvocationFailureLedgerIds = roleFailedSteps.map((entry) => entry.ledger_id);
   const identityValid = selectedEntries.every((entry) => {
     const resultExecutionId = resultString(entry, "execution_id");
     const provenanceExecutionId = provenanceString(entry, "execution_id");
@@ -665,6 +758,7 @@ export function reconstructRotationChainFromLedgerJsonl(
       (id, index) => terminalGateEvaluationIds[index] === id
     ) &&
     gateEvaluationLedgerIds.every((id) => terminal.parent_refs.includes(id)) &&
+    roleInvocationFailureLedgerIds.every((id) => terminal.parent_refs.includes(id)) &&
     (failedStep === null
       ? terminalFailedStepRecordId === null
       : terminalFailedStepRecordId === failedStep.record_id &&
@@ -679,6 +773,14 @@ export function reconstructRotationChainFromLedgerJsonl(
       ) &&
     selectedEntries
       .filter((entry) => entry.activity === "gate_evaluation_refused")
+      .every(
+        (entry) =>
+          entry.parent_refs.includes(bridgeLedgerId) &&
+          entry.parent_refs.includes(start.ledger_id) &&
+          entry.parent_refs.includes(planId)
+      ) &&
+    selectedEntries
+      .filter((entry) => entry.activity === "role_invocation_failed")
       .every(
         (entry) =>
           entry.parent_refs.includes(bridgeLedgerId) &&
@@ -999,6 +1101,75 @@ function buildInvocationLedgerEntry(input: {
   };
 }
 
+function buildRoleInvocationFailedLedgerEntry(input: {
+  readonly plan: BridgedExecutablePlan;
+  readonly bridge_entry: LedgerEntry;
+  readonly start_entry: LedgerEntry;
+  readonly plan_digest: Sha256Digest;
+  readonly record: RoleRuntimeInvocationFailedRecord;
+  readonly ledger_id: string;
+  readonly execution_id: string;
+}): LedgerEntry {
+  const derivedFrom = input.record.t0_digest === null ? [] : [input.record.t0_digest];
+  return {
+    ...baseLedgerEntry({
+      ledger_id: input.ledger_id,
+      timestamp: input.record.created_at,
+      plan: input.plan,
+      execution_id: input.execution_id,
+      activity: "role_invocation_failed",
+      status: "failed",
+      result: {
+        plan_id: input.plan.plan_id,
+        record_type: input.record.record_type,
+        record_id: input.record.record_id,
+        step_index: input.record.step_index,
+        role_id: input.record.role_id,
+        adapter_id: input.record.adapter_id,
+        adapter_kind: input.record.adapter_kind,
+        stage: input.record.stage,
+        taxonomy: input.record.taxonomy,
+        error_name: input.record.error_name,
+        input_tokens: input.record.input_tokens,
+        output_tokens: input.record.output_tokens,
+        total_tokens: input.record.total_tokens,
+        stop_reason: input.record.stop_reason,
+        budget: input.record.budget === null ? null : { ...input.record.budget },
+        t0_digest: input.record.t0_digest,
+        observer_normalization_stage: input.record.observer_normalization_stage,
+        trust_tier: input.record.trust_tier
+      },
+      errors: [],
+      parent_refs: [
+        input.bridge_entry.ledger_id,
+        input.start_entry.ledger_id,
+        input.plan.plan_id
+      ],
+      artifact_refs: derivedFrom.map((digest) => `raw-output:${digest}`)
+    }),
+    actor_type: "model",
+    actor_id: input.record.role_id,
+    started_at: input.record.created_at,
+    completed_at: input.record.created_at,
+    artifact_hashes: derivedFrom.map((digest) => ({
+      artifact_id: `raw-output:${digest}`,
+      hash: digest,
+      algorithm: "sha256" as const
+    })),
+    provenance: {
+      execution_seam_version: ROTATION_EXECUTION_SEAM_SCHEMA_VERSION,
+      execution_id: input.execution_id,
+      bridge_ledger_id: input.bridge_entry.ledger_id,
+      derived_plan_digest: input.plan_digest,
+      source_runtime_rotation_plan_id: input.plan.source_runtime_rotation_plan_id,
+      lineage_refs: [input.plan.source_runtime_rotation_plan_id, input.plan.plan_id],
+      derived_from: derivedFrom
+    },
+    verification_status: "unverified",
+    trust_tier: "T0"
+  };
+}
+
 function buildGateEvaluationRefusedLedgerEntry(input: {
   readonly plan: BridgedExecutablePlan;
   readonly bridge_entry: LedgerEntry;
@@ -1088,6 +1259,7 @@ function buildTerminalLedgerEntry(input: {
   readonly live_state: LiveRotationRuntimeState | null;
   readonly invocation_ledger_ids: readonly string[];
   readonly gate_evaluation_ledger_ids: readonly string[];
+  readonly role_invocation_failure_ledger_ids: readonly string[];
   readonly timestamp: string;
   readonly ledger_id: string;
   readonly execution_id: string;
@@ -1168,21 +1340,30 @@ function buildTerminalLedgerEntry(input: {
       input.bridge_entry.ledger_id,
       input.start_entry.ledger_id,
       ...input.invocation_ledger_ids,
-      ...input.gate_evaluation_ledger_ids
+      ...input.gate_evaluation_ledger_ids,
+      ...input.role_invocation_failure_ledger_ids
     ],
-    artifact_refs: [
+    artifact_refs: [...new Set([
       ...input.execution_result.records.map((record) => record.artifact_id),
-      ...(input.execution_result.failed_step_record === null
-        ? []
-        : [
-            input.execution_result.failed_step_record.artifact_id,
-            ...(input.execution_result.failed_step_record.derived_from ?? []).map(
-              (digest) => `raw-output:${digest}`
-            )
-          ]),
+      ...failedStepArtifactRefs(input.execution_result.failed_step_record),
       ...rawOutputRefs
-    ]
+    ])]
   });
+}
+
+function failedStepArtifactRefs(
+  record: RoleRuntimeExecutionResult["failed_step_record"]
+): readonly string[] {
+  if (record === null) {
+    return [];
+  }
+  if (record.record_type === "role_invocation_failed") {
+    return record.t0_digest === null ? [] : [`raw-output:${record.t0_digest}`];
+  }
+  return [
+    record.artifact_id,
+    ...(record.derived_from ?? []).map((digest) => `raw-output:${digest}`)
+  ];
 }
 
 function buildRefusalLedgerEntry(
@@ -1385,6 +1566,165 @@ function parseReconstructedFailedStep(
     issues,
     lineage_refs: lineageRefs
   };
+}
+
+function parseReconstructedInvocationFailedStep(
+  entry: LedgerEntry
+): ReconstructedRotationInvocationFailedStep | null {
+  if (!isObject(entry.result)) {
+    return null;
+  }
+  const allowedResultKeys = new Set([
+    "plan_id",
+    "record_type",
+    "record_id",
+    "step_index",
+    "role_id",
+    "adapter_id",
+    "adapter_kind",
+    "stage",
+    "taxonomy",
+    "error_name",
+    "input_tokens",
+    "output_tokens",
+    "total_tokens",
+    "stop_reason",
+    "budget",
+    "t0_digest",
+    "observer_normalization_stage",
+    "trust_tier",
+    "execution_id"
+  ]);
+  if (Object.keys(entry.result).some((key) => !allowedResultKeys.has(key))) {
+    return null;
+  }
+
+  const result = entry.result;
+  const recordId = resultString(entry, "record_id");
+  const stepIndex = resultNumber(entry, "step_index");
+  const roleId = resultString(entry, "role_id");
+  const adapterId = resultString(entry, "adapter_id");
+  const adapterKind = result["adapter_kind"];
+  const stage = result["stage"];
+  const taxonomy = result["taxonomy"];
+  const errorName = result["error_name"];
+  const inputTokens = result["input_tokens"];
+  const outputTokens = result["output_tokens"];
+  const totalTokens = result["total_tokens"];
+  const stopReason = result["stop_reason"];
+  const budget = parseFailureBudget(result["budget"]);
+  const t0Digest = result["t0_digest"];
+  const normalizationStage = result["observer_normalization_stage"];
+  const provenanceDerivedFrom = optionalProvenanceStringArray(entry, "derived_from");
+  const lineageRefs = provenanceStringArray(entry, "lineage_refs");
+
+  if (
+    resultString(entry, "record_type") !== "role_invocation_failed" ||
+    recordId === null ||
+    stepIndex === null ||
+    roleId === null ||
+    adapterId === null ||
+    (adapterKind !== "mock" && adapterKind !== "live") ||
+    !(stage === null || isAllowedValue(stage, ROLE_RUNTIME_ADAPTER_FAILURE_STAGES)) ||
+    !(taxonomy === null ||
+      isAllowedValue(taxonomy, ROLE_RUNTIME_ADAPTER_FAILURE_TAXONOMIES)) ||
+    !(errorName === null || isSafeErrorName(errorName)) ||
+    !isNullableCount(inputTokens) ||
+    !isNullableCount(outputTokens) ||
+    !isNullableCount(totalTokens) ||
+    !(stopReason === null || isAllowedValue(stopReason, ROLE_RUNTIME_ADAPTER_STOP_REASONS)) ||
+    (result["budget"] !== null && budget === null) ||
+    !(t0Digest === null || isSha256(t0Digest)) ||
+    !(normalizationStage === null || normalizationStage === "markdown_fence_unwrapped") ||
+    provenanceDerivedFrom === null ||
+    lineageRefs === null ||
+    resultString(entry, "trust_tier") !== "T0" ||
+    entry.trust_tier !== "T0" ||
+    entry.status !== "failed"
+  ) {
+    return null;
+  }
+
+  const expectedDerivedFrom = t0Digest === null ? [] : [t0Digest];
+  if (
+    !sameStrings(expectedDerivedFrom, provenanceDerivedFrom) ||
+    !expectedDerivedFrom.every((digest) =>
+      entry.artifact_refs.includes(`raw-output:${digest}`)
+    ) ||
+    !expectedDerivedFrom.every((digest) =>
+      entry.artifact_hashes.some(
+        (hash) => hash.artifact_id === `raw-output:${digest}` && hash.hash === digest
+      )
+    )
+  ) {
+    return null;
+  }
+
+  return {
+    ledger_id: entry.ledger_id,
+    execution_id: resultString(entry, "execution_id"),
+    record_id: recordId,
+    step_index: stepIndex,
+    role_id: roleId,
+    adapter_id: adapterId,
+    adapter_kind: adapterKind,
+    stage,
+    taxonomy,
+    error_name: errorName,
+    input_tokens: inputTokens,
+    output_tokens: outputTokens,
+    total_tokens: totalTokens,
+    stop_reason: stopReason,
+    budget,
+    t0_digest: t0Digest,
+    observer_normalization_stage: normalizationStage,
+    lineage_refs: lineageRefs
+  };
+}
+
+function parseFailureBudget(value: unknown): RoleRuntimeAdapterFailureBudget | null {
+  if (value === null || !isObject(value)) {
+    return null;
+  }
+  if (
+    Object.keys(value).some(
+      (key) => !["max_tokens", "timeout_ms", "max_response_bytes"].includes(key)
+    ) ||
+    !isPositiveInteger(value["max_tokens"]) ||
+    !isPositiveInteger(value["timeout_ms"]) ||
+    !isPositiveInteger(value["max_response_bytes"])
+  ) {
+    return null;
+  }
+  return {
+    max_tokens: value["max_tokens"],
+    timeout_ms: value["timeout_ms"],
+    max_response_bytes: value["max_response_bytes"]
+  };
+}
+
+function isAllowedValue<const T extends readonly string[]>(
+  value: unknown,
+  allowed: T
+): value is T[number] {
+  return typeof value === "string" && (allowed as readonly string[]).includes(value);
+}
+
+function isSafeErrorName(value: unknown): value is string {
+  return typeof value === "string" && /^[A-Za-z_$][A-Za-z0-9_$]{0,63}$/.test(value);
+}
+
+function isNullableCount(value: unknown): value is number | null {
+  return value === null ||
+    (typeof value === "number" && Number.isSafeInteger(value) && value >= 0);
+}
+
+function isPositiveInteger(value: unknown): value is number {
+  return typeof value === "number" && Number.isSafeInteger(value) && value > 0;
+}
+
+function isSha256(value: unknown): value is Sha256Digest {
+  return typeof value === "string" && /^sha256:[0-9a-f]{64}$/.test(value);
 }
 
 function resultGateRefusalIssues(

@@ -121,6 +121,19 @@ describe("LIVE-F1 provider failure taxonomy", () => {
     });
     expect(terminalResult.completed_steps).toBe(0);
     expect(terminalResult.failed_step_index).toBe(0);
+    const failedStep = result.ledger_entries.find(
+      (entry) => entry.activity === "role_invocation_failed"
+    );
+    expect(failedStep?.result).toMatchObject({
+      step_index: 0,
+      role_id: "planner",
+      stage: failureKind,
+      taxonomy: failureKind,
+      error_name: null,
+      t0_digest: null,
+      trust_tier: "T0"
+    });
+    expect(JSON.stringify(failedStep)).not.toContain(providerErrorProse);
   });
 
   it("does not fabricate adapter taxonomy when the provider invoker throws", async () => {

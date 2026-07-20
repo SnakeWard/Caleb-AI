@@ -1,0 +1,46 @@
+{
+  "pass_id": "LIVE-F8",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LIVE_F8_ADAPTER_FAILURE_EVIDENCE_REPORT.md",
+    "docs/LIVE_F8_ADAPTER_FAILURE_EVIDENCE_STOP_REPORT.md",
+    "docs/protocols/PASS_PROTOCOL_LIVE_F8.md",
+    "docs/protocols/PASS_PROTOCOL_LIVE_F8_AMENDMENT_A1.md",
+    "examples/audit/live-f8-pass-manifest.valid.json",
+    "tests/acceptance/liveF8AdapterFailureEvidenceAcceptance.test.ts",
+    "tests/fixtures/live-f8/pre-f8-success-reconstruction.sha256.json"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "PLANS.md",
+    "docs/STATUS_LOG.md",
+    "src/logicEngine/liveRotationRuntimeAdapter.ts",
+    "src/logicEngine/rotationExecutionSeam.ts",
+    "src/roleRuntime/roleRuntimeExecutor.ts",
+    "src/roleRuntime/types/roleRuntimeAdapter.ts",
+    "src/roleRuntime/types/roleRuntimeTypes.ts",
+    "tests/acceptance/liveF5TruncationEvidenceAcceptance.test.ts",
+    "tests/logicEngine/liveF1FailureTaxonomy.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/cli/**",
+    "src/modelBoundary/**",
+    "src/providers/**",
+    "src/rawOutput/**",
+    "src/roles/roleHandoffGate.ts",
+    "src/logicEngine/liveRoleArtifactEnvelope.ts",
+    "src/logicEngine/liveRoleOutputNormalizer.ts",
+    "src/logicEngine/liveRotationGateEvidence.ts",
+    "src/logicEngine/routeInputGate.ts",
+    "src/logicEngine/rotationPlanBridge.ts",
+    "examples/live-rotation/prompts/**",
+    "examples/live-rotation/event-e1.anthropic.fixture.json",
+    "examples/live-rotation/event-e2.cross-family.fixture.json",
+    "tests/setup/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

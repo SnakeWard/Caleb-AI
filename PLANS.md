@@ -3308,3 +3308,19 @@ with `stage: "invocation_exception"`, `taxonomy: null`, and constructor name
 only, then return structurally so the seam records its terminal. No seam-level
 catch-all is authorized. T7-T10 join T1-T6; any concrete non-adapter seam escape
 is a renewed Section 9 STOP and candidate citation seven.
+
+**Amendment A1 Progress:** Authority addendum committed at `9e09a4e`; fresh
+prechange snapshot `snap_20260720T001940267Z_000444_milestone` verified. Added
+bounded adapter failure evidence, executor returned-failure and exception
+sequencing, the sibling T0 Ledger record, terminal parent linkage, and strict
+execution-keyed reconstruction. T1-T10 pass. Focused validation passed 5 files /
+36 tests; canonical passed 202 files / 3,220 tests; governed typecheck/build
+exited 0. Catalogs remain 13/9; prompt, L1, matrix, gate, bridge, normalization,
+transport, provider, and live-fixture protected diffs are empty. AUD-2 is
+compliant/T2 across 17 paths with zero violations. Validation snapshot
+`snap_20260720T003952059Z_000446_milestone` verified.
+
+**Amendment A1 Final Report:** LIVE-F8 accepted offline at
+`docs/LIVE_F8_ADAPTER_FAILURE_EVIDENCE_REPORT.md`. Citations five and six are
+closed; no candidate citation-seven escape surfaced; PRE-7 may restart from its
+Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority.

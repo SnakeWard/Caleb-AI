@@ -11,6 +11,8 @@ import type {
 import { computeSha256Digest } from "../providers/liveAdapterShared.js";
 import type {
   RoleRuntimeAdapter,
+  RoleRuntimeAdapterFailureEvidence,
+  RoleRuntimeAdapterStopReason,
   RoleRuntimeAdapterInvokeInput,
   RoleRuntimeAdapterInvokeResult
 } from "../roleRuntime/types/roleRuntimeAdapter.js";
@@ -93,6 +95,7 @@ export interface LiveRotationInvocationTelemetry {
   readonly observer_normalization_stage: LiveRoleOutputNormalizationStage | null;
   readonly observer_failure_stage: LiveRoleArtifactFailureStage | null;
   readonly observer_validation_issues: readonly LiveRoleArtifactSafeIssue[];
+  readonly stop_reason: RoleRuntimeAdapterStopReason | null;
 }
 
 export interface LiveRotationRunTotals {
@@ -237,7 +240,7 @@ async function invokeRole(
       "live_prompt_template_digest_mismatch",
       emptyTelemetry(runtimeInput, binding, templateDigest, "live_prompt_template_digest_mismatch")
     );
-    return rejected();
+    return rejectedFromTracker(tracker, runtimeInput.step_index);
   }
 
   const promptText = renderPrompt(template.template_text, runtimeInput, config.evidence.task_statement);
@@ -345,7 +348,7 @@ async function invokeRole(
       observationOpen = false;
       const code = "live_role_timeout_budget_exceeded";
       tracker.markFailure(code, emptyTelemetry(runtimeInput, binding, promptDigest, code));
-      return rejected();
+      return rejectedFromTracker(tracker, runtimeInput.step_index);
     }
     result = outcome.value;
   } catch {
@@ -354,7 +357,7 @@ async function invokeRole(
       observerFailure,
       emptyTelemetry(runtimeInput, binding, promptDigest, observerFailure)
     );
-    return rejected();
+    return rejectedFromTracker(tracker, runtimeInput.step_index);
   } finally {
     if (timeoutHandle !== undefined) {
       clearTimeout(timeoutHandle);
@@ -384,7 +387,7 @@ async function invokeRole(
           observerNormalizationStage
         );
     tracker.markFailure(code, telemetry);
-    return rejected();
+    return rejectedFromTracker(tracker, runtimeInput.step_index);
   }
   if (result.status !== "response_schema_valid") {
     const code = "live_provider_response_unvalidated";
@@ -397,7 +400,7 @@ async function invokeRole(
       code,
       observerNormalizationStage
     ));
-    return rejected();
+    return rejectedFromTracker(tracker, runtimeInput.step_index);
   }
   if (observation === null) {
     const code = "live_observer_output_missing";
@@ -410,7 +413,7 @@ async function invokeRole(
       code,
       observerNormalizationStage
     ));
-    return rejected();
+    return rejectedFromTracker(tracker, runtimeInput.step_index);
   }
 
   const observed = observation as StoredObservation;
@@ -425,7 +428,7 @@ async function invokeRole(
       code,
       observerNormalizationStage
     ));
-    return rejected();
+    return rejectedFromTracker(tracker, runtimeInput.step_index);
   }
 
   const telemetry = telemetryFromResponse(
@@ -439,7 +442,7 @@ async function invokeRole(
   );
   const budgetFailure = tracker.record(telemetry);
   if (budgetFailure !== null) {
-    return rejected();
+    return rejectedFromTracker(tracker, runtimeInput.step_index);
   }
 
   return {
@@ -507,7 +510,8 @@ function telemetryFromResponse(
     provider_failure_retryable: null,
     observer_normalization_stage: observerNormalizationStage,
     observer_failure_stage: null,
-    observer_validation_issues: []
+    observer_validation_issues: [],
+    stop_reason: safeStopReason(response.finish_reason)
   };
 }
 
@@ -561,7 +565,8 @@ function telemetryFromFailure(
     provider_failure_retryable: failure.retryable,
     observer_normalization_stage: observerNormalizationStage,
     observer_failure_stage: observerFailureStage,
-    observer_validation_issues: observerValidationIssues.map((entry) => ({ ...entry }))
+    observer_validation_issues: observerValidationIssues.map((entry) => ({ ...entry })),
+    stop_reason: safeStopReason(response.finish_reason)
   };
 }
 
@@ -597,7 +602,8 @@ function emptyTelemetry(
     provider_failure_retryable: providerFailure?.retryable ?? null,
     observer_normalization_stage: observerNormalizationStage,
     observer_failure_stage: observerFailureStage,
-    observer_validation_issues: observerValidationIssues.map((entry) => ({ ...entry }))
+    observer_validation_issues: observerValidationIssues.map((entry) => ({ ...entry })),
+    stop_reason: null
   };
 }
 
@@ -610,11 +616,64 @@ function roundUsd(value: number): number {
   return Math.round(value * 1_000_000_000_000) / 1_000_000_000_000;
 }
 
-function rejected(): RoleRuntimeAdapterInvokeResult {
+function rejectedFromTracker(
+  tracker: LiveRotationRunBudgetTracker,
+  stepIndex: number
+): RoleRuntimeAdapterInvokeResult {
+  const invocations = tracker.state().invocations;
+  let telemetry: LiveRotationInvocationTelemetry | undefined;
+  for (let index = invocations.length - 1; index >= 0; index -= 1) {
+    if (invocations[index]?.step_index === stepIndex) {
+      telemetry = invocations[index];
+      break;
+    }
+  }
+  return rejected(telemetry === undefined ? undefined : toFailureEvidence(telemetry));
+}
+
+function toFailureEvidence(
+  telemetry: LiveRotationInvocationTelemetry
+): RoleRuntimeAdapterFailureEvidence {
+  return {
+    stage: telemetry.observer_failure_stage ?? telemetry.provider_failure_kind,
+    taxonomy: telemetry.observer_failure_stage === null
+      ? telemetry.provider_failure_kind ?? telemetry.failure_code
+      : telemetry.failure_code,
+    error_name: null,
+    input_tokens: telemetry.input_tokens,
+    output_tokens: telemetry.output_tokens,
+    total_tokens: telemetry.total_tokens,
+    stop_reason: telemetry.stop_reason,
+    budget: { ...telemetry.budget },
+    t0_digest: telemetry.observed_store_digest,
+    observer_normalization_stage: telemetry.observer_normalization_stage
+  };
+}
+
+function safeStopReason(value: string): RoleRuntimeAdapterStopReason {
+  switch (value) {
+    case "max_tokens":
+    case "end_turn":
+    case "stop":
+    case "length":
+    case "content_filter":
+    case "tool_use":
+    case "refusal":
+    case "unknown":
+      return value;
+    default:
+      return "unknown";
+  }
+}
+
+function rejected(
+  failureEvidence?: RoleRuntimeAdapterFailureEvidence
+): RoleRuntimeAdapterInvokeResult {
   return {
     ok: false,
     status: "failed",
     artifact: null,
-    failure_code: "adapter_rejected"
+    failure_code: "adapter_rejected",
+    ...(failureEvidence === undefined ? {} : { failure_evidence: failureEvidence })
   };
 }

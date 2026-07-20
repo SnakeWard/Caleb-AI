@@ -354,6 +354,23 @@ describe("LIVE-F5 truncation evidence preservation", () => {
       total_tokens: 1827
     });
     expect(terminal.artifact_refs).toContain(`raw-output:${digest}`);
+    const failedStep = result.ledger_entries.find(
+      (entry) => entry.activity === "role_invocation_failed"
+    );
+    expect(failedStep?.result).toMatchObject({
+      step_index: 0,
+      role_id: "planner",
+      stage: "output_truncated",
+      taxonomy: "live_observer_output_truncated",
+      input_tokens: 291,
+      output_tokens: 1536,
+      total_tokens: 1827,
+      stop_reason: "max_tokens",
+      budget: { max_tokens: 1536 },
+      t0_digest: digest,
+      trust_tier: "T0"
+    });
+    expect(failedStep?.artifact_refs).toContain(`raw-output:${digest}`);
     expect(await store.read(digest)).toMatchObject({
       ok: true,
       status: "found",

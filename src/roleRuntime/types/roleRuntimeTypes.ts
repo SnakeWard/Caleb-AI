@@ -5,7 +5,14 @@ import type {
 } from "../../roles/roleHandoffGate.js";
 import type { RoleId } from "../../roles/types/roleArtifact.js";
 import type { ContentAddressedRawOutputStore } from "../../rawOutput/contentAddressedRawOutputStore.js";
-import type { RoleRuntimeAdapter, RoleRuntimeContextRef } from "./roleRuntimeAdapter.js";
+import type {
+  RoleRuntimeAdapter,
+  RoleRuntimeAdapterFailureBudget,
+  RoleRuntimeAdapterFailureStage,
+  RoleRuntimeAdapterFailureTaxonomy,
+  RoleRuntimeAdapterStopReason,
+  RoleRuntimeContextRef
+} from "./roleRuntimeAdapter.js";
 import type { RotationPlanAdapterKind, StaticRotationPlan } from "./staticRotationPlan.js";
 
 export type RoleRuntimeExecutionStatus = "completed" | "halted" | "failed";
@@ -82,9 +89,40 @@ export interface RoleRuntimeGateEvaluationRefusedRecord {
   readonly created_at: ISODateTimeString;
 }
 
+export interface RoleRuntimeInvocationFailedRecord {
+  readonly record_type: "role_invocation_failed";
+  readonly record_id: string;
+  readonly plan_id: string;
+  readonly task_id: string;
+  readonly run_id: string;
+  readonly trace_id: string;
+  readonly context_id: string;
+  readonly step_index: number;
+  readonly role_id: RoleId;
+  readonly adapter_id: string;
+  readonly adapter_kind: RotationPlanAdapterKind;
+  readonly stage: RoleRuntimeAdapterFailureStage | null;
+  readonly taxonomy: RoleRuntimeAdapterFailureTaxonomy | null;
+  readonly error_name: string | null;
+  readonly input_tokens: number | null;
+  readonly output_tokens: number | null;
+  readonly total_tokens: number | null;
+  readonly stop_reason: RoleRuntimeAdapterStopReason | null;
+  readonly budget: RoleRuntimeAdapterFailureBudget | null;
+  readonly t0_digest: Sha256Digest | null;
+  readonly observer_normalization_stage: "markdown_fence_unwrapped" | null;
+  readonly trust_tier: "T0";
+  readonly created_at: ISODateTimeString;
+}
+
+export type RoleRuntimeFailedStepRecord =
+  | RoleRuntimeGateEvaluationRefusedRecord
+  | RoleRuntimeInvocationFailedRecord;
+
 export type RoleRuntimeLedgerRecord =
   | RoleRuntimeInvocationRecord
-  | RoleRuntimeGateEvaluationRefusedRecord;
+  | RoleRuntimeGateEvaluationRefusedRecord
+  | RoleRuntimeInvocationFailedRecord;
 
 export interface RoleRuntimeExecutionResult {
   readonly ok: boolean;
@@ -94,7 +132,7 @@ export interface RoleRuntimeExecutionResult {
   readonly failed_step_index: number | null;
   readonly failure_code: RoleRuntimeFailureCode | null;
   readonly records: readonly RoleRuntimeInvocationRecord[];
-  readonly failed_step_record: RoleRuntimeGateEvaluationRefusedRecord | null;
+  readonly failed_step_record: RoleRuntimeFailedStepRecord | null;
 }
 
 export interface RoleRuntimeExecutorInput {

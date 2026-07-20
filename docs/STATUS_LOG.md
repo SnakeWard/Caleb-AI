@@ -1014,3 +1014,28 @@ record, and is a candidate sixth telemetry-collapse citation.
 LIVE-F8 stopped under Section 9 for Pat's disposition. No source, test, prompt,
 fixture, gate, matrix, L1, LE-3, provider, transport, or historical Ledger line
 changed. PRE-7 and E1 attempt seven remain blocked.
+
+### 2026-07-19 — LIVE-F8 Amendment A1 — adapter failure evidence accepted
+
+Pat authorized the executor exception boundary without a seam catch-all. Every
+adapter-returned failure now appends bounded `role_invocation_failed` evidence
+before executor exit. Adapter-originated throws enter the same path with fixed
+stage `invocation_exception`, null taxonomy, and constructor identifier only;
+message, stack, payload, and inferred attribution never enter Ledger shapes.
+
+Execution-keyed reconstruction now reads the sibling record from JSONL alone,
+including role/step identity, safe stage/taxonomy/usage/stop/budget fields, T0
+digest, normalization stage, and lineage. Historical absent evidence stays
+`failed_step: null`; F7 gate evidence is unchanged; successful reconstruction is
+byte-identical to the 3,779-byte pre-F8 oracle.
+
+T1-T10 pass. Focused validation passed 5 files / 36 tests; canonical passed 202
+files / 3,220 tests; governed typecheck/build exited 0. V1/Hollowcut remain 13/9;
+prompt hashes, L1, gate matrix/checks, LE-3 bridge, normalization, providers,
+transport, and live fixtures are untouched. AUD-2 is compliant/T2 across 17
+paths with zero violations. Validation snapshot
+`snap_20260720T003952059Z_000446_milestone` is Ledgered and verified.
+
+LIVE-F8 Adapter Failure Evidence: Accepted offline — telemetry-collapse
+citations five and six are closed. PRE-7 may restart from Section 2; attempt
+seven remains unauthorized pending PRE-7 acceptance and fresh Pat authority.
