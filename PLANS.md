@@ -3301,3 +3301,10 @@ candidate sixth telemetry-collapse citation and requires Pat's disposition.
 **Final Report:** `docs/LIVE_F8_ADAPTER_FAILURE_EVIDENCE_STOP_REPORT.md`.
 LIVE-F8 stopped under Section 9 before source mutation. The fifth citation
 remains open; PRE-7 and attempt seven remain blocked.
+
+**Amendment A1 Resume:** Pat authorized D6-D7 on 2026-07-19. The executor will
+catch adapter-originated throws only, emit the same safe sibling failure record
+with `stage: "invocation_exception"`, `taxonomy: null`, and constructor name
+only, then return structurally so the seam records its terminal. No seam-level
+catch-all is authorized. T7-T10 join T1-T6; any concrete non-adapter seam escape
+is a renewed Section 9 STOP and candidate citation seven.
