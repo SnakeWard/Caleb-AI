@@ -170,10 +170,9 @@ describe("RA-X-1 Analyst role isolation registration", () => {
     expect(ANALYST_BOUNDS.findings_max).toBe(5);
   });
 
-  it("L1 allowlist remains seven entries (not touched)", async () => {
+  it("L1 allowlist presence of prior seven entries (eighth is RA-X-3 surface)", async () => {
+    // RA-X-1 required seven; RA-X-3 adds the eighth with its verifier.
     const source = await readFile("src/logicEngine/routeInputGate.ts", "utf8");
-    expect(source).toContain("contract_validated_task_frame");
-    expect(source).not.toContain("lineage_resolved_decision_facing_record");
     const kinds = [
       "contract_validated_task_frame",
       "verified_signal_frame",

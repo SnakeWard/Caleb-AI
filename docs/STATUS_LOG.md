@@ -1187,3 +1187,12 @@ Matrix **33 → 39** with six Analyst transitions; `hollow_evidence_request` not
 matrix row. Registry allowed_next_roles updated for LE-2 adjacency only (no
 route selection). Suite **209 files / 3,256 tests** exit 0; catalogs 13/9; L1
 seven; digests unchanged. Report: `docs/RA_X_2_ANALYST_MATRIX_WIRING_REPORT.md`.
+
+### 2026-07-21 — RA-X-3 — eighth L1 type + verifier
+
+Returns `lineage_resolved_decision_facing_record` with five-check verifier
+(lineage, well-formedness, no tier assertion, no route pre-commitment,
+satisfiability). Single-source capability catalog at
+`src/roles/roleCapabilitySet.ts`. Allowlist **7 → 8**. Nothing consumes the
+eighth type for routing yet. Suite **210 files / 3,266 tests** exit 0; catalogs
+13/9; digests unchanged. Report: `docs/RA_X_3_DECISION_FACING_L1_REPORT.md`.

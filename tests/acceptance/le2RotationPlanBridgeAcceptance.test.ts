@@ -29,7 +29,8 @@ const LOCKED_ALLOWLIST = [
   "deterministic_hollow_signal",
   "accepted_gate_policy_result",
   "human_pat_approval_record",
-  "snapshot_change_guard_state"
+  "snapshot_change_guard_state",
+  "lineage_resolved_decision_facing_record"
 ] as const;
 
 const NOW = "2026-07-18T20:30:00.000Z";

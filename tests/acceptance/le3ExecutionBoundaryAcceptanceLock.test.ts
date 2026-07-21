@@ -40,7 +40,8 @@ const L1_ALLOWLIST = [
   "deterministic_hollow_signal",
   "accepted_gate_policy_result",
   "human_pat_approval_record",
-  "snapshot_change_guard_state"
+  "snapshot_change_guard_state",
+  "lineage_resolved_decision_facing_record"
 ] as const;
 
 describe("LE-3-A execution boundary acceptance lock", () => {
@@ -123,13 +124,19 @@ describe("LE-3-A execution boundary acceptance lock", () => {
     expect(reportTable.split("\n").filter((line) => /^\| \d+ \|/.test(line))).toHaveLength(15);
   });
 
-  it("pins the L1 seven and catalog counts", async () => {
+  it("pins the L1 allowlist and catalog counts", async () => {
     const report = await readFile(REPORT_PATH, "utf8");
-
-    for (const kind of L1_ALLOWLIST) {
+    // Historical LE-3 report documents the pre-RA-X-3 seven; runtime allowlist is eight.
+    const historicalSeven = L1_ALLOWLIST.filter(
+      (kind) => kind !== "lineage_resolved_decision_facing_record"
+    );
+    for (const kind of historicalSeven) {
       expect(report).toContain(kind);
+    }
+    for (const kind of L1_ALLOWLIST) {
       expect(isAllowedRouteInputKind(kind)).toBe(true);
     }
+    expect(L1_ALLOWLIST).toHaveLength(8);
     expect(isAllowedRouteInputKind("derived_rotation_plan")).toBe(false);
     expect(isAllowedRouteInputKind("rotation_execution_result")).toBe(false);
     expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);

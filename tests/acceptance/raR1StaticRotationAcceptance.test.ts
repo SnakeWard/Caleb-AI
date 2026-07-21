@@ -26,7 +26,8 @@ const LOCKED_ALLOWLIST = [
   "deterministic_hollow_signal",
   "accepted_gate_policy_result",
   "human_pat_approval_record",
-  "snapshot_change_guard_state"
+  "snapshot_change_guard_state",
+  "lineage_resolved_decision_facing_record"
 ] as const;
 
 const EXECUTOR_PATH = "src/roleRuntime/roleRuntimeExecutor.ts";
@@ -313,7 +314,7 @@ describe("RA-R1 static rotation acceptance", () => {
     ]);
   });
 
-  it("L1 allowlist unchanged at exactly seven entries", async () => {
+  it("L1 allowlist includes exactly eight entries (RA-X-3)", async () => {
     const gateSource = await readFile("src/logicEngine/routeInputGate.ts", "utf8");
     for (const kind of LOCKED_ALLOWLIST) {
       expect(isAllowedRouteInputKind(kind)).toBe(true);
@@ -322,7 +323,7 @@ describe("RA-R1 static rotation acceptance", () => {
     expect(isAllowedRouteInputKind("role_handoff_gate_result")).toBe(false);
     expect(isAllowedRouteInputKind("role_runtime_decision")).toBe(false);
     expect(isAllowedRouteInputKind("future_unprotocolled_route_input")).toBe(false);
-    expect(LOCKED_ALLOWLIST).toHaveLength(7);
+    expect(LOCKED_ALLOWLIST).toHaveLength(8);
   });
 
   it("runtime composes with ContentAddressedRawOutputStore without modifying M3 modules", async () => {

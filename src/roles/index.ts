@@ -7,3 +7,4 @@ export * from "./roleArtifactBundleReportValidator.js";
 export * from "./runtimeRotationPlanValidator.js";
 export * from "./liveRoleSemanticPayloadValidator.js";
 export * from "./analystSemanticPayloadValidator.js";
+export * from "./roleCapabilitySet.js";

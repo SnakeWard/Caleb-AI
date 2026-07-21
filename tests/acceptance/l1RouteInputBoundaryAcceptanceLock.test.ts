@@ -22,7 +22,8 @@ const LOCKED_ALLOWLIST = [
   "deterministic_hollow_signal",
   "accepted_gate_policy_result",
   "human_pat_approval_record",
-  "snapshot_change_guard_state"
+  "snapshot_change_guard_state",
+  "lineage_resolved_decision_facing_record"
 ] as const;
 
 describe("L1-A route-input boundary acceptance lock", () => {

@@ -1,8 +1,11 @@
 import type { JsonObject, JsonValue } from "../../types/common.js";
 import type { TrustTier } from "../../types/trust.js";
+import type { LineageResolvedDecisionFacingRecord } from "./lineageResolvedDecisionFacingRecord.js";
 import type { SignalFrame } from "./signalFrame.js";
 import type { TaskFrame } from "./taskFrame.js";
 import type { RouteDecision } from "./routeDecision.js";
+
+export type { LineageResolvedDecisionFacingRecord } from "./lineageResolvedDecisionFacingRecord.js";
 
 export type RouteInputRecordKind =
   | "contract_validated_task_frame"
@@ -11,7 +14,8 @@ export type RouteInputRecordKind =
   | "deterministic_hollow_signal"
   | "accepted_gate_policy_result"
   | "human_pat_approval_record"
-  | "snapshot_change_guard_state";
+  | "snapshot_change_guard_state"
+  | "lineage_resolved_decision_facing_record";
 
 export type RouteInputSource = "logic_engine" | "hollow" | "gate" | "human_pat" | "change_guard";
 
@@ -87,7 +91,8 @@ export type LogicEngineRouteInput =
   | DeterministicHollowSignalRouteInput
   | AcceptedGatePolicyResultRouteInput
   | HumanPatApprovalRouteInput
-  | SnapshotChangeGuardStateRouteInput;
+  | SnapshotChangeGuardStateRouteInput
+  | LineageResolvedDecisionFacingRecord;
 
 export interface RouteInputIssue {
   readonly code: string;

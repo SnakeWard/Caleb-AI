@@ -20,7 +20,8 @@ const LOCKED_ALLOWLIST = [
   "deterministic_hollow_signal",
   "accepted_gate_policy_result",
   "human_pat_approval_record",
-  "snapshot_change_guard_state"
+  "snapshot_change_guard_state",
+  "lineage_resolved_decision_facing_record"
 ] as const;
 
 const NOW = "2026-07-07T12:00:00.000Z";
@@ -59,12 +60,12 @@ function taskFrameInput(frame = makeFrame()): ContractValidatedTaskFrameRouteInp
 }
 
 describe("LE-1 rotation plan seam acceptance", () => {
-  it("L1 allowlist remains seven entries verbatim", () => {
+  it("L1 allowlist remains eight entries verbatim (RA-X-3)", () => {
     for (const kind of LOCKED_ALLOWLIST) {
       expect(isAllowedRouteInputKind(kind)).toBe(true);
     }
+    expect(LOCKED_ALLOWLIST).toHaveLength(8);
     expect(isAllowedRouteInputKind("runtime_rotation_plan")).toBe(false);
-    expect(isAllowedRouteInputKind("lineage_resolved_decision_facing_record")).toBe(false);
   });
 
   it("rejects model-authored plan at seam", async () => {

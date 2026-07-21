@@ -10,6 +10,7 @@ import type {
   RouteSelectionFromInputsResult
 } from "./types/routeInput.js";
 import type { SignalFrame, SignalInputs, SignalScore } from "./types/signalFrame.js";
+import { validateLineageResolvedDecisionFacingRecord } from "./lineageResolvedDecisionFacingVerifier.js";
 
 const ALLOWED_KINDS: readonly RouteInputRecordKind[] = [
   "contract_validated_task_frame",
@@ -18,7 +19,8 @@ const ALLOWED_KINDS: readonly RouteInputRecordKind[] = [
   "deterministic_hollow_signal",
   "accepted_gate_policy_result",
   "human_pat_approval_record",
-  "snapshot_change_guard_state"
+  "snapshot_change_guard_state",
+  "lineage_resolved_decision_facing_record"
 ];
 
 const APPROVED_EFFECTIVE_TIERS: readonly TrustTier[] = ["T2", "T3", "T4"];
@@ -136,6 +138,14 @@ const ALLOWED_TOP_LEVEL_FIELDS: Readonly<Record<RouteInputRecordKind, readonly s
     "snapshot_id",
     "status",
     "gate_satisfied"
+  ],
+  lineage_resolved_decision_facing_record: [
+    "record_kind",
+    "record_id",
+    "source",
+    "validated_at",
+    "lineage_refs",
+    "task_requirements"
   ]
 };
 
@@ -248,7 +258,21 @@ function validateByKind(input: Record<string, unknown>, recordKind: RouteInputRe
       return validateHumanPatApproval(input);
     case "snapshot_change_guard_state":
       return validateSnapshotChangeGuard(input);
+    case "lineage_resolved_decision_facing_record":
+      return validateLineageDecisionFacing(input);
   }
+}
+
+/**
+ * Atomic with allowlist membership (RA-X-3): eighth type is never reachable
+ * without the five-check verifier passing.
+ */
+function validateLineageDecisionFacing(input: Record<string, unknown>): RouteInputIssue[] {
+  const result = validateLineageResolvedDecisionFacingRecord(input);
+  if (result.ok) {
+    return [];
+  }
+  return result.issues.map((entry) => issue(entry.code, entry.path, entry.message));
 }
 
 function validateContractTaskFrame(input: Record<string, unknown>): RouteInputIssue[] {
@@ -376,6 +400,7 @@ function expectedSourceFor(recordKind: RouteInputRecordKind): "logic_engine" | "
     case "contract_validated_task_frame":
     case "verified_signal_frame":
     case "engine_internal_state":
+    case "lineage_resolved_decision_facing_record":
       return "logic_engine";
     case "deterministic_hollow_signal":
       return "hollow";

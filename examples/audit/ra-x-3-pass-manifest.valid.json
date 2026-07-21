@@ -1,0 +1,36 @@
+{
+  "pass_id": "RA-X-3",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/RA_X_3_DECISION_FACING_L1_REPORT.md",
+    "docs/protocols/PASS_PROTOCOL_RA_X_3.md",
+    "examples/audit/ra-x-3-pass-manifest.valid.json",
+    "src/logicEngine/lineageResolvedDecisionFacingVerifier.ts",
+    "src/logicEngine/types/lineageResolvedDecisionFacingRecord.ts",
+    "src/roles/roleCapabilitySet.ts",
+    "tests/acceptance/raX3DecisionFacingL1Acceptance.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "docs/STATUS_LOG.md",
+    "src/logicEngine/index.ts",
+    "src/logicEngine/routeInputGate.ts",
+    "src/logicEngine/types/routeInput.ts",
+    "src/roles/index.ts",
+    "tests/acceptance/l1RouteInputBoundaryAcceptanceLock.test.ts",
+    "tests/acceptance/l1bAllowlistCorrection.test.ts",
+    "tests/acceptance/le1RotationPlanSeamAcceptance.test.ts",
+    "tests/acceptance/le2RotationPlanBridgeAcceptance.test.ts",
+    "tests/acceptance/le3ExecutionBoundaryAcceptanceLock.test.ts",
+    "tests/acceptance/le3GuardedExecutionAcceptance.test.ts",
+    "tests/acceptance/raR1StaticRotationAcceptance.test.ts",
+    "tests/acceptance/raX1AnalystIsolationAcceptance.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/roles/roleHandoffGate.ts",
+    "examples/live-rotation/prompts/**",
+    "package.json",
+    "package-lock.json"
+  ]
+}

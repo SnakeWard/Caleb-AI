@@ -2,6 +2,8 @@ export * from "./types/index.js";
 export * from "./signalClassifier.js";
 export * from "./routeSelector.js";
 export * from "./routeInputGate.js";
+export * from "./lineageResolvedDecisionFacingVerifier.js";
+export * from "./types/lineageResolvedDecisionFacingRecord.js";
 export * from "./workGraphBuilder.js";
 export * from "./ledgerEmitter.js";
 export * from "./taskFrameValidator.js";

@@ -31,7 +31,8 @@ const LOCKED_ALLOWLIST = [
   "deterministic_hollow_signal",
   "accepted_gate_policy_result",
   "human_pat_approval_record",
-  "snapshot_change_guard_state"
+  "snapshot_change_guard_state",
+  "lineage_resolved_decision_facing_record"
 ] as const;
 
 vi.setConfig({ testTimeout: 15_000 });
@@ -212,7 +213,7 @@ describe("LE-3 guarded execution seam acceptance", () => {
     for (const kind of LOCKED_ALLOWLIST) {
       expect(isAllowedRouteInputKind(kind)).toBe(true);
     }
-    expect(LOCKED_ALLOWLIST).toHaveLength(7);
+    expect(LOCKED_ALLOWLIST).toHaveLength(8);
     for (const record_kind of ["bridged_executable_plan", "rotation_execution_result"] as const) {
       const validation = validateRouteInputRecord({ record_kind });
       expect(validation.ok).toBe(false);
