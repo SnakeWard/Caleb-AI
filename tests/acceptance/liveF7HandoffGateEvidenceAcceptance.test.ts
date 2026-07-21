@@ -38,6 +38,7 @@ const EXPECTED_CONSUMPTION_MATRIX = {
   "planner->verifier": ["accepted"],
   "planner->critic": ["accepted", "needs_revision"],
   "planner->human_operator": ["accepted", "needs_revision"],
+  "planner->analyst": ["accepted", "needs_revision"],
   "implementer->verifier": ["accepted"],
   "implementer->critic": ["accepted"],
   "implementer->synthesizer": ["accepted"],
@@ -66,7 +67,12 @@ const EXPECTED_CONSUMPTION_MATRIX = {
   "human_operator->critic": ["accepted"],
   "human_operator->synthesizer": ["accepted"],
   "human_operator->reporter": ["accepted"],
-  "human_operator->recovery": ["accepted", "needs_revision"]
+  "human_operator->recovery": ["accepted", "needs_revision"],
+  "analyst->critic": ["accepted"],
+  "analyst->synthesizer": ["accepted"],
+  "analyst->planner": ["accepted", "needs_revision"],
+  "analyst->human_operator": ["accepted", "needs_revision"],
+  "analyst->recovery": ["accepted", "needs_revision"]
 } as const;
 
 function canonicalArtifact(

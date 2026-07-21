@@ -1,0 +1,28 @@
+{
+  "pass_id": "RA-X-2",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/RA_X_2_ANALYST_MATRIX_WIRING_REPORT.md",
+    "docs/protocols/PASS_PROTOCOL_RA_X_2.md",
+    "examples/audit/ra-x-2-pass-manifest.valid.json",
+    "tests/acceptance/raX2AnalystMatrixWiringAcceptance.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "docs/STATUS_LOG.md",
+    "src/roles/roleContractRegistry.ts",
+    "src/roles/roleHandoffGate.ts",
+    "tests/acceptance/le2RotationPlanBridgeAcceptance.test.ts",
+    "tests/acceptance/liveF7HandoffGateEvidenceAcceptance.test.ts",
+    "tests/acceptance/raX1AnalystIsolationAcceptance.test.ts",
+    "tests/logicEngine/rotationPlanBridge.test.ts",
+    "tests/roles/roleHandoffGate.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/logicEngine/routeInputGate.ts",
+    "examples/live-rotation/prompts/**",
+    "package.json",
+    "package-lock.json"
+  ]
+}

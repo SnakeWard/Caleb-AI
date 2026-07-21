@@ -1180,3 +1180,10 @@ with four-type semantic payload schema + strict validator and fixtures. Consumpt
 matrix remains 33 transitions; analyst unreachable. Suite **208 files / 3,248
 tests** exit 0; catalogs 13/9; L1 seven entries; prompt digests unchanged. Report:
 `docs/RA_X_1_ANALYST_ISOLATION_REPORT.md`.
+
+### 2026-07-21 — RA-X-2 — Analyst consumption-matrix wiring
+
+Matrix **33 → 39** with six Analyst transitions; `hollow_evidence_request` not a
+matrix row. Registry allowed_next_roles updated for LE-2 adjacency only (no
+route selection). Suite **209 files / 3,256 tests** exit 0; catalogs 13/9; L1
+seven; digests unchanged. Report: `docs/RA_X_2_ANALYST_MATRIX_WIRING_REPORT.md`.

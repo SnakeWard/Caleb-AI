@@ -82,55 +82,16 @@ describe("RA-X-1 Analyst role isolation registration", () => {
     ).toBe(true);
   });
 
-  it("T3: consumption matrix unchanged (33) and analyst unreachable as source or target", () => {
-    const keys = Object.keys(ROLE_HANDOFF_CONSUMPTION_MATRIX);
-    expect(keys).toHaveLength(33);
-    // Exact transition set lock (pre-RA-X-1).
-    expect(keys.sort()).toEqual([
-      "critic->human_operator",
-      "critic->implementer",
-      "critic->planner",
-      "critic->recovery",
-      "critic->synthesizer",
-      "critic->verifier",
-      "human_operator->critic",
-      "human_operator->implementer",
-      "human_operator->planner",
-      "human_operator->recovery",
-      "human_operator->reporter",
-      "human_operator->synthesizer",
-      "human_operator->verifier",
-      "implementer->critic",
-      "implementer->human_operator",
-      "implementer->synthesizer",
-      "implementer->verifier",
-      "planner->critic",
-      "planner->human_operator",
-      "planner->implementer",
-      "planner->verifier",
-      "recovery->human_operator",
-      "recovery->implementer",
-      "recovery->planner",
-      "recovery->verifier",
-      "reporter->human_operator",
-      "synthesizer->human_operator",
-      "synthesizer->reporter",
-      "synthesizer->verifier",
-      "verifier->critic",
-      "verifier->human_operator",
-      "verifier->reporter",
-      "verifier->synthesizer"
-    ]);
-    for (const key of keys) {
-      expect(key.includes("analyst")).toBe(false);
-    }
-    // Registry isolation: no role lists analyst as allowed next; analyst has empty next.
-    for (const entry of listRoleContracts()) {
-      expect(entry.allowed_next_roles.includes("analyst" as RoleId)).toBe(false);
-    }
+  it("T3: Analyst remains registered; matrix wiring is RA-X-2's surface", () => {
+    // RA-X-1 proved isolation at registration time. RA-X-2 adds six matrix rows.
+    // This detector keeps the schema/registry registration lock without re-asserting
+    // pre-wiring unreachability (superseded by RA-X-2).
     const analyst = getRoleContract("analyst");
     expect(analyst).toBeDefined();
-    expect(analyst?.allowed_next_roles).toEqual([]);
+    expect(analyst?.contract.role_id).toBe("analyst");
+    expect(analyst?.role_class).toBe("reasoning");
+    expect(analyst?.execution_authority).toBe("request_only");
+    expect(Object.keys(ROLE_HANDOFF_CONSUMPTION_MATRIX).length).toBeGreaterThanOrEqual(33);
   });
 
   it("T4: hollow_evidence_request is request-only (no result/output fields)", () => {

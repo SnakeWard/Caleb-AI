@@ -73,6 +73,8 @@ export const ROLE_HANDOFF_CONSUMPTION_MATRIX = Object.freeze({
   "planner->verifier": ACCEPTED_ONLY,
   "planner->critic": ACCEPTED_OR_NEEDS_REVISION,
   "planner->human_operator": ACCEPTED_OR_NEEDS_REVISION,
+  // RA-X-2: Analyst entry from Planner (mirrors planner→critic consumable statuses).
+  "planner->analyst": ACCEPTED_OR_NEEDS_REVISION,
   "implementer->verifier": ACCEPTED_ONLY,
   "implementer->critic": ACCEPTED_ONLY,
   "implementer->synthesizer": ACCEPTED_ONLY,
@@ -101,7 +103,14 @@ export const ROLE_HANDOFF_CONSUMPTION_MATRIX = Object.freeze({
   "human_operator->critic": ACCEPTED_ONLY,
   "human_operator->synthesizer": ACCEPTED_ONLY,
   "human_operator->reporter": ACCEPTED_ONLY,
-  "human_operator->recovery": ACCEPTED_OR_NEEDS_REVISION
+  "human_operator->recovery": ACCEPTED_OR_NEEDS_REVISION,
+  // RA-X-2: Analyst outbound transitions (six total including planner→analyst).
+  // hollow_evidence_request is NOT a matrix transition — orchestrator request-only seam.
+  "analyst->critic": ACCEPTED_ONLY,
+  "analyst->synthesizer": ACCEPTED_ONLY,
+  "analyst->planner": ACCEPTED_OR_NEEDS_REVISION,
+  "analyst->human_operator": ACCEPTED_OR_NEEDS_REVISION,
+  "analyst->recovery": ACCEPTED_OR_NEEDS_REVISION
 } as const satisfies Partial<
   Record<RoleHandoffTransitionKey, readonly RoleAcceptanceStatus[]>
 >);

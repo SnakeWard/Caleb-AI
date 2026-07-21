@@ -87,7 +87,7 @@ const ROLE_CONTRACTS = [
     display_name: "Planner",
     description: "Produces bounded plans, sequencing notes, constraints, and recommended next roles.",
     allowed_artifact_types: ["plan"],
-    allowed_next_roles: ["implementer", "verifier", "critic", "human_operator"],
+    allowed_next_roles: ["implementer", "verifier", "critic", "analyst", "human_operator"],
     can_handoff_to_human: true,
     role_class: "reasoning",
     permitted_input_kinds: ["contract_validated_task_frame", "human_decision", "recovery_plan"],
@@ -170,8 +170,7 @@ const ROLE_CONTRACTS = [
     permitted_input_kinds: ["role_artifact", "report"],
     execution_authority: "none"
   }),
-  // RA-X-1 isolation: registered, validated, unreachable via consumption matrix.
-  // allowed_next_roles empty — no handoff targets declared until RA-X-2.
+  // RA-X-2: reachable via six matrix transitions; hollow_evidence_request stays request-only.
   createRegisteredRoleContract({
     role_id: "analyst",
     display_name: "Analyst",
@@ -180,8 +179,8 @@ const ROLE_CONTRACTS = [
       "Request-only Hollow interaction; never self-verifying (T1 ceiling for Analyst-authored content). " +
       "No execution authority.",
     allowed_artifact_types: ["analysis"],
-    allowed_next_roles: [],
-    can_handoff_to_human: false,
+    allowed_next_roles: ["critic", "synthesizer", "planner", "human_operator", "recovery"],
+    can_handoff_to_human: true,
     role_class: "reasoning",
     permitted_input_kinds: ["planner_plan", "contract_validated_task_frame"],
     execution_authority: "request_only"

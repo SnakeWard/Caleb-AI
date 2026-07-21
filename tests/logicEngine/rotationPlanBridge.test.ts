@@ -222,19 +222,20 @@ describe("rotationPlanBridge", () => {
     expectLedgered(entries, "rejected");
   });
 
-  it("rejects routes containing Analyst while isolation holds (registered, no transitions)", async () => {
-    // RA-X-1: Analyst is registered but consumption-matrix unreachable.
-    // Bridge refuses with forbidden_transition (not unknown_role).
-    const plan = await fixture("examples/roles/runtime-rotation-plan.valid.json");
+  it("accepts planner_analyst_synthesizer when Analyst transitions are registry-legal (RA-X-2)", async () => {
+    const plan = await fixture("examples/roles/runtime-rotation-plan.valid.minimal.json");
+    plan["route_mode"] = "planner_analyst_synthesizer";
+    plan["roles_required"] = ["planner", "analyst", "synthesizer"];
+    plan["max_cycles"] = 1;
     plan["authored_by"] = "human";
     plan["side_effect_policy"] = "none";
     plan["code_mutation_policy"] = "none";
     plan["snapshot_requirement"] = false;
     plan["gates_required"] = ["role_handoff_gate", "final_verification_gate"];
+    plan["hollows_required"] = [];
     const { result, entries } = await invoke(plan);
-    expect(result.ok).toBe(false);
-    expect(result.rejection_code).toBe("bridge_rejected_forbidden_transition");
-    expectLedgered(entries, "rejected");
+    expect(result.ok).toBe(true);
+    expectLedgered(entries, "completed");
   });
 
   it("rejects planner_synthesizer because the registry forbids the transition", async () => {

@@ -117,18 +117,37 @@ async function expectRejection(
 }
 
 describe("LE-2 rotation plan bridge acceptance", () => {
-  it("Envelope 1: Analyst is registered but still rejected under RA-X-1 isolation", async () => {
-    // RA-X-1 registers Analyst without matrix transitions. Routes that require
-    // Analyst handoffs fail as forbidden_transition (not unknown_role).
-    const plan = await fixture("examples/roles/runtime-rotation-plan.valid.json");
-    plan["authored_by"] = "human";
-    plan["side_effect_policy"] = "none";
-    plan["code_mutation_policy"] = "none";
-    plan["snapshot_requirement"] = false;
-    plan["gates_required"] = ["role_handoff_gate", "final_verification_gate"];
-
+  it("Envelope 1: legal Analyst adjacency is accepted; illegal Analyst adjacency refuses", async () => {
+    // RA-X-2: registry honors six Analyst transitions. LE-2 uses allowed_next_roles only
+    // (no dynamic route selection). Route modes must match roles_required exactly.
     expect(hasRoleContract("analyst")).toBe(true);
-    await expectRejection(plan, "bridge_rejected_forbidden_transition");
+    expect(getRoleContract("planner")?.allowed_next_roles).toContain("analyst");
+    expect(getRoleContract("analyst")?.allowed_next_roles).toContain("synthesizer");
+
+    const legal = await fixture("examples/roles/runtime-rotation-plan.valid.minimal.json");
+    legal["route_mode"] = "planner_analyst_synthesizer";
+    legal["roles_required"] = ["planner", "analyst", "synthesizer"];
+    legal["max_cycles"] = 1;
+    legal["authored_by"] = "human";
+    legal["side_effect_policy"] = "none";
+    legal["code_mutation_policy"] = "none";
+    legal["snapshot_requirement"] = false;
+    legal["gates_required"] = ["role_handoff_gate", "final_verification_gate"];
+    legal["hollows_required"] = [];
+    const legalResult = await invoke(legal);
+    expect(legalResult.result.ok).toBe(true);
+
+    // critic→analyst is not among the six legal transitions.
+    const illegal = await fixture("examples/roles/runtime-rotation-plan.valid.json");
+    illegal["authored_by"] = "human";
+    illegal["route_mode"] = "full_rotation";
+    illegal["roles_required"] = ["planner", "critic", "analyst", "synthesizer"];
+    illegal["max_cycles"] = 1;
+    illegal["side_effect_policy"] = "none";
+    illegal["code_mutation_policy"] = "none";
+    illegal["snapshot_requirement"] = false;
+    illegal["gates_required"] = ["role_handoff_gate", "final_verification_gate"];
+    await expectRejection(illegal, "bridge_rejected_forbidden_transition");
   });
 
   it("Envelope 2: planner_synthesizer remains a registry-governed rejection", async () => {

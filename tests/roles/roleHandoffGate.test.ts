@@ -244,7 +244,8 @@ describe("validateRoleHandoffGate", () => {
   });
 
   it("keeps the check-11 matrix closed and default-deny", () => {
-    expect(Object.keys(ROLE_HANDOFF_CONSUMPTION_MATRIX)).toHaveLength(33);
+    // RA-X-2: 33 pre-existing + 6 Analyst transitions = 39.
+    expect(Object.keys(ROLE_HANDOFF_CONSUMPTION_MATRIX)).toHaveLength(39);
     const result = validateRoleHandoffGate({
       handoff: validHandoff({ target_role: "reporter" }),
       source_artifact: validArtifact({
