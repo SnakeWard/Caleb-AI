@@ -1161,3 +1161,14 @@ the implementer-seat authorization-echo requirement to the operating-contract
 runbook step so the AUTH-2 rule cannot stay paper-only on the next event.
 Detector extended for E2 labels and `post-event` creation tags. Report:
 `docs/AUTH_3_E2_A1_REGISTER_AND_ECHO_REPORT.md`.
+
+### 2026-07-21 — DEBT-1 — F: migration reconciliation complete
+
+Authoritative home is **F:\Caleb AI** (D: cold backup). Repo-wide `.gitattributes`
+byte-integrity lock (LF default + `-text` on docs/src/examples/tests and ledger).
+AUTH-2 evidence commits matched by subject prefix `^LABEL:` only (exactly one
+E2-A1 evidence commit). PLANS pre-migration snapshot claims annotated so the
+snapshot gate passes without weakening (local `.caleb/snapshots/` remains
+gitignored). E2-A1 `Recorded where first` corrected with Corrections log.
+`git repack`/`fsck` clean on NTFS; git on PATH. Suite **3241/3241** exit 0;
+catalogs 13/9; digests unchanged. Report: `docs/DEBT_1_MIGRATION_RECONCILIATION_REPORT.md`.

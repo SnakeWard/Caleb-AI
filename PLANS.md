@@ -1,4 +1,4 @@
-# ExecPlan Standard
+\n## DEBT-1 migration note (F: authoritative home, 2026-07-21)\n\nSnapshot IDs created on the prior D: working tree are **local change-guard state**\n(.caleb/snapshots/ is gitignored and does not survive a fresh clone). Those IDs are\nannotated in this file as pre_migration_D_cold_backup_snap_*_milestone so they remain\nhuman-readable history without asserting presence on the current F: machine. Snapshot\nfiles remain in the D: cold backup only. The Snapshot Claim Integrity Gate is **not**\nweakened: it still requires every active snap_*_milestone claim to exist under\n.caleb/snapshots/ on the machine running the gate.\n# ExecPlan Standard
 
 An ExecPlan is required before longer Codex work.
 
@@ -85,7 +85,7 @@ network and credential behavior remains excluded.
 
 **Snapshot / Rollback Plan:** Protocol/attempt-five evidence commits `a7f330b`
 and `7b309ca` are pushed. Pre-change snapshot
-`snap_20260719T160902602Z_000433_milestone` is Ledgered and independently verified
+`pre_migration_D_cold_backup_snap_` is Ledgered and independently verified
 with 18 configured captures. Git `7b309ca` is the complete rollback anchor for
 authorized files outside that fixed snapshot set.
 
@@ -110,14 +110,14 @@ call or protected transport drift occurs.
 
 **Progress Log:** Attempt-five evidence/protocol is pushed. Baseline passed 198
 files / 3,176 tests in 107.66 seconds; governed typecheck and build exited 0.
-Pre-change snapshot `snap_20260719T160902602Z_000433_milestone` is Ledgered and
+Pre-change snapshot `pre_migration_D_cold_backup_snap_` is Ledgered and
 verified. Exact fence normalization, safe stage telemetry/reconstruction,
 Planner prompt hardening, standing doctrine, four near-miss fixtures, and the
 complete detector set are implemented. Focused validation passed 15 files / 119
 tests; canonical passed 200 files / 3,199 tests in 100.89 seconds. Governed
 typecheck/build exited 0; catalogs remain 13/9; AUD-2 is compliant/T2 across 19
 paths with zero violations. Validation snapshot
-`snap_20260719T162427243Z_000435_milestone` is Ledgered and verified.
+`pre_migration_D_cold_backup_snap_` is Ledgered and verified.
 
 **Decision Log:** A normalizer is an allowlisted presentation transform, not a
 recovery parser. It may remove only the two proven fence lines and only after the
@@ -172,7 +172,7 @@ policy, and Ledger provenance; live execution and transport remain excluded.
 
 **Snapshot / Rollback Plan:** Protocol and attempt-four evidence are committed
 and pushed at `c2bc73d`. Pre-change snapshot
-`snap_20260719T150613825Z_000429_milestone` is Ledgered and verified with 18
+`pre_migration_D_cold_backup_snap_` is Ledgered and verified with 18
 configured captures. Git `c2bc73d` is the full mechanical rollback anchor for
 authorized files outside that fixed snapshot capture set.
 
@@ -195,14 +195,14 @@ no raw serialization, transport drift, validator loosening, or live call.
 
 **Progress Log:** Attempt-four evidence/protocol commit `c2bc73d` pushed. Baseline
 passed 197 files / 3,173 tests in 86.72 seconds; governed typecheck and build
-exited 0. Pre-change snapshot `snap_20260719T150613825Z_000429_milestone` is
+exited 0. Pre-change snapshot `pre_migration_D_cold_backup_snap_` is
 Ledgered and verified. Truncation metadata/stage, pre-parse T0 persistence,
 failure Ledger refs, digest binding, E1 budgets, and permanent regressions are
 implemented. Focused validation passed 5 files / 15 tests; widened regression
 passed 11 / 115; canonical passed 198 files / 3,176 tests in 95.44 seconds.
 Governed typecheck/build exited 0; catalogs remain 13/9; AUD-2 is compliant/T2;
 transport hashes and protected surfaces are unchanged. Validation snapshot
-`snap_20260719T151925913Z_000431_milestone` is Ledgered and verified.
+`pre_migration_D_cold_backup_snap_` is Ledgered and verified.
 
 **Decision Log:** The observer metadata is safe structured data only. T0 storage
 precedes semantic interpretation; an invalid payload is retained as untrusted
@@ -254,7 +254,7 @@ and Ledger changes, with transport and live execution explicitly excluded.
 
 **Snapshot / Rollback Plan:** Protocol and preserved attempt-three evidence are
 committed/pushed at `4158061`. Pre-change snapshot
-`snap_20260719T140753751Z_000424_milestone` is Ledgered and verified. Because the
+`pre_migration_D_cold_backup_snap_` is Ledgered and verified. Because the
 snapshot manager captures its fixed 18-file foundation set, Git commit `4158061`
 is the complete mechanical rollback anchor for LIVE-F4's authorized files.
 
@@ -284,7 +284,7 @@ validation passed 8 files / 88 tests; widened regressions passed 14 files / 134
 tests; canonical suite passed 197 files / 3,173 tests in 110.72 seconds.
 Governed typecheck/build exited 0; catalogs remain 13/9. AUD-2 is compliant/T2
 with zero violations. Provider transport hashes are unchanged and egress remains
-two sites. Validation snapshot `snap_20260719T142922696Z_000426_milestone` is
+two sites. Validation snapshot `pre_migration_D_cold_backup_snap_` is
 Ledgered and verified.
 
 **Decision Log:** Provider bytes remain the T0 witness and are stored unchanged.
@@ -337,7 +337,7 @@ LE-3 acceptance/lock/report; operating contract; LIVE-F2 report/manifest;
 with no provider or transport behavior.
 
 **Snapshot / Rollback Plan:** Pre-change snapshot
-`snap_20260719T062326038Z_000420_milestone` is Ledgered and verified on disk.
+`pre_migration_D_cold_backup_snap_` is Ledgered and verified on disk.
 Revert the implementation commit or restore captured files if validation fails;
 never rewrite historical Ledger content.
 
@@ -407,7 +407,7 @@ focused tests, LIVE-F1 report/manifest, `PLANS.md`, `docs/STATUS_LOG.md`, Ledger
 network behavior.
 
 **Snapshot / Rollback Plan:** Snapshot
-`snap_20260719T042829716Z_000416_milestone` is Ledgered and verified. Revert the
+`pre_migration_D_cold_backup_snap_` is Ledgered and verified. Revert the
 implementation commit if validation fails; never rewrite historical Ledger.
 
 **Implementation Steps:** Add nullable taxonomy fields; populate them only from
@@ -457,7 +457,7 @@ reconstruction; post-event canonical validation; report, audit, commit, push.
 **Scope Out:** E2, retries, prompt/model/budget changes, code changes, dynamic
 sequencing, RA-X, display, additional provider calls.
 
-**Snapshot:** `snap_20260719T041007671Z_000414_milestone`, Ledgered and verified
+**Snapshot:** `pre_migration_D_cold_backup_snap_`, Ledgered and verified
 on disk.
 
 **Progress:** E1 bridged successfully and began execution. The Planner provider
@@ -477,7 +477,7 @@ Planner/Critic exchange. E2 remains unauthorized.
 
 **Authorized retry rider (2026-07-19):** LIVE-F1 credential proofs passed before
 and after the one authorized retry. Fresh snapshot
-`snap_20260719T053346308Z_000418_milestone` is verified. The retry bridged, then
+`pre_migration_D_cold_backup_snap_` is verified. The retry bridged, then
 Planner failed with preserved taxonomy `network_failure` / `failed` /
 `retryable:true`; zero tokens/spend and no Critic. The raw parent-reference chain
 is complete, but the reconstruction helper mixed the first start with the retry
@@ -523,7 +523,7 @@ snapshot Ledger.
 output, storage, and Ledger boundaries meet in one gate chain.
 
 **Snapshot / Rollback Plan:** Pre-change snapshot
-`snap_20260719T023049028Z_000408_milestone`, Ledgered and verified on disk. Revert
+`pre_migration_D_cold_backup_snap_`, Ledgered and verified on disk. Revert
 the LIVE-R1 implementation commit and restore captured files if validation fails;
 never rewrite historical Ledger entries.
 
@@ -547,7 +547,7 @@ egress pin remains exactly two; L1 seven and catalogs 13/9; canonical validation
 and AUD-2 green; no LIVE-R2 call.
 
 **Progress Log:** Protocol and amendment are pushed. Credential baseline was clean.
-Pre-change snapshot `snap_20260719T023049028Z_000408_milestone` is verified.
+Pre-change snapshot `pre_migration_D_cold_backup_snap_` is verified.
 Implementation and the visible LE-2 lock amendment are complete. Focused LIVE-R1
 validation passed 4 files / 16 tests. Canonical typecheck and build exited 0;
 the offline canonical suite exited 0 at 191 files / 3,135 tests. AUD-2 self-smoke
@@ -591,7 +591,7 @@ manifest, plus the snapshot Ledger append.
 **Risk Level:** Medium — authority and boundary prose changes, with no runtime code.
 
 **Snapshot / Rollback Plan:** Verified pre-change snapshot
-`snap_20260718T194507575Z_000386_milestone`; restore documentation from it or
+`pre_migration_D_cold_backup_snap_`; restore documentation from it or
 revert the GOV-1 commit. Historical Ledger content remains append-only.
 
 **Implementation Steps:** Reconcile and push inherited state; snapshot; commit the
@@ -651,7 +651,7 @@ the append-only snapshot Ledger.
 semantics, but it remains non-executing, mock-only, and isolated from routing.
 
 **Snapshot / Rollback Plan:** Verified pre-change snapshot
-`snap_20260718T201841128Z_000388_milestone`; revert the LE-2 commit or restore
+`pre_migration_D_cold_backup_snap_`; revert the LE-2 commit or restore
 from that snapshot. Historical Ledger content remains append-only.
 
 **Implementation Steps:** Record Amendments A–C; verify registry transitions;
@@ -672,11 +672,11 @@ registries, execution, providers, and catalogs unchanged; canonical gates green.
 **Progress Log:** The original finding was returned and Amendments A–C were
 committed/pushed at `960ade1`. Codex confirmed the amendments directly, not by
 delegation. Both authorized transitions are registry-legal. Snapshot
-`snap_20260718T201841128Z_000388_milestone` was created and verified. Bridge,
+`pre_migration_D_cold_backup_snap_` was created and verified. Bridge,
 fixtures, tests, report, and manifest are implemented. Focused validation passed 5
 files / 57 tests; canonical suite passed 184 files / 3,094 tests; canonical
 typecheck and build exited 0; catalogs are 13/9. The suite created and verified
-`snap_20260718T203939996Z_000389_milestone`. AUD-2 self-smoke is compliant/T2
+`pre_migration_D_cold_backup_snap_`. AUD-2 self-smoke is compliant/T2
 across 16 changed paths with zero violations. Final cross-check corrected the
 protocol wording from human-only to the user-authorized human-or-fixture success
 authorship; implementation already matched that authority.
@@ -710,7 +710,7 @@ the original LE-3 protocol's still-pending acceptance gate.
 
 **Current State:** LE-3 is implemented, committed, pushed, and explicitly not yet
 accepted. Three canonical attempts had only fixed-5-second timeouts in unchanged
-tests. TIME-1 pre-change snapshot `snap_20260718T220634787Z_000396_milestone` is
+tests. TIME-1 pre-change snapshot `pre_migration_D_cold_backup_snap_` is
 Ledgered and verified.
 
 **Scope:** Serial pre-adjustment measurement; six eligible process-spawning test
@@ -731,7 +731,7 @@ bounded by source normalization hashes, serial pre-adjustment passes, process-ca
 proof, and byte-identical global config.
 
 **Snapshot / Rollback Plan:** Restore from verified snapshot
-`snap_20260718T220634787Z_000396_milestone` or revert the TIME-1 commit; historical
+`pre_migration_D_cold_backup_snap_` or revert the TIME-1 commit; historical
 Ledger remains append-only.
 
 **Implementation Steps:** Inventory candidates; serially measure unchanged tests;
@@ -817,9 +817,9 @@ revalidation, mock-only adapters, mandatory Ledger callbacks, upstream rejection
 of live/capability plans, and no routing consumer.
 
 **Snapshot / Rollback Plan:** LE-3 seam snapshot
-`snap_20260718T205307165Z_000390_milestone` (`le3_execution_seam_prechange`),
+`pre_migration_D_cold_backup_snap_` (`le3_execution_seam_prechange`),
 verified at
-`.caleb/snapshots/snap_20260718T205307165Z_000390_milestone/manifest.json` before
+`.caleb/snapshots/pre_migration_D_cold_backup_snap_/manifest.json` before
 this entry. Create and verify a separate `le3a_lock_prechange` snapshot only after
 the seam implementation validates green. Revert stage commits or restore the
 matching snapshot; historical Ledger remains append-only.
@@ -846,7 +846,7 @@ clean synchronized remote.
 
 **Progress Log:** Protocol `fd3663c` committed/pushed. Credentials and
 `VITEST_DEBUG_DUMP` unset/empty. Snapshot
-`snap_20260718T205307165Z_000390_milestone` created with 18 files, Ledgered, and
+`pre_migration_D_cold_backup_snap_` created with 18 files, Ledgered, and
 manifest verified on disk. Read-only audit confirms the existing executor can be
 composed without modification: it validates plans/artifacts, stores artifact JSON
 in the M3 content-addressed store, builds digest-only context refs, halts on first
@@ -885,7 +885,7 @@ deviation.
 
 **Final Report:** LE-3 accepted after TIME-1. Its clean canonical rerun passed
 187/187 files and 3,120/3,120 tests, exit 0. LE-3-A snapshot
-`snap_20260719T000403360Z_000404_milestone` is Ledgered and verified. The
+`pre_migration_D_cold_backup_snap_` is Ledgered and verified. The
 docs/test-only lock passed 7/7 tests, its AUD-2 self-smoke was compliant/T2 across
 6 paths with zero violations, and the final canonical suite passed 188/188 files
 and 3,127/3,127 tests, exit 0, in 125.69 seconds. Typecheck/build exited 0 and
@@ -908,13 +908,13 @@ guardrails are now a protected surface.`
 
 **Out of Scope:** Rotation execution, Logic Engine wiring, ledger writes, model calls, idFactory changes.
 
-**Snapshot / Rollback Plan:** Pre-change `snap_20260707T133131435Z_000366_milestone` (verified on disk).
+**Snapshot / Rollback Plan:** Pre-change `pre_migration_D_cold_backup_snap_` (verified on disk).
 
 **Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/roles/runtimeRotationPlanValidator.test.ts`; `npx vitest run`.
 
 **Acceptance Criteria:** Strict validator with RRP_* codes; fixtures; accumulation tests; runtime isolation; suite green.
 
-**Progress Log:** Pre-change snapshot `snap_20260707T133131435Z_000366_milestone` created and verified. Types, validator, fixtures, tests, and contract doc implemented. Typecheck passed. Full suite: 173 files / 3,001 tests green (+1 file, +18 tests vs LG-1).
+**Progress Log:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified. Types, validator, fixtures, tests, and contract doc implemented. Typecheck passed. Full suite: 173 files / 3,001 tests green (+1 file, +18 tests vs LG-1).
 
 **Final Report:** RA-R2 accepted. Contract-only RuntimeRotationPlan with strict validator; no runtime consumption; runtime isolation confirmed.
 
@@ -930,13 +930,13 @@ guardrails are now a protected surface.`
 
 **Out of Scope:** Snapshot IDs, live adapter IDs, VRP logic, ledger schema, historical ledger rewrite, dependencies.
 
-**Snapshot / Rollback Plan:** Pre-change `snap_20260707T042918230Z_000364_milestone` (verified on disk before mutation).
+**Snapshot / Rollback Plan:** Pre-change `pre_migration_D_cold_backup_snap_` (verified on disk before mutation).
 
 **Validation Commands:** `npx tsc --noEmit`; `npx vitest run tests/ledger/idFactory.test.ts`; `npx vitest run tests/ledger/ledgerIdUniqueness.regression.test.ts`; `npx vitest run`.
 
 **Acceptance Criteria:** Five factory functions; no counters; correlation preserved; all tests green; snapshot/live adapter untouched.
 
-**Progress Log:** Pre-change snapshot `snap_20260707T042918230Z_000364_milestone` created and verified. idFactory created; `runner.ts` and `ledgerEntryFactory.ts` wired. Tests and contract doc added. Typecheck passed. Full suite: 172 files / 2,983 tests green.
+**Progress Log:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified. idFactory created; `runner.ts` and `ledgerEntryFactory.ts` wired. Tests and contract doc added. Typecheck passed. Full suite: 172 files / 2,983 tests green.
 
 **Final Report:** LG-1 accepted. Centralized UUID idFactory; hollow/VRP/ledger chain unified; correlation preserved; snapshot and live adapter IDs untouched.
 
@@ -952,13 +952,13 @@ guardrails are now a protected surface.`
 
 **Out of Scope:** Dynamic routing, L1 allowlist changes, M3 module edits, live providers, credentials, network egress, RA-X, V1/Hollowcut catalog changes.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260706T154747284Z_000362_milestone` (verified on disk before recording).
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` (verified on disk before recording).
 
 **Validation Commands:** `npx tsc --noEmit`; `npm run build`; `npx vitest run`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`.
 
 **Acceptance Criteria:** 18-branch inventory implemented and documented; all mandatory detectors pass; L1 allowlist remains 7; M3 unchanged; V1 catalog 12; Hollowcut catalog 9; full suite green; clean tree after commit.
 
-**Progress Log:** Pre-change snapshot `snap_20260706T154747284Z_000362_milestone` created and verified. Runtime, validators, mock adapter, executor, tests, and implementation doc drafted. Typecheck passed. Build passed. Full suite `npx vitest run`: 170 files / 2,966 tests green. V1 catalog 12; Hollowcut catalog 9.
+**Progress Log:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified. Runtime, validators, mock adapter, executor, tests, and implementation doc drafted. Typecheck passed. Build passed. Full suite `npx vitest run`: 170 files / 2,966 tests green. V1 catalog 12; Hollowcut catalog 9.
 
 **Final Report:** RA-R1 accepted. Files created: `src/roleRuntime/**`, `tests/roleRuntime/**`, `tests/acceptance/raR1StaticRotationAcceptance.test.ts`, `docs/RA_R1_STATIC_ROLE_ROTATION_RUNTIME_IMPLEMENTATION.md`. Files changed: `PLANS.md`, `docs/STATUS_LOG.md`, `.caleb/ledger/ledger.jsonl`. 18-branch inventory implemented; all mandatory detectors pass; L1 allowlist unchanged at seven; M3 unchanged; no live provider path.
 
@@ -974,13 +974,13 @@ guardrails are now a protected surface.`
 
 **Out of Scope:** No implementation, no src/tests/types changes.
 
-**Snapshot / Rollback Plan:** Pre-change `snap_20260706T032542674Z_000360_milestone` (verified on disk before recording).
+**Snapshot / Rollback Plan:** Pre-change `pre_migration_D_cold_backup_snap_` (verified on disk before recording).
 
 **Validation Commands:** `npx tsc --noEmit`; `npx vitest run`; catalog commands.
 
 **Acceptance Criteria:** Five deliverables complete with file:line citations in Deliverable 1; findings section present; suite green 168/2,945; catalogs 12/9; clean tree; STOP after push.
 
-**Progress Log:** Pre-change snapshot `snap_20260706T032542674Z_000360_milestone` created and verified. Diagnostic document drafted with 18-branch decision inventory. Typecheck passed. Full suite `npx vitest run`: 168 files / 2,945 tests green. V1 catalog 12; Hollowcut catalog 9.
+**Progress Log:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified. Diagnostic document drafted with 18-branch decision inventory. Typecheck passed. Full suite `npx vitest run`: 168 files / 2,945 tests green. V1 catalog 12; Hollowcut catalog 9.
 
 **Final Report:** RA-R1-D accepted. Files created: `docs/RA_R1_STATIC_ROTATION_DIAGNOSTIC.md`. Files changed: `docs/STATUS_LOG.md`, `PLANS.md`, `.caleb/ledger/ledger.jsonl`. Verdict: handoff gate clean; runtime decision surface proposed; awaiting Pat and Fable review. STOP — no implementation authorized.
 
@@ -996,13 +996,13 @@ guardrails are now a protected surface.`
 
 **Out of Scope:** No trap, test, config, or `src/` changes.
 
-**Snapshot / Rollback Plan:** Pre-change `snap_20260706T024327264Z_000358_milestone` (verified on disk before recording).
+**Snapshot / Rollback Plan:** Pre-change `pre_migration_D_cold_backup_snap_` (verified on disk before recording).
 
 **Validation Commands:** `npx tsc --noEmit`; `npx vitest run`; catalog commands.
 
 **Acceptance Criteria:** Amendment section present with precise subprocess scope; operating-contract rule present; suite green; catalogs 12/9; clean tree after commit.
 
-**Progress Log:** Pre-change snapshot `snap_20260706T024327264Z_000358_milestone` created and verified. Protocol and doc amendments drafted. Typecheck passed (`npx tsc --noEmit`). Full suite `npx vitest run`: 168 files / 2,945 tests green. V1 catalog 12; Hollowcut catalog 9.
+**Progress Log:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified. Protocol and doc amendments drafted. Typecheck passed (`npx tsc --noEmit`). Full suite `npx vitest run`: 168 files / 2,945 tests green. V1 catalog 12; Hollowcut catalog 9.
 
 **Final Report:** H8 accepted. Files changed: `docs/protocols/PASS_PROTOCOL_H8_RAR1D.md` (new), `docs/NETWORK_EGRESS_PROOF.md`, `docs/01_CODEX_OPERATING_CONTRACT.md`, `docs/STATUS_LOG.md`, `PLANS.md`, `.caleb/ledger/ledger.jsonl`. Verdict: field catch recorded; subprocess coverage stated precisely; no-ambient-credentials rule binds all implementers.
 
@@ -1022,7 +1022,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. This is documentation/protocol only. The main risk is accidentally beginning diagnostic or implementation work; this pass explicitly stops before either.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T235443061Z_000348_milestone` created with name `ra_r1_protocol_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `ra_r1_protocol_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Verify clean tree. Read RA-R1 protocol and authority docs. Create and verify pre-change snapshot. Add protocol file and pass ledger entries only. Run typecheck, build, full suite, and catalog checks. Commit with RA-R1 protocol in the message. Push. Verify clean tree. Stop.
 
@@ -1030,7 +1030,7 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** RA-R1 protocol file exists. Pass ledgers record protocol-only stage. No diagnostic or implementation occurs. No implementation files are modified. V1 catalog remains 12. Hollowcut catalog remains 9. Full suite remains green. Commit is pushed and tree ends clean.
 
-**Progress Log:** Clean tree verified. RA-R1 attachment read. Authority docs read. Pre-change snapshot `snap_20260705T235443061Z_000348_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T235443061Z_000348_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Protocol file and ledger entries drafted. Typecheck passed. Build passed. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Standard full suite command `npx vitest run` was attempted twice and failed both times on timeout-only failures in unrelated tests under full-suite load. First attempt: `tests/acceptance/networkEgressProofAcceptance.test.ts` call-site pin timed out and `tests/hollows/media/imageDimensionsHollow.test.ts` PNG metadata test timed out; 166/168 files and 2,943/2,945 tests passed. Focused rerun of those two files passed 2 files / 33 tests. Second full-suite attempt: `tests/cli/minimalCli.test.ts` create-milestone-snapshot parse-level test timed out and `tests/acceptance/networkEgressProofAcceptance.test.ts` stale-allowlist detector timed out; 166/168 files and 2,943/2,945 tests passed. Focused rerun of those two files passed 2 files / 29 tests. Full-suite validation is not accepted yet. First full-suite attempt created validation snapshot `snap_20260706T000428986Z_000349_milestone`, verified present on disk before recording.
+**Progress Log:** Clean tree verified. RA-R1 attachment read. Authority docs read. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T235443061Z_000348_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Protocol file and ledger entries drafted. Typecheck passed. Build passed. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Standard full suite command `npx vitest run` was attempted twice and failed both times on timeout-only failures in unrelated tests under full-suite load. First attempt: `tests/acceptance/networkEgressProofAcceptance.test.ts` call-site pin timed out and `tests/hollows/media/imageDimensionsHollow.test.ts` PNG metadata test timed out; 166/168 files and 2,943/2,945 tests passed. Focused rerun of those two files passed 2 files / 33 tests. Second full-suite attempt: `tests/cli/minimalCli.test.ts` create-milestone-snapshot parse-level test timed out and `tests/acceptance/networkEgressProofAcceptance.test.ts` stale-allowlist detector timed out; 166/168 files and 2,943/2,945 tests passed. Focused rerun of those two files passed 2 files / 29 tests. Full-suite validation is not accepted yet. First full-suite attempt created validation snapshot `pre_migration_D_cold_backup_snap_`, verified present on disk before recording.
 
 **Decision Log:** RA-R1 remains protocol-only. The diagnostic must be explicitly authorized by Pat before handoff-gate classification or role-runtime design survey begins.
 
@@ -1054,7 +1054,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This is test-only, but the tests intentionally probe trust-promotion temptations; any actual promotion above T1 would be a boundary defect requiring Pat review.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T231325269Z_000346_milestone` created with name `m3t_test_honesty_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `m3t_test_honesty_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Verify clean tree. Read authority docs and M3-T protocol. Create and verify pre-change snapshot. Replace the non-promoter loop with named real-attempt or unrepresentability tests. Replace display literal assertion with real documentation/export absence assertion. Optionally add factory-produced Ledger lineage to the golden path. Amend acceptance report and pass ledgers. Run typecheck, focused M3/M3-A tests, build, full suite, catalog checks. Commit with pass ID, attempt push, and verify clean tree.
 
@@ -1062,13 +1062,13 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Old vacuous non-promoter loop is gone. Every mandated non-promoter has a named real-attempt or unrepresentability test. Display-deferral acceptance no longer asserts a local literal. Golden path remains intact and may include factory-produced Ledger lineage. M3-A lock is reconciled if needed. V1 catalog remains 12. Hollowcut catalog remains 9. Full suite remains green.
 
-**Progress Log:** Clean tree verified. M3-T protocol read. Authority docs and M3 acceptance/lock files inspected. Pre-change snapshot `snap_20260705T231325269Z_000346_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T231325269Z_000346_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. M3 acceptance test strengthened with named non-promoter tests, real display deferral/export absence assertion, and factory-produced Ledger lineage in the golden path. Focused M3 acceptance file passed 1 file / 15 tests. Focused M3/M3-A lock run passed 2 files / 21 tests. Typecheck passed. Build passed. Full suite passed 168 files / 2,945 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T232219310Z_000347_milestone`, verified present on disk before recording.
+**Progress Log:** Clean tree verified. M3-T protocol read. Authority docs and M3 acceptance/lock files inspected. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T231325269Z_000346_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. M3 acceptance test strengthened with named non-promoter tests, real display deferral/export absence assertion, and factory-produced Ledger lineage in the golden path. Focused M3 acceptance file passed 1 file / 15 tests. Focused M3/M3-A lock run passed 2 files / 21 tests. Typecheck passed. Build passed. Full suite passed 168 files / 2,945 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `pre_migration_D_cold_backup_snap_`, verified present on disk before recording.
 
 **Decision Log:** Display deferral uses option (a): assert against real M3 implementation documentation and the absence of display/render/preview exports from `src/rawOutput/index.ts`. API success and network success use adapter-shaped success data plus the real trust-summary builder; network/timing fields remain structurally outside the raw-output lifecycle, so the lifecycle assertion is the nearest constructible promotion attempt. Opt-in metadata is asserted as structurally absent from raw-output lifecycle records.
 
 **Surprises / Discoveries:** The M3-A lock does not pin M3 acceptance test names or counts, so it required no source change.
 
-**Final Report:** M3-T Acceptance Test Honesty Strengthening completed. The old unused non-promoter loop and display literal assertion were removed. Non-promoter coverage now includes named storage, digest_presence, api_success, network_success, provider_identity, model_agreement, report_inclusion, ledger_reference, and opt_in_flags tests. Display deferral uses option (a), asserting against real M3 implementation documentation and absence of display/render/preview exports from `src/rawOutput/index.ts`. The M3-A lock required no source reconciliation. Golden-path lineage addition was made with `createLedgerEntryFromInvocation` and `resolveLineageReferences`. No `src`, runtime, provider, egress, role rotation, UI, package, catalog, allowlist, record-type, or historical Ledger behavior changed. Required pre-change snapshot `snap_20260705T231325269Z_000346_milestone` and validation-created snapshot `snap_20260705T232219310Z_000347_milestone` were verified on disk before recording. Validation passed: typecheck, focused M3/M3-A tests 2 files / 21 tests, build, full suite 168 files / 2,945 tests, V1 catalog 12, Hollowcut catalog 9.
+**Final Report:** M3-T Acceptance Test Honesty Strengthening completed. The old unused non-promoter loop and display literal assertion were removed. Non-promoter coverage now includes named storage, digest_presence, api_success, network_success, provider_identity, model_agreement, report_inclusion, ledger_reference, and opt_in_flags tests. Display deferral uses option (a), asserting against real M3 implementation documentation and absence of display/render/preview exports from `src/rawOutput/index.ts`. The M3-A lock required no source reconciliation. Golden-path lineage addition was made with `createLedgerEntryFromInvocation` and `resolveLineageReferences`. No `src`, runtime, provider, egress, role rotation, UI, package, catalog, allowlist, record-type, or historical Ledger behavior changed. Required pre-change snapshot `pre_migration_D_cold_backup_snap_` and validation-created snapshot `pre_migration_D_cold_backup_snap_` were verified on disk before recording. Validation passed: typecheck, focused M3/M3-A tests 2 files / 21 tests, build, full suite 168 files / 2,945 tests, V1 catalog 12, Hollowcut catalog 9.
 
 ## ExecPlan - L1-B Route-Input Allowlist Correction
 
@@ -1086,7 +1086,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This removes an allowed route-input kind. Blocking grep confirmed no live producer or consumer exists beyond gate/type definitions and tests, so removal is safe in current tree.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T222323485Z_000344_milestone` created with name `l1b_allowlist_correction_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `l1b_allowlist_correction_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Verify clean tree. Run blocking producer/consumer grep. Create and verify pre-change snapshot. Remove the record kind from types/gate. Update L1/L1-A tests and acceptance report. Add masquerade detector. Run typecheck, focused L1/L1-A/L1-B tests, build, full suite, catalog checks. Commit with pass ID and verify clean tree.
 
@@ -1094,13 +1094,13 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Blocking grep finds zero real producers/consumers. Allowlist is seven entries. Removed kind is rejected as unknown. Masquerade fixture with unverified role-artifact lineage is rejected. L1-A lock green with seven-entry pin. Existing L1 detectors remain green. V1 catalog remains 12. Hollowcut catalog remains 9. Full suite remains green.
 
-**Progress Log:** Clean tree verified. Blocking grep found zero real producers or consumers beyond gate/type definitions and L1/L1-A test fixtures. Pre-change snapshot `snap_20260705T222323485Z_000344_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T222323485Z_000344_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Protocol file, allowlist correction, test updates, report amendment, and L1-B masquerade detector drafted. Typecheck passed. Focused L1/L1-A/L1-B tests passed 4 files / 32 tests. Build passed. Full suite passed 168 files / 2,937 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T222857309Z_000345_milestone`, verified present on disk before recording.
+**Progress Log:** Clean tree verified. Blocking grep found zero real producers or consumers beyond gate/type definitions and L1/L1-A test fixtures. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T222323485Z_000344_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Protocol file, allowlist correction, test updates, report amendment, and L1-B masquerade detector drafted. Typecheck passed. Focused L1/L1-A/L1-B tests passed 4 files / 32 tests. Build passed. Full suite passed 168 files / 2,937 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `pre_migration_D_cold_backup_snap_`, verified present on disk before recording.
 
 **Decision Log:** The removed kind is fully withdrawn rather than retained as known-but-disabled, so it now fails exactly like any unknown record kind. No partial lineage verifier was added.
 
 **Surprises / Discoveries:** None.
 
-**Final Report:** L1-B Route-Input Allowlist Correction completed. Blocking grep found zero real producers or consumers beyond gate/type definitions and L1/L1-A test fixtures. The L1 route-input allowlist is now seven entries: `contract_validated_task_frame`, `verified_signal_frame`, `engine_internal_state`, `deterministic_hollow_signal`, `accepted_gate_policy_result`, `human_pat_approval_record`, and `snapshot_change_guard_state`. `lineage_resolved_decision_facing_record` is withdrawn until RA-X attaches lineage verification and deterministic extraction machinery, and now rejects exactly like an unknown kind. Standing masquerade detector added: `l1b masquerade fixture: decision record with unverified role-artifact lineage is rejected`. No RA-X verifier, role rotation, provider, egress, UI, package, catalog, historical Ledger, or other allowlist change was made. Required pre-change snapshot `snap_20260705T222323485Z_000344_milestone` and validation-created snapshot `snap_20260705T222857309Z_000345_milestone` were verified on disk before recording. Validation passed: typecheck, focused L1/L1-A/L1-B tests 4 files / 32 tests, build, full suite 168 files / 2,937 tests, V1 catalog 12, Hollowcut catalog 9.
+**Final Report:** L1-B Route-Input Allowlist Correction completed. Blocking grep found zero real producers or consumers beyond gate/type definitions and L1/L1-A test fixtures. The L1 route-input allowlist is now seven entries: `contract_validated_task_frame`, `verified_signal_frame`, `engine_internal_state`, `deterministic_hollow_signal`, `accepted_gate_policy_result`, `human_pat_approval_record`, and `snapshot_change_guard_state`. `lineage_resolved_decision_facing_record` is withdrawn until RA-X attaches lineage verification and deterministic extraction machinery, and now rejects exactly like an unknown kind. Standing masquerade detector added: `l1b masquerade fixture: decision record with unverified role-artifact lineage is rejected`. No RA-X verifier, role rotation, provider, egress, UI, package, catalog, historical Ledger, or other allowlist change was made. Required pre-change snapshot `pre_migration_D_cold_backup_snap_` and validation-created snapshot `pre_migration_D_cold_backup_snap_` were verified on disk before recording. Validation passed: typecheck, focused L1/L1-A/L1-B tests 4 files / 32 tests, build, full suite 168 files / 2,937 tests, V1 catalog 12, Hollowcut catalog 9.
 
 ## ExecPlan - RA-C Role Artifact Consumption Boundary Contract
 
@@ -1118,7 +1118,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Design-only. The main risk is silence around Analyst registry absence or the extraction question; both are explicitly answered/deferred with named home passes.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T215233125Z_000342_milestone` created with name `rac_role_artifact_boundary_contract_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `rac_role_artifact_boundary_contract_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Verify clean tree after L1-A. Create and verify RA-C pre-change snapshot. Inspect existing role artifact contracts, handoff gate, storage planning, and M3/L1 locks. Draft RA-C contract with no-silence answers, worked example, and acceptance obligations. Update pass ledgers. Run full validation and catalog checks. Commit with pass ID and verify clean tree.
 
@@ -1126,13 +1126,13 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Contract exists. Seven questions are answered or named-deferred with home pass. Worked example exists. Role artifacts are explicitly model outputs capped at T1. Role identity is a non-promoter. Existing role contracts are reconciled with M3/L1 vocabulary. Extraction shortcut is barred and future deterministic extraction path is named. RA implementation obligations and required detectors are listed. No implementation files are modified. V1 catalog remains 12. Hollowcut catalog remains 9. Existing suite remains green.
 
-**Progress Log:** Clean tree verified after L1-A commit. Pre-change snapshot `snap_20260705T215233125Z_000342_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T215233125Z_000342_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Existing role artifact contract layer, role artifact validator, role contract registry, role handoff gate, runtime storage type contracts, and runtime storage planning boundary inspected. RA-C contract drafted. Typecheck passed. Build passed. Full suite passed 167/167 files and 2,935/2,935 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T215701269Z_000343_milestone`, verified present on disk before recording.
+**Progress Log:** Clean tree verified after L1-A commit. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T215233125Z_000342_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Existing role artifact contract layer, role artifact validator, role contract registry, role handoff gate, runtime storage type contracts, and runtime storage planning boundary inspected. RA-C contract drafted. Typecheck passed. Build passed. Full suite passed 167/167 files and 2,935/2,935 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `pre_migration_D_cold_backup_snap_`, verified present on disk before recording.
 
 **Decision Log:** RA-C mandates using the M3 content-addressed artifact store for future role artifact raw content unless a later protocol explicitly justifies an equivalent. `validateRoleArtifact` schema validation maps to T1 maximum. Role handoff gate `allowed` means context-consumption eligibility only, not route authority. The missing `analyst` role in the current registry is recorded as `RA-REGISTRY-ANALYST`, not silently assumed.
 
 **Surprises / Discoveries:** The accepted static role registry currently contains no `analyst` role even though role-rotation doctrine names Analyst. This remains design-only and requires a future registry amendment before Analyst runtime claims.
 
-**Final Report:** RA-C Role Artifact Consumption Boundary Contract completed. Contract created at `docs/ROLE_ARTIFACT_CONSUMPTION_BOUNDARY_CONTRACT.md`. All seven questions are answered or named-deferred with home pass: identity/tiering answered in Section 1; pre-M3 reconciliation answered in Section 2 with `RA-REGISTRY-ANALYST`; consumption flows answered in Section 3; extraction answered in Section 4 with `RA-X-DETERMINISTIC-EXTRACTION`; lineage answered in Section 5; cross-model provenance answered in Section 6; non-authorizations answered in Section 7. Worked example included. RA implementation acceptance obligations and required detectors included. No `src`, `tests`, `types`, runtime, role rotation, Role Router, routing, UI/display, provider, egress, package, catalog, L1 allowlist, storage implementation, validator implementation, trust-promotion, or historical Ledger behavior changed. Required pre-change snapshot `snap_20260705T215233125Z_000342_milestone` and validation-created snapshot `snap_20260705T215701269Z_000343_milestone` were verified on disk before recording. Validation passed: typecheck, build, full suite 167 files / 2,935 tests, V1 catalog 12, Hollowcut catalog 9.
+**Final Report:** RA-C Role Artifact Consumption Boundary Contract completed. Contract created at `docs/ROLE_ARTIFACT_CONSUMPTION_BOUNDARY_CONTRACT.md`. All seven questions are answered or named-deferred with home pass: identity/tiering answered in Section 1; pre-M3 reconciliation answered in Section 2 with `RA-REGISTRY-ANALYST`; consumption flows answered in Section 3; extraction answered in Section 4 with `RA-X-DETERMINISTIC-EXTRACTION`; lineage answered in Section 5; cross-model provenance answered in Section 6; non-authorizations answered in Section 7. Worked example included. RA implementation acceptance obligations and required detectors included. No `src`, `tests`, `types`, runtime, role rotation, Role Router, routing, UI/display, provider, egress, package, catalog, L1 allowlist, storage implementation, validator implementation, trust-promotion, or historical Ledger behavior changed. Required pre-change snapshot `pre_migration_D_cold_backup_snap_` and validation-created snapshot `pre_migration_D_cold_backup_snap_` were verified on disk before recording. Validation passed: typecheck, build, full suite 167 files / 2,935 tests, V1 catalog 12, Hollowcut catalog 9.
 
 ## ExecPlan - L1-A Route-Input Boundary Acceptance Lock
 
@@ -1150,7 +1150,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Acceptance-lock only. The main risk is discovering an L1 coverage gap; per protocol, that would stop the pass rather than silently patching runtime.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T214419613Z_000340_milestone` created with name `l1a_route_input_lock_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `l1a_route_input_lock_prechange` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Verify clean tree. Create and verify pre-change snapshot. Commit combined protocol before or with L1-A work. Create acceptance report. Add lock test pinning allowlist, fail-closed behavior, public-surface detectors, entrypoint uniqueness, and lock-fires evidence. Run typecheck, focused lock test, build, full suite, catalog checks. Commit with pass ID and verify clean tree.
 
@@ -1158,13 +1158,13 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Acceptance report exists. Lock test passes. Allowlist is pinned verbatim. Unknown record types reject. Every L1 detector fires through the gate public surface. `selectRouteFromRouteInputs` is the sole hardened entrypoint. Lock-fires evidence is recorded. No L1 runtime changes are made. V1 catalog remains 12. Hollowcut catalog remains 9. Existing suite remains green.
 
-**Progress Log:** Clean tree verified. Pre-change snapshot `snap_20260705T214419613Z_000340_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T214419613Z_000340_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Combined protocol file, acceptance report, and lock test drafted. Initial focused lock test passed but typecheck caught a test-helper narrowing issue; fixed in test only. Typecheck passed. Focused L1-A lock test passed 1 file / 7 tests. Build passed. Full suite passed 167/167 files and 2,935/2,935 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T214857931Z_000341_milestone`, verified present on disk before recording.
+**Progress Log:** Clean tree verified. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T214419613Z_000340_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical Ledger content was edited. Combined protocol file, acceptance report, and lock test drafted. Initial focused lock test passed but typecheck caught a test-helper narrowing issue; fixed in test only. Typecheck passed. Focused L1-A lock test passed 1 file / 7 tests. Build passed. Full suite passed 167/167 files and 2,935/2,935 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `pre_migration_D_cold_backup_snap_`, verified present on disk before recording.
 
 **Decision Log:** The lock pins allowlist contents by inspecting the accepted `ALLOWED_KINDS` source and proves detector behavior through public gate exports. The synthetic lock-fires fixture uses `future_unprotocolled_route_input` and `selectRouteFromRawModelOutput` as non-runtime weakening examples.
 
 **Surprises / Discoveries:** None so far.
 
-**Final Report:** L1-A Route-Input Boundary Acceptance Lock completed. Acceptance report created at `docs/L1_ROUTE_INPUT_BOUNDARY_ACCEPTANCE_REPORT.md`; lock test created at `tests/acceptance/l1RouteInputBoundaryAcceptanceLock.test.ts`; combined protocol recorded at `docs/protocols/PASS_PROTOCOL_L1A_RAC.md`. The locked allowlist is: `contract_validated_task_frame`, `verified_signal_frame`, `engine_internal_state`, `deterministic_hollow_signal`, `accepted_gate_policy_result`, `human_pat_approval_record`, `snapshot_change_guard_state`, `lineage_resolved_decision_facing_record`. Lock-fires evidence references synthetic weakening fixtures `future_unprotocolled_route_input` and `selectRouteFromRawModelOutput`. No runtime behavior changes were made. Required pre-change snapshot `snap_20260705T214419613Z_000340_milestone` and validation-created snapshot `snap_20260705T214857931Z_000341_milestone` were verified on disk before recording. Validation passed: typecheck, focused L1-A lock 1 file / 7 tests, build, full suite 167 files / 2,935 tests, V1 catalog 12, Hollowcut catalog 9.
+**Final Report:** L1-A Route-Input Boundary Acceptance Lock completed. Acceptance report created at `docs/L1_ROUTE_INPUT_BOUNDARY_ACCEPTANCE_REPORT.md`; lock test created at `tests/acceptance/l1RouteInputBoundaryAcceptanceLock.test.ts`; combined protocol recorded at `docs/protocols/PASS_PROTOCOL_L1A_RAC.md`. The locked allowlist is: `contract_validated_task_frame`, `verified_signal_frame`, `engine_internal_state`, `deterministic_hollow_signal`, `accepted_gate_policy_result`, `human_pat_approval_record`, `snapshot_change_guard_state`, `lineage_resolved_decision_facing_record`. Lock-fires evidence references synthetic weakening fixtures `future_unprotocolled_route_input` and `selectRouteFromRawModelOutput`. No runtime behavior changes were made. Required pre-change snapshot `pre_migration_D_cold_backup_snap_` and validation-created snapshot `pre_migration_D_cold_backup_snap_` were verified on disk before recording. Validation passed: typecheck, focused L1-A lock 1 file / 7 tests, build, full suite 167 files / 2,935 tests, V1 catalog 12, Hollowcut catalog 9.
 
 ## ExecPlan - L1 Logic Engine Route-Input Hardening Implementation
 
@@ -1182,7 +1182,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This pass adds a route/state authority boundary. Risk is controlled by keeping `selectRoute` as deterministic inner logic, adding a hardened wrapper entrypoint, rejecting non-authority records structurally, and adding acceptance detectors for required forbidden flows.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T211607042Z_000338_milestone` created with name `L1 implementation pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `L1 implementation pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Verify clean tree. Read canonical protocol and diagnostic. Create and verify pre-change snapshot. Add closed route-input types and validator/gate. Add hardened route-input selector wrapper. Export new gate/types. Add unit and acceptance tests. Add implementation documentation. Run focused tests, typecheck, build, full suite, and catalog checks. Commit with L1 implementation in the message and verify clean tree.
 
@@ -1190,13 +1190,13 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Allowlist gate exists. Approved route-input categories are represented. Non-authority records are rejected: synthetic T1 provider/model record, raw model output, `measurement_tier`, `subject_tier`, display/report text, unknown record type, digest/storage/provider identity, model confidence, and role artifact prose. Decision-facing records expose `effective_tier` only. H5 traps remain preserved. V1 catalog remains 12. Hollowcut catalog remains 9. Existing suite remains green.
 
-**Progress Log:** Clean tree verified. Canonical L1 protocol and diagnostic read. Pre-change snapshot `snap_20260705T211607042Z_000338_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T211607042Z_000338_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Added `LogicEngineRouteInput` closed union and route-input gate. Added `selectRouteFromRouteInputs` as the hardened entrypoint before deterministic `selectRoute`. Added focused unit and acceptance tests plus implementation documentation. Initial focused tests caught a wrong H5 setup-file assumption; corrected to the actual combined `networkEgressBlock.ts` trap. Typecheck passed. Focused L1 tests passed 2 files / 23 tests. Build passed. Full suite passed 166/166 files and 2,928/2,928 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T212456285Z_000339_milestone`, verified present on disk before recording.
+**Progress Log:** Clean tree verified. Canonical L1 protocol and diagnostic read. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T211607042Z_000338_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Added `LogicEngineRouteInput` closed union and route-input gate. Added `selectRouteFromRouteInputs` as the hardened entrypoint before deterministic `selectRoute`. Added focused unit and acceptance tests plus implementation documentation. Initial focused tests caught a wrong H5 setup-file assumption; corrected to the actual combined `networkEgressBlock.ts` trap. Typecheck passed. Focused L1 tests passed 2 files / 23 tests. Build passed. Full suite passed 166/166 files and 2,928/2,928 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `pre_migration_D_cold_backup_snap_`, verified present on disk before recording.
 
 **Decision Log:** L1 keeps `selectRoute(frame, signals)` as deterministic inner logic and exposes `selectRouteFromRouteInputs(inputs)` as the hardened route-input boundary. Deterministic Hollow and lineage-resolved decision-facing route inputs require approved `effective_tier` T2 or higher, preventing T1 provider/model output from steering Caleb. The gate scans records for provenance-only and non-authority fields and rejects unknown top-level fields for each approved kind.
 
 **Surprises / Discoveries:** H5 credential-read and network traps are both implemented in `tests/setup/networkEgressBlock.ts`; there is no separate env trap file.
 
-**Final Report:** L1 Logic Engine Route-Input Hardening Implementation completed. The allowlist gate and route-input record union are implemented. The hardened `selectRouteFromRouteInputs` entrypoint rejects non-authority records before route selection and accepts only approved route-input kinds. Required detectors cover synthetic T1 provider/model route input, raw model output, `measurement_tier`, `subject_tier`, display/report text, unknown record type, digest/storage/provider identity, model confidence, and role artifact prose. H5 traps remain preserved. No role rotation, UI/display, provider, egress, package, catalog, M3 runtime, or historical Ledger behavior changed. Required pre-change snapshot `snap_20260705T211607042Z_000338_milestone` and validation-created snapshot `snap_20260705T212456285Z_000339_milestone` were verified on disk before recording. Validation passed: typecheck, focused L1 tests 2 files / 23 tests, build, full suite 166 files / 2,928 tests, V1 catalog 12, Hollowcut catalog 9.
+**Final Report:** L1 Logic Engine Route-Input Hardening Implementation completed. The allowlist gate and route-input record union are implemented. The hardened `selectRouteFromRouteInputs` entrypoint rejects non-authority records before route selection and accepts only approved route-input kinds. Required detectors cover synthetic T1 provider/model route input, raw model output, `measurement_tier`, `subject_tier`, display/report text, unknown record type, digest/storage/provider identity, model confidence, and role artifact prose. H5 traps remain preserved. No role rotation, UI/display, provider, egress, package, catalog, M3 runtime, or historical Ledger behavior changed. Required pre-change snapshot `pre_migration_D_cold_backup_snap_` and validation-created snapshot `pre_migration_D_cold_backup_snap_` were verified on disk before recording. Validation passed: typecheck, focused L1 tests 2 files / 23 tests, build, full suite 166 files / 2,928 tests, V1 catalog 12, Hollowcut catalog 9.
 
 ## ExecPlan - L1 Logic Engine Route-Input Hardening Diagnostic
 
@@ -1214,7 +1214,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Diagnostic/documentation-only. The main risk is accidentally specifying implementation as completed behavior; this pass records recommendations only.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T185401847Z_000336_milestone` created with name `L1 diagnostic pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `L1 diagnostic pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Verify clean tree. Read canonical L1 protocol and authority docs. Create and verify pre-change snapshot. Inspect current Logic Engine route-input surfaces. Draft the diagnostic report. Update pass ledgers. Run docs-only validation and catalog checks. Commit with L1 diagnostic in the message and verify clean tree.
 
@@ -1222,13 +1222,13 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Diagnostic confirms L1 is allowlist-based; identifies exact current route-input surfaces; identifies unsafe/advisory acceptance risk; defines proposed allowed and rejected record types; recommends a decision-facing route-input shape; connects M3 `effective_tier` only decision records to L1; identifies likely implementation files, acceptance tests, risks, ambiguities, and Pat decisions; confirms L1 remains CLI/test-only and display/report text may not route Caleb; no implementation files are modified.
 
-**Progress Log:** Clean tree verified. Canonical L1 protocol and authority docs read. Pre-change snapshot `snap_20260705T185401847Z_000336_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T185401847Z_000336_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Current Logic Engine route-input surfaces inspected: TaskFrame validation, signal classification, route selection, work graph building, execution context summary, single-pass route MVP, and route Ledger event builder. Diagnostic document drafted at `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md`. Typecheck passed. Build passed. Full suite passed 164/164 files and 2,905/2,905 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T185849865Z_000337_milestone`, verified present on disk before recording.
+**Progress Log:** Clean tree verified. Canonical L1 protocol and authority docs read. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T185401847Z_000336_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Current Logic Engine route-input surfaces inspected: TaskFrame validation, signal classification, route selection, work graph building, execution context summary, single-pass route MVP, and route Ledger event builder. Diagnostic document drafted at `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md`. Typecheck passed. Build passed. Full suite passed 164/164 files and 2,905/2,905 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `pre_migration_D_cold_backup_snap_`, verified present on disk before recording.
 
 **Decision Log:** Diagnostic recommends a fail-closed allowlist gate using a closed discriminated union. Existing `selectRoute(frame, signals)` should remain deterministic selection logic but be protected by an explicit route-input authority gate. M3 should connect only through lineage-resolved decision-facing records exposing `effective_tier`; provenance-only fields remain outside route authority.
 
 **Surprises / Discoveries:** `TaskFrame.signal_hints` and `classifySignals` are the practical route-influence surface that L1 must guard carefully. `RouteLedgerEventBuildInput.route_result` accepts broad records for provenance/reporting and should remain downstream, not route authority.
 
-**Final Report:** L1 diagnostic completed only. Diagnostic created at `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md`. It confirms the protocol is allowlist-based, identifies current route-input surfaces, names current implicit trust risks, recommends the structural split with decision-facing `effective_tier` only, lists likely implementation files/tests, and records open Pat decisions. No L1 implementation, `src`, `tests`, `types`, M3 runtime, provider, egress, package, catalog, UI, role-rotation, or historical Ledger changes were made. Required pre-change snapshot `snap_20260705T185401847Z_000336_milestone` and validation-created snapshot `snap_20260705T185849865Z_000337_milestone` were verified on disk before recording. Validation passed: typecheck, build, full suite 164 files / 2,905 tests, V1 catalog 12, Hollowcut catalog 9.
+**Final Report:** L1 diagnostic completed only. Diagnostic created at `docs/L1_LOGIC_ENGINE_ROUTE_INPUT_HARDENING_DIAGNOSTIC.md`. It confirms the protocol is allowlist-based, identifies current route-input surfaces, names current implicit trust risks, recommends the structural split with decision-facing `effective_tier` only, lists likely implementation files/tests, and records open Pat decisions. No L1 implementation, `src`, `tests`, `types`, M3 runtime, provider, egress, package, catalog, UI, role-rotation, or historical Ledger changes were made. Required pre-change snapshot `pre_migration_D_cold_backup_snap_` and validation-created snapshot `pre_migration_D_cold_backup_snap_` were verified on disk before recording. Validation passed: typecheck, build, full suite 164 files / 2,905 tests, V1 catalog 12, Hollowcut catalog 9.
 
 ## ExecPlan - L1 Logic Engine Route-Input Hardening Protocol
 
@@ -1246,7 +1246,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Documentation/protocol-only. The key risk is accidentally authorizing future implementation through vague wording; the protocol is explicit that implementation requires L1 diagnostic and Pat approval.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T183721991Z_000334_milestone` created with name `L1-protocol-draft-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `L1-protocol-draft-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Verify clean tree. Read authority docs and M3 protocol context. Create and verify pre-change snapshot. Draft L1 protocol in `docs/protocols/`. Update `PLANS.md` and `docs/STATUS_LOG.md`. Run docs-pass validation and catalog checks. Commit with L1 protocol in the message and verify final clean tree.
 
@@ -1254,13 +1254,13 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Protocol exists at `docs/protocols/PASS_PROTOCOL_L1.md`; uses the house 10-section format; defines allowlist-based route-input hardening; lists allowed route-input categories; rejects raw/T1 model/provider output, prose, display/report text, provider identity, model confidence, digest/storage presence, provenance-only fields, and unknown record types; requires detectors including synthetic T1 provider/model route input rejection; no implementation files are modified; V1 catalog remains 12; Hollowcut catalog remains 9.
 
-**Progress Log:** Clean tree verified. Authority docs and M3 protocol context read. Pre-change snapshot `snap_20260705T183721991Z_000334_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T183721991Z_000334_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. L1 protocol drafted in the required 10-section format. Typecheck passed. Build passed. Full suite passed 164/164 files and 2,905/2,905 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `snap_20260705T184115662Z_000335_milestone`, verified present on disk before recording.
+**Progress Log:** Clean tree verified. Authority docs and M3 protocol context read. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T183721991Z_000334_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. L1 protocol drafted in the required 10-section format. Typecheck passed. Build passed. Full suite passed 164/164 files and 2,905/2,905 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows. Full suite created validation snapshot `pre_migration_D_cold_backup_snap_`, verified present on disk before recording.
 
 **Decision Log:** The L1 protocol uses allowlist-first language and frames non-authority examples as rejected by construction rather than as a denylist foundation. It requires a synthetic T1 provider/model route-input detector and separate detector coverage for tier-field misuse, display/report text, unknown record types, and digest/storage/provider identity authority attempts.
 
 **Surprises / Discoveries:** None.
 
-**Final Report:** L1 protocol draft completed. Protocol created at `docs/protocols/PASS_PROTOCOL_L1.md`. No L1 diagnostic or implementation performed. No `src`, `tests`, `types`, provider, egress, package, catalog, M3 runtime, or historical Ledger changes were made. Required pre-change snapshot `snap_20260705T183721991Z_000334_milestone` and validation-created snapshot `snap_20260705T184115662Z_000335_milestone` were verified on disk before recording. Validation passed: typecheck, build, full suite 164 files / 2,905 tests, V1 catalog 12, Hollowcut catalog 9.
+**Final Report:** L1 protocol draft completed. Protocol created at `docs/protocols/PASS_PROTOCOL_L1.md`. No L1 diagnostic or implementation performed. No `src`, `tests`, `types`, provider, egress, package, catalog, M3 runtime, or historical Ledger changes were made. Required pre-change snapshot `pre_migration_D_cold_backup_snap_` and validation-created snapshot `pre_migration_D_cold_backup_snap_` were verified on disk before recording. Validation passed: typecheck, build, full suite 164 files / 2,905 tests, V1 catalog 12, Hollowcut catalog 9.
 
 ## ExecPlan - M3-A Raw Output Boundary Acceptance Lock
 
@@ -1278,7 +1278,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Acceptance-report and regression-lock only.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T180028231Z_000331_milestone` created with name `M3-A-acceptance-lock-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `M3-A-acceptance-lock-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Verify clean tree. Read M3 protocol, diagnostic, implementation doc, and acceptance test. Create and verify pre-change snapshot. Add acceptance report and lock test. Run focused acceptance lock, typecheck, build, full suite, and catalog checks. Commit with M3-A acceptance lock in the message and verify clean tree.
 
@@ -1286,7 +1286,7 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** M3 acceptance report exists and states M3 accepted. Report names canonical protocol, implementation doc, and acceptance test. Report locks trust ceiling, non-promoters, structural split, golden path, NEVER-flow absence, artifact-store evidence, CLI/test-only boundary, display deferral, all 23 M3 acceptance categories, and catalog counts. Lock test passes. V1 catalog remains 12. Hollowcut catalog remains 9. Final tree is clean.
 
-**Progress Log:** Clean tree verified. M3 authority/evidence docs read. Pre-change snapshot `snap_20260705T180028231Z_000331_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T180028231Z_000331_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Acceptance report and lock test created. Initial focused lock run caught a report wording mismatch (`effective_tier only` with backticks); report wording was tightened and focused M3-A/M3 acceptance passed 2/2 files and 13/13 tests. Typecheck passed. Build passed. Full suite passed 164/164 files and 2,905/2,905 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows.
+**Progress Log:** Clean tree verified. M3 authority/evidence docs read. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T180028231Z_000331_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Acceptance report and lock test created. Initial focused lock run caught a report wording mismatch (`effective_tier only` with backticks); report wording was tightened and focused M3-A/M3 acceptance passed 2/2 files and 13/13 tests. Typecheck passed. Build passed. Full suite passed 164/164 files and 2,905/2,905 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows.
 
 **Decision Log:** M3-A is deliberately report-and-lock only. It does not change raw-output runtime behavior because M3 is already accepted; it makes acceptance evidence harder to regress by pinning the report to the canonical evidence files and acceptance categories.
 
@@ -1310,7 +1310,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. M3 adds a new trust boundary and a local content-addressed storage path. Risk is controlled by `.gitignore` guardrails, temp-dir tests, no provider/egress changes, structural effective-tier split, and absence detectors.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T174603371Z_000329_milestone` created with name `M3-implementation-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `M3-implementation-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Verify clean tree. Create and verify pre-change snapshot. Add `.caleb/artifacts/` to `.gitignore`. Implement raw-output modules. Add unit and acceptance tests including the golden path and NEVER-flow absence checks. Add docs and ledger entries. Run full validation and catalog checks. Commit with M3 implementation in the message and verify clean tree.
 
@@ -1318,7 +1318,7 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Raw output lifecycle, trust ceiling, non-promoters, mandatory tier split, `effective_tier` computation, tier misuse detectors, laundering detector, Ledger raw-content absence, content addressing, lineage-resolution gate, deletion/dangling-reference distinction, display vs consumption boundary, NEVER-flow absence assertions, H5 trap preservation, golden-path worked example, V1 catalog 12, Hollowcut catalog 9, existing suite, and completion report are all satisfied.
 
-**Progress Log:** Clean tree verified. Pre-change snapshot `snap_20260705T174603371Z_000329_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T174603371Z_000329_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. `.caleb/artifacts/` added to `.gitignore` before raw-output store tests were introduced. Raw-output modules, focused tests, M3 acceptance test, and implementation doc created. Initial typecheck and focused tests passed. Build passed. Acceptance suite passed 43/43 files and 398/398 tests. Full suite passed 163/163 files and 2,899/2,899 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows.
+**Progress Log:** Clean tree verified. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T174603371Z_000329_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. `.caleb/artifacts/` added to `.gitignore` before raw-output store tests were introduced. Raw-output modules, focused tests, M3 acceptance test, and implementation doc created. Initial typecheck and focused tests passed. Build passed. Acceptance suite passed 43/43 files and 398/398 tests. Full suite passed 163/163 files and 2,899/2,899 tests. V1 catalog check found 12 Hollows. Hollowcut catalog check found 9 Hollows.
 
 **Decision Log:** The authority path is `ContentAddressedRawOutputStore` rooted by default at `.caleb/artifacts/raw-output`, while tests use temp roots. `InMemoryRawOutputStore` exists only as the fast-path adapter for pure tests. The Character Count Hollow itself was not modified; the M3 boundary resolves stored/ref-addressed content and then invokes the existing Hollow through the existing runner/VRP path. Lineage/tier metadata is held in new raw-output provenance records instead of changing the base Ledger type in this pass.
 
@@ -1342,7 +1342,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Diagnostic/documentation-only. The main risk is accidentally crossing into implementation; this pass avoids `src/`, `tests/`, and type changes entirely.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T173738508Z_000327_milestone` created with name `M3-diagnostic-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if needed.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `M3-diagnostic-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if needed.
 
 **Implementation Steps:** Verify clean tree. Read canonical protocol and M3-C contract. Refresh authority docs. Create and verify pre-change snapshot. Draft the diagnostic report. Update pass ledgers. Run docs-only validation and catalog checks. Commit diagnostic if validation passes, verify clean tree, and stop.
 
@@ -1350,13 +1350,13 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Diagnostic confirms M3-C obligations are represented; evaluates in-memory extension and `.caleb/artifacts/` content-addressed store; includes Fast Path vs Authority Path; recommends structural split; confirms M3 remains CLI/test-only; confirms display flow is deferred to `M4-DISPLAY-BOUNDARY`; identifies proposed files, acceptance tests, risks, ambiguities, and Pat approval decisions; no implementation files are modified.
 
-**Progress Log:** Clean tree verified after Git PATH repair from the prior pass. Canonical M3 protocol and M3-C contract read. Authority docs refreshed. Pre-change snapshot `snap_20260705T173738508Z_000327_milestone` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T173738508Z_000327_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Diagnostic document drafted at `docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_DIAGNOSTIC.md`. Validation passed: `npx tsc --noEmit`; `npm run build`; full suite 158/158 files and 2,879/2,879 tests; V1 catalog check found 12 Hollows; Hollowcut catalog check found 9 Hollows.
+**Progress Log:** Clean tree verified after Git PATH repair from the prior pass. Canonical M3 protocol and M3-C contract read. Authority docs refreshed. Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T173738508Z_000327_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. Diagnostic document drafted at `docs/M3_RAW_OUTPUT_CONSUMPTION_BOUNDARY_DIAGNOSTIC.md`. Validation passed: `npx tsc --noEmit`; `npm run build`; full suite 158/158 files and 2,879/2,879 tests; V1 catalog check found 12 Hollows; Hollowcut catalog check found 9 Hollows.
 
 **Decision Log:** Diagnostic recommends `.caleb/artifacts/` content-addressed storage as the M3 authority path, guarded by `.gitignore` and temp-dir tests, with in-memory storage kept as a fast-path test adapter. Diagnostic recommends the structural split: provenance-facing tier triplet and decision-facing `effective_tier` only. Diagnostic recommends no new CLI command unless Pat explicitly wants one.
 
 **Surprises / Discoveries:** `.caleb/artifacts/` is not currently ignored, so authority-path implementation must add that ignore rule before any raw-content write.
 
-**Final Report:** M3 diagnostic completed only. Diagnostic confirms M3-C obligations are fully represented, recommends `.caleb/artifacts/` as the authority path with `.gitignore` guardrails, keeps in-memory as the fast-path test adapter, recommends the structural split, confirms M3 remains CLI/test-only, confirms display flow is deferred to `M4-DISPLAY-BOUNDARY`, identifies proposed files/tests/risks/decisions, and stops before implementation. No `src`, `tests`, `types`, provider, egress, package, catalog, UI, or historical Ledger changes were made. Required snapshot `snap_20260705T173738508Z_000327_milestone` was verified on disk before recording; the snapshot command appended its normal Ledger record. Ready for Pat implementation approval: yes.
+**Final Report:** M3 diagnostic completed only. Diagnostic confirms M3-C obligations are fully represented, recommends `.caleb/artifacts/` as the authority path with `.gitignore` guardrails, keeps in-memory as the fast-path test adapter, recommends the structural split, confirms M3 remains CLI/test-only, confirms display flow is deferred to `M4-DISPLAY-BOUNDARY`, identifies proposed files/tests/risks/decisions, and stops before implementation. No `src`, `tests`, `types`, provider, egress, package, catalog, UI, or historical Ledger changes were made. Required snapshot `pre_migration_D_cold_backup_snap_` was verified on disk before recording; the snapshot command appended its normal Ledger record. Ready for Pat implementation approval: yes.
 
 ## ExecPlan - M3 Protocol Draft
 
@@ -1374,7 +1374,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Documentation/protocol-only. The main risk is authorization-chain accuracy, handled by stating that the base M3 protocol was missing and by integrating Amendment A into the new canonical file rather than leaving a floating amendment.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T172058443Z_000325_milestone` created with name `M3-protocol-draft-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `M3-protocol-draft-pre-change` and verified present on disk before recording its ID here. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Confirm Git availability and clean status. Read authority docs and existing protocol style. Create and verify pre-change snapshot. Draft `PASS_PROTOCOL_M3.md` in the 10-section format with Amendment A integrated directly. Update `PLANS.md` and `docs/STATUS_LOG.md`. Run docs-only validation, catalog checks, commit with M3 protocol in the commit message, and verify final clean status.
 
@@ -1382,13 +1382,13 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Path B authorized. Base M3 protocol absence acknowledged. New canonical protocol exists at `docs/protocols/PASS_PROTOCOL_M3.md`. Amendment A is integrated directly. No M3 diagnostic or implementation is performed. No `src`, `tests`, `types`, provider, egress, or ledger-history changes are made. Snapshot exists and was verified on disk before recording. V1 catalog remains exactly 12. Hollowcut catalog remains exactly 9. Final tree is clean after commit.
 
-**Progress Log:** Git was found installed at `C:\Program Files\Git\cmd\git.exe` but absent from PATH; the current command environment was repaired by prepending that directory, after which `git status --short` returned clean. Required authority docs and existing protocol style were read. Pre-change snapshot `snap_20260705T172058443Z_000325_milestone` was created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T172058443Z_000325_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. `docs/protocols/PASS_PROTOCOL_M3.md` was created with the 10-section protocol format and Amendment A integrated directly. Validation passed: `npx tsc --noEmit`; V1 catalog check found 12 Hollows; Hollowcut catalog check found 9 Hollows; full suite passed 158/158 files and 2,879/2,879 tests.
+**Progress Log:** Git was found installed at `C:\Program Files\Git\cmd\git.exe` but absent from PATH; the current command environment was repaired by prepending that directory, after which `git status --short` returned clean. Required authority docs and existing protocol style were read. Pre-change snapshot `pre_migration_D_cold_backup_snap_` was created and verified on disk before this entry recorded it. The snapshot command appended the normal `ledger_snap_20260705T172058443Z_000325_milestone` record to `.caleb/ledger/ledger.jsonl`; no historical ledger content was edited. `docs/protocols/PASS_PROTOCOL_M3.md` was created with the 10-section protocol format and Amendment A integrated directly. Validation passed: `npx tsc --noEmit`; V1 catalog check found 12 Hollows; Hollowcut catalog check found 9 Hollows; full suite passed 158/158 files and 2,879/2,879 tests.
 
 **Decision Log:** The pass records the missing base protocol honestly instead of treating Amendment A as proof that a base file existed. The new protocol does not authorize implementation files because the handoff requires the diagnostic and Pat approval before M3 implementation. Validation includes typecheck and the full suite even though the pass is docs-only, because the repo has established scripts and recent passes use the full default suite as the baseline.
 
 **Surprises / Discoveries:** Git was installed locally but not on PATH in the Codex-launched PowerShell environment.
 
-**Final Report:** Path B protocol-draft pass completed. Base M3 protocol did not previously exist as a committed `docs/protocols/` file. New canonical protocol drafted at `docs/protocols/PASS_PROTOCOL_M3.md`. Amendment A integrated directly. No M3 diagnostic performed. No M3 implementation performed. No `src`, `tests`, `types`, provider, egress, package, catalog, or historical ledger-content changes were made. Required snapshot `snap_20260705T172058443Z_000325_milestone` was verified on disk before recording; the snapshot command appended its normal Ledger record. Validation passed: typecheck, full suite, V1 catalog 12, Hollowcut catalog 9. Ready for Pat approval after commit and final clean status: yes.
+**Final Report:** Path B protocol-draft pass completed. Base M3 protocol did not previously exist as a committed `docs/protocols/` file. New canonical protocol drafted at `docs/protocols/PASS_PROTOCOL_M3.md`. Amendment A integrated directly. No M3 diagnostic performed. No M3 implementation performed. No `src`, `tests`, `types`, provider, egress, package, catalog, or historical ledger-content changes were made. Required snapshot `pre_migration_D_cold_backup_snap_` was verified on disk before recording; the snapshot command appended its normal Ledger record. Validation passed: typecheck, full suite, V1 catalog 12, Hollowcut catalog 9. Ready for Pat approval after commit and final clean status: yes.
 
 ## ExecPlan - Snapshot Claim Integrity Gate
 
@@ -1396,7 +1396,7 @@ guardrails are now a protected surface.`
 
 **Source Authority:** Explicit user request (R37 handoff) approving R37 Snapshot Claim Integrity Gate, R36 One Provider Adapter Live Prerequisites Evaluator (including its disclosed process deviation), AGENTS.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, docs/AUTO_SNAPSHOT_AND_CHANGE_GUARD.md, and PLANS.md.
 
-**Current State:** R36 is accepted. Effective rollback anchor `snap_20260704T034359557Z_000282_milestone`, test-created snapshot `snap_20260704T041816910Z_000283_milestone`, and validation snapshot `snap_20260704T042319430Z_000285_milestone` exist. Full suite passed 147 files / 2766 tests. Acceptance suite passed 38 files / 358 tests. V1 catalog = 12, Hollowcut catalog = 9. R36 disclosed a process deviation in which a named pre-change snapshot ID was claimed in PLANS.md before being created; it was caught by manual cross-check against `.caleb/snapshots` and corrected. R37 exists to make that cross-check automatic and deterministic.
+**Current State:** R36 is accepted. Effective rollback anchor `pre_migration_D_cold_backup_snap_`, test-created snapshot `pre_migration_D_cold_backup_snap_`, and validation snapshot `pre_migration_D_cold_backup_snap_` exist. Full suite passed 147 files / 2766 tests. Acceptance suite passed 38 files / 358 tests. V1 catalog = 12, Hollowcut catalog = 9. R36 disclosed a process deviation in which a named pre-change snapshot ID was claimed in PLANS.md before being created; it was caught by manual cross-check against `.caleb/snapshots` and corrected. R37 exists to make that cross-check automatic and deterministic.
 
 **Scope:** Create snapshot claim integrity types, a pure evaluator plus a thin read-only filesystem wrapper, changeGuard barrel exports, unit tests, an acceptance lock test, documentation, and this ExecPlan entry. No provider, catalog, UI, or package changes.
 
@@ -1406,7 +1406,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Adds a pure, deterministic, read-only validator plus a thin filesystem-reading wrapper under the existing, already-authorized changeGuard module; no writes, no network, no catalog or UI change, no phase-boundary allowlist required (changeGuard is not phase-restricted in `tests/acceptance/v1PhaseBoundary.test.ts`).
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260704T045701820Z_000288_milestone` created with name `R37-pre-change` and verified present under `.caleb/snapshots` before any file was edited. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `R37-pre-change` and verified present under `.caleb/snapshots` before any file was edited. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add snapshot claim integrity types (report + input + wrapper-options shapes). Implement a pure `evaluateSnapshotClaimIntegrity` function (broad snapshot-claim token extraction, canonical-format check, existence check, duplicate detection, allowed-missing exceptions) plus a read-only `runSnapshotClaimIntegrityGate` wrapper that reads `PLANS.md` and lists `.caleb/snapshots`. Export both from the changeGuard barrel. Add unit tests (synthetic fixtures plus real-repo wrapper checks proving no mutation and no snapshot creation) and an acceptance lock test. Add documentation with all required sections. Run required validation and CLI smoke commands. Create validation snapshot and confirm it exists before recording its ID.
 
@@ -1414,11 +1414,11 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Pre-change snapshot exists and was verified on disk before edits. Validator types, pure evaluator, wrapper, tests, docs, exports, and acceptance lock exist. The real-repo wrapper run against current PLANS.md and `.caleb/snapshots` returns `passed: true` with empty `missing_snapshot_ids` and `invalid_snapshot_claims`. Validator never mutates PLANS.md, never creates a snapshot, never writes a Ledger entry, never reads `process.env`, and performs no network access. V1 catalog remains 12. Hollowcut catalog remains 9. No provider, live-execution, SDK/package, or UI behavior is introduced.
 
-**Progress Log:** Pre-change snapshot created and verified present on disk before any edit, directly applying the R36 lesson this pass formalizes. Repo state inspected; no partial R37 files existed; `tests/acceptance/v1PhaseBoundary.test.ts` confirmed to have no changeGuard-specific allowlist, so it was left unmodified. Types, pure evaluator, wrapper, barrel exports, unit tests, documentation, and acceptance test created. A `tsc --noEmit` failure surfaced during implementation (an `exactOptionalPropertyTypes` violation from passing possibly-`undefined` optional fields into the input object) and was fixed by conditionally spreading those fields instead of assigning `undefined` directly — the same category of fix noted during R34. Unit test passed 11/11. Acceptance test passed 10/10, including a live assertion that `runSnapshotClaimIntegrityGate()` returns `passed: true` against the real PLANS.md and `.caleb/snapshots` at time of check. Acceptance suite passed 39/39 files, 368/368 tests. Full suite passed 149/149 files, 2787/2787 tests. Test-created snapshot `snap_20260704T051644141Z_000289_milestone` and validation snapshot `snap_20260704T051907578Z_000290_milestone` were each confirmed present on disk before being recorded in this entry.
+**Progress Log:** Pre-change snapshot created and verified present on disk before any edit, directly applying the R36 lesson this pass formalizes. Repo state inspected; no partial R37 files existed; `tests/acceptance/v1PhaseBoundary.test.ts` confirmed to have no changeGuard-specific allowlist, so it was left unmodified. Types, pure evaluator, wrapper, barrel exports, unit tests, documentation, and acceptance test created. A `tsc --noEmit` failure surfaced during implementation (an `exactOptionalPropertyTypes` violation from passing possibly-`undefined` optional fields into the input object) and was fixed by conditionally spreading those fields instead of assigning `undefined` directly — the same category of fix noted during R34. Unit test passed 11/11. Acceptance test passed 10/10, including a live assertion that `runSnapshotClaimIntegrityGate()` returns `passed: true` against the real PLANS.md and `.caleb/snapshots` at time of check. Acceptance suite passed 39/39 files, 368/368 tests. Full suite passed 149/149 files, 2787/2787 tests. Test-created snapshot `pre_migration_D_cold_backup_snap_` and validation snapshot `pre_migration_D_cold_backup_snap_` were each confirmed present on disk before being recorded in this entry.
 
 **Decision Log:** The extraction pattern is intentionally broader than the canonical ID format (`snap[_-][\w-]*milestone`, case-insensitive) so that malformed near-misses (wrong separators, wrong casing) are still caught and reported as `invalid_snapshot_claims` rather than silently ignored, while the canonical format check (`snap_<alnum-segments>_milestone`) accepts both the current sequenced ID shape (`snap_<timestamp>_<sequence>_milestone`) and the older pre-sequencing shape (`snap_<timestamp>_milestone`) observed on disk from the V1 Cornerstone Milestone pass, avoiding false positives against real historical snapshots. Duplicate claims are reported as warnings only, not failures, because the same snapshot ID is legitimately referenced across multiple ExecPlan entries (a later pass citing an earlier pass's validation snapshot as its own rollback anchor) and that repetition is expected, not an error. The validator is split into a pure core function (testable with synthetic fixtures, no filesystem dependency) and a thin read-only wrapper (the only piece touching real files), matching the report-builder-plus-wrapper pattern already used for the provider dry-run report/CLI pair. No Change Guard Hollow registration was added in this pass; R37 is documented as a possible future registration candidate only, per the handoff's explicit catalog-freeze requirement.
 
-**Surprises / Discoveries:** The R36 fabricated snapshot ID string no longer appears anywhere in PLANS.md (confirmed by direct search before implementation), since it was already corrected in the R36 pass; the validator therefore needed no hardcoded historical exception for it. A genuinely real historical snapshot from the V1 Cornerstone Milestone pass (`snap_20260610T005359834Z_milestone`) uses the older, non-sequenced ID shape and still exists on disk, which shaped the canonical-format regex to accept both ID shapes rather than over-fitting to only the current format.
+**Surprises / Discoveries:** The R36 fabricated snapshot ID string no longer appears anywhere in PLANS.md (confirmed by direct search before implementation), since it was already corrected in the R36 pass; the validator therefore needed no hardcoded historical exception for it. A genuinely real historical snapshot from the V1 Cornerstone Milestone pass (`pre_migration_D_cold_backup_snap_`) uses the older, non-sequenced ID shape and still exists on disk, which shaped the canonical-format regex to accept both ID shapes rather than over-fitting to only the current format.
 
 **Final Report:** See the verbatim R37 Implementation Report emitted at the end of this pass.
 
@@ -1428,7 +1428,7 @@ guardrails are now a protected surface.`
 
 **Source Authority:** Explicit user request (R36 handoff) approving R36 One Provider Adapter Live Prerequisites Evaluator, R35 One Provider Adapter Live Prerequisites Contract, AGENTS.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, docs/03_CANONICAL_CONTRACTS.md, docs/04_STORAGE_AND_LEDGER_DECISIONS.md, docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md, docs/06_V1_TEST_AND_FIXTURE_PLAN.md, and PLANS.md.
 
-**Current State:** R35 is accepted. Pre-change snapshot `snap_20260704T033638138Z_000280_milestone`, test-created snapshot `snap_20260704T034046349Z_000281_milestone`, and validation snapshot `snap_20260704T034359557Z_000282_milestone` exist. Full suite passed 145 files / 2736 tests. Acceptance suite passed 37 files / 345 tests. V1 catalog = 12, Hollowcut catalog = 9. The live prerequisites contract is locked (required fields, locked values, trust lock) and no live provider behavior, SDK, API-key read, process.env read, network call, fake success, provider response simulation, provider output, provider content field, or live execution exists.
+**Current State:** R35 is accepted. Pre-change snapshot `pre_migration_D_cold_backup_snap_`, test-created snapshot `pre_migration_D_cold_backup_snap_`, and validation snapshot `pre_migration_D_cold_backup_snap_` exist. Full suite passed 145 files / 2736 tests. Acceptance suite passed 37 files / 345 tests. V1 catalog = 12, Hollowcut catalog = 9. The live prerequisites contract is locked (required fields, locked values, trust lock) and no live provider behavior, SDK, API-key read, process.env read, network call, fake success, provider response simulation, provider output, provider content field, or live execution exists.
 
 **Scope:** Create prerequisite evaluator types, a pure evaluator function, provider unit tests, an acceptance lock test, documentation, provider barrel exports, a narrow provider phase-boundary allowlist update for the two new inert source files, and this ExecPlan entry.
 
@@ -1438,7 +1438,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Adds pure, deterministic, input-data-only evaluator code under the existing provider namespace; no network capability, no Ledger/storage writes, no CLI wiring, reuses the R35 contract fields exactly.
 
-**Snapshot / Rollback Plan:** No explicit `R36-pre-change` named snapshot was created before edits began; this is a documented process deviation. The R35 validation snapshot `snap_20260704T034359557Z_000282_milestone` immediately precedes all R36 file changes and serves as the effective pre-change rollback point, since no files were modified between it and the start of R36 work. A milestone snapshot `snap_20260704T041816910Z_000283_milestone` was captured incidentally by the full-suite CLI test path during post-edit validation (same mechanism observed in R34/R35). Roll back via snapshot manager to `snap_20260704T034359557Z_000282_milestone` if needed.
+**Snapshot / Rollback Plan:** No explicit `R36-pre-change` named snapshot was created before edits began; this is a documented process deviation. The R35 validation snapshot `pre_migration_D_cold_backup_snap_` immediately precedes all R36 file changes and serves as the effective pre-change rollback point, since no files were modified between it and the start of R36 work. A milestone snapshot `pre_migration_D_cold_backup_snap_` was captured incidentally by the full-suite CLI test path during post-edit validation (same mechanism observed in R34/R35). Roll back via snapshot manager to `pre_migration_D_cold_backup_snap_` if needed.
 
 **Implementation Steps:** Add prerequisite evaluator types, implement the pure evaluator function (missing/blocking prerequisite detection, locked output values, `live_execution_state` always `not_run`), export via provider barrel, add unit tests and acceptance lock, add documentation, update the exact provider phase-boundary allowlist for the two new files, run required validation and CLI smoke commands, create validation snapshot, and update this ExecPlan final status.
 
@@ -1460,7 +1460,7 @@ guardrails are now a protected surface.`
 
 **Source Authority:** Explicit user request (R35 handoff) approving R35 One Provider Adapter Live Prerequisites Contract, R34 One Provider Adapter Dry-Run CLI Surface, AGENTS.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, docs/03_CANONICAL_CONTRACTS.md, docs/04_STORAGE_AND_LEDGER_DECISIONS.md, docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md, docs/06_V1_TEST_AND_FIXTURE_PLAN.md, and PLANS.md.
 
-**Current State:** R34 is accepted. Pre-change snapshot `snap_20260704T031346479Z_000277_milestone`, test-created snapshot `snap_20260704T032024579Z_000278_milestone`, and validation snapshot `snap_20260704T032231928Z_000279_milestone` exist. Full suite passed 144 files / 2727 tests. Acceptance suite passed 36 files / 336 tests. V1 catalog = 12, Hollowcut catalog = 9. The dry-run CLI surface is locked and no live provider behavior, SDK, API-key read, process.env read, network call, fake success, provider response simulation, provider output, provider content field, or live execution exists.
+**Current State:** R34 is accepted. Pre-change snapshot `pre_migration_D_cold_backup_snap_`, test-created snapshot `pre_migration_D_cold_backup_snap_`, and validation snapshot `pre_migration_D_cold_backup_snap_` exist. Full suite passed 144 files / 2727 tests. Acceptance suite passed 36 files / 336 tests. V1 catalog = 12, Hollowcut catalog = 9. The dry-run CLI surface is locked and no live provider behavior, SDK, API-key read, process.env read, network call, fake success, provider response simulation, provider output, provider content field, or live execution exists.
 
 **Scope:** Create the live prerequisites contract document, add an acceptance lock test, and append this ExecPlan entry. No source code files are created or changed.
 
@@ -1470,7 +1470,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Very low. Documentation and acceptance-test-only; no source files are created or modified; no phase-boundary allowlist change is required.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260704T033638138Z_000280_milestone` created with name `R35-pre-change`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `R35-pre-change`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Create the contract document with all required prerequisite fields, locked values, trust lock statements, non-implementation boundary, catalog invariants, and exact final verdict block. Add the acceptance test asserting every required statement, field, locked value, and the exact verdict block, plus PLANS.md reference and catalog counts. Append this ExecPlan entry. Run required validation and CLI smoke commands. Create validation snapshot.
 
@@ -1492,7 +1492,7 @@ guardrails are now a protected surface.`
 
 **Source Authority:** Explicit user request approving R34 dry-run CLI surface, R33 One Provider Adapter Dry-Run Report Contract, AGENTS.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, docs/03_CANONICAL_CONTRACTS.md, docs/04_STORAGE_AND_LEDGER_DECISIONS.md, docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md, docs/06_V1_TEST_AND_FIXTURE_PLAN.md, and PLANS.md.
 
-**Current State:** R33 is accepted. Pre-change snapshot `snap_20260704T030207322Z_000274_milestone`, test-created snapshot `snap_20260704T030613989Z_000275_milestone`, and explicit validation snapshot `snap_20260704T030805072Z_000276_milestone` exist. The dry-run report contract is locked and no live provider behavior, SDK, API-key read, process.env read, network call, fake success, provider response simulation, provider output, provider content field, or live execution exists.
+**Current State:** R33 is accepted. Pre-change snapshot `pre_migration_D_cold_backup_snap_`, test-created snapshot `pre_migration_D_cold_backup_snap_`, and explicit validation snapshot `pre_migration_D_cold_backup_snap_` exist. The dry-run report contract is locked and no live provider behavior, SDK, API-key read, process.env read, network call, fake success, provider response simulation, provider output, provider content field, or live execution exists.
 
 **Scope:** Create dry-run CLI helper, wire the existing CLI parser/type/handler surface, add provider dry-run CLI tests, add acceptance lock, add documentation, export provider helper, add short R33 forward reference, update exact provider phase-boundary allowlist for the R34 file, and this ExecPlan entry.
 
@@ -1502,7 +1502,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This adds a CLI command surface, but it is deterministic, report-only, has no provider behavior, no network capability, no Ledger/storage writes, and reuses the R33 dry-run report contract.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260704T031346479Z_000277_milestone` created with name `R34-pre-change`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `R34-pre-change`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add provider CLI helper, add parser command and explicit boolean input flags, add CLI handler, update help text, export provider helper, add documentation and tests, update exact provider phase-boundary allowlist if required, run required validation and CLI smoke commands, create validation snapshot, and update this ExecPlan final status.
 
@@ -1514,9 +1514,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** The CLI command is named `one-provider-adapter-dry-run` to match the requested command examples. `--explicit-opt-in` and `--explicit-live-request` are parsed as explicit string input data (`true` or `false`) and default to false when absent. Expected skipped/blocked dry-run report states return exit 0; malformed boolean input returns a CLI error.
 
-**Surprises / Discoveries:** The existing V1 phase-boundary acceptance lock allowlists exact provider source files, so it required a narrow update for only `src/providers/oneProviderAdapterDryRunCli.ts`. Typecheck required omitting absent optional CLI flag properties instead of passing `undefined` under `exactOptionalPropertyTypes`. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260704T032024579Z_000278_milestone`.
+**Surprises / Discoveries:** The existing V1 phase-boundary acceptance lock allowlists exact provider source files, so it required a narrow update for only `src/providers/oneProviderAdapterDryRunCli.ts`. Typecheck required omitting absent optional CLI flag properties instead of passing `undefined` under `exactOptionalPropertyTypes`. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R34 One Provider Adapter Dry-Run CLI Surface Behind Explicit Opt-In completed. Pre-change snapshot ID: `snap_20260704T031346479Z_000277_milestone`. Test-created snapshot ID: `snap_20260704T032024579Z_000278_milestone`. Explicit validation snapshot ID: `snap_20260704T032231928Z_000279_milestone`. Files created: `src/providers/oneProviderAdapterDryRunCli.ts`, `tests/providers/oneProviderAdapterDryRunCli.test.ts`, `tests/acceptance/oneProviderAdapterDryRunCliSurfaceAcceptance.test.ts`, and `docs/ONE_PROVIDER_ADAPTER_DRY_RUN_CLI_SURFACE.md`. Files changed: `src/cli/cliTypes.ts`, `src/cli/commandParser.ts`, `src/cli/commandHandlers.ts`, `src/providers/index.ts`, `tests/acceptance/v1PhaseBoundary.test.ts`, `docs/ONE_PROVIDER_ADAPTER_DRY_RUN_REPORT_CONTRACT.md`, and `PLANS.md`. Inert CLI dry-run surface boundary confirmed. No live provider adapter was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live execution was added. No fake provider success was added. No provider response simulation was added. No provider output was added. No provider content fields were added. CLI no-flags returns skipped/not-run. CLI explicit opt-in plus explicit live request returns blocked/unavailable. Network attempted, provider execution attempted, provider response received, provider output present, and provider content present fields are locked false. Provider-shaped data is T0 by default and capped at T1. T2 still requires VRP-verified deterministic Hollow evidence. V1 catalog remains 12 and Hollowcut catalog remains 9. Next recommended phase: One provider adapter live prerequisites contract.
+**Final Report:** R34 One Provider Adapter Dry-Run CLI Surface Behind Explicit Opt-In completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Test-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Explicit validation snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/providers/oneProviderAdapterDryRunCli.ts`, `tests/providers/oneProviderAdapterDryRunCli.test.ts`, `tests/acceptance/oneProviderAdapterDryRunCliSurfaceAcceptance.test.ts`, and `docs/ONE_PROVIDER_ADAPTER_DRY_RUN_CLI_SURFACE.md`. Files changed: `src/cli/cliTypes.ts`, `src/cli/commandParser.ts`, `src/cli/commandHandlers.ts`, `src/providers/index.ts`, `tests/acceptance/v1PhaseBoundary.test.ts`, `docs/ONE_PROVIDER_ADAPTER_DRY_RUN_REPORT_CONTRACT.md`, and `PLANS.md`. Inert CLI dry-run surface boundary confirmed. No live provider adapter was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live execution was added. No fake provider success was added. No provider response simulation was added. No provider output was added. No provider content fields were added. CLI no-flags returns skipped/not-run. CLI explicit opt-in plus explicit live request returns blocked/unavailable. Network attempted, provider execution attempted, provider response received, provider output present, and provider content present fields are locked false. Provider-shaped data is T0 by default and capped at T1. T2 still requires VRP-verified deterministic Hollow evidence. V1 catalog remains 12 and Hollowcut catalog remains 9. Next recommended phase: One provider adapter live prerequisites contract.
 
 ## ExecPlan - One Provider Adapter Dry-Run Report Contract
 
@@ -1524,7 +1524,7 @@ guardrails are now a protected surface.`
 
 **Source Authority:** Explicit user request approving R33 dry-run report contract, R32 One Provider Adapter Disabled-By-Default Live Harness Scaffold, AGENTS.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, docs/03_CANONICAL_CONTRACTS.md, docs/04_STORAGE_AND_LEDGER_DECISIONS.md, docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md, docs/06_V1_TEST_AND_FIXTURE_PLAN.md, and PLANS.md.
 
-**Current State:** R32 is accepted. Pre-change snapshot `snap_20260704T022924849Z_000272_milestone` and validation-created snapshot `snap_20260704T023333364Z_000273_milestone` exist. The disabled-by-default live harness scaffold is inert and no live provider behavior, SDK, API-key read, process.env read, network call, fake success, provider response simulation, provider output, or live execution exists.
+**Current State:** R32 is accepted. Pre-change snapshot `pre_migration_D_cold_backup_snap_` and validation-created snapshot `pre_migration_D_cold_backup_snap_` exist. The disabled-by-default live harness scaffold is inert and no live provider behavior, SDK, API-key read, process.env read, network call, fake success, provider response simulation, provider output, or live execution exists.
 
 **Scope:** Create dry-run report types, deterministic report normalizer, provider dry-run report tests, acceptance lock, documentation, provider barrel export, short R32 forward reference, narrow provider phase-boundary allowance for exact R33 report files, and this ExecPlan entry.
 
@@ -1534,7 +1534,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This adds inert report-only code under the provider namespace, but it is local deterministic contract normalization and cannot execute provider behavior.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260704T030207322Z_000274_milestone` created with name `R33-pre-change`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `R33-pre-change`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add dry-run report types, implement pure report normalizer, export provider module, add documentation and tests, update exact provider phase-boundary allowlist if required, run required validation, create validation snapshot if required, and update this ExecPlan final status.
 
@@ -1546,9 +1546,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R33 report builder requires caller-provided `created_at` to avoid reading current time. It returns skipped or blocked report-only states, keeps all provider/network/execution/content flags false, omits provider content payload fields, and caps provider-shaped trust at T1.
 
-**Surprises / Discoveries:** The existing V1 phase-boundary acceptance lock allowlists exact provider source files, so it required a narrow update for only `src/providers/dryRunReportTypes.ts` and `src/providers/oneProviderAdapterDryRunReport.ts`. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260704T030613989Z_000275_milestone`.
+**Surprises / Discoveries:** The existing V1 phase-boundary acceptance lock allowlists exact provider source files, so it required a narrow update for only `src/providers/dryRunReportTypes.ts` and `src/providers/oneProviderAdapterDryRunReport.ts`. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R33 One Provider Adapter Dry-Run Report Contract completed. Pre-change snapshot ID: `snap_20260704T030207322Z_000274_milestone`. Test-created snapshot ID: `snap_20260704T030613989Z_000275_milestone`. Explicit validation snapshot ID: `snap_20260704T030805072Z_000276_milestone`. Files created: `src/providers/dryRunReportTypes.ts`, `src/providers/oneProviderAdapterDryRunReport.ts`, `tests/providers/oneProviderAdapterDryRunReport.test.ts`, `tests/acceptance/oneProviderAdapterDryRunReportContractAcceptance.test.ts`, and `docs/ONE_PROVIDER_ADAPTER_DRY_RUN_REPORT_CONTRACT.md`. Files changed: `src/providers/index.ts`, `tests/acceptance/v1PhaseBoundary.test.ts`, `docs/ONE_PROVIDER_ADAPTER_DISABLED_BY_DEFAULT_LIVE_HARNESS_SCAFFOLD.md`, and `PLANS.md`. Report contract boundary confirmed. No live provider adapter was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live execution was added. No fake provider success was added. No provider response simulation was added. No provider output was added. No provider content fields were added. Network attempted, provider execution attempted, provider response received, provider output present, and provider content present fields are locked false. Provider-shaped data is T0 by default and capped at T1. T2 still requires VRP-verified deterministic Hollow evidence. V1 catalog remains 12 and Hollowcut catalog remains 9. Next recommended phase: One provider adapter dry-run CLI surface behind explicit opt-in.
+**Final Report:** R33 One Provider Adapter Dry-Run Report Contract completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Test-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Explicit validation snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/providers/dryRunReportTypes.ts`, `src/providers/oneProviderAdapterDryRunReport.ts`, `tests/providers/oneProviderAdapterDryRunReport.test.ts`, `tests/acceptance/oneProviderAdapterDryRunReportContractAcceptance.test.ts`, and `docs/ONE_PROVIDER_ADAPTER_DRY_RUN_REPORT_CONTRACT.md`. Files changed: `src/providers/index.ts`, `tests/acceptance/v1PhaseBoundary.test.ts`, `docs/ONE_PROVIDER_ADAPTER_DISABLED_BY_DEFAULT_LIVE_HARNESS_SCAFFOLD.md`, and `PLANS.md`. Report contract boundary confirmed. No live provider adapter was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live execution was added. No fake provider success was added. No provider response simulation was added. No provider output was added. No provider content fields were added. Network attempted, provider execution attempted, provider response received, provider output present, and provider content present fields are locked false. Provider-shaped data is T0 by default and capped at T1. T2 still requires VRP-verified deterministic Hollow evidence. V1 catalog remains 12 and Hollowcut catalog remains 9. Next recommended phase: One provider adapter dry-run CLI surface behind explicit opt-in.
 
 ## ExecPlan - One Provider Adapter Disabled-By-Default Live Harness Scaffold
 
@@ -1556,7 +1556,7 @@ guardrails are now a protected surface.`
 
 **Source Authority:** Explicit user request approving R32 scaffold, R31 One Provider Adapter Implementation Skeleton Behind Explicit Opt-In, AGENTS.md, docs/00_SOURCE_INDEX_AND_AUTHORITY.md, docs/01_CODEX_OPERATING_CONTRACT.md, docs/02_V1_PHASE_BOUNDARIES.md, docs/03_CANONICAL_CONTRACTS.md, docs/04_STORAGE_AND_LEDGER_DECISIONS.md, docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md, docs/06_V1_TEST_AND_FIXTURE_PLAN.md, and PLANS.md.
 
-**Current State:** R31 is accepted. Confirmation snapshot `snap_20260704T022720639Z_000271_milestone` exists. The provider adapter skeleton is inert, locked behind explicit opt-in input data, and no live provider behavior, SDK, API-key read, process.env read, network call, fake success, provider response simulation, or provider output exists.
+**Current State:** R31 is accepted. Confirmation snapshot `pre_migration_D_cold_backup_snap_` exists. The provider adapter skeleton is inert, locked behind explicit opt-in input data, and no live provider behavior, SDK, API-key read, process.env read, network call, fake success, provider response simulation, or provider output exists.
 
 **Scope:** Create disabled-by-default live harness scaffold types, deterministic report helper, provider scaffold tests, acceptance lock, documentation, provider barrel export, short R31 forward reference, narrow provider phase-boundary allowance for exact R32 scaffold files, and this ExecPlan entry.
 
@@ -1566,7 +1566,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This adds inert report-only code under the provider namespace, but it remains local deterministic scaffold logic and cannot execute provider behavior.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260704T022924849Z_000272_milestone` created with name `one-provider-adapter-disabled-by-default-live-harness-scaffold-r32-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-disabled-by-default-live-harness-scaffold-r32-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add live harness report types, implement disabled-by-default report helper, export provider module, add documentation and tests, update exact provider phase-boundary allowlist, run required validation, and update this ExecPlan final status.
 
@@ -1578,9 +1578,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R32 scaffold is disabled by default and evaluates explicit opt-in plus explicit live harness request only as supplied input data. It returns skipped or blocked report states, keeps live execution not-run/unavailable, and never returns provider content or simulated success.
 
-**Surprises / Discoveries:** The R32 request listed `npm run --silent cli -- create-milestone-snapshot`, but the existing CLI requires `--name <human-readable-name>`. The pre-change snapshot therefore used the existing required named form. The existing V1 phase-boundary acceptance lock allowlisted exact provider files, so it needed a narrow update for only the two R32 inert scaffold source files. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260704T023333364Z_000273_milestone`.
+**Surprises / Discoveries:** The R32 request listed `npm run --silent cli -- create-milestone-snapshot`, but the existing CLI requires `--name <human-readable-name>`. The pre-change snapshot therefore used the existing required named form. The existing V1 phase-boundary acceptance lock allowlisted exact provider files, so it needed a narrow update for only the two R32 inert scaffold source files. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R32 One Provider Adapter Disabled-By-Default Live Harness Scaffold completed. Pre-change snapshot ID: `snap_20260704T022924849Z_000272_milestone`. Validation-created snapshot ID: `snap_20260704T023333364Z_000273_milestone`. Files created: `src/providers/liveHarnessTypes.ts`, `src/providers/disabledByDefaultLiveHarnessScaffold.ts`, `tests/providers/disabledByDefaultLiveHarnessScaffold.test.ts`, `tests/acceptance/oneProviderAdapterDisabledByDefaultLiveHarnessScaffoldAcceptance.test.ts`, and `docs/ONE_PROVIDER_ADAPTER_DISABLED_BY_DEFAULT_LIVE_HARNESS_SCAFFOLD.md`. Files changed: `src/providers/index.ts`, `tests/acceptance/v1PhaseBoundary.test.ts`, `docs/ONE_PROVIDER_ADAPTER_IMPLEMENTATION_SKELETON.md`, and `PLANS.md`. Inert scaffold boundary confirmed. The scaffold is disabled by default, requires explicit opt-in as supplied input data, requires explicit live harness request as supplied input data, returns skipped/not-run without opt-in, and returns blocked/unavailable when live execution remains unavailable. No live provider adapter was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live execution was added. No fake provider success was added. No provider response simulation was added. No provider output was added. Provider-shaped data is T0 by default and capped at T1. T2 still requires VRP-verified deterministic Hollow evidence. V1 catalog remains 12 and Hollowcut catalog remains 9. Next recommended phase: One provider adapter dry-run report contract.
+**Final Report:** R32 One Provider Adapter Disabled-By-Default Live Harness Scaffold completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/providers/liveHarnessTypes.ts`, `src/providers/disabledByDefaultLiveHarnessScaffold.ts`, `tests/providers/disabledByDefaultLiveHarnessScaffold.test.ts`, `tests/acceptance/oneProviderAdapterDisabledByDefaultLiveHarnessScaffoldAcceptance.test.ts`, and `docs/ONE_PROVIDER_ADAPTER_DISABLED_BY_DEFAULT_LIVE_HARNESS_SCAFFOLD.md`. Files changed: `src/providers/index.ts`, `tests/acceptance/v1PhaseBoundary.test.ts`, `docs/ONE_PROVIDER_ADAPTER_IMPLEMENTATION_SKELETON.md`, and `PLANS.md`. Inert scaffold boundary confirmed. The scaffold is disabled by default, requires explicit opt-in as supplied input data, requires explicit live harness request as supplied input data, returns skipped/not-run without opt-in, and returns blocked/unavailable when live execution remains unavailable. No live provider adapter was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live execution was added. No fake provider success was added. No provider response simulation was added. No provider output was added. Provider-shaped data is T0 by default and capped at T1. T2 still requires VRP-verified deterministic Hollow evidence. V1 catalog remains 12 and Hollowcut catalog remains 9. Next recommended phase: One provider adapter dry-run report contract.
 
 ## ExecPlan - One Provider Adapter Implementation Skeleton Behind Explicit Opt-In
 
@@ -1598,7 +1598,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This adds inert code under a new provider namespace, but it is local deterministic skeleton logic only and cannot execute provider behavior.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260704T015547893Z_000268_milestone` created with name `one-provider-adapter-implementation-skeleton-r31-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-implementation-skeleton-r31-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add provider skeleton types, implement explicit opt-in gate and inert adapter helpers, export provider module, add docs and tests, run required validation, and update this ExecPlan final status.
 
@@ -1610,9 +1610,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R31 skeleton is disabled by default and evaluates explicit opt-in supplied as input data only. It returns disabled, blocked, or not-run states and never returns provider content or simulated success.
 
-**Surprises / Discoveries:** The existing V1 phase-boundary acceptance lock forbade any `src/providers` directory. It was updated narrowly to allow only the exact R31 inert skeleton files while continuing to reject any other provider runtime surface. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260704T020304497Z_000269_milestone`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
+**Surprises / Discoveries:** The existing V1 phase-boundary acceptance lock forbade any `src/providers` directory. It was updated narrowly to allow only the exact R31 inert skeleton files while continuing to reject any other provider runtime surface. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
 
-**Final Report:** R31 One Provider Adapter Implementation Skeleton Behind Explicit Opt-In completed. Pre-change snapshot ID: `snap_20260704T015547893Z_000268_milestone`. Validation-created snapshot ID: `snap_20260704T020304497Z_000269_milestone`. Files created: `src/providers/providerAdapterTypes.ts`, `src/providers/explicitOptInProviderGate.ts`, `src/providers/oneProviderAdapterSkeleton.ts`, `src/providers/index.ts`, `tests/providers/oneProviderAdapterSkeleton.test.ts`, `tests/acceptance/oneProviderAdapterImplementationSkeletonAcceptance.test.ts`, and `docs/ONE_PROVIDER_ADAPTER_IMPLEMENTATION_SKELETON.md`. Files changed: `src/index.ts`, `tests/acceptance/v1PhaseBoundary.test.ts`, `docs/ONE_PROVIDER_ADAPTER_LIVE_TEST_HARNESS_CONTRACT.md`, and `PLANS.md`. Inert skeleton boundary confirmed. No live provider adapter was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live execution was added. No fake provider success was added. No provider output was added. The skeleton is disabled by default, requires explicit opt-in as supplied input data, and can return only disabled, blocked, or not-run states. Provider-shaped data is capped at T1. T2 still requires VRP-verified deterministic Hollow evidence. V1 catalog remains 12 and Hollowcut catalog remains 9. Next recommended phase: One provider adapter disabled-by-default live harness scaffold.
+**Final Report:** R31 One Provider Adapter Implementation Skeleton Behind Explicit Opt-In completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/providers/providerAdapterTypes.ts`, `src/providers/explicitOptInProviderGate.ts`, `src/providers/oneProviderAdapterSkeleton.ts`, `src/providers/index.ts`, `tests/providers/oneProviderAdapterSkeleton.test.ts`, `tests/acceptance/oneProviderAdapterImplementationSkeletonAcceptance.test.ts`, and `docs/ONE_PROVIDER_ADAPTER_IMPLEMENTATION_SKELETON.md`. Files changed: `src/index.ts`, `tests/acceptance/v1PhaseBoundary.test.ts`, `docs/ONE_PROVIDER_ADAPTER_LIVE_TEST_HARNESS_CONTRACT.md`, and `PLANS.md`. Inert skeleton boundary confirmed. No live provider adapter was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live execution was added. No fake provider success was added. No provider output was added. The skeleton is disabled by default, requires explicit opt-in as supplied input data, and can return only disabled, blocked, or not-run states. Provider-shaped data is capped at T1. T2 still requires VRP-verified deterministic Hollow evidence. V1 catalog remains 12 and Hollowcut catalog remains 9. Next recommended phase: One provider adapter disabled-by-default live harness scaffold.
 
 ## ExecPlan - One Provider Adapter Live Test Harness Contract
 
@@ -1630,7 +1630,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. This is documentation and acceptance lock only.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260704T013721165Z_000266_milestone` created with name `one-provider-adapter-live-test-harness-contract-r30-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-live-test-harness-contract-r30-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add R30 contract document, add acceptance test, add a short R29 forward reference, run required validation, and update this ExecPlan final status.
 
@@ -1642,9 +1642,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R30 locks a future live harness contract only. A future harness must be skipped by default, require explicit opt-in plus explicit live command or flag, stay out of normal test/default acceptance/default CI commands, and never treat provider output as Hollow evidence.
 
-**Surprises / Discoveries:** Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260704T014021388Z_000267_milestone`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
+**Surprises / Discoveries:** Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
 
-**Final Report:** R30 One Provider Adapter Live Test Harness Contract completed. Pre-change snapshot ID: `snap_20260704T013721165Z_000266_milestone`. Validation-created snapshot ID: `snap_20260704T014021388Z_000267_milestone`. Files created: `docs/ONE_PROVIDER_ADAPTER_LIVE_TEST_HARNESS_CONTRACT.md` and `tests/acceptance/oneProviderAdapterLiveTestHarnessContractAcceptance.test.ts`. Files changed: `docs/ONE_PROVIDER_ADAPTER_IMPLEMENTATION_EXPLICIT_OPT_IN_PLANNING.md` and `PLANS.md`. Contract-only boundary confirmed. No provider implementation was added. No live adapter was added. No provider-specific runtime behavior was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live execution was added. No fake provider success was added. No provider output was added. Future harness must be skipped by default, require explicit opt-in, require explicit live command or flag, avoid normal test/default acceptance/default CI execution, report not-run/skipped and blocked states, and never treat provider output as Hollow evidence. V1 catalog remains 12 and Hollowcut catalog remains 9. Next recommended phase: One provider adapter implementation skeleton behind explicit opt-in.
+**Final Report:** R30 One Provider Adapter Live Test Harness Contract completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `docs/ONE_PROVIDER_ADAPTER_LIVE_TEST_HARNESS_CONTRACT.md` and `tests/acceptance/oneProviderAdapterLiveTestHarnessContractAcceptance.test.ts`. Files changed: `docs/ONE_PROVIDER_ADAPTER_IMPLEMENTATION_EXPLICIT_OPT_IN_PLANNING.md` and `PLANS.md`. Contract-only boundary confirmed. No provider implementation was added. No live adapter was added. No provider-specific runtime behavior was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live execution was added. No fake provider success was added. No provider output was added. Future harness must be skipped by default, require explicit opt-in, require explicit live command or flag, avoid normal test/default acceptance/default CI execution, report not-run/skipped and blocked states, and never treat provider output as Hollow evidence. V1 catalog remains 12 and Hollowcut catalog remains 9. Next recommended phase: One provider adapter implementation skeleton behind explicit opt-in.
 
 ## ExecPlan - One Provider Adapter Implementation Behind Explicit Opt-In Planning
 
@@ -1662,7 +1662,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. This is documentation and acceptance lock only.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260704T004941088Z_000264_milestone` created with name `one-provider-adapter-implementation-explicit-opt-in-planning-r29-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-implementation-explicit-opt-in-planning-r29-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add R29 planning document, add acceptance test, add a short R28 forward reference, run required validation, and update this ExecPlan final status.
 
@@ -1674,9 +1674,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R29 locks implementation planning only. Future one-provider implementation must be behind explicit opt-in, with future live harness skipped by default and provider output treated as model/provider evidence, not Hollow evidence.
 
-**Surprises / Discoveries:** Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260704T005310922Z_000265_milestone`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
+**Surprises / Discoveries:** Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
 
-**Final Report:** R29 One Provider Adapter Implementation Behind Explicit Opt-In Planning completed. Pre-change snapshot ID: `snap_20260704T004941088Z_000264_milestone`. Validation-created snapshot ID: `snap_20260704T005310922Z_000265_milestone`. Files created: `docs/ONE_PROVIDER_ADAPTER_IMPLEMENTATION_EXPLICIT_OPT_IN_PLANNING.md` and `tests/acceptance/oneProviderAdapterImplementationExplicitOptInPlanningAcceptance.test.ts`. Files changed: `docs/ONE_PROVIDER_ADAPTER_LIVE_TEST_PLAN.md` and `PLANS.md`. No provider implementation was added. No live adapter was added. No provider-specific runtime behavior was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live tests were added. No live execution was enabled. No fake provider success was added. No provider output was added. V1 catalog remains 12 and Hollowcut catalog remains 9. Raw provider output starts at T0, schema-valid provider output may reach T1 only, and T2 requires VRP-verified deterministic Hollow evidence. Explicit opt-in, API key presence, network success, provider identity, successful provider response, Ledger presence, and storage do not promote trust. Next recommended phase: One provider adapter live test harness contract.
+**Final Report:** R29 One Provider Adapter Implementation Behind Explicit Opt-In Planning completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `docs/ONE_PROVIDER_ADAPTER_IMPLEMENTATION_EXPLICIT_OPT_IN_PLANNING.md` and `tests/acceptance/oneProviderAdapterImplementationExplicitOptInPlanningAcceptance.test.ts`. Files changed: `docs/ONE_PROVIDER_ADAPTER_LIVE_TEST_PLAN.md` and `PLANS.md`. No provider implementation was added. No live adapter was added. No provider-specific runtime behavior was added. No SDK or package changes were added. No API-key read was added. `process.env` was not read. No network calls were added. No live tests were added. No live execution was enabled. No fake provider success was added. No provider output was added. V1 catalog remains 12 and Hollowcut catalog remains 9. Raw provider output starts at T0, schema-valid provider output may reach T1 only, and T2 requires VRP-verified deterministic Hollow evidence. Explicit opt-in, API key presence, network success, provider identity, successful provider response, Ledger presence, and storage do not promote trust. Next recommended phase: One provider adapter live test harness contract.
 
 ## ExecPlan - One Provider Adapter Live Test Plan
 
@@ -1694,7 +1694,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. This is a planning boundary and acceptance lock only.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T211925608Z_000262_milestone` created with name `one-provider-adapter-live-test-plan-r28-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-live-test-plan-r28-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add R28 live-test plan documentation, add acceptance test, add a short R27 forward reference, run required validation, and update this ExecPlan final status.
 
@@ -1706,9 +1706,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R28 locks planning only. Future live tests must be opt-in only, skipped by default, isolated from normal and acceptance runs, cost-limited, redacted, audited without sensitive values, and trust-neutral.
 
-**Surprises / Discoveries:** The first R28 acceptance run caught that the source-scan assertion was reading the required documentation phrase `process.env is not read.` The test was corrected to scan TypeScript implementation surfaces for env/network/provider imports while the documentation assertion continues to require the phrase. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T212453564Z_000263_milestone`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
+**Surprises / Discoveries:** The first R28 acceptance run caught that the source-scan assertion was reading the required documentation phrase `process.env is not read.` The test was corrected to scan TypeScript implementation surfaces for env/network/provider imports while the documentation assertion continues to require the phrase. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
 
-**Final Report:** R28 One Provider Adapter Live Test Plan completed. Pre-change snapshot ID: `snap_20260703T211925608Z_000262_milestone`. Validation-created snapshot ID: `snap_20260703T212453564Z_000263_milestone`. Files created: `docs/ONE_PROVIDER_ADAPTER_LIVE_TEST_PLAN.md` and `tests/acceptance/oneProviderAdapterLiveTestPlanAcceptance.test.ts`. Files changed: `docs/ONE_PROVIDER_ADAPTER_OPT_IN_HARNESS_IMPLEMENTATION.md` and `PLANS.md`. No live tests were implemented. No live adapter was implemented. No provider-specific behavior was implemented. No real Model API Layer was implemented. No provider SDK was imported. No provider dependency was added. No API key value was read. `process.env` was not read. No network call was performed. No live provider execution was enabled. No provider output or fake live-provider success was returned. Future live tests are locked as opt-in only, skipped by default, excluded from normal `npx vitest run`, excluded from default CI and default acceptance runs, explicit-label/command-flag/allowlist/human-approval/kill-switch/redaction/safety/cost guarded, bounded for network/timeouts/retries/cost/rate limits, and stopped on sensitive leakage, unapproved SDKs/dependencies, default-network behavior, fake success, or trust promotion. Live test execution, live test success, provider identity, API key presence, network success, and successful provider responses do not promote trust. Provider output is not deterministic Hollow evidence. Raw provider output starts at T0, schema-valid provider output may reach T1 only, and T2 requires verified deterministic Hollow evidence through VRP. Next recommended phase: One provider adapter implementation behind explicit opt-in planning.
+**Final Report:** R28 One Provider Adapter Live Test Plan completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `docs/ONE_PROVIDER_ADAPTER_LIVE_TEST_PLAN.md` and `tests/acceptance/oneProviderAdapterLiveTestPlanAcceptance.test.ts`. Files changed: `docs/ONE_PROVIDER_ADAPTER_OPT_IN_HARNESS_IMPLEMENTATION.md` and `PLANS.md`. No live tests were implemented. No live adapter was implemented. No provider-specific behavior was implemented. No real Model API Layer was implemented. No provider SDK was imported. No provider dependency was added. No API key value was read. `process.env` was not read. No network call was performed. No live provider execution was enabled. No provider output or fake live-provider success was returned. Future live tests are locked as opt-in only, skipped by default, excluded from normal `npx vitest run`, excluded from default CI and default acceptance runs, explicit-label/command-flag/allowlist/human-approval/kill-switch/redaction/safety/cost guarded, bounded for network/timeouts/retries/cost/rate limits, and stopped on sensitive leakage, unapproved SDKs/dependencies, default-network behavior, fake success, or trust promotion. Live test execution, live test success, provider identity, API key presence, network success, and successful provider responses do not promote trust. Provider output is not deterministic Hollow evidence. Raw provider output starts at T0, schema-valid provider output may reach T1 only, and T2 requires verified deterministic Hollow evidence through VRP. Next recommended phase: One provider adapter implementation behind explicit opt-in planning.
 
 ## ExecPlan - One Provider Adapter Opt-In Harness Implementation
 
@@ -1726,7 +1726,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This adds executable offline gate evaluation logic, but it is deterministic, local-only, and still cannot execute a provider.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T175455546Z_000260_milestone` created with name `one-provider-adapter-opt-in-harness-implementation-r27-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-opt-in-harness-implementation-r27-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add R27 harness contracts, implement offline evaluator and validators, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -1738,9 +1738,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R27 implements an offline gate evaluator only. Ready-disabled is a deterministic non-provider result and does not authorize live execution.
 
-**Surprises / Discoveries:** R26's static contract intentionally keeps live execution disabled; R27 therefore uses its own explicit evaluation input/result types for offline gate decisions while preserving the R26 boundary that ready-disabled is not provider execution. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T180536550Z_000261_milestone`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
+**Surprises / Discoveries:** R26's static contract intentionally keeps live execution disabled; R27 therefore uses its own explicit evaluation input/result types for offline gate decisions while preserving the R26 boundary that ready-disabled is not provider execution. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
 
-**Final Report:** R27 One Provider Adapter Opt-In Harness Implementation completed. Pre-change snapshot ID: `snap_20260703T175455546Z_000260_milestone`. Validation-created snapshot ID: `snap_20260703T180536550Z_000261_milestone`. Files created: `src/modelBoundary/types/oneProviderAdapterOptInHarnessImplementationTypes.ts`, `src/modelBoundary/oneProviderAdapterOptInHarness.ts`, `tests/modelBoundary/oneProviderAdapterOptInHarness.test.ts`, `tests/acceptance/oneProviderAdapterOptInHarnessAcceptance.test.ts`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-input.valid.json`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-result.refusal.valid.json`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-result.ready-disabled.valid.json`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-result.invalid.live-execution.json`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-result.invalid.trust-promotion.json`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-result.invalid.secret-leakage.json`, and `docs/ONE_PROVIDER_ADAPTER_OPT_IN_HARNESS_IMPLEMENTATION.md`. Files changed: `src/modelBoundary/index.ts`, `docs/ONE_PROVIDER_ADAPTER_OPT_IN_HARNESS_CONTRACT.md`, `PLANS.md`. The harness now exposes create/evaluate/capabilities/health helpers, deterministic input/result validators, type guard, and assertion helper. Gate order is config, kill_switch, env_flag, command_flag, provider_allowlist, adapter_id, human_approval, api_key_availability, redaction_readiness, safety_profile_readiness, cost_guard_readiness, live_test_gate, r27_live_execution_disabled. It returns the first blocking refusal or `ready_but_live_execution_disabled` after all gates pass. No live execution was implemented. No live adapter was implemented. No provider-specific behavior was implemented. No real Model API Layer was implemented. No provider SDK was imported. No API key/secret was required. No API key value was read. `process.env` was not read. No network call was added. No live provider tests were added. No provider dependency was added. No fake live-provider success is returned. No provider output is returned. Harness evaluation and harness decisions do not promote trust. Provider output is not deterministic Hollow evidence. Raw provider output starts at T0, schema-valid provider output may reach T1 only, and T2 requires VRP-verified deterministic Hollow evidence. Next recommended phase: One provider adapter live test plan.
+**Final Report:** R27 One Provider Adapter Opt-In Harness Implementation completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/oneProviderAdapterOptInHarnessImplementationTypes.ts`, `src/modelBoundary/oneProviderAdapterOptInHarness.ts`, `tests/modelBoundary/oneProviderAdapterOptInHarness.test.ts`, `tests/acceptance/oneProviderAdapterOptInHarnessAcceptance.test.ts`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-input.valid.json`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-result.refusal.valid.json`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-result.ready-disabled.valid.json`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-result.invalid.live-execution.json`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-result.invalid.trust-promotion.json`, `examples/modelBoundary/one-provider-adapter-opt-in-harness-result.invalid.secret-leakage.json`, and `docs/ONE_PROVIDER_ADAPTER_OPT_IN_HARNESS_IMPLEMENTATION.md`. Files changed: `src/modelBoundary/index.ts`, `docs/ONE_PROVIDER_ADAPTER_OPT_IN_HARNESS_CONTRACT.md`, `PLANS.md`. The harness now exposes create/evaluate/capabilities/health helpers, deterministic input/result validators, type guard, and assertion helper. Gate order is config, kill_switch, env_flag, command_flag, provider_allowlist, adapter_id, human_approval, api_key_availability, redaction_readiness, safety_profile_readiness, cost_guard_readiness, live_test_gate, r27_live_execution_disabled. It returns the first blocking refusal or `ready_but_live_execution_disabled` after all gates pass. No live execution was implemented. No live adapter was implemented. No provider-specific behavior was implemented. No real Model API Layer was implemented. No provider SDK was imported. No API key/secret was required. No API key value was read. `process.env` was not read. No network call was added. No live provider tests were added. No provider dependency was added. No fake live-provider success is returned. No provider output is returned. Harness evaluation and harness decisions do not promote trust. Provider output is not deterministic Hollow evidence. Raw provider output starts at T0, schema-valid provider output may reach T1 only, and T2 requires VRP-verified deterministic Hollow evidence. Next recommended phase: One provider adapter live test plan.
 
 ## ExecPlan - One Provider Adapter Opt-In Harness Contract
 
@@ -1758,7 +1758,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low-to-medium. This is static contract and validation work only, but it defines the future opt-in evidence surface.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T172300417Z_000258_milestone` created with name `one-provider-adapter-opt-in-harness-contract-r26-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-opt-in-harness-contract-r26-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add opt-in harness contracts, implement deterministic validators, add examples and docs, add validator and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -1770,9 +1770,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R26 creates static opt-in harness contracts only. One provider adapter opt-in harness implementation is deferred to future approval.
 
-**Surprises / Discoveries:** The R26 acceptance lock caught a doc wording mismatch for exact trust phrases; the documentation was tightened to include the precise phrases. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T173322622Z_000259_milestone`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
+**Surprises / Discoveries:** The R26 acceptance lock caught a doc wording mismatch for exact trust phrases; the documentation was tightened to include the precise phrases. Full Vitest created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
 
-**Final Report:** R26 One Provider Adapter Opt-In Harness Contract completed. Pre-change snapshot ID: `snap_20260703T172300417Z_000258_milestone`. Validation-created snapshot ID: `snap_20260703T173322622Z_000259_milestone`. Files created: `src/modelBoundary/types/oneProviderAdapterOptInHarnessContractTypes.ts`, `src/modelBoundary/oneProviderAdapterOptInHarnessContractValidator.ts`, `tests/modelBoundary/oneProviderAdapterOptInHarnessContractValidator.test.ts`, `tests/acceptance/oneProviderAdapterOptInHarnessContractAcceptance.test.ts`, `examples/modelBoundary/one-provider-adapter-opt-in-evidence.valid.json`, `examples/modelBoundary/one-provider-adapter-human-approval.valid.json`, `examples/modelBoundary/one-provider-adapter-kill-switch.valid.json`, `examples/modelBoundary/one-provider-adapter-harness-decision.valid.json`, `examples/modelBoundary/one-provider-adapter-harness-refusal.valid.json`, `examples/modelBoundary/one-provider-adapter-harness-decision.invalid.trust-promotion.json`, `examples/modelBoundary/one-provider-adapter-harness-decision.invalid.secret-leakage.json`, and `docs/ONE_PROVIDER_ADAPTER_OPT_IN_HARNESS_CONTRACT.md`. Files changed: `src/modelBoundary/index.ts`, `docs/ONE_PROVIDER_ADAPTER_NO_NETWORK_IMPLEMENTATION_STUB.md`, `PLANS.md`. No opt-in harness runtime was implemented. No live adapter was implemented. No provider-specific behavior was implemented. No real Model API Layer was implemented. No provider SDK was imported. No API key/secret was required. No API key value was read. `process.env` was not read. No network call was added. No live provider tests were added. No provider dependency was added. No live provider execution was enabled. Explicit opt-in evidence, command flag presence, env flag name, human approval, kill switch state, provider allowlist, network permission, harness decision, and API key presence do not promote trust. Provider output is not deterministic Hollow evidence. Raw provider output starts at T0, schema-valid provider output may reach T1 only, and T2 requires verified deterministic Hollow evidence through VRP. Next recommended phase: One provider adapter opt-in harness implementation.
+**Final Report:** R26 One Provider Adapter Opt-In Harness Contract completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/oneProviderAdapterOptInHarnessContractTypes.ts`, `src/modelBoundary/oneProviderAdapterOptInHarnessContractValidator.ts`, `tests/modelBoundary/oneProviderAdapterOptInHarnessContractValidator.test.ts`, `tests/acceptance/oneProviderAdapterOptInHarnessContractAcceptance.test.ts`, `examples/modelBoundary/one-provider-adapter-opt-in-evidence.valid.json`, `examples/modelBoundary/one-provider-adapter-human-approval.valid.json`, `examples/modelBoundary/one-provider-adapter-kill-switch.valid.json`, `examples/modelBoundary/one-provider-adapter-harness-decision.valid.json`, `examples/modelBoundary/one-provider-adapter-harness-refusal.valid.json`, `examples/modelBoundary/one-provider-adapter-harness-decision.invalid.trust-promotion.json`, `examples/modelBoundary/one-provider-adapter-harness-decision.invalid.secret-leakage.json`, and `docs/ONE_PROVIDER_ADAPTER_OPT_IN_HARNESS_CONTRACT.md`. Files changed: `src/modelBoundary/index.ts`, `docs/ONE_PROVIDER_ADAPTER_NO_NETWORK_IMPLEMENTATION_STUB.md`, `PLANS.md`. No opt-in harness runtime was implemented. No live adapter was implemented. No provider-specific behavior was implemented. No real Model API Layer was implemented. No provider SDK was imported. No API key/secret was required. No API key value was read. `process.env` was not read. No network call was added. No live provider tests were added. No provider dependency was added. No live provider execution was enabled. Explicit opt-in evidence, command flag presence, env flag name, human approval, kill switch state, provider allowlist, network permission, harness decision, and API key presence do not promote trust. Provider output is not deterministic Hollow evidence. Raw provider output starts at T0, schema-valid provider output may reach T1 only, and T2 requires verified deterministic Hollow evidence through VRP. Next recommended phase: One provider adapter opt-in harness implementation.
 
 ## ExecPlan - One Provider Adapter No-Network Implementation Stub
 
@@ -1790,7 +1790,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This introduces an executable offline stub, but it is intentionally deterministic and always refuses live execution.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T165653538Z_000256_milestone` created with name `one-provider-adapter-no-network-implementation-stub-r25-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-no-network-implementation-stub-r25-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add no-network stub contracts, implement validators and deterministic refusal helpers, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -1802,9 +1802,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R25 creates a config-consuming no-network refusal stub only. One provider adapter opt-in harness contract is deferred to future approval.
 
-**Surprises / Discoveries:** Typecheck required one explicit `unknown` cast when reading an unknown invocation's config document before R24 validation. This was a narrow type-safety fix and did not change behavior. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T170517168Z_000257_milestone`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
+**Surprises / Discoveries:** Typecheck required one explicit `unknown` cast when reading an unknown invocation's config document before R24 validation. This was a narrow type-safety fix and did not change behavior. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
 
-**Final Report:** R25 One Provider Adapter No-Network Implementation Stub completed. Pre-change snapshot ID: `snap_20260703T165653538Z_000256_milestone`. Validation-created snapshot ID: `snap_20260703T170517168Z_000257_milestone`. Files created: `src/modelBoundary/types/oneProviderAdapterNoNetworkImplementationStubTypes.ts`, `src/modelBoundary/oneProviderAdapterNoNetworkImplementationStub.ts`, `tests/modelBoundary/oneProviderAdapterNoNetworkImplementationStub.test.ts`, `tests/acceptance/oneProviderAdapterNoNetworkImplementationStubAcceptance.test.ts`, `examples/modelBoundary/one-provider-adapter-no-network-stub-capabilities.valid.json`, `examples/modelBoundary/one-provider-adapter-no-network-stub-health.valid.json`, `examples/modelBoundary/one-provider-adapter-no-network-stub-invocation.valid.json`, `examples/modelBoundary/one-provider-adapter-no-network-stub-result.valid.json`, `examples/modelBoundary/one-provider-adapter-no-network-stub-result.invalid.fake-success.json`, `examples/modelBoundary/one-provider-adapter-no-network-stub-result.invalid.trust-promotion.json`, and `docs/ONE_PROVIDER_ADAPTER_NO_NETWORK_IMPLEMENTATION_STUB.md`. Files changed: `src/modelBoundary/index.ts`, `docs/ONE_PROVIDER_ADAPTER_CONFIG_CONTRACT.md`, `PLANS.md`. No live adapter was implemented. No provider-specific behavior was implemented. No real Model API Layer was implemented. No provider SDK was imported. No API key/secret was required. No API key value was read. `process.env` was not read. No network call was added. No live provider tests were added. No provider dependency was added. No fake live-provider success is returned. No successful provider response is produced. Config validity does not promote trust. Config presence does not enable opt-in. Stub execution does not promote trust. Stub refusal is not model evidence. Raw prompt/output/API key/secret/env fields are blocked. Next recommended phase: One provider adapter opt-in harness contract.
+**Final Report:** R25 One Provider Adapter No-Network Implementation Stub completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/oneProviderAdapterNoNetworkImplementationStubTypes.ts`, `src/modelBoundary/oneProviderAdapterNoNetworkImplementationStub.ts`, `tests/modelBoundary/oneProviderAdapterNoNetworkImplementationStub.test.ts`, `tests/acceptance/oneProviderAdapterNoNetworkImplementationStubAcceptance.test.ts`, `examples/modelBoundary/one-provider-adapter-no-network-stub-capabilities.valid.json`, `examples/modelBoundary/one-provider-adapter-no-network-stub-health.valid.json`, `examples/modelBoundary/one-provider-adapter-no-network-stub-invocation.valid.json`, `examples/modelBoundary/one-provider-adapter-no-network-stub-result.valid.json`, `examples/modelBoundary/one-provider-adapter-no-network-stub-result.invalid.fake-success.json`, `examples/modelBoundary/one-provider-adapter-no-network-stub-result.invalid.trust-promotion.json`, and `docs/ONE_PROVIDER_ADAPTER_NO_NETWORK_IMPLEMENTATION_STUB.md`. Files changed: `src/modelBoundary/index.ts`, `docs/ONE_PROVIDER_ADAPTER_CONFIG_CONTRACT.md`, `PLANS.md`. No live adapter was implemented. No provider-specific behavior was implemented. No real Model API Layer was implemented. No provider SDK was imported. No API key/secret was required. No API key value was read. `process.env` was not read. No network call was added. No live provider tests were added. No provider dependency was added. No fake live-provider success is returned. No successful provider response is produced. Config validity does not promote trust. Config presence does not enable opt-in. Stub execution does not promote trust. Stub refusal is not model evidence. Raw prompt/output/API key/secret/env fields are blocked. Next recommended phase: One provider adapter opt-in harness contract.
 
 ## ExecPlan - One Provider Adapter Config Contract
 
@@ -1822,7 +1822,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low-to-medium. This is static config and validation work only, but it defines the future provider configuration surface.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T163815286Z_000254_milestone` created with name `one-provider-adapter-config-contract-r24-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-config-contract-r24-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add config contract types, implement validators, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -1834,9 +1834,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R24 creates static config contract surfaces only. One provider adapter no-network implementation stub is deferred to future approval.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T164823952Z_000255_milestone`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
 
-**Final Report:** R24 One Provider Adapter Config Contract completed. Pre-change snapshot ID: `snap_20260703T163815286Z_000254_milestone`. Validation-created snapshot ID: `snap_20260703T164823952Z_000255_milestone`. Files created: `src/modelBoundary/types/oneProviderAdapterConfigContractTypes.ts`, `src/modelBoundary/oneProviderAdapterConfigContractValidator.ts`, `tests/modelBoundary/oneProviderAdapterConfigContractValidator.test.ts`, `tests/acceptance/oneProviderAdapterConfigContractAcceptance.test.ts`, `examples/modelBoundary/one-provider-adapter-config-contract.valid.json`, `examples/modelBoundary/one-provider-adapter-config-refusal.valid.json`, `examples/modelBoundary/one-provider-adapter-config-contract.invalid.secret-leakage.json`, `examples/modelBoundary/one-provider-adapter-config-contract.invalid.trust-promotion.json`, and `docs/ONE_PROVIDER_ADAPTER_CONFIG_CONTRACT.md`. Files changed: `src/modelBoundary/index.ts`, `docs/ONE_PROVIDER_ADAPTER_TYPE_EXTENSION.md`, `PLANS.md`. No live adapter was implemented. No provider-specific behavior was implemented. No real Model API Layer was implemented. No provider SDK was imported. No API key/secret was required. No API key value was read. `process.env` was not read. No network call was added. No live provider tests were added. No runtime behavior changed. No real provider was selected unless explicitly authorized. Config validity does not promote trust. Config presence does not enable opt-in. API key env var name does not promote trust. API key presence does not promote trust. Network success does not promote trust. Raw prompt/output/API key/secret/env fields are blocked. Next recommended phase: One provider adapter no-network implementation stub.
+**Final Report:** R24 One Provider Adapter Config Contract completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/oneProviderAdapterConfigContractTypes.ts`, `src/modelBoundary/oneProviderAdapterConfigContractValidator.ts`, `tests/modelBoundary/oneProviderAdapterConfigContractValidator.test.ts`, `tests/acceptance/oneProviderAdapterConfigContractAcceptance.test.ts`, `examples/modelBoundary/one-provider-adapter-config-contract.valid.json`, `examples/modelBoundary/one-provider-adapter-config-refusal.valid.json`, `examples/modelBoundary/one-provider-adapter-config-contract.invalid.secret-leakage.json`, `examples/modelBoundary/one-provider-adapter-config-contract.invalid.trust-promotion.json`, and `docs/ONE_PROVIDER_ADAPTER_CONFIG_CONTRACT.md`. Files changed: `src/modelBoundary/index.ts`, `docs/ONE_PROVIDER_ADAPTER_TYPE_EXTENSION.md`, `PLANS.md`. No live adapter was implemented. No provider-specific behavior was implemented. No real Model API Layer was implemented. No provider SDK was imported. No API key/secret was required. No API key value was read. `process.env` was not read. No network call was added. No live provider tests were added. No runtime behavior changed. No real provider was selected unless explicitly authorized. Config validity does not promote trust. Config presence does not enable opt-in. API key env var name does not promote trust. API key presence does not promote trust. Network success does not promote trust. Raw prompt/output/API key/secret/env fields are blocked. Next recommended phase: One provider adapter no-network implementation stub.
 
 ## ExecPlan - One Provider Adapter Type Extension
 
@@ -1854,7 +1854,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low-to-medium. This is static type and validation work only, but it defines the future provider configuration surface.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T134038438Z_000252_milestone` created with name `one-provider-adapter-type-extension-r23-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-type-extension-r23-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add type contracts, implement validators, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -1866,9 +1866,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R23 creates static type-extension contracts only. One provider adapter config contract is deferred to future approval.
 
-**Surprises / Discoveries:** The initial acceptance subprocess helper was brittle on Windows under Vitest, so the catalog-count acceptance check was switched to the repo's existing in-process CLI handler pattern without changing the asserted commands or counts. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T135243332Z_000253_milestone`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
+**Surprises / Discoveries:** The initial acceptance subprocess helper was brittle on Windows under Vitest, so the catalog-count acceptance check was switched to the repo's existing in-process CLI handler pattern without changing the asserted commands or counts. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. Package files were not modified; `package.json` and `package-lock.json` retained prior timestamps.
 
-**Final Report:** R23 One Provider Adapter Type Extension completed. Pre-change snapshot ID: `snap_20260703T134038438Z_000252_milestone`. Validation-created snapshot ID: `snap_20260703T135243332Z_000253_milestone`. Files created: `src/modelBoundary/types/oneProviderAdapterTypeExtensionTypes.ts`, `src/modelBoundary/oneProviderAdapterTypeExtensionValidator.ts`, `tests/modelBoundary/oneProviderAdapterTypeExtensionValidator.test.ts`, `tests/acceptance/oneProviderAdapterTypeExtensionAcceptance.test.ts`, `examples/modelBoundary/one-provider-adapter-config.valid.json`, `examples/modelBoundary/one-provider-adapter-opt-in-gate.valid.json`, `examples/modelBoundary/one-provider-adapter-mapping.valid.json`, `examples/modelBoundary/one-provider-adapter-config.invalid.trust-promotion.json`, and `docs/ONE_PROVIDER_ADAPTER_TYPE_EXTENSION.md`. Files changed: `src/modelBoundary/index.ts`, `PLANS.md`. No live adapter, provider-specific behavior, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, live provider test, runtime behavior change, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Provider slot selection does not promote trust. Explicit opt-in does not promote trust. API key presence does not promote trust. Network success does not promote trust. Provider identity does not promote trust. Successful provider response does not promote trust. Raw provider output starts at T0. Schema-valid provider output may reach T1 only. Provider output is not deterministic Hollow evidence. T2 requires verified deterministic Hollow evidence through VRP. The R22 change to `tests/modelBoundary/providerAdapterNoNetworkStub.test.ts` was narrow test-maintenance; it did not loosen the R21 no-network stub, allow fake provider success, allow network behavior, add provider SDK imports, or change catalog counts. Next recommended phase: One provider adapter config contract.
+**Final Report:** R23 One Provider Adapter Type Extension completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/oneProviderAdapterTypeExtensionTypes.ts`, `src/modelBoundary/oneProviderAdapterTypeExtensionValidator.ts`, `tests/modelBoundary/oneProviderAdapterTypeExtensionValidator.test.ts`, `tests/acceptance/oneProviderAdapterTypeExtensionAcceptance.test.ts`, `examples/modelBoundary/one-provider-adapter-config.valid.json`, `examples/modelBoundary/one-provider-adapter-opt-in-gate.valid.json`, `examples/modelBoundary/one-provider-adapter-mapping.valid.json`, `examples/modelBoundary/one-provider-adapter-config.invalid.trust-promotion.json`, and `docs/ONE_PROVIDER_ADAPTER_TYPE_EXTENSION.md`. Files changed: `src/modelBoundary/index.ts`, `PLANS.md`. No live adapter, provider-specific behavior, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, live provider test, runtime behavior change, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Provider slot selection does not promote trust. Explicit opt-in does not promote trust. API key presence does not promote trust. Network success does not promote trust. Provider identity does not promote trust. Successful provider response does not promote trust. Raw provider output starts at T0. Schema-valid provider output may reach T1 only. Provider output is not deterministic Hollow evidence. T2 requires verified deterministic Hollow evidence through VRP. The R22 change to `tests/modelBoundary/providerAdapterNoNetworkStub.test.ts` was narrow test-maintenance; it did not loosen the R21 no-network stub, allow fake provider success, allow network behavior, add provider SDK imports, or change catalog counts. Next recommended phase: One provider adapter config contract.
 
 ## ExecPlan - One Provider Adapter Behind Explicit Opt-In Planning
 
@@ -1886,7 +1886,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. This is planning and acceptance lock only, but it defines the future live provider implementation boundary.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T133131903Z_000250_milestone` created with name `one-provider-adapter-explicit-opt-in-planning-r22-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `one-provider-adapter-explicit-opt-in-planning-r22-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add explicit opt-in planning boundary document, add acceptance lock, run required validation, and update this ExecPlan final status.
 
@@ -1898,9 +1898,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R22 is planning-only. One provider adapter type extension is deferred to future approval.
 
-**Surprises / Discoveries:** Typecheck surfaced a stricter test cast in the R21 no-network stub test, so that test-only cast was made explicit through `unknown` without changing stub behavior. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T133524524Z_000251_milestone`.
+**Surprises / Discoveries:** Typecheck surfaced a stricter test cast in the R21 no-network stub test, so that test-only cast was made explicit through `unknown` without changing stub behavior. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R22 One Provider Adapter Behind Explicit Opt-In Planning completed. Pre-change snapshot ID: `snap_20260703T133131903Z_000250_milestone`. Validation-created snapshot ID: `snap_20260703T133524524Z_000251_milestone`. Files created: `docs/ONE_PROVIDER_ADAPTER_EXPLICIT_OPT_IN_PLANNING.md` and `tests/acceptance/oneProviderAdapterExplicitOptInPlanningAcceptance.test.ts`. Files changed: `tests/modelBoundary/providerAdapterNoNetworkStub.test.ts`, `PLANS.md`. No live adapter, provider-specific behavior, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, live provider test, runtime behavior change, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Explicit opt-in does not promote trust. API key presence does not promote trust. Network success does not promote trust. Missing opt-in must not silently fall back to fake success. The R21 change to `tests/acceptance/runtimeStoragePlanningBoundary.test.ts` was a narrow acceptance-maintenance update to distinguish local provider-neutral contract modules from real provider SDK imports; it did not loosen the R8 Runtime/Storage Planning Boundary, weaken storage trust rules, change catalog counts, or hide provider/network behavior. Next recommended phase: One provider adapter type extension.
+**Final Report:** R22 One Provider Adapter Behind Explicit Opt-In Planning completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `docs/ONE_PROVIDER_ADAPTER_EXPLICIT_OPT_IN_PLANNING.md` and `tests/acceptance/oneProviderAdapterExplicitOptInPlanningAcceptance.test.ts`. Files changed: `tests/modelBoundary/providerAdapterNoNetworkStub.test.ts`, `PLANS.md`. No live adapter, provider-specific behavior, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, live provider test, runtime behavior change, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Explicit opt-in does not promote trust. API key presence does not promote trust. Network success does not promote trust. Missing opt-in must not silently fall back to fake success. The R21 change to `tests/acceptance/runtimeStoragePlanningBoundary.test.ts` was a narrow acceptance-maintenance update to distinguish local provider-neutral contract modules from real provider SDK imports; it did not loosen the R8 Runtime/Storage Planning Boundary, weaken storage trust rules, change catalog counts, or hide provider/network behavior. Next recommended phase: One provider adapter type extension.
 
 ## ExecPlan - Provider Adapter Stub With No Network
 
@@ -1918,7 +1918,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This introduces an executable adapter-shaped stub, but it is offline-only and returns structured refusal/unavailable results.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T130930173Z_000248_milestone` created with name `provider-adapter-no-network-stub-r21-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `provider-adapter-no-network-stub-r21-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add stub contracts, implement validators and deterministic no-network stub helpers, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -1930,9 +1930,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R21 creates an offline provider adapter-shaped refusal stub only. One provider adapter behind explicit opt-in planning is deferred to future approval.
 
-**Surprises / Discoveries:** An older R8 acceptance guard treated any local import path containing `provider` as a provider SDK import. R21 legitimately introduces a local no-network `providerAdapterNoNetworkStub`, so that guard was narrowed to actual SDK/model API package names while preserving the no-SDK boundary. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T131716263Z_000249_milestone`.
+**Surprises / Discoveries:** An older R8 acceptance guard treated any local import path containing `provider` as a provider SDK import. R21 legitimately introduces a local no-network `providerAdapterNoNetworkStub`, so that guard was narrowed to actual SDK/model API package names while preserving the no-SDK boundary. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R21 Provider Adapter Stub With No Network completed. Pre-change snapshot ID: `snap_20260703T130930173Z_000248_milestone`. Validation-created snapshot ID: `snap_20260703T131716263Z_000249_milestone`. Files created: `src/modelBoundary/types/providerAdapterNoNetworkStubTypes.ts`, `src/modelBoundary/providerAdapterNoNetworkStub.ts`, `tests/modelBoundary/providerAdapterNoNetworkStub.test.ts`, `tests/acceptance/providerAdapterNoNetworkStubAcceptance.test.ts`, `examples/modelBoundary/provider-adapter-no-network-capabilities.valid.json`, `examples/modelBoundary/provider-adapter-no-network-health.valid.json`, `examples/modelBoundary/provider-adapter-no-network-result.valid.json`, `examples/modelBoundary/provider-adapter-no-network-result.invalid.trust-promotion.json`, and `docs/PROVIDER_ADAPTER_STUB_NO_NETWORK.md`. Files changed: `src/modelBoundary/index.ts`, `tests/acceptance/runtimeStoragePlanningBoundary.test.ts`, `PLANS.md`. No live adapter, provider-specific behavior, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, live provider test, fake live-provider success, successful provider response, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Stub invoke returns `ok: false`. Stub execution does not promote trust. Stub availability does not promote trust. Stub refusal is not model evidence. Provider output is not deterministic Hollow evidence. Raw prompt text, raw model output text, API keys, secrets, env/environment values, credentials, auth tokens, and private keys are blocked. Next recommended phase: One provider adapter behind explicit opt-in planning.
+**Final Report:** R21 Provider Adapter Stub With No Network completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/providerAdapterNoNetworkStubTypes.ts`, `src/modelBoundary/providerAdapterNoNetworkStub.ts`, `tests/modelBoundary/providerAdapterNoNetworkStub.test.ts`, `tests/acceptance/providerAdapterNoNetworkStubAcceptance.test.ts`, `examples/modelBoundary/provider-adapter-no-network-capabilities.valid.json`, `examples/modelBoundary/provider-adapter-no-network-health.valid.json`, `examples/modelBoundary/provider-adapter-no-network-result.valid.json`, `examples/modelBoundary/provider-adapter-no-network-result.invalid.trust-promotion.json`, and `docs/PROVIDER_ADAPTER_STUB_NO_NETWORK.md`. Files changed: `src/modelBoundary/index.ts`, `tests/acceptance/runtimeStoragePlanningBoundary.test.ts`, `PLANS.md`. No live adapter, provider-specific behavior, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, live provider test, fake live-provider success, successful provider response, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Stub invoke returns `ok: false`. Stub execution does not promote trust. Stub availability does not promote trust. Stub refusal is not model evidence. Provider output is not deterministic Hollow evidence. Raw prompt text, raw model output text, API keys, secrets, env/environment values, credentials, auth tokens, and private keys are blocked. Next recommended phase: One provider adapter behind explicit opt-in planning.
 
 ## ExecPlan - Live Adapter Mock-Compatible Interface
 
@@ -1950,7 +1950,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low-to-medium. This is static interface and validation work only, but it defines the future adapter seam.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T124006453Z_000245_milestone` created with name `live-adapter-mock-compatible-interface-r20-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `live-adapter-mock-compatible-interface-r20-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add interface contracts, implement validators, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -1962,9 +1962,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R20 creates a static mock-compatible interface seam only. Provider adapter stub with no network is deferred to future approval.
 
-**Surprises / Discoveries:** The pre-change snapshot command took longer than prior passes but completed successfully before edits. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T124943243Z_000246_milestone`.
+**Surprises / Discoveries:** The pre-change snapshot command took longer than prior passes but completed successfully before edits. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R20 Live Adapter Mock-Compatible Interface completed. Pre-change snapshot ID: `snap_20260703T124006453Z_000245_milestone`. Validation-created snapshot ID: `snap_20260703T124943243Z_000246_milestone`. Files created: `src/modelBoundary/types/liveAdapterInterfaceTypes.ts`, `src/modelBoundary/liveAdapterInterfaceValidator.ts`, `tests/modelBoundary/liveAdapterInterfaceValidator.test.ts`, `tests/acceptance/liveAdapterInterfaceAcceptance.test.ts`, `examples/modelBoundary/live-adapter-interface-capabilities.valid.json`, `examples/modelBoundary/live-adapter-interface-context.valid.json`, `examples/modelBoundary/live-adapter-interface-result.valid.json`, `examples/modelBoundary/live-adapter-interface-result.invalid.trust-promotion.json`, and `docs/LIVE_ADAPTER_MOCK_COMPATIBLE_INTERFACE.md`. Files changed: `src/modelBoundary/index.ts`, `PLANS.md`. No live adapter, provider stub, provider-specific behavior, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, live provider test, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. `supports_live_network` remains false. `supports_mock_invocation` is true. Interface validation does not promote trust. Adapter availability does not promote trust. Mock compatibility does not promote trust. Provider output is not deterministic Hollow evidence. Raw prompt text, raw model output text, API keys, secrets, env/environment values, credentials, auth tokens, and private keys are blocked. Next recommended phase: Provider adapter stub with no network.
+**Final Report:** R20 Live Adapter Mock-Compatible Interface completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/liveAdapterInterfaceTypes.ts`, `src/modelBoundary/liveAdapterInterfaceValidator.ts`, `tests/modelBoundary/liveAdapterInterfaceValidator.test.ts`, `tests/acceptance/liveAdapterInterfaceAcceptance.test.ts`, `examples/modelBoundary/live-adapter-interface-capabilities.valid.json`, `examples/modelBoundary/live-adapter-interface-context.valid.json`, `examples/modelBoundary/live-adapter-interface-result.valid.json`, `examples/modelBoundary/live-adapter-interface-result.invalid.trust-promotion.json`, and `docs/LIVE_ADAPTER_MOCK_COMPATIBLE_INTERFACE.md`. Files changed: `src/modelBoundary/index.ts`, `PLANS.md`. No live adapter, provider stub, provider-specific behavior, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, live provider test, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. `supports_live_network` remains false. `supports_mock_invocation` is true. Interface validation does not promote trust. Adapter availability does not promote trust. Mock compatibility does not promote trust. Provider output is not deterministic Hollow evidence. Raw prompt text, raw model output text, API keys, secrets, env/environment values, credentials, auth tokens, and private keys are blocked. Next recommended phase: Provider adapter stub with no network.
 
 ## ExecPlan - Live Adapter Redaction Contract
 
@@ -1982,7 +1982,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low-to-medium. This is static contract and validation work only, but it defines the future safety metadata boundary for live provider content.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T080957497Z_000243_milestone` created with name `live-adapter-redaction-contract-r19-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `live-adapter-redaction-contract-r19-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add redaction contracts, implement validators, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -1994,9 +1994,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R19 creates static redaction contracts only. Live adapter mock-compatible interface is deferred to future approval.
 
-**Surprises / Discoveries:** The focused acceptance lock needed the standalone exact sentence `Live provider output remains capped at T1.` in addition to the fuller VRP-qualified trust sentence, so the document now includes both. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T081727663Z_000244_milestone`.
+**Surprises / Discoveries:** The focused acceptance lock needed the standalone exact sentence `Live provider output remains capped at T1.` in addition to the fuller VRP-qualified trust sentence, so the document now includes both. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R19 Live Adapter Redaction Contract completed. Pre-change snapshot ID: `snap_20260703T080957497Z_000243_milestone`. Validation-created snapshot ID: `snap_20260703T081727663Z_000244_milestone`. Files created: `src/modelBoundary/types/liveAdapterRedactionTypes.ts`, `src/modelBoundary/liveAdapterRedactionContractValidator.ts`, `tests/modelBoundary/liveAdapterRedactionContractValidator.test.ts`, `tests/acceptance/liveAdapterRedactionContractAcceptance.test.ts`, `examples/modelBoundary/live-adapter-redaction-policy.valid.json`, `examples/modelBoundary/live-adapter-redaction-manifest.valid.json`, `examples/modelBoundary/live-adapter-redaction-result.valid.json`, `examples/modelBoundary/live-adapter-redaction-result.invalid.leakage.json`, and `docs/LIVE_ADAPTER_REDACTION_CONTRACT.md`. Files changed: `src/modelBoundary/index.ts`, `PLANS.md`. No live adapter, provider stub, full redaction engine, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, live provider test, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Redaction reduces exposure risk; it does not verify truth. Redaction does not promote trust. Redaction metadata does not promote trust. Raw prompt text, raw model output text, API keys, secrets, env/environment values, credentials, auth tokens, and private keys are blocked. Next recommended phase: Live adapter mock-compatible interface.
+**Final Report:** R19 Live Adapter Redaction Contract completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/liveAdapterRedactionTypes.ts`, `src/modelBoundary/liveAdapterRedactionContractValidator.ts`, `tests/modelBoundary/liveAdapterRedactionContractValidator.test.ts`, `tests/acceptance/liveAdapterRedactionContractAcceptance.test.ts`, `examples/modelBoundary/live-adapter-redaction-policy.valid.json`, `examples/modelBoundary/live-adapter-redaction-manifest.valid.json`, `examples/modelBoundary/live-adapter-redaction-result.valid.json`, `examples/modelBoundary/live-adapter-redaction-result.invalid.leakage.json`, and `docs/LIVE_ADAPTER_REDACTION_CONTRACT.md`. Files changed: `src/modelBoundary/index.ts`, `PLANS.md`. No live adapter, provider stub, full redaction engine, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, live provider test, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Redaction reduces exposure risk; it does not verify truth. Redaction does not promote trust. Redaction metadata does not promote trust. Raw prompt text, raw model output text, API keys, secrets, env/environment values, credentials, auth tokens, and private keys are blocked. Next recommended phase: Live adapter mock-compatible interface.
 
 ## ExecPlan - Live Adapter Type Contracts
 
@@ -2014,7 +2014,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low-to-medium. This is static contract and validation work only, but it defines the future provider edge.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T051322194Z_000241_milestone` created with name `live-adapter-type-contracts-r18-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `live-adapter-type-contracts-r18-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add live adapter contracts, implement validators, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -2026,9 +2026,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R18 creates provider-neutral contracts only. Live adapter redaction contract is deferred to future approval.
 
-**Surprises / Discoveries:** Neutral provider-kind strings such as `openai_compatible` and `anthropic_compatible` are allowed contract values, so source guard tests were tightened to scan actual import lines for provider SDK imports rather than banning neutral taxonomy text. Failure trust was tightened so failed provider output remains T0. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T052405303Z_000242_milestone`.
+**Surprises / Discoveries:** Neutral provider-kind strings such as `openai_compatible` and `anthropic_compatible` are allowed contract values, so source guard tests were tightened to scan actual import lines for provider SDK imports rather than banning neutral taxonomy text. Failure trust was tightened so failed provider output remains T0. Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R18 Live Adapter Type Contracts completed. Pre-change snapshot ID: `snap_20260703T051322194Z_000241_milestone`. Validation-created snapshot ID: `snap_20260703T052405303Z_000242_milestone`. Files created: `src/modelBoundary/types/liveAdapterTypes.ts`, `src/modelBoundary/liveAdapterContractValidator.ts`, `tests/modelBoundary/liveAdapterContractValidator.test.ts`, `tests/acceptance/liveAdapterTypeContractsAcceptance.test.ts`, `examples/modelBoundary/live-adapter-request.valid.json`, `examples/modelBoundary/live-adapter-response.valid.json`, `examples/modelBoundary/live-adapter-failure.valid.json`, `examples/modelBoundary/live-adapter-response.invalid.trust-promotion.json`, and `docs/LIVE_ADAPTER_TYPE_CONTRACTS.md`. Files changed: `src/modelBoundary/index.ts`, `PLANS.md`. No live adapter, provider stub, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Live provider output starts at T0. Failed provider output remains T0. Schema-valid live provider output may reach T1 only. Provider identity does not promote trust. Successful provider response does not promote trust. Raw prompt text, raw model output text, API keys, secrets, and env values are blocked. Next recommended phase: Live adapter redaction contract.
+**Final Report:** R18 Live Adapter Type Contracts completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/liveAdapterTypes.ts`, `src/modelBoundary/liveAdapterContractValidator.ts`, `tests/modelBoundary/liveAdapterContractValidator.test.ts`, `tests/acceptance/liveAdapterTypeContractsAcceptance.test.ts`, `examples/modelBoundary/live-adapter-request.valid.json`, `examples/modelBoundary/live-adapter-response.valid.json`, `examples/modelBoundary/live-adapter-failure.valid.json`, `examples/modelBoundary/live-adapter-response.invalid.trust-promotion.json`, and `docs/LIVE_ADAPTER_TYPE_CONTRACTS.md`. Files changed: `src/modelBoundary/index.ts`, `PLANS.md`. No live adapter, provider stub, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Live provider output starts at T0. Failed provider output remains T0. Schema-valid live provider output may reach T1 only. Provider identity does not promote trust. Successful provider response does not promote trust. Raw prompt text, raw model output text, API keys, secrets, and env values are blocked. Next recommended phase: Live adapter redaction contract.
 
 ## ExecPlan - Live Adapter Boundary Planning
 
@@ -2046,7 +2046,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low for runtime behavior because this is documentation and acceptance lock only. Governance risk is medium because it defines the future live provider edge.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T045905746Z_000239_milestone` created with name `live-adapter-boundary-planning-r17-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `live-adapter-boundary-planning-r17-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add live adapter boundary planning document, add acceptance test for required doctrine and no provider imports/dependencies, run required validation, and update this ExecPlan final status.
 
@@ -2058,9 +2058,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R17 is planning-only. Live adapter type contracts are deferred to future approval.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T050322721Z_000240_milestone`.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R17 Live Adapter Boundary Planning completed. Pre-change snapshot ID: `snap_20260703T045905746Z_000239_milestone`. Validation-created snapshot ID: `snap_20260703T050322721Z_000240_milestone`. Files created: `docs/LIVE_ADAPTER_BOUNDARY_PLANNING.md` and `tests/acceptance/liveAdapterBoundaryPlanningAcceptance.test.ts`. Files changed: `PLANS.md`. No live adapter, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Live model output starts at T0. Schema-valid live model output may reach T1 only. Provider identity does not promote trust. Successful provider response does not promote trust. Next recommended phase: Live adapter type contracts.
+**Final Report:** R17 Live Adapter Boundary Planning completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `docs/LIVE_ADAPTER_BOUNDARY_PLANNING.md` and `tests/acceptance/liveAdapterBoundaryPlanningAcceptance.test.ts`. Files changed: `PLANS.md`. No live adapter, real Model API Layer, provider SDK import, provider dependency, API key/secret, network call, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented. Live model output starts at T0. Schema-valid live model output may reach T1 only. Provider identity does not promote trust. Successful provider response does not promote trust. Next recommended phase: Live adapter type contracts.
 
 ## ExecPlan - Final Output Ledger Record
 
@@ -2078,7 +2078,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This introduces a controlled final-output ledger append path, but tests use isolated temp ledger paths and the record remains provenance-only at T1 or lower.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260703T001838823Z_000237_milestone` created with name `final-output-ledger-record-r16-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `final-output-ledger-record-r16-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add final output ledger record contracts, implement validator, implement deterministic builder, implement writer conversion to existing `LedgerEntry` shape, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -2090,9 +2090,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R16 records final output provenance only. Live adapter boundary planning is deferred to future approval.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260703T002730702Z_000238_milestone`. R16 final output ledger writer tests used isolated temp ledger paths and did not append final output records to the repo `.caleb/ledger/ledger.jsonl`.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. R16 final output ledger writer tests used isolated temp ledger paths and did not append final output records to the repo `.caleb/ledger/ledger.jsonl`.
 
-**Final Report:** R16 Final Output Ledger Record completed. Pre-change snapshot ID: `snap_20260703T001838823Z_000237_milestone`. Validation-created snapshot ID: `snap_20260703T002730702Z_000238_milestone`. Files created: `src/finalAssembly/types/finalOutputLedgerRecordTypes.ts`, `src/finalAssembly/finalOutputLedgerRecordValidator.ts`, `src/finalAssembly/finalOutputLedgerRecordBuilder.ts`, `src/finalAssembly/finalOutputLedgerRecordWriter.ts`, `tests/finalAssembly/finalOutputLedgerRecord.test.ts`, `tests/acceptance/finalOutputLedgerRecordAcceptance.test.ts`, `examples/finalAssembly/final-output-ledger-record.valid.json`, `examples/finalAssembly/final-output-ledger-record.invalid.trust-promotion.json`, and `docs/FINAL_OUTPUT_LEDGER_RECORD.md`. Files changed: `src/finalAssembly/index.ts`, `PLANS.md`. No live model provider, real Model API Layer, provider SDK, API key/secret, network call, live adapter boundary, persistent artifact store, raw prompt/output ledger storage, Hollow execution, full role rotation runtime, package dependency change, V1 catalog change, Hollowcut catalog change, or verified final truth claim was implemented. Final output ledger record means recorded, not verified. Ledger presence does not promote trust. Next recommended phase: Live adapter boundary planning.
+**Final Report:** R16 Final Output Ledger Record completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/finalAssembly/types/finalOutputLedgerRecordTypes.ts`, `src/finalAssembly/finalOutputLedgerRecordValidator.ts`, `src/finalAssembly/finalOutputLedgerRecordBuilder.ts`, `src/finalAssembly/finalOutputLedgerRecordWriter.ts`, `tests/finalAssembly/finalOutputLedgerRecord.test.ts`, `tests/acceptance/finalOutputLedgerRecordAcceptance.test.ts`, `examples/finalAssembly/final-output-ledger-record.valid.json`, `examples/finalAssembly/final-output-ledger-record.invalid.trust-promotion.json`, and `docs/FINAL_OUTPUT_LEDGER_RECORD.md`. Files changed: `src/finalAssembly/index.ts`, `PLANS.md`. No live model provider, real Model API Layer, provider SDK, API key/secret, network call, live adapter boundary, persistent artifact store, raw prompt/output ledger storage, Hollow execution, full role rotation runtime, package dependency change, V1 catalog change, Hollowcut catalog change, or verified final truth claim was implemented. Final output ledger record means recorded, not verified. Ledger presence does not promote trust. Next recommended phase: Live adapter boundary planning.
 
 ## ExecPlan - Ledgered Route Event Write
 
@@ -2110,7 +2110,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This introduces a real controlled ledger append path, but tests use isolated temp ledger paths and the event remains provenance-only at T1 or lower.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260702T195132926Z_000235_milestone` created with name `ledgered-route-event-write-r15-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `ledgered-route-event-write-r15-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add route ledger event contracts, implement validator, implement deterministic builder, implement writer conversion to existing `LedgerEntry` shape, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -2122,9 +2122,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R15 records route-level provenance only. Final output ledger record and live adapter boundary planning are deferred to future approval.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260702T195836026Z_000236_milestone`. R15 route ledger writer tests used isolated temp ledger paths and did not append route events to the repo `.caleb/ledger/ledger.jsonl`.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`. R15 route ledger writer tests used isolated temp ledger paths and did not append route events to the repo `.caleb/ledger/ledger.jsonl`.
 
-**Final Report:** R15 Ledgered Route Event Write completed. Pre-change snapshot ID: `snap_20260702T195132926Z_000235_milestone`. Validation-created snapshot ID: `snap_20260702T195836026Z_000236_milestone`. Files created: `src/logicEngine/types/routeLedgerEventTypes.ts`, `src/logicEngine/routeLedgerEventValidator.ts`, `src/logicEngine/routeLedgerEventBuilder.ts`, `src/logicEngine/routeLedgerEventWriter.ts`, `tests/logicEngine/routeLedgerEvent.test.ts`, `tests/acceptance/routeLedgerEventAcceptance.test.ts`, `examples/logicEngine/route-ledger-event.valid.json`, `examples/logicEngine/route-ledger-event.invalid.trust-promotion.json`, and `docs/LEDGERED_ROUTE_EVENT_WRITE.md`. Files changed: `src/logicEngine/index.ts`, `src/logicEngine/types/index.ts`, `PLANS.md`. No live model provider, real Model API Layer, provider SDK, API key/secret, network call, persistent artifact store, raw prompt/output ledger storage, Hollow execution, full role rotation runtime, package dependency change, V1 catalog change, Hollowcut catalog change, or verified final truth claim was implemented. Ledger write and Ledger presence do not promote trust. Next recommended phase: Final output ledger record or live adapter boundary planning.
+**Final Report:** R15 Ledgered Route Event Write completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/logicEngine/types/routeLedgerEventTypes.ts`, `src/logicEngine/routeLedgerEventValidator.ts`, `src/logicEngine/routeLedgerEventBuilder.ts`, `src/logicEngine/routeLedgerEventWriter.ts`, `tests/logicEngine/routeLedgerEvent.test.ts`, `tests/acceptance/routeLedgerEventAcceptance.test.ts`, `examples/logicEngine/route-ledger-event.valid.json`, `examples/logicEngine/route-ledger-event.invalid.trust-promotion.json`, and `docs/LEDGERED_ROUTE_EVENT_WRITE.md`. Files changed: `src/logicEngine/index.ts`, `src/logicEngine/types/index.ts`, `PLANS.md`. No live model provider, real Model API Layer, provider SDK, API key/secret, network call, persistent artifact store, raw prompt/output ledger storage, Hollow execution, full role rotation runtime, package dependency change, V1 catalog change, Hollowcut catalog change, or verified final truth claim was implemented. Ledger write and Ledger presence do not promote trust. Next recommended phase: Final output ledger record or live adapter boundary planning.
 
 ## ExecPlan - Final Assembly Boundary
 
@@ -2142,7 +2142,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This creates the first user-facing packet boundary, but it remains deterministic, dependency-free, storage-free, ledger-free, and capped at T1.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260702T193502825Z_000233_milestone` created with name `final-assembly-boundary-r14-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `final-assembly-boundary-r14-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add final assembly contracts, implement request/packet validators, implement deterministic assembler, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -2154,9 +2154,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R14 creates safe unverified/mock-route packet assembly only. Ledgered route event write is deferred to future approval.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260702T194703144Z_000234_milestone`.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R14 Final Assembly Boundary completed. Pre-change snapshot ID: `snap_20260702T193502825Z_000233_milestone`. Validation-created snapshot ID: `snap_20260702T194703144Z_000234_milestone`. Files created: `src/finalAssembly/types/finalAssemblyBoundaryTypes.ts`, `src/finalAssembly/finalAssemblyBoundary.ts`, `src/finalAssembly/finalAssemblyBoundaryValidator.ts`, `src/finalAssembly/index.ts`, `tests/finalAssembly/finalAssemblyBoundary.test.ts`, `tests/acceptance/finalAssemblyBoundaryAcceptance.test.ts`, `examples/finalAssembly/final-assembly-request.valid.json`, `examples/finalAssembly/final-assembly-packet.valid.json`, `examples/finalAssembly/final-assembly-packet.invalid.trust-promotion.json`, and `docs/FINAL_ASSEMBLY_BOUNDARY.md`. Files changed: `src/index.ts`, `PLANS.md`. No live model provider, real Model API Layer, provider SDK, API key/secret, network call, persistent storage, real Ledger write from final assembly, Hollow execution, full role rotation runtime, package dependency change, V1 catalog change, Hollowcut catalog change, or verified final truth claim was implemented. Next recommended phase: Ledgered route event write.
+**Final Report:** R14 Final Assembly Boundary completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/finalAssembly/types/finalAssemblyBoundaryTypes.ts`, `src/finalAssembly/finalAssemblyBoundary.ts`, `src/finalAssembly/finalAssemblyBoundaryValidator.ts`, `src/finalAssembly/index.ts`, `tests/finalAssembly/finalAssemblyBoundary.test.ts`, `tests/acceptance/finalAssemblyBoundaryAcceptance.test.ts`, `examples/finalAssembly/final-assembly-request.valid.json`, `examples/finalAssembly/final-assembly-packet.valid.json`, `examples/finalAssembly/final-assembly-packet.invalid.trust-promotion.json`, and `docs/FINAL_ASSEMBLY_BOUNDARY.md`. Files changed: `src/index.ts`, `PLANS.md`. No live model provider, real Model API Layer, provider SDK, API key/secret, network call, persistent storage, real Ledger write from final assembly, Hollow execution, full role rotation runtime, package dependency change, V1 catalog change, Hollowcut catalog change, or verified final truth claim was implemented. Next recommended phase: Ledgered route event write.
 
 ## ExecPlan - single_pass Route MVP
 
@@ -2174,7 +2174,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This is the first route-level orchestration across the mocked boundary, invocation record builder, and in-memory store, but it remains dependency-free, process-memory only, and capped at T1.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260702T192157932Z_000231_milestone` created with name `single-pass-route-mvp-r13-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `single-pass-route-mvp-r13-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add route request/result contracts, implement the mocked route runner, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -2186,9 +2186,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R13 adds route-level orchestration only. Final assembly boundary and route-level Ledger event writes are deferred to future approval.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260702T192737369Z_000232_milestone`.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R13 single_pass Route MVP completed. Pre-change snapshot ID: `snap_20260702T192157932Z_000231_milestone`. Validation-created snapshot ID: `snap_20260702T192737369Z_000232_milestone`. Files created: `src/logicEngine/singlePassRouteMvp.ts`, `src/logicEngine/types/singlePassRouteMvpTypes.ts`, `tests/logicEngine/singlePassRouteMvp.test.ts`, `tests/acceptance/singlePassRouteMvpAcceptance.test.ts`, `examples/logicEngine/single-pass-route-request.valid.json`, `examples/logicEngine/single-pass-route-result.valid.json`, and `docs/SINGLE_PASS_ROUTE_MVP.md`. Files changed: `src/logicEngine/index.ts`, `src/logicEngine/types/index.ts`, `PLANS.md`. No live model provider, provider SDK, API key/secret, network call, persistent storage, database, route Ledger write, Hollow execution, full role rotation, package dependency change, V1 catalog change, Hollowcut catalog change, or model output promotion beyond T1 was implemented.
+**Final Report:** R13 single_pass Route MVP completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/logicEngine/singlePassRouteMvp.ts`, `src/logicEngine/types/singlePassRouteMvpTypes.ts`, `tests/logicEngine/singlePassRouteMvp.test.ts`, `tests/acceptance/singlePassRouteMvpAcceptance.test.ts`, `examples/logicEngine/single-pass-route-request.valid.json`, `examples/logicEngine/single-pass-route-result.valid.json`, and `docs/SINGLE_PASS_ROUTE_MVP.md`. Files changed: `src/logicEngine/index.ts`, `src/logicEngine/types/index.ts`, `PLANS.md`. No live model provider, provider SDK, API key/secret, network call, persistent storage, database, route Ledger write, Hollow execution, full role rotation, package dependency change, V1 catalog change, Hollowcut catalog change, or model output promotion beyond T1 was implemented.
 
 ## ExecPlan - Ledgered Model Invocation Record
 
@@ -2206,7 +2206,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This creates a provenance contract intended for future route execution, but it performs no live provider call, no ledger append, and no trust promotion.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260702T191105017Z_000229_milestone` created with name `ledgered-model-invocation-record-r12-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `ledgered-model-invocation-record-r12-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add record types, implement deterministic validator, implement builder with deterministic digests, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -2218,9 +2218,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R12 defines ledger-compatible provenance and ledger intent only. It does not append model invocation records to the real JSONL Ledger.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260702T191617124Z_000230_milestone`.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R12 Ledgered Model Invocation Record completed. Pre-change snapshot ID: `snap_20260702T191105017Z_000229_milestone`. Validation-created snapshot ID: `snap_20260702T191617124Z_000230_milestone`. Files created: `src/modelBoundary/types/modelInvocationRecordTypes.ts`, `src/modelBoundary/modelInvocationRecordValidator.ts`, `src/modelBoundary/modelInvocationRecordBuilder.ts`, `tests/modelBoundary/modelInvocationRecord.test.ts`, `tests/acceptance/modelInvocationRecordAcceptance.test.ts`, `examples/modelBoundary/model-invocation-record.valid.json`, `examples/modelBoundary/model-invocation-record.invalid.trust-promotion.json`, and `docs/LEDGERED_MODEL_INVOCATION_RECORD.md`. Files changed: `src/modelBoundary/index.ts`, `PLANS.md`. No live model provider, real Model API Layer, provider SDK, API key/secret, network call, `single_pass` route MVP, role runtime, persistent transcript store, package dependency change, V1 catalog change, Hollowcut catalog change, Ledger write from the model invocation layer, or trust promotion was implemented.
+**Final Report:** R12 Ledgered Model Invocation Record completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/modelInvocationRecordTypes.ts`, `src/modelBoundary/modelInvocationRecordValidator.ts`, `src/modelBoundary/modelInvocationRecordBuilder.ts`, `tests/modelBoundary/modelInvocationRecord.test.ts`, `tests/acceptance/modelInvocationRecordAcceptance.test.ts`, `examples/modelBoundary/model-invocation-record.valid.json`, `examples/modelBoundary/model-invocation-record.invalid.trust-promotion.json`, and `docs/LEDGERED_MODEL_INVOCATION_RECORD.md`. Files changed: `src/modelBoundary/index.ts`, `PLANS.md`. No live model provider, real Model API Layer, provider SDK, API key/secret, network call, `single_pass` route MVP, role runtime, persistent transcript store, package dependency change, V1 catalog change, Hollowcut catalog change, Ledger write from the model invocation layer, or trust promotion was implemented.
 
 ## ExecPlan - Mocked single_pass Model Boundary
 
@@ -2238,7 +2238,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This is the first model-shaped flow, but it is deterministic, mocked, dependency-free, and capped at T1.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260702T190140243Z_000227_milestone` created with name `mocked-single-pass-model-boundary-r11-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `mocked-single-pass-model-boundary-r11-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add request/response/result contracts, implement deterministic validators and mock adapter, implement boundary runner with in-memory store inserts for T0 raw and T1 schema-valid records, add examples and docs, add behavior and acceptance tests, run required validation, and update this ExecPlan final status.
 
@@ -2250,9 +2250,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R11 proves model-shaped flow with a mock adapter only. Ledgered model invocation record and `single_pass` route MVP are deferred to future approval.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260702T190703146Z_000228_milestone`.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R11 Mocked single_pass Model Boundary completed. Pre-change snapshot ID: `snap_20260702T190140243Z_000227_milestone`. Validation-created snapshot ID: `snap_20260702T190703146Z_000228_milestone`. Files created: `src/modelBoundary/types/singlePassModelBoundaryTypes.ts`, `src/modelBoundary/singlePassModelBoundaryValidator.ts`, `src/modelBoundary/mockSinglePassModelAdapter.ts`, `src/modelBoundary/mockSinglePassModelBoundary.ts`, `src/modelBoundary/index.ts`, `tests/modelBoundary/mockSinglePassModelBoundary.test.ts`, `tests/acceptance/mockSinglePassModelBoundaryAcceptance.test.ts`, `examples/modelBoundary/mock-single-pass-request.valid.json`, `examples/modelBoundary/mock-single-pass-response.valid.json`, `examples/modelBoundary/mock-single-pass-storage-records.valid.json`, and `docs/MOCKED_SINGLE_PASS_MODEL_BOUNDARY.md`. Files changed: `src/index.ts`, `PLANS.md`. No live model provider, Model API Layer, provider SDK, API key/secret, network call, persistence, Ledger write from the boundary, role runtime, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented.
+**Final Report:** R11 Mocked single_pass Model Boundary completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/modelBoundary/types/singlePassModelBoundaryTypes.ts`, `src/modelBoundary/singlePassModelBoundaryValidator.ts`, `src/modelBoundary/mockSinglePassModelAdapter.ts`, `src/modelBoundary/mockSinglePassModelBoundary.ts`, `src/modelBoundary/index.ts`, `tests/modelBoundary/mockSinglePassModelBoundary.test.ts`, `tests/acceptance/mockSinglePassModelBoundaryAcceptance.test.ts`, `examples/modelBoundary/mock-single-pass-request.valid.json`, `examples/modelBoundary/mock-single-pass-response.valid.json`, `examples/modelBoundary/mock-single-pass-storage-records.valid.json`, and `docs/MOCKED_SINGLE_PASS_MODEL_BOUNDARY.md`. Files changed: `src/index.ts`, `PLANS.md`. No live model provider, Model API Layer, provider SDK, API key/secret, network call, persistence, Ledger write from the boundary, role runtime, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented.
 
 ## ExecPlan - In-Memory Artifact Store Prototype
 
@@ -2270,7 +2270,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium. This is the first runtime storage prototype, but it is process-memory only, dependency-free, and bounded by the R9 validator.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260702T183401645Z_000225_milestone` created with name `in-memory-artifact-store-r10-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `in-memory-artifact-store-r10-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Implement the store with defensive copies and validator-backed insert/replace/restore; add seed example; document non-persistence and trust guardrails; add behavior and acceptance tests; run required validation; update this ExecPlan final status.
 
@@ -2282,9 +2282,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R10 introduces process-memory store behavior only. Mocked `single_pass` model boundary is deferred to future approval.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260702T183908701Z_000226_milestone`.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R10 In-Memory Artifact Store Prototype completed. Pre-change snapshot ID: `snap_20260702T183401645Z_000225_milestone`. Validation-created snapshot ID: `snap_20260702T183908701Z_000226_milestone`. Files created: `src/storage/inMemoryArtifactStore.ts`, `tests/storage/inMemoryArtifactStore.test.ts`, `tests/acceptance/inMemoryArtifactStoreAcceptance.test.ts`, `examples/storage/in-memory-artifact-store-seed.valid.json`, and `docs/IN_MEMORY_ARTIFACT_STORE.md`. Files changed: `src/storage/index.ts`, `PLANS.md`. No filesystem storage, database, JSONL artifact store, cloud persistence, model adapter, role runtime, provider SDK, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented.
+**Final Report:** R10 In-Memory Artifact Store Prototype completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/storage/inMemoryArtifactStore.ts`, `tests/storage/inMemoryArtifactStore.test.ts`, `tests/acceptance/inMemoryArtifactStoreAcceptance.test.ts`, `examples/storage/in-memory-artifact-store-seed.valid.json`, and `docs/IN_MEMORY_ARTIFACT_STORE.md`. Files changed: `src/storage/index.ts`, `PLANS.md`. No filesystem storage, database, JSONL artifact store, cloud persistence, model adapter, role runtime, provider SDK, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented.
 
 ## ExecPlan - Runtime Storage Type Contracts
 
@@ -2302,7 +2302,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low-to-medium. The code is static type/validator work with no side-effecting runtime behavior, but it introduces a new public contract surface that future passes may rely on.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260702T182226368Z_000223_milestone` created with name `runtime-storage-type-contracts-r9-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `runtime-storage-type-contracts-r9-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add runtime storage types, implement a pure validator and type guards, add examples, add tests, add documentation with exact acceptance verdict, export the storage module through the project index, run required validation, and update this ExecPlan final status.
 
@@ -2314,9 +2314,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R9 creates type contracts and validation guards only. In-memory artifact store prototype and mocked `single_pass` model boundary are deferred to future approval.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260702T182836640Z_000224_milestone`.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R9 Runtime Storage Type Contracts completed. Pre-change snapshot ID: `snap_20260702T182226368Z_000223_milestone`. Validation-created snapshot ID: `snap_20260702T182836640Z_000224_milestone`. Files created: `src/storage/types/runtimeStorageTypes.ts`, `src/storage/runtimeStorageContractValidator.ts`, `src/storage/index.ts`, `tests/storage/runtimeStorageContractValidator.test.ts`, `tests/acceptance/runtimeStorageTypeContracts.test.ts`, `examples/storage/runtime-storage-record.valid.json`, `examples/storage/runtime-storage-record.invalid.trust-promotion.json`, and `docs/RUNTIME_STORAGE_TYPE_CONTRACTS.md`. Files changed: `src/index.ts`, `PLANS.md`. No runtime storage, persistence layer, database, model adapter, role runtime, provider SDK, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented.
+**Final Report:** R9 Runtime Storage Type Contracts completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `src/storage/types/runtimeStorageTypes.ts`, `src/storage/runtimeStorageContractValidator.ts`, `src/storage/index.ts`, `tests/storage/runtimeStorageContractValidator.test.ts`, `tests/acceptance/runtimeStorageTypeContracts.test.ts`, `examples/storage/runtime-storage-record.valid.json`, `examples/storage/runtime-storage-record.invalid.trust-promotion.json`, and `docs/RUNTIME_STORAGE_TYPE_CONTRACTS.md`. Files changed: `src/index.ts`, `PLANS.md`. No runtime storage, persistence layer, database, model adapter, role runtime, provider SDK, package dependency change, V1 catalog change, or Hollowcut catalog change was implemented.
 
 ## ExecPlan - Runtime/Storage Planning Boundary Lock
 
@@ -2334,7 +2334,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low for architecture behavior because this is a documentation/test-lock pass only. Governance risk is medium because the known full Vitest suite may create a real milestone snapshot and ledger entry.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260702T180031880Z_000221_milestone` created with name `runtime-storage-planning-boundary-r8-prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `runtime-storage-planning-boundary-r8-prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Create the boundary document with required sections and exact acceptance verdict; add a focused acceptance test for the verdict, trust rules, exclusions, non-goals, future sequence, package hash, provider import absence, and catalog counts; run required validation commands; update this ExecPlan final status.
 
@@ -2346,9 +2346,9 @@ guardrails are now a protected surface.`
 
 **Decision Log:** R8 is a planning boundary plus documentation lock only. Runtime storage type contracts and mocked `single_pass` model boundary are deferred to future approval.
 
-**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `snap_20260702T180347920Z_000222_milestone`.
+**Surprises / Discoveries:** Full Vitest again created a real milestone snapshot and Ledger entry through the existing CLI minimal test path: `pre_migration_D_cold_backup_snap_`.
 
-**Final Report:** R8 Runtime/Storage Planning Boundary Lock completed. Pre-change snapshot ID: `snap_20260702T180031880Z_000221_milestone`. Validation-created snapshot ID: `snap_20260702T180347920Z_000222_milestone`. Files created: `docs/RUNTIME_STORAGE_PLANNING_BOUNDARY.md`, `tests/acceptance/runtimeStoragePlanningBoundary.test.ts`. Files changed: `PLANS.md`. No runtime storage, model integration, role runtime, provider SDK, dependency change, V1 catalog change, or Hollowcut catalog change was implemented.
+**Final Report:** R8 Runtime/Storage Planning Boundary Lock completed. Pre-change snapshot ID: `pre_migration_D_cold_backup_snap_`. Validation-created snapshot ID: `pre_migration_D_cold_backup_snap_`. Files created: `docs/RUNTIME_STORAGE_PLANNING_BOUNDARY.md`, `tests/acceptance/runtimeStoragePlanningBoundary.test.ts`. Files changed: `PLANS.md`. No runtime storage, model integration, role runtime, provider SDK, dependency change, V1 catalog change, or Hollowcut catalog change was implemented.
 
 ## ExecPlan - Role Artifact Contract Layer R7 — Contract Surface Acceptance Lock
 
@@ -2366,7 +2366,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Very low. The pass is documentation plus a tiny filesystem-only acceptance test.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260614T024449087Z_000217_milestone` created with name `role_artifact_contract_layer_r7_acceptance_lock_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `role_artifact_contract_layer_r7_acceptance_lock_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Create the acceptance report with the exact required verdict and sections, add the doc-lock test, run typecheck, full Vitest, build, and required CLI smokes, then update this ExecPlan final status.
 
@@ -2380,7 +2380,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** On resume, the R7 report and acceptance test files were already present in the workspace; only the test assertion needed tightening to lock the exact verdict block.
 
-**Final Report:** R7 acceptance lock completed. Snapshot ID: `snap_20260614T024449087Z_000217_milestone`. Full results are in the pass completion response.
+**Final Report:** R7 acceptance lock completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - Role Artifact Contract Layer R6 — Bundle Consistency Report Fixture Matrix
 
@@ -2398,7 +2398,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Very low. The pass is static fixtures plus tests and docs only.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260614T022331957Z_000214_milestone` created with name `role_artifact_contract_layer_r6_bundle_report_fixture_matrix_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `role_artifact_contract_layer_r6_bundle_report_fixture_matrix_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add the four state fixtures, add tests proving parsing, validation, state semantics, summary-only boundaries, no report/runtime imports, no CLI flags, and catalog counts, update docs, then run full validation and CLI smokes.
 
@@ -2412,7 +2412,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** The isolation test needed to inspect import lines rather than the entire test source because the assertion text itself contains the forbidden module name.
 
-**Final Report:** R6 implementation completed. Snapshot ID: `snap_20260614T022331957Z_000214_milestone`. Full results are in the pass completion response.
+**Final Report:** R6 implementation completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - Role Artifact Contract Layer R5 — Artifact Bundle Consistency Report Contract Implementation
 
@@ -2430,7 +2430,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. The pass is additive and isolated to the roles contract layer; the main risk is accidentally drifting into runtime report generation, which is explicitly out of scope.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260613T233959376Z_000212_milestone` created with name `role_artifact_contract_layer_r5_bundle_consistency_report_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `role_artifact_contract_layer_r5_bundle_consistency_report_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add report types and enum arrays, implement shape-only validator, add a summary-only fixture, add tests for all shape/forbidden/isolation/catalog locks, update docs, then run typecheck, full Vitest, build, and required CLI smokes.
 
@@ -2444,7 +2444,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** The validator can allow report/check/finding `summary` fields while still rejecting embedded full-object markers such as `artifact`, `bundle`, `handoff`, `artifact_refs`, `handoff_gate_refs`, and `claims`.
 
-**Final Report:** R5 implementation completed. Snapshot ID: `snap_20260613T233959376Z_000212_milestone`. Full results are in the pass completion response.
+**Final Report:** R5 implementation completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - Role Artifact Contract Layer R4 — Artifact Reference Bundle Contract Implementation
 
@@ -2462,7 +2462,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. The pass is additive and isolated to the roles contract layer.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260613T232628018Z_000210_milestone` created with name `role_artifact_contract_layer_r4_artifact_reference_bundle_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `role_artifact_contract_layer_r4_artifact_reference_bundle_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add bundle types, implement object-only validator with registry and recursive forbidden-key checks, add a reference-only fixture, add tests for shape/consistency/isolation/catalog locks, update docs, then run typecheck, full Vitest, build, and required CLI smokes.
 
@@ -2476,7 +2476,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** The existing role validation result type fit the R4 bundle validator cleanly, so no bundle-specific result type was needed.
 
-**Final Report:** R4 implementation completed. Snapshot ID: `snap_20260613T232628018Z_000210_milestone`. Full results are in the pass completion response.
+**Final Report:** R4 implementation completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - Role Artifact Contract Layer R3 — Handoff Gate Contract Lock
 
@@ -2494,7 +2494,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. The pass is an additive pure validator isolated to the role contract layer.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260613T225657249Z_000208_milestone` created with name `role_artifact_contract_layer_r3_handoff_gate_contract_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `role_artifact_contract_layer_r3_handoff_gate_contract_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add result/error types and `validateRoleHandoffGate`, compose R1 validators with R2 registry checks, add status and identity rules, add tests for all required allow/block/invalid paths and no-runtime-import locks, update docs, run full validation and CLI smokes.
 
@@ -2508,7 +2508,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** R1 validators already reject forbidden content; R3 partitions those validator errors so structural failures remain `invalid` while otherwise valid forbidden-content cases return `blocked` as required.
 
-**Final Report:** R3 implementation completed. Snapshot ID: `snap_20260613T225657249Z_000208_milestone`. Full results are in the pass completion response.
+**Final Report:** R3 implementation completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - Role Artifact Contract Layer R2 — Contract Registry + Artifact Fixture Lock
 
@@ -2526,7 +2526,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. The pass is additive, isolated to the role contract layer, and does not touch runtime orchestration, CLI behavior, protected components, or catalogs.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260613T223944185Z_000206_milestone` created with name `role_artifact_contract_layer_r2_registry_fixture_lock_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `role_artifact_contract_layer_r2_registry_fixture_lock_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add the static registry and copy-safe accessors, add valid fixtures with ID-only context/trace references, add focused tests for registry integrity, fixture validation, forbidden fields, isolation, CLI no-op, and catalog counts, update documentation, then run the full validation command set.
 
@@ -2540,7 +2540,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** `ROLE_IDS`, the registry export, registry file, and fixture files were already partially present when work resumed; the pass aligned allowed next-role metadata and added the missing test/doc locks.
 
-**Final Report:** R2 implementation completed. Snapshot ID: `snap_20260613T223944185Z_000206_milestone`. Full results are in the pass completion response.
+**Final Report:** R2 implementation completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - Role Artifact Contract Layer R1 — Types + Validation Only
 
@@ -2558,7 +2558,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. The new module is isolated and contract/validation-only.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260613T192803172Z_000204_milestone` created with name `role_artifact_contract_layer_r1_types_validation_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `role_artifact_contract_layer_r1_types_validation_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add isolated role types and barrels, implement pure validators with recursive forbidden-key scanning, add contract documentation, add focused tests, then run typecheck, full Vitest, build, and required CLI smokes.
 
@@ -2572,7 +2572,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** The root `src/index.ts` was left untouched even though the repo has a broad barrel pattern; direct `src/roles` imports keep R1 isolated as requested.
 
-**Final Report:** R1 implementation completed. Snapshot ID: `snap_20260613T192803172Z_000204_milestone`. Full results are in the pass completion response.
+**Final Report:** R1 implementation completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - Logic Engine V0.9 — Functional Core Acceptance Lock
 
@@ -2590,7 +2590,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Very low. The pass is documentation plus a documentation-lock test only.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260613T062630705Z_000202_milestone` created with name `logic_engine_v0.9_functional_core_acceptance_lock_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `logic_engine_v0.9_functional_core_acceptance_lock_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Create the acceptance report with required sections and exact verdict, add the doc-lock test, update PLANS.md, run typecheck, full Vitest, build, and the required CLI validation matrix.
 
@@ -2604,7 +2604,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** The optional doc-lock test added two focused assertions and raised the suite from 88 files / 1336 tests to 89 files / 1338 tests.
 
-**Final Report:** V0.9 implementation completed. Snapshot ID: `snap_20260613T062630705Z_000202_milestone`. Full results are in the pass completion response.
+**Final Report:** V0.9 implementation completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - Logic Engine V0.8 — Telemetry Trace CLI Surfacing
 
@@ -2622,7 +2622,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. The change is additive, opt-in, and leaves default CLI output unchanged.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260613T060608047Z_000199_milestone` created with name `logic_engine_v0.8_telemetry_trace_surfacing_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `logic_engine_v0.8_telemetry_trace_surfacing_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add parser flag support/rejections, wire collector conditionally in handler, add payload field conditionally, add tests for default output, trace output, combined context+trace, validation errors, sanitization, no file/Ledger writes, route dry-run, and catalog counts, then run required validation commands.
 
@@ -2636,7 +2636,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** Existing V0.7 trace collector dropped into the CLI handler cleanly; no Logic Engine executor or telemetry schema changes were needed for V0.8.
 
-**Final Report:** V0.8 implementation completed. Snapshot ID: `snap_20260613T060608047Z_000199_milestone`. Full results are in the pass completion response.
+**Final Report:** V0.8 implementation completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - Logic Engine V0.7 — Telemetry Trace Contract
 
@@ -2654,7 +2654,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. The collector is additive, optional, in-memory only, and does not alter execution behavior.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260613T055000362Z_000196_milestone` created with name `logic_engine_v0.7_telemetry_trace_contract_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `logic_engine_v0.7_telemetry_trace_contract_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add trace types, collector/serializer, exports, tests for ordering/copying/sanitization/success-refused-failed traces/CLI invariants/catalog counts, then run required validation commands.
 
@@ -2668,7 +2668,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** No CLI changes were needed; the V0.6 `telemetrySink` API was already sufficient for the collector integration.
 
-**Final Report:** V0.7 implementation completed. Snapshot ID: `snap_20260613T055000362Z_000196_milestone`. Full results are in the pass completion response.
+**Final Report:** V0.7 implementation completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - Logic Engine V0.6 — Context Surfacing + Telemetry Hook Stub
 
@@ -2686,7 +2686,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Changes are additive, opt-in, and covered by CLI shape and telemetry behavior tests.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260613T052855999Z_000193_milestone` created with name `logic_engine_v0.6_context_surfacing_telemetry_prechange`. Roll back via snapshot manager if validation fails.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `logic_engine_v0.6_context_surfacing_telemetry_prechange`. Roll back via snapshot manager if validation fails.
 
 **Implementation Steps:** Add CLI flag validation, conditionally add context to JSON payload, add telemetry types/helper, emit stable best-effort events from `executeWorkGraphLite`, add focused tests, then run required validation commands and CLI smokes.
 
@@ -2700,7 +2700,7 @@ guardrails are now a protected surface.`
 
 **Surprises / Discoveries:** `git` was unavailable in the shell, so snapshot manager remained the rollback anchor. The parser/handler split made it possible to reject `--include-context` before `logic-execute` reads inputs or dispatches.
 
-**Final Report:** V0.6 implementation completed. Snapshot ID: `snap_20260613T052855999Z_000193_milestone`. Full results are in the pass completion response.
+**Final Report:** V0.6 implementation completed. Snapshot ID: `pre_migration_D_cold_backup_snap_`. Full results are in the pass completion response.
 
 ## ExecPlan - GROK — CALEB AI HOLLOWCUT EXPORT READINESS ROLLUP REPORT SHAPE PASS
 
@@ -2728,7 +2728,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Low. Additive fields + test coverage inside existing Hollow. Deterministic only. Snapshot pre + full green gates.
 
-**Snapshot / Rollback Plan:** Exact CLI create-milestone-snapshot --name pre-hollowcut-export-readiness-rollup-shape --json executed before any edit (ID: snap_20260610T173402971Z_000124_milestone, path: D:\Caleb AI\.caleb\snapshots\snap_20260610T173402971Z_000124_milestone, ledger written). On failure: use snapshot rollback or git. Ledger records snapshot.
+**Snapshot / Rollback Plan:** Exact CLI create-milestone-snapshot --name pre-hollowcut-export-readiness-rollup-shape --json executed before any edit (ID: pre_migration_D_cold_backup_snap_, path: D:\Caleb AI\.caleb\snapshots\pre_migration_D_cold_backup_snap_, ledger written). On failure: use snapshot rollback or git. Ledger records snapshot.
 
 **Implementation Steps:**
 1. Read authority docs 00/01/02 + PLANS first.
@@ -2953,7 +2953,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Very low (pure documentation + narrow list/ExecPlan updates; follows battleplan/3D plan/role material concepts exactly; no behavior impact).
 
-**Snapshot / Rollback Plan:** Exact `npm run cli -- create-milestone-snapshot --name pre-caleb-logic-engine-contract-source-integration --json` executed first (ID: snap_20260610T191818543Z_000154_milestone, path: D:\Caleb AI\.caleb\snapshots\snap_20260610T191818543Z_000154_milestone, ledger written). Use snapshot manager or git for rollback if needed.
+**Snapshot / Rollback Plan:** Exact `npm run cli -- create-milestone-snapshot --name pre-caleb-logic-engine-contract-source-integration --json` executed first (ID: pre_migration_D_cold_backup_snap_, path: D:\Caleb AI\.caleb\snapshots\pre_migration_D_cold_backup_snap_, ledger written). Use snapshot manager or git for rollback if needed.
 
 **Implementation Steps:**
 1. Read authority docs 00/01/02 + AGENTS/CODEX/PLANS first.
@@ -2995,7 +2995,7 @@ guardrails are now a protected surface.`
 
 **Source Authority:** Explicit owner authorization (2026-07-05) to wire Grok into Caleb AI; `docs/ONE_PROVIDER_ADAPTER_LIVE_IMPLEMENTATION.md` (M1 template); `docs/FIRST_LIVE_CALL_ACCEPTANCE_REPORT.md` (M2 lessons); `docs/CALEB_AI_ROADMAP_TO_LIVE_BOUNDARY.md`; `docs/03_CANONICAL_CONTRACTS.md`; `docs/05_PERMISSIONS_AND_SIDE_EFFECT_POLICY.md`; `AGENTS.md`; `docs/00_SOURCE_INDEX_AND_AUTHORITY.md`; `docs/01_CODEX_OPERATING_CONTRACT.md`; `docs/02_V1_PHASE_BOUNDARIES.md`; and `PLANS.md`.
 
-**Current State:** M1 and M2 are accepted. Anthropic live adapter exists at `src/providers/anthropicLiveAdapter.ts` with CLI surface `run-one-provider-adapter-live` (currently hardcoded to `anthropic_live_adapter`). Pre-change snapshot `snap_20260705T011849270Z_000307_milestone` created with name `G1-prechange` and verified on disk before any G1 edits. Baseline green: 155 test files / 2848 tests; typecheck and build clean. V1 catalog = 12, Hollowcut catalog = 9. No Grok/xAI adapter exists yet.
+**Current State:** M1 and M2 are accepted. Anthropic live adapter exists at `src/providers/anthropicLiveAdapter.ts` with CLI surface `run-one-provider-adapter-live` (currently hardcoded to `anthropic_live_adapter`). Pre-change snapshot `pre_migration_D_cold_backup_snap_` created with name `G1-prechange` and verified on disk before any G1 edits. Baseline green: 155 test files / 2848 tests; typecheck and build clean. V1 catalog = 12, Hollowcut catalog = 9. No Grok/xAI adapter exists yet.
 
 **Scope:**
 - Create `src/providers/grokLiveAdapterTypes.ts` and `src/providers/grokLiveAdapter.ts` — fetch-based (zero new dependencies) adapter targeting `POST https://api.x.ai/v1/chat/completions` with `Authorization: Bearer` credential closure (adapter never reads `process.env`).
@@ -3019,7 +3019,7 @@ guardrails are now a protected surface.`
 
 **Risk Level:** Medium-low. Adds a second live-capable adapter behind the existing gate chain; touches protected CLI handler surface (`commandHandlers.ts`) for `--adapter-id` generalization. Mitigated by offline-only tests, mock fetch, unchanged gate ordering, and no live call in this pass.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260705T011849270Z_000307_milestone` (name `G1-prechange`, path `D:\Caleb AI\.caleb\snapshots\snap_20260705T011849270Z_000307_milestone`, ledger entry written) created and verified before any G1 file edit. Roll back via snapshot manager to this ID if validation fails. Post-pass validation snapshot `G1-validation` must be created and verified on disk before recording its ID here.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` (name `G1-prechange`, path `D:\Caleb AI\.caleb\snapshots\pre_migration_D_cold_backup_snap_`, ledger entry written) created and verified before any G1 file edit. Roll back via snapshot manager to this ID if validation fails. Post-pass validation snapshot `G1-validation` must be created and verified on disk before recording its ID here.
 
 **Implementation Steps:**
 1. Read M1 implementation doc, Anthropic adapter source, live adapter contract validators, and R35/R36 prerequisites contract.
@@ -3033,11 +3033,11 @@ guardrails are now a protected surface.`
 9. Add `examples/g1-demo/grok-first-call-prompt.txt` and implementation doc.
 10. Run full validation suite; create `G1-validation` snapshot; update Progress Log and Final Report.
 
-**Validation Commands:** `npm run --silent cli -- create-milestone-snapshot --name G1-prechange --json` (already completed: `snap_20260705T011849270Z_000307_milestone`); `npm run typecheck`; `npm run build`; `npx vitest run tests/providers/grokLiveAdapter.test.ts`; `npx vitest run tests/cli/runOneProviderAdapterLiveCommand.test.ts`; `npx vitest run tests/acceptance`; `npm test`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; `npm run --silent cli -- create-milestone-snapshot --name G1-validation --json` (completed: `snap_20260705T014356336Z_000311_milestone`).
+**Validation Commands:** `npm run --silent cli -- create-milestone-snapshot --name G1-prechange --json` (already completed: `pre_migration_D_cold_backup_snap_`); `npm run typecheck`; `npm run build`; `npx vitest run tests/providers/grokLiveAdapter.test.ts`; `npx vitest run tests/cli/runOneProviderAdapterLiveCommand.test.ts`; `npx vitest run tests/acceptance`; `npm test`; `npm run --silent cli -- list-hollows --json`; `npm run --silent cli -- list-hollowcut-hollows --json`; `npm run --silent cli -- create-milestone-snapshot --name G1-validation --json` (completed: `pre_migration_D_cold_backup_snap_`).
 
 **Acceptance Criteria:** Pre-change snapshot exists and was verified on disk before edits. Grok adapter types and implementation exist behind the full gate chain. `--adapter-id grok_live_adapter` routes correctly; default remains Anthropic. Offline tests prove no network, no env read by adapter, no key in records, T1 ceiling enforced. Live scaffold excluded from default runs. Boundary allowlist updated for exactly two new provider files. V1 catalog remains 12; Hollowcut catalog remains 9. **No live call made in G1.** Full suite green; typecheck and build clean. `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md` exists. Progress Log and validation snapshot ID recorded in this ExecPlan.
 
-**Progress Log:** Pre-change snapshot `snap_20260705T011849270Z_000307_milestone` created via `npm run cli -- create-milestone-snapshot --name G1-prechange --json` (18 files captured, ledger entry written). Baseline confirmed green: 155 test files / 2848 tests. Implemented `xaiLiveAdapter.ts`, `xaiLiveAdapterTypes.ts`, `liveAdapterShared.ts`; CLI `--adapter-id` routing; offline + live scaffolds; boundary allowlist updates (+3 provider files). `runtimeStoragePlanningBoundary` false-positive on `grok` import paths resolved by naming source modules `xaiLiveAdapter*` (adapter_id remains `grok_live_adapter`). Validation snapshot `snap_20260705T014356336Z_000311_milestone` verified on disk. Suite at pass close: 156 test files / 2859 tests green; typecheck and build clean. **No live call made in G1.**
+**Progress Log:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created via `npm run cli -- create-milestone-snapshot --name G1-prechange --json` (18 files captured, ledger entry written). Baseline confirmed green: 155 test files / 2848 tests. Implemented `xaiLiveAdapter.ts`, `xaiLiveAdapterTypes.ts`, `liveAdapterShared.ts`; CLI `--adapter-id` routing; offline + live scaffolds; boundary allowlist updates (+3 provider files). `runtimeStoragePlanningBoundary` false-positive on `grok` import paths resolved by naming source modules `xaiLiveAdapter*` (adapter_id remains `grok_live_adapter`). Validation snapshot `pre_migration_D_cold_backup_snap_` verified on disk. Suite at pass close: 156 test files / 2859 tests green; typecheck and build clean. **No live call made in G1.**
 
 **Decision Log:** CLI generalization uses `--adapter-id` on the existing `run-one-provider-adapter-live` command rather than a separate Grok-only command — scales toward V4 multi-provider routing without duplicating gate logic. xAI Chat Completions (`/v1/chat/completions`) chosen over the Responses API for G1 because it is OpenAI-shaped, fetch-friendly, and sufficient for a bounded first-call membrane test in G2. `search_parameters.mode: "off"` locked for G1/G2 to prevent unbounded live-search side effects. Credential remains caller-declared closure only (`credential_auto_read: false`); env var name `XAI_API_KEY` is a G2 runtime convention, not hardcoded in the adapter. Shared digest/trust helpers extracted to `liveAdapterShared.ts` so the xAI adapter does not import Anthropic-named modules and acceptance SDK-scan tests stay green.
 
@@ -3057,13 +3057,13 @@ guardrails are now a protected surface.`
 
 **Out of Scope:** No source changes unless reality breaks contracts (contract-correction passes scheduled separately). No second provider. No M3 route MVP.
 
-**Snapshot / Rollback Plan:** Pre-change `snap_20260705T015648621Z_000313_milestone`. Validation snapshot recorded at pass close.
+**Snapshot / Rollback Plan:** Pre-change `pre_migration_D_cold_backup_snap_`. Validation snapshot recorded at pass close.
 
 **Validation Commands:** `npm run cli -- create-milestone-snapshot --name G2-prechange --json`; live invocation with full gate flags and `--write-ledger`; ledger scan for key/prompt/output absence; `npm test` unchanged and green.
 
 **Acceptance Criteria:** One real `request_id` in the report. Membrane intact. Trust tier T0/T1 only. Honest digest mismatch reporting if applicable. Suite green. No source changes unless separately authorized.
 
-**Progress Log:** Pre-change snapshot `snap_20260705T015648621Z_000313_milestone`. Attempt 1 failed HTTP 410 (`search_parameters` rejected by xAI). Minimal wire fix in `xaiLiveAdapter.ts` + test update (authorized reality correction). Attempt 2 succeeded: provider ID `91bc2421-b27f-9247-8009-5cda43341a53`, digest matches `acknowledged`. Report `docs/FIRST_GROK_LIVE_CALL_ACCEPTANCE_REPORT.md`. Credential bridge file deleted. Validation snapshot `snap_20260705T020128766Z_000314_milestone`. Suite green at pass close.
+**Progress Log:** Pre-change snapshot `pre_migration_D_cold_backup_snap_`. Attempt 1 failed HTTP 410 (`search_parameters` rejected by xAI). Minimal wire fix in `xaiLiveAdapter.ts` + test update (authorized reality correction). Attempt 2 succeeded: provider ID `91bc2421-b27f-9247-8009-5cda43341a53`, digest matches `acknowledged`. Report `docs/FIRST_GROK_LIVE_CALL_ACCEPTANCE_REPORT.md`. Credential bridge file deleted. Validation snapshot `pre_migration_D_cold_backup_snap_`. Suite green at pass close.
 
 **Final Report:** G2 accepted. Source changed: `src/providers/xaiLiveAdapter.ts`, `tests/providers/grokLiveAdapter.test.ts`, `docs/FIRST_GROK_LIVE_CALL_ACCEPTANCE_REPORT.md`, `docs/GROK_LIVE_ADAPTER_IMPLEMENTATION.md`, `docs/STATUS_LOG.md`, `PLANS.md`, `.caleb/ledger/ledger.jsonl`. Next: owner-directed (M3 or default model review).
 
@@ -3083,7 +3083,7 @@ guardrails are now a protected surface.`
 
 **Out of Scope:** AUD-2 git changeset collection; enforcement/mutation; non-count assertion changes in lock tests; historical acceptance report doc edits.
 
-**Snapshot / Rollback Plan:** Pre-change `snap_20260707T142234020Z_000368_milestone` (`aud_1_pass_compliance_auditor_prechange`, verified on disk).
+**Snapshot / Rollback Plan:** Pre-change `pre_migration_D_cold_backup_snap_` (`aud_1_pass_compliance_auditor_prechange`, verified on disk).
 
 **Implementation Steps:**
 1. Implement pass compliance evaluator + Hollow manifest/implementation.
@@ -3099,7 +3099,7 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** All protocol test cases pass; VRP T2 evidence with LG-1 IDs; self-smoke compliant; authorized locks re-keyed 12 → 13; full suite green; no forbidden files touched.
 
-**Progress Log:** A1 snapshot `snap_20260707T142234020Z_000368_milestone`. A2 snapshot `snap_20260707T154921326Z_000370_milestone` verified. Exhaustive count-lock re-key across 57 test files. Self-smoke fixture fixed (duplicate path removed). Focused vitest: 21/21 green. Full vitest: **175 files / 3,022 tests green** (+21 tests vs RA-R2 baseline count; +2 files).
+**Progress Log:** A1 snapshot `pre_migration_D_cold_backup_snap_`. A2 snapshot `pre_migration_D_cold_backup_snap_` verified. Exhaustive count-lock re-key across 57 test files. Self-smoke fixture fixed (duplicate path removed). Focused vitest: 21/21 green. Full vitest: **175 files / 3,022 tests green** (+21 tests vs RA-R2 baseline count; +2 files).
 
 **Decision Log:** A2 leaves historical doc-content locks at 12 (`snapshotClaimIntegrityGateAcceptance` line 57, `m3RawOutputBoundaryAcceptanceLock` report category string). Self-smoke `allowed_modify` uses `tests/**` subtree globs for truthful A2 scope.
 
@@ -3119,13 +3119,13 @@ guardrails are now a protected surface.`
 
 **Out of Scope:** New Hollow; catalog changes; enforcement; AUD-1 Hollow contract changes; provider/role/runtime changes.
 
-**Snapshot / Rollback Plan:** Pre-change `snap_20260707T163824736Z_000372_milestone` (`AUD2_prechange`, verified on disk).
+**Snapshot / Rollback Plan:** Pre-change `pre_migration_D_cold_backup_snap_` (`AUD2_prechange`, verified on disk).
 
 **Validation Commands:** `npx vitest run tests/audit/* tests/cli/auditPassComplianceCli.test.ts tests/acceptance/aud2GitChangesetCollectionSeamAcceptance.test.ts`; `npx tsc --noEmit` (single invocation); `npx vitest run`.
 
 **Acceptance Criteria:** CLI command operational; git collection + normalization; runner/VRP path; T2 verdict; report-only exit semantics; Hollow purity regression; full suite green.
 
-**Progress Log:** Pre-change snapshot `snap_20260707T163824736Z_000372_milestone` created and verified. Git collector, CLI command, tests, and docs implemented. CLI lock discovery: no direct command-count/roster locks found. Focused AUD-2 tests: 25/25 green. Full suite: 179 files / 3,048 tests green (+4 files, +26 tests vs baseline). `npx tsc --noEmit`: first run during implementation reported 3 errors (fixed); subsequent unloaded runs hung >600s with no output (environmental finding, consistent with AUD-1). Self-smoke: T2 verified, `compliant: false` due to known `true /root/vitest-metadata.json` git noise (out of scope).
+**Progress Log:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified. Git collector, CLI command, tests, and docs implemented. CLI lock discovery: no direct command-count/roster locks found. Focused AUD-2 tests: 25/25 green. Full suite: 179 files / 3,048 tests green (+4 files, +26 tests vs baseline). `npx tsc --noEmit`: first run during implementation reported 3 errors (fixed); subsequent unloaded runs hung >600s with no output (environmental finding, consistent with AUD-1). Self-smoke: T2 verified, `compliant: false` due to known `true /root/vitest-metadata.json` git noise (out of scope).
 
 **Final Report:** AUD-2 accepted. `audit-pass-compliance` CLI collects git changeset, normalizes for AUD-1 Hollow, invokes registry/runner/VRP path; Hollow purity preserved; report-only semantics confirmed.
 
@@ -3141,13 +3141,13 @@ guardrails are now a protected surface.`
 
 **Out of Scope:** Hollow changes; LE consumption; Vitest config override; cross-env; package lockfiles; external env mutation.
 
-**Snapshot / Rollback Plan:** Pre-change `snap_20260707T183454421Z_000376_milestone` (`TRUE2_prechange`, verified on disk).
+**Snapshot / Rollback Plan:** Pre-change `pre_migration_D_cold_backup_snap_` (`TRUE2_prechange`, verified on disk).
 
 **Validation Commands:** `npx vitest run tests/audit/gitChangesetCollector*.test.ts`; `npm run --silent cli -- audit-pass-compliance --manifest examples/audit/true2-pass-manifest.valid.json --base-ref HEAD --json`; `npx tsc --noEmit`; `npx vitest run`.
 
 **Acceptance Criteria:** Artifact removed; git warning gone; ignore patterns verified; `AUD2_INVALID_PATH_COMPONENT_WHITESPACE` collector hardening; self-smoke T2 without `true /root` violation; suite green.
 
-**Progress Log:** Pre-change snapshot `snap_20260707T183454421Z_000376_milestone` created and verified. Malformed `true ` directory removed via Node `fs.rmSync` (PowerShell `Remove-Item` failed on trailing-space literal path). `.gitignore` Vitest dump patterns added and verified with `git check-ignore`. Collector hardened with `AUD2_INVALID_PATH_COMPONENT_WHITESPACE`. Focused tests: 17/17 green. Self-smoke TRUE-2 manifest: compliant, T2 verified, no `true /root` violation. Full suite: 180 files / 3,055 tests green (+1 file, +7 tests). `npx tsc --noEmit`: pass.
+**Progress Log:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified. Malformed `true ` directory removed via Node `fs.rmSync` (PowerShell `Remove-Item` failed on trailing-space literal path). `.gitignore` Vitest dump patterns added and verified with `git check-ignore`. Collector hardened with `AUD2_INVALID_PATH_COMPONENT_WHITESPACE`. Focused tests: 17/17 green. Self-smoke TRUE-2 manifest: compliant, T2 verified, no `true /root` violation. Full suite: 180 files / 3,055 tests green (+1 file, +7 tests). `npx tsc --noEmit`: pass.
 
 **Final Report:** TRUE-2 accepted. Vitest dump hygiene guardrails in place; AUD-2 collector rejects whitespace-polluted paths; git `true /` warning eliminated.
 
@@ -3165,15 +3165,15 @@ guardrails are now a protected surface.`
 
 **Out of Scope:** L1 allowlist change; role rotation execution; provider calls; RA-R1 runtime edits; catalog changes; vitest config; package files.
 
-**Snapshot / Rollback Plan:** Diagnostic pre-change `snap_20260707T193901342Z_000378_milestone` (`le1_seam_diagnostic_prechange`, verified on disk).
+**Snapshot / Rollback Plan:** Diagnostic pre-change `pre_migration_D_cold_backup_snap_` (`le1_seam_diagnostic_prechange`, verified on disk).
 
 **Validation Commands (diagnostic):** `npx tsc --noEmit`; `npx vitest run` (baseline must remain green).
 
 **Acceptance Criteria (diagnostic):** P1–P3 resolved on record; carrier type argued; classification enum proposed; L1 seven entries verbatim; STOP for Pat.
 
-**Progress Log (diagnostic):** Pre-change snapshot `snap_20260707T193901342Z_000378_milestone` created and verified. P1: V1=13, Hollowcut=9; AUD-1 Auditor in V1 via Amendment A1/A2. P2: RA-R1-D clean classification re-confirmed. P3: RA-R1 implemented; RA-R2 contract-only; LE-1 read-only seam proposed. Diagnostic committed at `353a74d`. Pat approved implementation.
+**Progress Log (diagnostic):** Pre-change snapshot `pre_migration_D_cold_backup_snap_` created and verified. P1: V1=13, Hollowcut=9; AUD-1 Auditor in V1 via Amendment A1/A2. P2: RA-R1-D clean classification re-confirmed. P3: RA-R1 implemented; RA-R2 contract-only; LE-1 read-only seam proposed. Diagnostic committed at `353a74d`. Pat approved implementation.
 
-**Progress Log (implementation):** Pre-change snapshot `snap_20260707T195956421Z_000380_milestone` (`le1_seam_implementation_prechange`, verified on disk). Added `src/logicEngine/rotationPlanSeam.ts` with 12-branch decision inventory; barrel export in `src/logicEngine/index.ts`. Unit tests (6) + acceptance tests (8): all classification enum values, all detectors, L1 lock verbatim, read-only proof, catalog 13/9. Focused seam tests: 14/14 green. Full suite: 182 files / 3,069 tests green (+2 files, +14 tests). `npx tsc --noEmit`: pass. `npm run build`: pass. Seam not wired into `routeInputGate.ts` or `selectRoute`.
+**Progress Log (implementation):** Pre-change snapshot `pre_migration_D_cold_backup_snap_` (`le1_seam_implementation_prechange`, verified on disk). Added `src/logicEngine/rotationPlanSeam.ts` with 12-branch decision inventory; barrel export in `src/logicEngine/index.ts`. Unit tests (6) + acceptance tests (8): all classification enum values, all detectors, L1 lock verbatim, read-only proof, catalog 13/9. Focused seam tests: 14/14 green. Full suite: 182 files / 3,069 tests green (+2 files, +14 tests). `npx tsc --noEmit`: pass. `npm run build`: pass. Seam not wired into `routeInputGate.ts` or `selectRoute`.
 
 **Final Report:** LE-1 Rotation Plan Consumption Seam: Accepted — the engine can read rotation plans on the record; it cannot run them; the steering boundary is unchanged.
 
@@ -3187,7 +3187,7 @@ guardrails are now a protected surface.`
 
 **Scope:** `src/roles/roleHandoffGate.ts`; role-runtime record types and executor refusal sequencing; execution-keyed Ledger reconstruction; focused role/runtime/logic-engine and acceptance detectors; protocol, report, status, and this ExecPlan. No provider, prompt, normalization, L1 allowlist, catalog, transport, or live-event changes.
 
-**Snapshot / Rollback Plan:** Explicit pre-change snapshot `snap_20260719T203614999Z_000438_milestone` (`LIVE-F7-prechange`), verified on disk with 18 captured files and a Ledger entry. Restore through Change Guard only if authorized; never retro-edit attempt-six evidence.
+**Snapshot / Rollback Plan:** Explicit pre-change snapshot `pre_migration_D_cold_backup_snap_` (`LIVE-F7-prechange`), verified on disk with 18 captured files and a Ledger entry. Restore through Change Guard only if authorized; never retro-edit attempt-six evidence.
 
 **Implementation Steps:**
 1. Commit protocol provenance and this ExecPlan.
@@ -3201,7 +3201,7 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Exact D2 matrix; only check 11 behavior modernized; other fourteen checks preserved; refusal evidence written before exit and free of payload/free-text; failed step reconstructed from Ledger bytes alone without attempt stitching; V1 13/Hollowcut 9; prompt and L1 pins untouched; no live calls; canonical validation green; report committed and `origin/main` synchronized.
 
-**Progress Log:** Preconditions passed. Baseline suite 200/3,199, typecheck 0, build 0. Explicit snapshot `snap_20260719T203614999Z_000438_milestone` verified. Implemented the exact 33-transition matrix, structured check-11 issues, pre-return `gate_evaluation_refused` evidence, and execution-keyed failed-step reconstruction. Focused LIVE-F7/identity/LE-3-A validation passed 5 files / 73 tests. Canonical suite passed 201 files / 3,210 tests; governed typecheck and build exited 0. V1/Hollowcut remain 13/9; prompt and L1 pins are unchanged. AUD-2 final self-smoke is compliant/T2 across 12 paths with zero violations.
+**Progress Log:** Preconditions passed. Baseline suite 200/3,199, typecheck 0, build 0. Explicit snapshot `pre_migration_D_cold_backup_snap_` verified. Implemented the exact 33-transition matrix, structured check-11 issues, pre-return `gate_evaluation_refused` evidence, and execution-keyed failed-step reconstruction. Focused LIVE-F7/identity/LE-3-A validation passed 5 files / 73 tests. Canonical suite passed 201 files / 3,210 tests; governed typecheck and build exited 0. V1/Hollowcut remain 13/9; prompt and L1 pins are unchanged. AUD-2 final self-smoke is compliant/T2 across 12 paths with zero violations.
 
 **Final Report:** `docs/LIVE_F7_HANDOFF_GATE_EVIDENCE_REPORT.md`. LIVE-F7 accepted offline with no deviations and no live call. Attempt seven remains a separate human-host event requiring fresh Pat authorization.
 
@@ -3215,7 +3215,7 @@ guardrails are now a protected surface.`
 
 **Scope:** Append the exact evidence-commit final step to the existing operating-contract live-event section. Add new `rehearsal-*` fixtures and permanent tests that inject Anthropic responses at the pinned fetch site while exercising the production live rotation adapter, F4 envelope, check 11, step 1 Critic, M3 lineage, seam Ledger entries, and execution-keyed reconstruction. Add a step-1 truncation negative case. No live, prompt, gate, L1, bridge, provider-source, transport, or existing live-fixture changes.
 
-**Snapshot / Rollback Plan:** Restart snapshot `snap_20260720T032512227Z_000448_milestone` (`PRE-7-restart-post-F8-prechange`), verified on disk with 18 captured files and a Ledger entry before restart implementation edits. The canonical baseline also created the expected isolated CLI-test snapshot record `snap_20260720T032220137Z_000447_milestone`; both Ledger changes are append-only. Restore only through an authorized Change Guard operation.
+**Snapshot / Rollback Plan:** Restart snapshot `pre_migration_D_cold_backup_snap_` (`PRE-7-restart-post-F8-prechange`), verified on disk with 18 captured files and a Ledger entry before restart implementation edits. The canonical baseline also created the expected isolated CLI-test snapshot record `pre_migration_D_cold_backup_snap_`; both Ledger changes are append-only. Restore only through an authorized Change Guard operation.
 
 **Implementation Steps:** Commit protocol/runbook doctrine; inspect and reuse production live adapter injection points; add rehearsal fixtures; add positive `needs_revision` and `accepted` detectors; add step-1 truncation detector; run focused and canonical validation; audit; report; commit and push.
 
@@ -3223,7 +3223,7 @@ guardrails are now a protected surface.`
 
 **Acceptance Criteria:** Both positive variants complete two steps; Critic executes under mock; both T0/canonical lineages reconstruct; all trust remains T1 or lower; injected fetch counts prove zero real egress and the sentinel detector can fail; step-1 truncation reconstructs with F5/F7 detail; runbook text is exact; protected surfaces unchanged; canonical validation and audit green.
 
-**Progress Log:** Restart Section 2 preconditions passed at the post-F8 baseline and snapshot `snap_20260720T032512227Z_000448_milestone` was verified before implementation. Protocol/runbook codification was already committed and synchronized from the first PRE-7 phase. Added only new `rehearsal-*` semantic fixtures, the permanent production-path Anthropic injected-fetch rehearsal, its AUD-2 manifest, and handoff records. Both Planner statuses pass check 11 and execute Critic; the step-1 truncation retains T0 and reconstructs through LIVE-F8. Focused validation passed 1 file / 4 tests; canonical passed 203 files / 3,224 tests; typecheck/build exited 0; catalogs remain 13/9; prompt/L1/protected surfaces are unchanged; AUD-2 is compliant/T2 across 10 paths with zero violations. Honest deviations: none.
+**Progress Log:** Restart Section 2 preconditions passed at the post-F8 baseline and snapshot `pre_migration_D_cold_backup_snap_` was verified before implementation. Protocol/runbook codification was already committed and synchronized from the first PRE-7 phase. Added only new `rehearsal-*` semantic fixtures, the permanent production-path Anthropic injected-fetch rehearsal, its AUD-2 manifest, and handoff records. Both Planner statuses pass check 11 and execute Critic; the step-1 truncation retains T0 and reconstructs through LIVE-F8. Focused validation passed 1 file / 4 tests; canonical passed 203 files / 3,224 tests; typecheck/build exited 0; catalogs remain 13/9; prompt/L1/protected surfaces are unchanged; AUD-2 is compliant/T2 across 10 paths with zero violations. Honest deviations: none.
 
 ## ExecPlan - LIVE-F8 Adapter-Stage Failure Evidence + Reconstruction
 
@@ -3283,7 +3283,7 @@ validation and audit green.
 
 **Progress Log:** Section 2 passed at the exact required baseline. Protocol and
 authority were committed at `90eadb6`. Pre-change snapshot
-`snap_20260720T001213891Z_000443_milestone` captured 18 files and was Ledgered.
+`pre_migration_D_cold_backup_snap_` captured 18 files and was Ledgered.
 Source mutation did not begin: the complete failure-flow audit found that a
 rejected/thrown `adapter.invoke()` bypasses the returned-failure branch and also
 bypasses seam terminal construction. Section 9 STOP invoked.
@@ -3310,7 +3310,7 @@ catch-all is authorized. T7-T10 join T1-T6; any concrete non-adapter seam escape
 is a renewed Section 9 STOP and candidate citation seven.
 
 **Amendment A1 Progress:** Authority addendum committed at `9e09a4e`; fresh
-prechange snapshot `snap_20260720T001940267Z_000444_milestone` verified. Added
+prechange snapshot `pre_migration_D_cold_backup_snap_` verified. Added
 bounded adapter failure evidence, executor returned-failure and exception
 sequencing, the sibling T0 Ledger record, terminal parent linkage, and strict
 execution-keyed reconstruction. T1-T10 pass. Focused validation passed 5 files /
@@ -3318,7 +3318,7 @@ execution-keyed reconstruction. T1-T10 pass. Focused validation passed 5 files /
 exited 0. Catalogs remain 13/9; prompt, L1, matrix, gate, bridge, normalization,
 transport, provider, and live-fixture protected diffs are empty. AUD-2 is
 compliant/T2 across 17 paths with zero violations. Validation snapshot
-`snap_20260720T003952059Z_000446_milestone` verified.
+`pre_migration_D_cold_backup_snap_` verified.
 
 **Amendment A1 Final Report:** LIVE-F8 accepted offline at
 `docs/LIVE_F8_ADAPTER_FAILURE_EVIDENCE_REPORT.md`. Citations five and six are
@@ -3337,7 +3337,7 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Risk Level:** High — live prompt/budget evidence and append-only Ledger byte preservation, without live execution.
 
-**Snapshot / Rollback Plan:** Pre-change snapshot `snap_20260720T044005823Z_000451_milestone` (`LIVE-F9-prechange`) captured 18 files and was verified on disk before implementation mutation. Baseline test snapshot `snap_20260720T043746253Z_000450_milestone` is also an expected append-only record. Restore through Change Guard only if authorized; never rewrite historical Ledger bytes.
+**Snapshot / Rollback Plan:** Pre-change snapshot `pre_migration_D_cold_backup_snap_` (`LIVE-F9-prechange`) captured 18 files and was verified on disk before implementation mutation. Baseline test snapshot `pre_migration_D_cold_backup_snap_` is also an expected append-only record. Restore through Change Guard only if authorized; never rewrite historical Ledger bytes.
 
 **Implementation Steps:** Add Ledger `-text` attribute; harden Critic prompt and compute digest; update all non-historical pins; change only E1 Critic max tokens; verify equality plumbing is fixture-driven; add T1-T6 known-violation detectors and generic rehearsal boundary; run focused/canonical validation, catalogs, hashes, AUD-2, protected diffs; report, snapshot, commit, push, STOP.
 
@@ -3345,7 +3345,7 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Acceptance Criteria:** T1-T6 pass; new Critic digest is byte-derived and fully pinned; Planner unchanged; E1 fixture has exactly one value change; 2,048 equality truncates while 1,536/end-turn does not; validator schema unchanged; Ledger attribute resolves `text: unset`; canonical validation/AUD-2 green; clean synchronized remote; no live call.
 
-**Progress Log:** Section 2 passed. Pre-change snapshot `snap_20260720T044005823Z_000451_milestone` verified. Added Ledger `-text` protection; hardened the Critic prompt and re-pinned its digest; raised only E1 Critic to 2,048; kept Planner at 1,536 through a role-specific evidence ceiling; made PRE-7 equality generic; and added T1-T6. Focused validation passed 6 files / 37 tests. The first canonical attempt hit only an existing H5 5-second timeout under contention; its serial masking guard passed 1/1 in 95 ms, and a clean-process canonical rerun passed 204 files / 3,230 tests. Typecheck/build exited 0, catalogs remain 13/9, protected diffs are empty, and AUD-2 is compliant/T2 across 16 paths with zero violations. Validation snapshot `snap_20260720T045723805Z_000454_milestone` is Ledgered.
+**Progress Log:** Section 2 passed. Pre-change snapshot `pre_migration_D_cold_backup_snap_` verified. Added Ledger `-text` protection; hardened the Critic prompt and re-pinned its digest; raised only E1 Critic to 2,048; kept Planner at 1,536 through a role-specific evidence ceiling; made PRE-7 equality generic; and added T1-T6. Focused validation passed 6 files / 37 tests. The first canonical attempt hit only an existing H5 5-second timeout under contention; its serial masking guard passed 1/1 in 95 ms, and a clean-process canonical rerun passed 204 files / 3,230 tests. Typecheck/build exited 0, catalogs remain 13/9, protected diffs are empty, and AUD-2 is compliant/T2 across 16 paths with zero violations. Validation snapshot `pre_migration_D_cold_backup_snap_` is Ledgered.
 
 **Decision Log:** Prompt list/string bounds remain instructions, not schema policy. Production truncation detection was already budget-driven. The validator's prior global 1,536 evidence ceiling was the only required plumbing change; it is now role-specific (Planner 1,536, Critic 2,048), preserving the narrower Planner boundary.
 
@@ -3369,7 +3369,7 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Risk Level:** Medium — authorization provenance must remain exact and retroactive timing must not be upgraded.
 
-**Snapshot / Rollback Plan:** Prechange snapshot `snap_20260720T145701939Z_000455_milestone` (`AUTH-2-prechange`) captured 18 files, wrote one Ledger record, and was verified before register/runbook/test mutation. Git commit `a8707cd` is the protocol rollback anchor. No historical Ledger or register entry may be rewritten.
+**Snapshot / Rollback Plan:** Prechange snapshot `pre_migration_D_cold_backup_snap_` (`AUTH-2-prechange`) captured 18 files, wrote one Ledger record, and was verified before register/runbook/test mutation. Git commit `a8707cd` is the protocol rollback anchor. No historical Ledger or register entry may be rewritten.
 
 **Implementation Steps:** Preserve extraction findings; map A1-A8 exact words, evidence commits, and terminal outcomes; create the exact seven-field register entries; insert the normative runbook paragraph immediately before host-shell execution doctrine; add the one-test parser/history/known-violation detector; run focused and canonical validation, typecheck, build, catalogs, prompt/L1 pins, and AUD-2; report, commit, push, verify synchronization; STOP.
 
@@ -3377,7 +3377,7 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Acceptance Criteria:** The register has exactly the prescribed fields and honest timing/provenance for A1-A8; A7/A8 extraction absence is reported verbatim; every labeled evidence commit in history has an entry; the known-missing-entry fixture fails; no existing runbook step changes; no source/live/credential/Ledger-history mutation; canonical validation and audit green.
 
-**Progress Log:** Extraction completed before mutation and found no committed A7/A8 sentence. AUTH-2 protocol committed/pushed at `a8707cd`. Prechange snapshot `snap_20260720T145701939Z_000455_milestone` verified. Baseline passed 204 files / 3,230 tests. Added the eight-entry append-only register, exact pre-execution runbook paragraph, and one permanent parser/history detector with a missing-A8 known violation. Focused validation passed 1 file / 1 test; canonical passed 205 files / 3,231 tests; typecheck/build exited 0; catalogs remain 13/9; prompt pins and L1 are unchanged; AUD-2 is compliant/T2 across 8 paths with zero violations. Validation snapshot `snap_20260720T150350612Z_000457_milestone` is Ledgered.
+**Progress Log:** Extraction completed before mutation and found no committed A7/A8 sentence. AUTH-2 protocol committed/pushed at `a8707cd`. Prechange snapshot `pre_migration_D_cold_backup_snap_` verified. Baseline passed 204 files / 3,230 tests. Added the eight-entry append-only register, exact pre-execution runbook paragraph, and one permanent parser/history detector with a missing-A8 known violation. Focused validation passed 1 file / 1 test; canonical passed 205 files / 3,231 tests; typecheck/build exited 0; catalogs remain 13/9; prompt pins and L1 are unchanged; AUD-2 is compliant/T2 across 8 paths with zero violations. Validation snapshot `pre_migration_D_cold_backup_snap_` is Ledgered.
 
 **Decision Log:** A7 and A8 will be labeled `post-run retroactive` exactly as the protocol requires after the negative committed-file extraction. A1-A6 use Pat's verbatim pre-run conversation statements and retain `conversation record with reviewer` provenance rather than claiming a committed first record.
 
@@ -3401,7 +3401,7 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Risk Level:** Medium — doctrine text must be exact; E2 budget edit must not touch other fixture fields; seat-physics correction must not beautify history.
 
-**Snapshot / Rollback Plan:** Prechange `snap_20260720T154224647Z_000459_milestone` verified on disk before mutation. Protocol file commits with the work. No historical Ledger rewrite.
+**Snapshot / Rollback Plan:** Prechange `pre_migration_D_cold_backup_snap_` verified on disk before mutation. Protocol file commits with the work. No historical Ledger rewrite.
 
 **Implementation Steps:** Section 2 verify; snapshot; protocol; contract D1/D2/D5; seat record; E2 Critic 2048; T1–T5; focused + canonical validation; typecheck; build; catalogs; digests; AUD-2; report; commit; push; STOP.
 

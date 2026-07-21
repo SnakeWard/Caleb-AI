@@ -1,0 +1,29 @@
+{
+  "pass_id": "DEBT-1",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/DEBT_1_MIGRATION_RECONCILIATION_REPORT.md",
+    "docs/protocols/PASS_PROTOCOL_DEBT_1.md",
+    "examples/audit/debt-1-pass-manifest.valid.json",
+    "tests/acceptance/debt1MigrationReconciliationAcceptance.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    ".gitattributes",
+    "PLANS.md",
+    "docs/LIVE_EVENT_AUTHORIZATIONS.md",
+    "docs/STATUS_LOG.md",
+    "tests/acceptance/auth2LiveEventAuthorizationRegisterAcceptance.test.ts",
+    "tests/acceptance/liveF9CriticBudgetPromptLedgerIntegrityAcceptance.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/logicEngine/**",
+    "src/roles/**",
+    "examples/live-rotation/prompts/**",
+    "package.json",
+    "package-lock.json",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ]
+}

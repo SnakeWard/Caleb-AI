@@ -1,1 +1,24 @@
+# Byte-integrity: prevent CRLF conversion on hash-locked and contract text.
+# Governs future checkouts/clones. Do not use as a bulk working-tree rewrite.
+# Later rules override earlier ones (git attributes last-match-wins).
+
+# Repo-wide LF default for text.
+* text=auto eol=lf
+
+# Ledger must remain exact bytes (LIVE-F9 / evidence commits).
 .caleb/ledger/** -text
+
+# Hash-locked / detector-locked classes — never convert EOL on checkout.
+docs/** -text
+src/** -text
+examples/** -text
+tests/** -text
+
+# Contract/prose and TypeScript surfaces (acceptance locks hash these).
+*.md -text
+*.ts -text
+*.tsx -text
+*.txt -text
+
+# Prompt templates (live-rotation digests) — also under examples/**.
+examples/live-rotation/prompts/** -text

@@ -5,6 +5,8 @@ import { describe, expect, it } from "vitest";
 
 const REGISTER_PATH = "docs/LIVE_EVENT_AUTHORIZATIONS.md";
 const EVENT_LABEL_PATTERN = /^LIVE-R2-E\d+-A\d+$/;
+/** Evidence commits only: subject starts with label + colon (DEBT-1 precision). */
+const EVIDENCE_COMMIT_SUBJECT_PATTERN = /^(LIVE-R2-E\d+-A\d+):/;
 const FIELD_NAMES = [
   "Authorization",
   "Stated by",
@@ -60,8 +62,9 @@ function labeledLedgerEvidenceCommits(): readonly LabeledEvidenceCommit[] {
     { cwd: process.cwd(), encoding: "utf8" }
   );
   return output.split(/\r?\n/).flatMap((line) => {
+    if (line.trim() === "") return [];
     const [commit = "", subject = ""] = line.split("\t", 2);
-    const match = /\b(LIVE-R2-E\d+-A\d+)\b/.exec(subject);
+    const match = EVIDENCE_COMMIT_SUBJECT_PATTERN.exec(subject);
     return match === null ? [] : [{ label: match[1] ?? "", commit }];
   });
 }
@@ -90,13 +93,21 @@ function validateRegister(
       /^(pre-run|post-run retroactive), \d{4}-\d{2}-\d{2}$/
     );
     expect(entry.fields.get("Recorded where first")).toMatch(
-      /^(implementer session context only|conversation record with reviewer|.+:\d+)$/
+      /^(implementer session context only|implementer session, registered immediately|conversation record with reviewer|.+:\d+)$/
     );
     expect(entry.fields.get("Register entry created")).toMatch(
       /^\d{4}-\d{2}-\d{2}, (AUTH-2 \(for backfill\)|post-event|[A-Z0-9-]+)$/
     );
     expect(entry.fields.get("Evidence commit")).toMatch(/^[0-9a-f]{40}$/);
     expect(entry.fields.get("Outcome")).toMatch(/^".+"$/);
+  }
+  // D2: evidence history labels must not be duplicated by imprecise message matching.
+  const historyCounts = new Map<string, number>();
+  for (const evidence of history) {
+    historyCounts.set(evidence.label, (historyCounts.get(evidence.label) ?? 0) + 1);
+  }
+  for (const [label, count] of historyCounts) {
+    if (count > 1) issues.push(`duplicate_evidence_commit:${label}:${count}`);
   }
   for (const evidence of history) {
     const entry = byLabel.get(evidence.label);
@@ -115,6 +126,9 @@ describe("AUTH-2 live-event authorization register", () => {
   it("parses the exact field shape, covers labeled Ledger commits, and catches a missing event", async () => {
     const register = await readFile(REGISTER_PATH, "utf8");
     const history = labeledLedgerEvidenceCommits();
+    const e2Evidence = history.filter((entry) => entry.label === "LIVE-R2-E2-A1");
+    expect(e2Evidence).toHaveLength(1);
+    expect(e2Evidence[0]?.commit).toBe("873276c767fa32783a820a69499d87215c82f798");
     expect(history.map((entry) => entry.label)).toEqual([
       "LIVE-R2-E2-A1",
       "LIVE-R2-E1-A8",
@@ -123,9 +137,21 @@ describe("AUTH-2 live-event authorization register", () => {
     ]);
     expect(validateRegister(register, history)).toEqual([]);
 
-    const knownViolation = register.replace(/\n## LIVE-R2-E2-A1[\s\S]*$/, "");
+    const knownViolation = register.replace(/\n## LIVE-R2-E2-A1[\s\S]*?(?=\n## |\n*$)/, "\n");
     expect(validateRegister(knownViolation, history)).toContain(
       "missing_history_entry:LIVE-R2-E2-A1"
+    );
+
+    // Synthetic genuine-duplicate evidence commit still fails (D2).
+    const syntheticDuplicate: LabeledEvidenceCommit[] = [
+      ...history,
+      {
+        label: "LIVE-R2-E2-A1",
+        commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ];
+    expect(validateRegister(register, syntheticDuplicate)).toContain(
+      "duplicate_evidence_commit:LIVE-R2-E2-A1:2"
     );
   }, 30_000);
 
@@ -134,5 +160,14 @@ describe("AUTH-2 live-event authorization register", () => {
     expect(contract).toContain(
       "The implementer seat echoes the pending authorization requirement back to the operator at event start; the operator does not proceed to execution until the register entry is appended."
     );
+  });
+
+  it("DEBT-1 evidence-commit matcher requires subject-prefix form, not substring", () => {
+    expect(EVIDENCE_COMMIT_SUBJECT_PATTERN.test(
+      "LIVE-R2-E2-A1: cross-family showcase - first complete Anthropic+xAI rotation, first attempt"
+    )).toBe(true);
+    expect(EVIDENCE_COMMIT_SUBJECT_PATTERN.test(
+      "AUTH-3: register LIVE-R2-E2-A1 and lock authorization echo"
+    )).toBe(false);
   });
 });

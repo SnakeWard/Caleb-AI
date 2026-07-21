@@ -295,13 +295,14 @@ describe("LIVE-F9 Critic budget, prompt bounds, and Ledger byte integrity", () =
       ["check-attr", "text", "--", ".caleb/ledger/ledger.jsonl"],
       { cwd: process.cwd(), encoding: "utf8" }
     );
+    // DEBT-1 locks docs/** as -text; contrast path is package.json (* text=auto only).
     const outside = execFileSync(
       "git",
-      ["check-attr", "text", "--", "docs/STATUS_LOG.md"],
+      ["check-attr", "text", "--", "package.json"],
       { cwd: process.cwd(), encoding: "utf8" }
     );
     expect(ledger.trim()).toBe(".caleb/ledger/ledger.jsonl: text: unset");
-    expect(outside.trim()).toBe("docs/STATUS_LOG.md: text: unspecified");
+    expect(outside.trim()).toBe("package.json: text: auto");
     expect(() => assertLedgerTextUnset(ledger)).not.toThrow();
     expect(() => assertLedgerTextUnset(outside)).toThrow(
       "Ledger path is not protected by -text"

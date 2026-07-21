@@ -81,7 +81,16 @@ live-event runbook.
 - Authorization: "I Pat authorize. Make it so."
 - Stated by: Pat (T4)
 - Stated when: post-run retroactive, 2026-07-20
-- Recorded where first: conversation record with reviewer
+- Recorded where first: implementer session, registered immediately
 - Register entry created: 2026-07-20, post-event
 - Evidence commit: 873276c767fa32783a820a69499d87215c82f798
 - Outcome: "completed"
+
+## Corrections log (append-only)
+
+### 2026-07-21 DEBT-1 — LIVE-R2-E2-A1 Recorded where first
+- Field: Recorded where first
+- Incorrect value previously recorded: conversation record with reviewer
+- Correct value: implementer session, registered immediately
+- Reason: pre-fill error; first durable record was the implementer session that registered the entry immediately (AUTH-3), not a reviewer conversation pre-fill
+- Mechanism: field corrected in place so the canonical entry reads true; this Corrections log line is the append-only audit of that field correction (event entries remain append-only; this is field-level provenance repair, not event invention)
