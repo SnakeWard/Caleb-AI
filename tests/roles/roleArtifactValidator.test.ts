@@ -279,8 +279,8 @@ describe("Role Artifact Contract Layer R1 validators", () => {
     expect(source).not.toMatch(/from .*api/i);
   });
 
-  it("V1 catalog remains exactly 13", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  it("V1 catalog remains exactly 14", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
   });
 
   it("Hollowcut catalog remains exactly 9", () => {

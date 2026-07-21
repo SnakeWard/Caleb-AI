@@ -119,8 +119,8 @@ describe("Runtime/Storage Planning Boundary acceptance lock", () => {
     }
   });
 
-  it("keeps V1 Hollow catalog count locked at 13", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  it("keeps V1 Hollow catalog count locked at 14", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
   });
 
   it("keeps Hollowcut catalog count locked at 9", () => {

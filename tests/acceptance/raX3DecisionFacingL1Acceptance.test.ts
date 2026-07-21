@@ -189,18 +189,12 @@ describe("RA-X-3 eighth L1 type + five-check verifier", () => {
     expect(unsat.issues.some((i) => i.code === "capability_unsatisfiable")).toBe(true);
   });
 
-  it("T6: no consumer yet — selectRouteFromRouteInputs does not require the eighth type", async () => {
+  it("T6: eighth type remains verifier-gated (consumer is RA-X-4 classifier path)", async () => {
+    // RA-X-3 delivered gated-and-ready input. RA-X-4 may consume via classifier.
+    // Verifier invocation remains mandatory at the gate.
     const source = await readFile("src/logicEngine/routeInputGate.ts", "utf8");
-    // Route selection still narrows only task_frame + signal_frame.
-    expect(source).toContain('input.record_kind === "contract_validated_task_frame"');
-    expect(source).toContain('input.record_kind === "verified_signal_frame"');
-    expect(source).not.toMatch(
-      /selectRouteFromRouteInputs[\s\S]{0,800}lineage_resolved_decision_facing_record/
-    );
-    // No classifier module yet.
-    const files = await readFile("src/logicEngine/index.ts", "utf8");
-    expect(files).not.toContain("routeClassifier");
-    expect(files).not.toContain("dynamicRoute");
+    expect(source).toContain("validateLineageResolvedDecisionFacingRecord");
+    expect(source).toContain('case "lineage_resolved_decision_facing_record"');
   });
 
   it("T7: atomic addition — allowlist is eight and gate invokes verifier", async () => {

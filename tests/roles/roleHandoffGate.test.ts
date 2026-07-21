@@ -374,7 +374,7 @@ describe("role handoff gate isolation locks", () => {
   });
 
   it("keeps V1 catalog count locked", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
   });
 
   it("keeps Hollowcut catalog count locked", () => {

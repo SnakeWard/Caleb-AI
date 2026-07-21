@@ -115,7 +115,7 @@ describe("M3-A raw output boundary acceptance lock", () => {
   });
 
   it("preserves catalog counts", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });

@@ -374,9 +374,9 @@ describe("executeWorkGraphLite — V0.5 ExecutionContext", () => {
     expect(result.execution_context?.role_artifacts).toHaveLength(0);
   });
 
-  // ── Test 28: V1 catalog remains exactly 13 ───────────────────────────────
-  it("V1 Hollow catalog remains exactly 13 (test 28)", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  // ── Test 28: V1 catalog remains exactly 14 ───────────────────────────────
+  it("V1 Hollow catalog remains exactly 14 (test 28)", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
   });
 
   // ── Test 29: Hollowcut catalog remains exactly 9 ─────────────────────────

@@ -1032,8 +1032,8 @@ describe("route-decision dry-run behavior is unchanged (test 14)", () => {
 // ─── catalog integrity (tests 15 & 16) ───────────────────────────────────────
 
 describe("catalog integrity", () => {
-  it("V1 Hollow catalog remains exactly 13 (test 15)", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  it("V1 Hollow catalog remains exactly 14 (test 15)", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
   });
 
   it("Hollowcut Hollow catalog remains exactly 9 (test 16)", () => {

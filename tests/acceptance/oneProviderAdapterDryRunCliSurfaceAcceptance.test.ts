@@ -139,7 +139,7 @@ describe("one provider adapter dry-run CLI surface acceptance", () => {
     const v1Data = v1.data as { hollows: unknown[] };
     const hollowcutData = hollowcut.data as { hollows: unknown[] };
     expect(v1.ok).toBe(true);
-    expect(v1Data.hollows).toHaveLength(13);
+    expect(v1Data.hollows).toHaveLength(14);
     expect(hollowcut.ok).toBe(true);
     expect(hollowcutData.hollows).toHaveLength(9);
   });

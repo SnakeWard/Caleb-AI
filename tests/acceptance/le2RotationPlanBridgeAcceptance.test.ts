@@ -342,7 +342,7 @@ describe("LE-2 rotation plan bridge acceptance", () => {
       expect(isAllowedRouteInputKind(kind)).toBe(true);
     }
     expect(isAllowedRouteInputKind("runtime_rotation_plan")).toBe(false);
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
 
     const [bridgeSource, routeGateSource, executorSource] = await Promise.all([

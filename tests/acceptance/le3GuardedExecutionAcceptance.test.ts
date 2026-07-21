@@ -309,8 +309,8 @@ describe("LE-3 guarded execution seam acceptance", () => {
     );
   });
 
-  it("preserves catalog locks at V1 13 and Hollowcut 9", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  it("preserves catalog locks at V1 14 and Hollowcut 9 (RA-X-4)", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });

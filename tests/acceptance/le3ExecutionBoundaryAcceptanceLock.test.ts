@@ -139,7 +139,7 @@ describe("LE-3-A execution boundary acceptance lock", () => {
     expect(L1_ALLOWLIST).toHaveLength(8);
     expect(isAllowedRouteInputKind("derived_rotation_plan")).toBe(false);
     expect(isAllowedRouteInputKind("rotation_execution_result")).toBe(false);
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 

@@ -329,9 +329,9 @@ describe("executeWorkGraphLite — V0.4", () => {
     expect(result.errors).toHaveLength(0);
   });
 
-  // ── Test 14: V1 catalog remains exactly 13 ───────────────────────────────
-  it("V1 Hollow catalog remains exactly 13 (test 14)", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  // ── Test 14: V1 catalog remains exactly 14 ───────────────────────────────
+  it("V1 Hollow catalog remains exactly 14 (test 14)", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
   });
 
   // ── Test 15: Hollowcut catalog remains exactly 9 ─────────────────────────

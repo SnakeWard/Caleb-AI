@@ -1196,3 +1196,15 @@ satisfiability). Single-source capability catalog at
 `src/roles/roleCapabilitySet.ts`. Allowlist **7 → 8**. Nothing consumes the
 eighth type for routing yet. Suite **210 files / 3,266 tests** exit 0; catalogs
 13/9; digests unchanged. Report: `docs/RA_X_3_DECISION_FACING_L1_REPORT.md`.
+
+### 2026-07-21 — RA-X-4 — route classifier + dynamic LE-2 + request-only seam
+
+Version-locked pure-lookup table `rax4.1.0` (eight rows); build-time
+matrix-walkability + acyclicity proofs; V1 Hollow
+`hollow.routing.route_classifier` (**catalog 13 → 14**); additive LE-2 path
+(gated decision-facing record → classifier; fixed TaskFrame+SignalFrame
+unchanged); request-only `hollow_evidence_request` seam (orchestrator runs
+Hollow, VRP gates before Analyst). T1–T10 green including defining T7.
+Suite **211 files / 3,278 tests** exit 0; typecheck/build 0; Hollowcut 9;
+prompt digests unchanged; matrix 39 and L1 eight untouched. Report:
+`docs/RA_X_4_ROUTE_CLASSIFIER_REPORT.md`.

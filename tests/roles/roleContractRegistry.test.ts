@@ -164,7 +164,7 @@ describe("role registry isolation locks", () => {
   });
 
   it("keeps V1 and Hollowcut catalog counts locked", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });

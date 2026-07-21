@@ -61,6 +61,6 @@ describe("Provider Adapter Stub With No Network acceptance lock", () => {
     const pkg = await readFile("package.json", "utf8");
     expect(pkg).not.toMatch(/openai|anthropic|gemini|grok|langchain|langgraph|autogen|crewai/i);
   });
-  it("keeps V1 Hollow catalog count locked at 13", () => expect(V1_HOLLOW_MANIFESTS).toHaveLength(13));
+  it("keeps V1 Hollow catalog count locked at 14", () => expect(V1_HOLLOW_MANIFESTS).toHaveLength(14));
   it("keeps Hollowcut catalog count locked at 9", () => expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9));
 });

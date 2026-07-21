@@ -10,7 +10,10 @@ import type {
   RouteSelectionFromInputsResult
 } from "./types/routeInput.js";
 import type { SignalFrame, SignalInputs, SignalScore } from "./types/signalFrame.js";
+import type { RouteDecision } from "./types/routeDecision.js";
 import { validateLineageResolvedDecisionFacingRecord } from "./lineageResolvedDecisionFacingVerifier.js";
+import { classifyDecisionFacingRecord } from "../hollows/categories/routing/routeClassifierHollow.js";
+import type { LineageResolvedDecisionFacingRecord } from "./types/lineageResolvedDecisionFacingRecord.js";
 
 const ALLOWED_KINDS: readonly RouteInputRecordKind[] = [
   "contract_validated_task_frame",
@@ -190,6 +193,38 @@ export function selectRouteFromRouteInputs(inputs: readonly unknown[]): RouteSel
     return { ok: false, decision: null, accepted_inputs: accepted, issues };
   }
 
+  // RA-X-4 additive path: gated decision-facing record → pure classifier lookup.
+  const decisionFacing = accepted.find(
+    (input) => input.record_kind === "lineage_resolved_decision_facing_record"
+  );
+  if (decisionFacing?.record_kind === "lineage_resolved_decision_facing_record") {
+    const classified = classifyDecisionFacingRecord(
+      decisionFacing as LineageResolvedDecisionFacingRecord
+    );
+    if (!classified.ok) {
+      return {
+        ok: false,
+        decision: null,
+        accepted_inputs: accepted,
+        issues: [
+          issue("classifier_refused", "$", `${classified.code}: ${classified.message}`)
+        ]
+      };
+    }
+    const taskFrame = accepted.find((input) => input.record_kind === "contract_validated_task_frame");
+    const decision = buildClassifierRouteDecision(
+      classified.result,
+      taskFrame?.record_kind === "contract_validated_task_frame"
+        ? taskFrame.task_frame.task_id
+        : decisionFacing.record_id,
+      taskFrame?.record_kind === "contract_validated_task_frame"
+        ? taskFrame.task_frame.run_id
+        : decisionFacing.record_id
+    );
+    return { ok: true, decision, accepted_inputs: accepted, issues: [] };
+  }
+
+  // Pre-RA-X-4 fixed path (unchanged): TaskFrame + SignalFrame.
   const taskFrameInput = accepted.find((input) => input.record_kind === "contract_validated_task_frame");
   const signalFrameInput = accepted.find((input) => input.record_kind === "verified_signal_frame");
 
@@ -214,7 +249,55 @@ export function selectRouteFromRouteInputs(inputs: readonly unknown[]): RouteSel
   }
 
   const decision = selectRoute(taskFrameInput.task_frame, signalFrameInput.signal_frame);
-  return { ok: true, decision, accepted_inputs: accepted, issues: [] };
+  return {
+    ok: true,
+    decision: { ...decision, selection_path: "fixed_signal" },
+    accepted_inputs: accepted,
+    issues: []
+  };
+}
+
+function buildClassifierRouteDecision(
+  classified: {
+    readonly table_version: string;
+    readonly role_sequence: readonly string[];
+    readonly features: {
+      readonly stakes: string;
+      readonly ambiguity: string;
+      readonly evidence_need: string;
+    };
+  },
+  taskId: string,
+  runId: string
+): RouteDecision {
+  // Map sequence length to a coarse route_mode label for compatibility; sequence is authoritative.
+  const route_mode =
+    classified.role_sequence.length <= 2
+      ? "single_pass"
+      : classified.role_sequence.length === 3
+        ? "plan_synth"
+        : "plan_analyze_synth";
+  return {
+    task_id: taskId,
+    run_id: runId,
+    route_mode,
+    route_rationale: `RA-X-4 classifier table ${classified.table_version} row features stakes=${classified.features.stakes} ambiguity=${classified.features.ambiguity} evidence_need=${classified.features.evidence_need}`,
+    hard_overrides_applied: [],
+    requires_snapshot_gate: false,
+    requires_approval_gate: classified.features.stakes === "high",
+    complexity_band:
+      classified.features.stakes === "high"
+        ? "high"
+        : classified.features.ambiguity === "ambiguous"
+          ? "medium"
+          : "low",
+    signal_score: 0,
+    decided_at: new Date().toISOString(),
+    selection_path: "classifier",
+    role_sequence: classified.role_sequence,
+    table_version: classified.table_version,
+    classification_features: classified.features
+  };
 }
 
 export function isAllowedRouteInputKind(record_kind: string): record_kind is RouteInputRecordKind {

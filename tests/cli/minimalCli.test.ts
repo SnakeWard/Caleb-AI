@@ -67,8 +67,8 @@ describe("minimal CLI", () => {
     });
   }, 30_000);
 
-  it("V1_HOLLOW_MANIFESTS remains exactly 13 (protected)", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  it("V1_HOLLOW_MANIFESTS remains exactly 14 (protected)", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
   });
 
   it("Hollowcut catalog registers project_state_check and timeline Hollows", () => {
@@ -98,7 +98,7 @@ describe("minimal CLI", () => {
       expect(code).toBe(0);
     });
     // The test above exercises it; we can also assert statically here
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
     const hollowcutIds = HOLLOWCUT_HOLLOW_MANIFESTS.map(m => m.hollow_id);
     expect(hollowcutIds).toContain("hollow.hollowcut.project_state_check");
     expect(hollowcutIds).toContain("hollow.hollowcut.project_timeline_cross_check");

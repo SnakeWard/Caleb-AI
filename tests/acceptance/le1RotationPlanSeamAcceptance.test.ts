@@ -220,8 +220,8 @@ describe("LE-1 rotation plan seam acceptance", () => {
     expect(result.artifact.artifact_id).toMatch(/^rpd_/);
   });
 
-  it("V1 catalog remains exactly 13 and Hollowcut exactly 9", () => {
-    expect(V1_HOLLOW_MANIFESTS.length).toBe(13);
+  it("V1 catalog remains exactly 14 and Hollowcut exactly 9", () => {
+    expect(V1_HOLLOW_MANIFESTS.length).toBe(14);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS.length).toBe(9);
   });
 });

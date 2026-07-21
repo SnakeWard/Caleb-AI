@@ -122,8 +122,8 @@ describe("hollow.hollowcut.export_readiness_check", () => {
     expect(Array.isArray(res.next_required_actions)).toBe(true);
   });
 
-  it("V1 catalog remains exactly 13 (protected); Hollowcut catalog separate at 8 including export_readiness_check", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  it("V1 catalog remains exactly 14 (protected); Hollowcut catalog separate at 8 including export_readiness_check", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS.length).toBe(9);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS.map((m: any) => m.hollow_id)).toContain("hollow.hollowcut.export_readiness_check");
     expect(HOLLOWCUT_HOLLOW_MANIFESTS.map((m: any) => m.hollow_id)).toContain("hollow.hollowcut.export_plan_preview");
@@ -381,8 +381,8 @@ describe("hollow.hollowcut.export_readiness_check", () => {
     expect(implResult && implResult.result).toBeTruthy();
   });
 
-  it("V1 remains exactly 13; Hollowcut remains exactly 9; no export/render/FFmpeg/media mutation behavior added", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  it("V1 remains exactly 14; Hollowcut remains exactly 9; no export/render/FFmpeg/media mutation behavior added", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS.length).toBe(9);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS.map((m: any) => m.hollow_id)).toContain("hollow.hollowcut.export_plan_preview");
     // Preview plan (when present) and Hollow manifest confirm non-destructive only

@@ -177,8 +177,8 @@ describe("Hollowcut boundary lock", () => {
     await expect(exists("src/hollowcut/project/hollowcutProjectValidation.ts")).resolves.toBe(true);
   });
 
-  it("keeps the V1 Hollow catalog locked to the 13 accepted production Hollows", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  it("keeps the V1 Hollow catalog locked to the 14 accepted production Hollows (RA-X-4)", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
   });
 
   it("does not include future Hollowcut Hollow ID families in the V1 catalog", () => {

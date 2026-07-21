@@ -273,7 +273,7 @@ describe("validateTaskFrameInput — signal_hints value validation", () => {
     expect(result.errors.length).toBeGreaterThanOrEqual(2);
   });
 
-  it("SIGNAL_FIELD_NAMES contains exactly 13 fields", () => {
+  it("SIGNAL_FIELD_NAMES contains exactly 14 fields", () => {
     expect(SIGNAL_FIELD_NAMES).toHaveLength(13);
   });
 });

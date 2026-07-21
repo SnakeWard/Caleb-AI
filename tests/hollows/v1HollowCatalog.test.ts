@@ -22,7 +22,8 @@ const EXPECTED_IDS = [
   "hollow.code.import_surface",
   "hollow.code.export_surface",
   "hollow.code.safety_scan",
-  "hollow.audit.pass_compliance_check"
+  "hollow.audit.pass_compliance_check",
+  "hollow.routing.route_classifier"
 ].sort();
 
 describe("V1 Hollow catalog", () => {

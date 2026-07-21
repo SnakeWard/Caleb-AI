@@ -34,6 +34,10 @@ import {
   passComplianceCheckImplementation,
   passComplianceCheckManifest
 } from "./audit/passComplianceCheck.js";
+import {
+  routeClassifierImplementation,
+  routeClassifierManifest
+} from "./categories/routing/routeClassifierHollow.js";
 import { HollowRegistry } from "./registry.js";
 import { HollowRunner } from "./runner.js";
 import type { HollowImplementation, HollowRunnerOptions } from "./runnerTypes.js";
@@ -52,7 +56,8 @@ export const V1_HOLLOW_MANIFESTS = [
   importSurfaceManifest,
   exportSurfaceManifest,
   codeSafetyScanManifest,
-  passComplianceCheckManifest
+  passComplianceCheckManifest,
+  routeClassifierManifest
 ] as const satisfies readonly HollowManifest[];
 
 export const V1_HOLLOW_IMPLEMENTATIONS: Readonly<Record<string, HollowImplementation>> = {
@@ -68,7 +73,8 @@ export const V1_HOLLOW_IMPLEMENTATIONS: Readonly<Record<string, HollowImplementa
   [importSurfaceManifest.hollow_id]: importSurfaceImplementation,
   [exportSurfaceManifest.hollow_id]: exportSurfaceImplementation,
   [codeSafetyScanManifest.hollow_id]: codeSafetyScanImplementation,
-  [passComplianceCheckManifest.hollow_id]: passComplianceCheckImplementation
+  [passComplianceCheckManifest.hollow_id]: passComplianceCheckImplementation,
+  [routeClassifierManifest.hollow_id]: routeClassifierImplementation
 };
 
 export function createV1HollowRegistry(): HollowRegistry {

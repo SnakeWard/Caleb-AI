@@ -204,8 +204,8 @@ describe("media metadata planning contracts", () => {
     }
   });
 
-  it("keeps the V1 Hollow catalog locked to exactly 13 production Hollows", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  it("keeps the V1 Hollow catalog locked to exactly 14 production Hollows", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
   });
 
   it("does not add hollow.media IDs to the V1 Hollow catalog", () => {

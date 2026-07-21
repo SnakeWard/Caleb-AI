@@ -168,8 +168,8 @@ describe("network egress proof acceptance (H5)", () => {
     expect(pin.stale_allowlist_entries).toEqual(["src/providers/anthropicLiveAdapter.ts"]);
   });
 
-  it("keeps catalog invariants: V1 = 13, Hollowcut = 9", () => {
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+  it("keeps catalog invariants: V1 = 14, Hollowcut = 9", () => {
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
     expect(HOLLOWCUT_HOLLOW_MANIFESTS).toHaveLength(9);
   });
 });

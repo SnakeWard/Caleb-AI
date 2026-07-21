@@ -25,6 +25,7 @@ const EXPECTED_V1_HOLLOW_IDS = [
   "hollow.code.safety_scan",
   "hollow.provenance.file_hash",
   "hollow.provenance.ledger_provenance",
+  "hollow.routing.route_classifier",
   "hollow.text.character_count",
   "hollow.text.prompt_limit",
   "hollow.text.repetition_scan",
@@ -34,10 +35,10 @@ const EXPECTED_V1_HOLLOW_IDS = [
 ];
 
 describe("V1 MVP acceptance", () => {
-  it("contains exactly the 13 expected production Hollows", () => {
+  it("contains exactly the 14 expected production Hollows (RA-X-4 classifier)", () => {
     const ids = V1_HOLLOW_MANIFESTS.map((manifest) => manifest.hollow_id).sort();
 
-    expect(V1_HOLLOW_MANIFESTS).toHaveLength(13);
+    expect(V1_HOLLOW_MANIFESTS).toHaveLength(14);
     expect(ids).toEqual(EXPECTED_V1_HOLLOW_IDS);
   });
 
@@ -94,7 +95,7 @@ describe("V1 MVP acceptance", () => {
     expect(report.stats.ledger_entry_count).toBe(1);
   });
 
-  it("lists all 13 Hollows through the CLI handler", async () => {
+  it("lists all 14 Hollows through the CLI handler", async () => {
     const result = await handleCliCommand(parseCliArgs(["list-hollows", "--json"]));
     const data = result.data as { hollows: Array<{ hollow_id: string }> };
 
