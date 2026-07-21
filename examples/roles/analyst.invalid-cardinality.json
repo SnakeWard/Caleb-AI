@@ -1,0 +1,52 @@
+{
+  "schema_version": "0.1.0",
+  "role_id": "analyst",
+  "output_type": "finding",
+  "summary": "Too many findings for the bound.",
+  "findings": [
+    {
+      "finding_id": "f1",
+      "stance": "supports",
+      "claim_text": "Claim one.",
+      "rationale": "Rationale one.",
+      "evidence_ref_ids": []
+    },
+    {
+      "finding_id": "f2",
+      "stance": "supports",
+      "claim_text": "Claim two.",
+      "rationale": "Rationale two.",
+      "evidence_ref_ids": []
+    },
+    {
+      "finding_id": "f3",
+      "stance": "supports",
+      "claim_text": "Claim three.",
+      "rationale": "Rationale three.",
+      "evidence_ref_ids": []
+    },
+    {
+      "finding_id": "f4",
+      "stance": "supports",
+      "claim_text": "Claim four.",
+      "rationale": "Rationale four.",
+      "evidence_ref_ids": []
+    },
+    {
+      "finding_id": "f5",
+      "stance": "supports",
+      "claim_text": "Claim five.",
+      "rationale": "Rationale five.",
+      "evidence_ref_ids": []
+    },
+    {
+      "finding_id": "f6",
+      "stance": "supports",
+      "claim_text": "Claim six overflows.",
+      "rationale": "Rationale six.",
+      "evidence_ref_ids": []
+    }
+  ],
+  "confidence": 0.5,
+  "acceptance_status": "accepted"
+}

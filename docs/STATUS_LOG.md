@@ -1172,3 +1172,11 @@ snapshot gate passes without weakening (local `.caleb/snapshots/` remains
 gitignored). E2-A1 `Recorded where first` corrected with Corrections log.
 `git repack`/`fsck` clean on NTFS; git on PATH. Suite **3241/3241** exit 0;
 catalogs 13/9; digests unchanged. Report: `docs/DEBT_1_MIGRATION_RECONCILIATION_REPORT.md`.
+
+### 2026-07-21 — RA-X-1 — Analyst role isolation registration
+
+Registers Analyst (`role_class` reasoning, `execution_authority` request_only)
+with four-type semantic payload schema + strict validator and fixtures. Consumption
+matrix remains 33 transitions; analyst unreachable. Suite **208 files / 3,248
+tests** exit 0; catalogs 13/9; L1 seven entries; prompt digests unchanged. Report:
+`docs/RA_X_1_ANALYST_ISOLATION_REPORT.md`.

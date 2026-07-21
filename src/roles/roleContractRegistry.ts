@@ -11,6 +11,11 @@ import type {
   RoleId
 } from "./types/roleArtifact.js";
 import type { RoleContract } from "./types/roleContract.js";
+import type {
+  RoleClass,
+  RoleExecutionAuthority,
+  RolePermittedInputKind
+} from "./types/roleClass.js";
 
 export interface RegisteredRoleContract {
   readonly contract: RoleContract;
@@ -20,6 +25,11 @@ export interface RegisteredRoleContract {
   readonly forbidden_fields: readonly string[];
   readonly allowed_next_roles: readonly RoleId[];
   readonly can_handoff_to_human: boolean;
+  /** Uniform structural fields (RA-X-1). */
+  readonly role_class: RoleClass;
+  readonly permitted_input_kinds: readonly RolePermittedInputKind[];
+  /** "none" = no execution; "request_only" = may emit Hollow request shapes only. */
+  readonly execution_authority: RoleExecutionAuthority;
 }
 
 const REQUIRED_ROLE_ARTIFACT_FIELDS = [
@@ -78,7 +88,10 @@ const ROLE_CONTRACTS = [
     description: "Produces bounded plans, sequencing notes, constraints, and recommended next roles.",
     allowed_artifact_types: ["plan"],
     allowed_next_roles: ["implementer", "verifier", "critic", "human_operator"],
-    can_handoff_to_human: true
+    can_handoff_to_human: true,
+    role_class: "reasoning",
+    permitted_input_kinds: ["contract_validated_task_frame", "human_decision", "recovery_plan"],
+    execution_authority: "none"
   }),
   createRegisteredRoleContract({
     role_id: "implementer",
@@ -86,7 +99,10 @@ const ROLE_CONTRACTS = [
     description: "Produces implementation notes without executing code or mutating workspace state.",
     allowed_artifact_types: ["implementation_notes"],
     allowed_next_roles: ["verifier", "critic", "synthesizer", "human_operator"],
-    can_handoff_to_human: true
+    can_handoff_to_human: true,
+    role_class: "implementation",
+    permitted_input_kinds: ["planner_plan", "role_artifact"],
+    execution_authority: "none"
   }),
   createRegisteredRoleContract({
     role_id: "verifier",
@@ -94,7 +110,10 @@ const ROLE_CONTRACTS = [
     description: "Produces verification artifacts that summarize checks, evidence references, and blockers.",
     allowed_artifact_types: ["verification"],
     allowed_next_roles: ["critic", "synthesizer", "reporter", "human_operator"],
-    can_handoff_to_human: true
+    can_handoff_to_human: true,
+    role_class: "verification",
+    permitted_input_kinds: ["role_artifact", "implementation_notes"],
+    execution_authority: "none"
   }),
   createRegisteredRoleContract({
     role_id: "critic",
@@ -102,7 +121,10 @@ const ROLE_CONTRACTS = [
     description: "Produces critique artifacts that identify defects, risks, and revision requirements.",
     allowed_artifact_types: ["critique"],
     allowed_next_roles: ["planner", "implementer", "verifier", "synthesizer", "recovery", "human_operator"],
-    can_handoff_to_human: true
+    can_handoff_to_human: true,
+    role_class: "reasoning",
+    permitted_input_kinds: ["planner_plan", "role_artifact", "analysis"],
+    execution_authority: "none"
   }),
   createRegisteredRoleContract({
     role_id: "synthesizer",
@@ -110,7 +132,10 @@ const ROLE_CONTRACTS = [
     description: "Produces synthesis artifacts that assemble accepted claims and evidence into a coherent result.",
     allowed_artifact_types: ["synthesis"],
     allowed_next_roles: ["reporter", "verifier", "human_operator"],
-    can_handoff_to_human: true
+    can_handoff_to_human: true,
+    role_class: "synthesis",
+    permitted_input_kinds: ["role_artifact", "critique", "analysis"],
+    execution_authority: "none"
   }),
   createRegisteredRoleContract({
     role_id: "reporter",
@@ -118,7 +143,10 @@ const ROLE_CONTRACTS = [
     description: "Produces report artifacts that summarize accepted status, residual limits, and next steps.",
     allowed_artifact_types: ["report"],
     allowed_next_roles: ["human_operator"],
-    can_handoff_to_human: true
+    can_handoff_to_human: true,
+    role_class: "reporting",
+    permitted_input_kinds: ["synthesis", "role_artifact"],
+    execution_authority: "none"
   }),
   createRegisteredRoleContract({
     role_id: "recovery",
@@ -126,7 +154,10 @@ const ROLE_CONTRACTS = [
     description: "Produces recovery plans for blocked or failed role artifact paths.",
     allowed_artifact_types: ["recovery_plan"],
     allowed_next_roles: ["planner", "implementer", "verifier", "human_operator"],
-    can_handoff_to_human: true
+    can_handoff_to_human: true,
+    role_class: "recovery",
+    permitted_input_kinds: ["role_artifact", "human_decision"],
+    execution_authority: "none"
   }),
   createRegisteredRoleContract({
     role_id: "human_operator",
@@ -134,7 +165,26 @@ const ROLE_CONTRACTS = [
     description: "Produces human decision artifacts for explicit approval, rejection, or blocked-state resolution.",
     allowed_artifact_types: ["human_decision"],
     allowed_next_roles: ["planner", "implementer", "verifier", "critic", "synthesizer", "reporter", "recovery"],
-    can_handoff_to_human: false
+    can_handoff_to_human: false,
+    role_class: "human",
+    permitted_input_kinds: ["role_artifact", "report"],
+    execution_authority: "none"
+  }),
+  // RA-X-1 isolation: registered, validated, unreachable via consumption matrix.
+  // allowed_next_roles empty — no handoff targets declared until RA-X-2.
+  createRegisteredRoleContract({
+    role_id: "analyst",
+    display_name: "Analyst",
+    description:
+      "Reasoning role that marshals evidence into four bounded output types. " +
+      "Request-only Hollow interaction; never self-verifying (T1 ceiling for Analyst-authored content). " +
+      "No execution authority.",
+    allowed_artifact_types: ["analysis"],
+    allowed_next_roles: [],
+    can_handoff_to_human: false,
+    role_class: "reasoning",
+    permitted_input_kinds: ["planner_plan", "contract_validated_task_frame"],
+    execution_authority: "request_only"
   })
 ] as const satisfies readonly RegisteredRoleContract[];
 
@@ -199,6 +249,9 @@ function createRegisteredRoleContract(input: {
   readonly allowed_artifact_types: readonly RoleArtifactType[];
   readonly allowed_next_roles: readonly RoleId[];
   readonly can_handoff_to_human: boolean;
+  readonly role_class: RoleClass;
+  readonly permitted_input_kinds: readonly RolePermittedInputKind[];
+  readonly execution_authority: RoleExecutionAuthority;
 }): RegisteredRoleContract {
   return {
     contract: {
@@ -212,7 +265,10 @@ function createRegisteredRoleContract(input: {
     required_fields: REQUIRED_ROLE_ARTIFACT_FIELDS,
     forbidden_fields: INHERITED_FORBIDDEN_FIELDS,
     allowed_next_roles: input.allowed_next_roles,
-    can_handoff_to_human: input.can_handoff_to_human
+    can_handoff_to_human: input.can_handoff_to_human,
+    role_class: input.role_class,
+    permitted_input_kinds: input.permitted_input_kinds,
+    execution_authority: input.execution_authority
   };
 }
 
@@ -229,6 +285,9 @@ function copyRegisteredRoleContract(entry: RegisteredRoleContract): RegisteredRo
     required_fields: [...entry.required_fields],
     forbidden_fields: [...entry.forbidden_fields],
     allowed_next_roles: [...entry.allowed_next_roles],
-    can_handoff_to_human: entry.can_handoff_to_human
+    can_handoff_to_human: entry.can_handoff_to_human,
+    role_class: entry.role_class,
+    permitted_input_kinds: [...entry.permitted_input_kinds],
+    execution_authority: entry.execution_authority
   };
 }

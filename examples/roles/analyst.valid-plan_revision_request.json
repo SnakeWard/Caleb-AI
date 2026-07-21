@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1.0",
+  "role_id": "analyst",
+  "output_type": "plan_revision_request",
+  "summary": "Request plan revision to add a contention vs defect criterion.",
+  "revision_reason": "Gap analysis found no measurable threshold for host contention.",
+  "revision_targets": ["step_1_criteria", "acceptance_checks"],
+  "confidence": 0.82,
+  "acceptance_status": "needs_revision"
+}

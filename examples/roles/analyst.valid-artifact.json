@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1.0",
+  "artifact_id": "role_artifact_fixture_analyst_001",
+  "artifact_type": "analysis",
+  "role_id": "analyst",
+  "task_id": "task_role_fixture_001",
+  "run_id": "run_role_fixture_001",
+  "trace_id": "trace_role_fixture_001",
+  "context_id": "context_role_fixture_001",
+  "summary": "Analyst fixture artifact for isolation registration without handoff traffic.",
+  "claims": [
+    {
+      "claim_id": "claim_analyst_001",
+      "text": "Analyst role contract validates without consumption-matrix transitions.",
+      "evidence_ref_ids": ["evidence_analyst_001"]
+    }
+  ],
+  "assumptions": ["RA-X-1 isolation holds: no matrix transition reaches analyst."],
+  "constraints": ["No Hollow execution is performed by the Analyst."],
+  "open_questions": [],
+  "recommendations": ["Wire planner to analyst transitions only in RA-X-2."],
+  "evidence_refs": [
+    {
+      "ref_id": "evidence_analyst_001",
+      "ref_type": "context",
+      "description": "RA-X-1 isolation registration fixture."
+    }
+  ],
+  "confidence": 0.85,
+  "handoff_notes": ["Unreachable until RA-X-2 matrix transitions exist."],
+  "required_next_role": null,
+  "acceptance_status": "accepted",
+  "created_at": "2026-07-21T00:00:00.000Z",
+  "telemetry_trace_ref": {
+    "trace_id": "trace_role_fixture_001",
+    "context_id": "context_role_fixture_001"
+  },
+  "execution_context_ref": {
+    "context_id": "context_role_fixture_001"
+  },
+  "warnings": []
+}

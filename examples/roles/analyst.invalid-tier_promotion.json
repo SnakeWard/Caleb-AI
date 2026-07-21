@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1.0",
+  "role_id": "analyst",
+  "output_type": "finding",
+  "summary": "Attempts to self-verify as T2.",
+  "findings": [
+    {
+      "finding_id": "finding_001",
+      "stance": "supports",
+      "claim_text": "Claim.",
+      "rationale": "Rationale.",
+      "evidence_ref_ids": []
+    }
+  ],
+  "confidence": 0.9,
+  "acceptance_status": "accepted",
+  "trust_tier": "T2"
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1.0",
+  "role_id": "analyst",
+  "output_type": "finding",
+  "summary": "Bounded finding that the plan is consistent with fixture evidence.",
+  "findings": [
+    {
+      "finding_id": "finding_001",
+      "stance": "supports",
+      "claim_text": "The plan's first step matches the stated task frame.",
+      "rationale": "Task frame description and plan step text align under local fixtures.",
+      "evidence_ref_ids": ["ev_plan_001"]
+    }
+  ],
+  "confidence": 0.8,
+  "acceptance_status": "accepted"
+}

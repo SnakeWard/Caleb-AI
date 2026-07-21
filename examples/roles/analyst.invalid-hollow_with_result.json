@@ -1,0 +1,11 @@
+{
+  "schema_version": "0.1.0",
+  "role_id": "analyst",
+  "output_type": "hollow_evidence_request",
+  "summary": "Malformed request that includes execution results.",
+  "hollow_id": "character_count",
+  "evidence_sought": "Count characters.",
+  "result": { "count": 42 },
+  "confidence": 0.5,
+  "acceptance_status": "accepted"
+}

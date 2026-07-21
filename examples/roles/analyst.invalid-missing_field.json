@@ -1,0 +1,8 @@
+{
+  "schema_version": "0.1.0",
+  "role_id": "analyst",
+  "output_type": "finding",
+  "summary": "Missing findings array.",
+  "confidence": 0.5,
+  "acceptance_status": "accepted"
+}

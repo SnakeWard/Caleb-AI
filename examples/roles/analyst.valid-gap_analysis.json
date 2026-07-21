@@ -1,0 +1,14 @@
+{
+  "schema_version": "0.1.0",
+  "role_id": "analyst",
+  "output_type": "gap_analysis",
+  "summary": "Identifies missing host-contention criteria in the plan.",
+  "gaps": [
+    {
+      "gap_id": "gap_001",
+      "description": "No quantitative threshold distinguishes host contention from defects."
+    }
+  ],
+  "confidence": 0.75,
+  "acceptance_status": "needs_revision"
+}

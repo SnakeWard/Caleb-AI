@@ -1,0 +1,43 @@
+{
+  "pass_id": "RA-X-1",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/RA_X_1_ANALYST_ISOLATION_REPORT.md",
+    "docs/protocols/PASS_PROTOCOL_RA_X_1.md",
+    "examples/audit/ra-x-1-pass-manifest.valid.json",
+    "examples/roles/analyst.valid-artifact.json",
+    "examples/roles/analyst.valid-finding.json",
+    "examples/roles/analyst.valid-gap_analysis.json",
+    "examples/roles/analyst.valid-plan_revision_request.json",
+    "examples/roles/analyst.valid-hollow_evidence_request.json",
+    "examples/roles/analyst.invalid-unknown_type.json",
+    "examples/roles/analyst.invalid-missing_field.json",
+    "examples/roles/analyst.invalid-cardinality.json",
+    "examples/roles/analyst.invalid-string_overflow.json",
+    "examples/roles/analyst.invalid-tier_promotion.json",
+    "examples/roles/analyst.invalid-hollow_with_result.json",
+    "src/roles/analystSemanticPayloadValidator.ts",
+    "src/roles/types/analystSemanticPayload.ts",
+    "src/roles/types/roleClass.ts",
+    "tests/acceptance/raX1AnalystIsolationAcceptance.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "docs/STATUS_LOG.md",
+    "src/roles/index.ts",
+    "src/roles/roleContractRegistry.ts",
+    "src/roles/types/index.ts",
+    "src/roles/types/roleArtifact.ts",
+    "tests/acceptance/le2RotationPlanBridgeAcceptance.test.ts",
+    "tests/logicEngine/rotationPlanBridge.test.ts",
+    "tests/roles/roleContractRegistry.test.ts"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/roles/roleHandoffGate.ts",
+    "src/logicEngine/routeInputGate.ts",
+    "examples/live-rotation/prompts/**",
+    "package.json",
+    "package-lock.json"
+  ]
+}

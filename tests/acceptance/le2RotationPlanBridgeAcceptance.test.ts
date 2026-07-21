@@ -117,7 +117,9 @@ async function expectRejection(
 }
 
 describe("LE-2 rotation plan bridge acceptance", () => {
-  it("Envelope 1: unregistered Analyst is rejected without changing the registry", async () => {
+  it("Envelope 1: Analyst is registered but still rejected under RA-X-1 isolation", async () => {
+    // RA-X-1 registers Analyst without matrix transitions. Routes that require
+    // Analyst handoffs fail as forbidden_transition (not unknown_role).
     const plan = await fixture("examples/roles/runtime-rotation-plan.valid.json");
     plan["authored_by"] = "human";
     plan["side_effect_policy"] = "none";
@@ -125,8 +127,8 @@ describe("LE-2 rotation plan bridge acceptance", () => {
     plan["snapshot_requirement"] = false;
     plan["gates_required"] = ["role_handoff_gate", "final_verification_gate"];
 
-    expect(hasRoleContract("analyst")).toBe(false);
-    await expectRejection(plan, "bridge_rejected_unknown_role");
+    expect(hasRoleContract("analyst")).toBe(true);
+    await expectRejection(plan, "bridge_rejected_forbidden_transition");
   });
 
   it("Envelope 2: planner_synthesizer remains a registry-governed rejection", async () => {

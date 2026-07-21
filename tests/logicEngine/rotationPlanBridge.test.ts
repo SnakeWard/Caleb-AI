@@ -222,7 +222,9 @@ describe("rotationPlanBridge", () => {
     expectLedgered(entries, "rejected");
   });
 
-  it("rejects routes containing unregistered Analyst", async () => {
+  it("rejects routes containing Analyst while isolation holds (registered, no transitions)", async () => {
+    // RA-X-1: Analyst is registered but consumption-matrix unreachable.
+    // Bridge refuses with forbidden_transition (not unknown_role).
     const plan = await fixture("examples/roles/runtime-rotation-plan.valid.json");
     plan["authored_by"] = "human";
     plan["side_effect_policy"] = "none";
@@ -231,7 +233,7 @@ describe("rotationPlanBridge", () => {
     plan["gates_required"] = ["role_handoff_gate", "final_verification_gate"];
     const { result, entries } = await invoke(plan);
     expect(result.ok).toBe(false);
-    expect(result.rejection_code).toBe("bridge_rejected_unknown_role");
+    expect(result.rejection_code).toBe("bridge_rejected_forbidden_transition");
     expectLedgered(entries, "rejected");
   });
 

@@ -25,7 +25,8 @@ const fixtureFiles = [
   "synthesizer.valid-artifact.json",
   "reporter.valid-artifact.json",
   "recovery.valid-artifact.json",
-  "human_operator.valid-artifact.json"
+  "human_operator.valid-artifact.json",
+  "analyst.valid-artifact.json"
 ] as const;
 
 const allowedRoleIds = new Set<string>(ROLE_IDS);

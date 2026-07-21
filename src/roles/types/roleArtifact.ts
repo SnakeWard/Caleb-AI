@@ -12,7 +12,8 @@ export type RoleId =
   | "synthesizer"
   | "reporter"
   | "recovery"
-  | "human_operator";
+  | "human_operator"
+  | "analyst";
 
 export const VALID_ROLE_IDS: readonly RoleId[] = [
   "planner",
@@ -22,7 +23,8 @@ export const VALID_ROLE_IDS: readonly RoleId[] = [
   "synthesizer",
   "reporter",
   "recovery",
-  "human_operator"
+  "human_operator",
+  "analyst"
 ] as const;
 
 export const ROLE_IDS = VALID_ROLE_IDS;
@@ -35,7 +37,8 @@ export type RoleArtifactType =
   | "synthesis"
   | "report"
   | "recovery_plan"
-  | "human_decision";
+  | "human_decision"
+  | "analysis";
 
 export const VALID_ROLE_ARTIFACT_TYPES: readonly RoleArtifactType[] = [
   "plan",
@@ -45,7 +48,8 @@ export const VALID_ROLE_ARTIFACT_TYPES: readonly RoleArtifactType[] = [
   "synthesis",
   "report",
   "recovery_plan",
-  "human_decision"
+  "human_decision",
+  "analysis"
 ] as const;
 
 export type RoleAcceptanceStatus =

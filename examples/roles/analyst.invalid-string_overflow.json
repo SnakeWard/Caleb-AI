@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1.0",
+  "role_id": "analyst",
+  "output_type": "finding",
+  "summary": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "findings": [
+    {
+      "finding_id": "finding_001",
+      "stance": "neutral",
+      "claim_text": "Ok claim.",
+      "rationale": "Ok rationale.",
+      "evidence_ref_ids": []
+    }
+  ],
+  "confidence": 0.5,
+  "acceptance_status": "accepted"
+}
