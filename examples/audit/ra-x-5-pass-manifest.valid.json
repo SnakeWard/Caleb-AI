@@ -1,0 +1,36 @@
+{
+  "pass_id": "RA-X-5",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/RA_X_5_MOCK_REHEARSAL_REPORT.md",
+    "docs/protocols/PASS_PROTOCOL_RA_X_5.md",
+    "examples/audit/ra-x-5-pass-manifest.valid.json",
+    "tests/acceptance/raX5MockRotationRehearsalAcceptance.test.ts",
+    "tests/fixtures/ra-x-5/rax5-rehearsal-route-1.json",
+    "tests/fixtures/ra-x-5/rax5-rehearsal-route-2.json",
+    "tests/fixtures/ra-x-5/rax5-rehearsal-route-3.json",
+    "tests/fixtures/ra-x-5/rax5-rehearsal-route-4.json",
+    "tests/fixtures/ra-x-5/rax5-rehearsal-route-5.json",
+    "tests/fixtures/ra-x-5/rax5-rehearsal-route-6.json",
+    "tests/fixtures/ra-x-5/rax5-rehearsal-route-7.json",
+    "tests/fixtures/ra-x-5/rax5-rehearsal-route-8.json"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "docs/STATUS_LOG.md",
+    "src/roleRuntime/mockRoleRuntimeAdapter.ts",
+    "src/roles/runtimeRotationPlanValidator.ts",
+    "src/roles/types/runtimeRotationPlan.ts"
+  ],
+  "allowed_delete": [
+    "__no_deletes__/**"
+  ],
+  "forbidden": [
+    "src/logicEngine/routeClassificationTable.ts",
+    "src/roles/roleHandoffGate.ts",
+    "src/roles/roleCapabilitySet.ts",
+    "examples/live-rotation/prompts/**",
+    "package.json",
+    "package-lock.json"
+  ]
+}

@@ -23,6 +23,7 @@ export type RuntimeRotationRouteMode =
   | "planner_critic_synthesizer"
   | "planner_synthesizer"
   | "planner_analyst_synthesizer"
+  | "planner_analyst_critic"
   | "full_rotation";
 
 export const VALID_RUNTIME_ROTATION_ROUTE_MODES: readonly RuntimeRotationRouteMode[] = [
@@ -30,6 +31,7 @@ export const VALID_RUNTIME_ROTATION_ROUTE_MODES: readonly RuntimeRotationRouteMo
   "planner_critic_synthesizer",
   "planner_synthesizer",
   "planner_analyst_synthesizer",
+  "planner_analyst_critic",
   "full_rotation"
 ] as const;
 

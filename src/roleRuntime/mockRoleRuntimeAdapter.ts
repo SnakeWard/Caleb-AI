@@ -9,7 +9,14 @@ import type {
 export interface MockRoleRuntimeAdapterOptions {
   readonly adapter_id: string;
   readonly role_id: RoleId;
-  readonly artifact_type: "plan" | "critique" | "implementation_notes" | "verification" | "synthesis" | "report";
+  readonly artifact_type:
+    | "plan"
+    | "critique"
+    | "implementation_notes"
+    | "verification"
+    | "synthesis"
+    | "report"
+    | "analysis";
   readonly artifact_id_prefix?: string;
   readonly fixed_artifact?: Record<string, unknown>;
   readonly should_fail?: boolean;

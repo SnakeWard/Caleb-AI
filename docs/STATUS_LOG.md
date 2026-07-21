@@ -1208,3 +1208,13 @@ Hollow, VRP gates before Analyst). T1–T10 green including defining T7.
 Suite **211 files / 3,278 tests** exit 0; typecheck/build 0; Hollowcut 9;
 prompt digests unchanged; matrix 39 and L1 eight untouched. Report:
 `docs/RA_X_4_ROUTE_CLASSIFIER_REPORT.md`.
+
+### 2026-07-21 — RA-X-5 — exhaustive dynamic-rotation mock rehearsal
+
+Campaign-certifying proving pass: all eight `rax4.1.0` routes end-to-end on
+mocks (classifier → LE-2 → mock execution → ledger-only reconstruction).
+Analyst request-only seam exercised in-route (T3); mid-route Critic failure
+reconstructs with F8 detail (T5). Minimal enablement: RA-R2 mode
+`planner_analyst_critic` for classifier row 2. Suite **212 files / 3,284
+tests** exit 0; catalogs 14/9; digests/matrix/L1/table unchanged. **RA-X
+campaign complete on mocks.** Report: `docs/RA_X_5_MOCK_REHEARSAL_REPORT.md`.

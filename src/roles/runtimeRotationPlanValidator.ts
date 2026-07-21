@@ -42,6 +42,8 @@ const ROUTE_MODE_ROLES: Record<RuntimeRotationRouteMode, readonly RuntimeRotatio
   planner_critic_synthesizer: ["planner", "critic", "synthesizer"],
   planner_synthesizer: ["planner", "synthesizer"],
   planner_analyst_synthesizer: ["planner", "analyst", "synthesizer"],
+  // RA-X-5: aligns RA-R2 plan modes with classifier table row 2 (planner→analyst→critic).
+  planner_analyst_critic: ["planner", "analyst", "critic"],
   full_rotation: ["planner", "analyst", "critic", "synthesizer"]
 };
 
