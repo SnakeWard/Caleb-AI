@@ -1218,3 +1218,14 @@ reconstructs with F8 detail (T5). Minimal enablement: RA-R2 mode
 `planner_analyst_critic` for classifier row 2. Suite **212 files / 3,284
 tests** exit 0; catalogs 14/9; digests/matrix/L1/table unchanged. **RA-X
 campaign complete on mocks.** Report: `docs/RA_X_5_MOCK_REHEARSAL_REPORT.md`.
+
+### 2026-07-22 — LIVE-D1-PREP — live dynamic-selection seam
+
+Makes `execute-live-rotation` classifier-capable for row 1: optional
+decision-facing record → verifier → `rax4.1.0` classifier → row-1 lock →
+sequence→`planner_critic` RRP verify → production `route_classification_decision`
+ledger line → existing live machinery. Reconstruction additively returns
+selection fields (null when absent). Fixture
+`examples/live-rotation/event-d1.dynamic.fixture.json`. Dress rehearsal T1
+green on mocks. Suite **213 files / 3,294 tests** exit 0; catalogs 14/9;
+no live call. Report: `docs/LIVE_D1_PREP_REPORT.md`.

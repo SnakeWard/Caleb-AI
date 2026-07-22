@@ -1,0 +1,110 @@
+{
+  "schema_version": "live-r1.0.0",
+  "event_id": "LIVE-D1",
+  "carrier": {
+    "record_kind": "contract_validated_task_frame",
+    "record_id": "route_input.live_d1",
+    "source": "logic_engine",
+    "validated_at": "2026-07-22T00:00:00.000Z",
+    "lineage_refs": ["rrp_d15e0001-0000-4000-8000-0000000000d1"],
+    "task_frame": {
+      "task_id": "task_d15e0001-0000-4000-8000-0000000000d1",
+      "run_id": "run_d15e0001-0000-4000-8000-0000000000d1",
+      "trace_id": "trace_live_d1_source",
+      "task_type": "planning",
+      "description": "LIVE-D1 first live dynamic rotation — row 1 classifier-selected Planner/Critic",
+      "input_summary": "Bounded host-contention triage protocol task",
+      "requested_by": "Pat",
+      "requires_code_mutation": false,
+      "created_at": "2026-07-22T00:00:00.000Z"
+    },
+    "validation": {
+      "validator": "validateTaskFrameInput",
+      "valid": true
+    }
+  },
+  "lineage_resolved_decision_facing_record": {
+    "record_kind": "lineage_resolved_decision_facing_record",
+    "record_id": "route_input.decision_facing.live_d1",
+    "source": "logic_engine",
+    "validated_at": "2026-07-22T00:00:00.000Z",
+    "lineage_refs": ["gated:contract_validated_task_frame:route_input.live_d1"],
+    "task_requirements": {
+      "summary": "LIVE-D1 row-1 dynamic selection: low stakes, bounded ambiguity, no evidence need.",
+      "required_capabilities": ["reasoning"],
+      "constraints": [
+        "feature:stakes=low",
+        "feature:ambiguity=bounded",
+        "feature:evidence_need=none"
+      ],
+      "open_questions": []
+    }
+  },
+  "runtime_rotation_plan": {
+    "runtime_rotation_plan_id": "rrp_d15e0001-0000-4000-8000-0000000000d1",
+    "schema_version": "1.0.0",
+    "task_id": "task_d15e0001-0000-4000-8000-0000000000d1",
+    "run_id": "run_d15e0001-0000-4000-8000-0000000000d1",
+    "authored_by": "human",
+    "route_mode": "planner_critic",
+    "roles_required": ["planner", "critic"],
+    "hollows_required": [],
+    "gates_required": ["role_handoff_gate", "final_verification_gate"],
+    "max_cycles": 1,
+    "stop_criteria": [
+      "table_version:rax4.1.0",
+      "selection_path:classifier",
+      "live-d1-row-1-planner-critic"
+    ],
+    "side_effect_policy": "none",
+    "code_mutation_policy": "none",
+    "snapshot_requirement": false,
+    "ledger_policy": "record_all_passes",
+    "created_at": "2026-07-22T00:00:00.000Z",
+    "live_rotation_gate_evidence": {
+      "schema_version": "1.0.0",
+      "explicit_opt_in": true,
+      "explicit_live_request": true,
+      "network_permission": true,
+      "approved_by": "Pat",
+      "task_statement": "Design a concise protocol for distinguishing host-contention test failures from deterministic code defects in Caleb AI.",
+      "prompt_templates": {
+        "planner": {
+          "template_id": "live_rotation_planner_v1",
+          "path": "examples/live-rotation/prompts/planner.prompt.txt",
+          "sha256_digest": "sha256:f32675859e07243a7cf0cd8e743537f4c975826ea7bf684348ed128792489003"
+        },
+        "critic": {
+          "template_id": "live_rotation_critic_v1",
+          "path": "examples/live-rotation/prompts/critic.prompt.txt",
+          "sha256_digest": "sha256:8074e98c3317f24cfe4f5bd1b94e9328ffe75e1f390a81f776badb759d3b8e8f"
+        }
+      },
+      "role_bindings": [
+        {
+          "role_id": "planner",
+          "provider_id": "anthropic",
+          "adapter_id": "anthropic_live_adapter",
+          "model_id": "claude-haiku-4-5",
+          "budget": { "max_tokens": 1536, "timeout_ms": 30000, "max_response_bytes": 1048576 }
+        },
+        {
+          "role_id": "critic",
+          "provider_id": "anthropic",
+          "adapter_id": "anthropic_live_adapter",
+          "model_id": "claude-haiku-4-5",
+          "budget": { "max_tokens": 2048, "timeout_ms": 30000, "max_response_bytes": 1048576 }
+        }
+      ],
+      "run_budget": {
+        "max_total_invocations": 2,
+        "max_total_tokens": 8192,
+        "max_spend_usd": 0.05
+      }
+    }
+  },
+  "adapter_bindings": [
+    { "role_id": "planner", "adapter_id": "anthropic_live_adapter", "adapter_kind": "live" },
+    { "role_id": "critic", "adapter_id": "anthropic_live_adapter", "adapter_kind": "live" }
+  ]
+}

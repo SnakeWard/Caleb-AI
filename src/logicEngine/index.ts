@@ -23,3 +23,4 @@ export * from "./rotationPlanBridge.js";
 export * from "./rotationExecutionSeam.js";
 export * from "./liveRotationGateEvidence.js";
 export * from "./liveRotationRuntimeAdapter.js";
+export * from "./liveDynamicSelectionSeam.js";

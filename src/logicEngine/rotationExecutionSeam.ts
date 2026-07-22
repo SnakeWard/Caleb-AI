@@ -256,6 +256,19 @@ export type ReconstructedRotationAnyFailedStep =
   | ReconstructedRotationFailedStep
   | ReconstructedRotationInvocationFailedStep;
 
+export interface ReconstructedRotationSelectionFields {
+  readonly selection_path: "classifier" | null;
+  readonly table_version: string | null;
+  readonly role_sequence: readonly string[] | null;
+  readonly features: {
+    readonly stakes: string;
+    readonly ambiguity: string;
+    readonly evidence_need: string;
+  } | null;
+  readonly decision_record_id: string | null;
+  readonly classification_ledger_id: string | null;
+}
+
 export interface ReconstructedRotationLedgerChain {
   readonly plan_id: string;
   readonly execution_id: string | null;
@@ -269,6 +282,11 @@ export interface ReconstructedRotationLedgerChain {
   readonly failure_code: string | null;
   readonly invocations: readonly ReconstructedRotationLedgerInvocation[];
   readonly failed_step: ReconstructedRotationAnyFailedStep | null;
+  /**
+   * LIVE-D1-PREP additive selection provenance. Null fields when no correlating
+   * route_classification_decision exists (historical honesty — never fabricated).
+   */
+  readonly selection: ReconstructedRotationSelectionFields;
 }
 
 export type ReconstructRotationLedgerResult =
@@ -798,6 +816,11 @@ export function reconstructRotationChainFromLedgerJsonl(
 
   const failedStepIndex = resultNullableNumber(terminal, "failed_step_index");
   const failureCode = resultNullableString(terminal, "failure_code");
+  const selection = extractSelectionFieldsFromLedger(parsed, {
+    task_id: start.task_id,
+    run_id: start.run_id,
+    source_runtime_rotation_plan_id: sourcePlanId
+  });
   return {
     ok: true,
     chain: {
@@ -812,10 +835,73 @@ export function reconstructRotationChainFromLedgerJsonl(
       failed_step_index: failedStepIndex,
       failure_code: failureCode,
       invocations,
-      failed_step: failedStep
+      failed_step: failedStep,
+      selection
     },
     refusal_code: null,
     errors: []
+  };
+}
+
+function extractSelectionFieldsFromLedger(
+  entries: readonly LedgerEntry[],
+  correlation: {
+    readonly task_id: string;
+    readonly run_id: string;
+    readonly source_runtime_rotation_plan_id: string;
+  }
+): ReconstructedRotationSelectionFields {
+  const empty: ReconstructedRotationSelectionFields = {
+    selection_path: null,
+    table_version: null,
+    role_sequence: null,
+    features: null,
+    decision_record_id: null,
+    classification_ledger_id: null
+  };
+  const candidates = entries.filter(
+    (entry) =>
+      entry.activity === "route_classification_decision" &&
+      entry.status === "completed" &&
+      entry.task_id === correlation.task_id &&
+      entry.run_id === correlation.run_id
+  );
+  // Prefer entry that references the same source plan when present.
+  const matched =
+    candidates.find((entry) => {
+      const source = resultNullableString(entry, "source_runtime_rotation_plan_id");
+      return source === null || source === correlation.source_runtime_rotation_plan_id;
+    }) ?? null;
+  if (matched === null) {
+    return empty;
+  }
+  const selectionPath = resultNullableString(matched, "selection_path");
+  const tableVersion = resultNullableString(matched, "table_version");
+  const roleSequenceRaw = isObject(matched.result) ? matched.result["role_sequence"] : null;
+  const roleSequence =
+    Array.isArray(roleSequenceRaw) && roleSequenceRaw.every((v) => typeof v === "string")
+      ? (roleSequenceRaw as string[])
+      : null;
+  const featuresRaw = isObject(matched.result) ? matched.result["features"] : null;
+  const features =
+    isObject(featuresRaw) &&
+    typeof featuresRaw["stakes"] === "string" &&
+    typeof featuresRaw["ambiguity"] === "string" &&
+    typeof featuresRaw["evidence_need"] === "string"
+      ? {
+          stakes: featuresRaw["stakes"],
+          ambiguity: featuresRaw["ambiguity"],
+          evidence_need: featuresRaw["evidence_need"]
+        }
+      : null;
+  const decisionRecordId = resultNullableString(matched, "decision_record_id");
+  return {
+    selection_path: selectionPath === "classifier" ? "classifier" : null,
+    table_version: tableVersion,
+    role_sequence: roleSequence,
+    features,
+    decision_record_id: decisionRecordId,
+    classification_ledger_id: matched.ledger_id
   };
 }
 

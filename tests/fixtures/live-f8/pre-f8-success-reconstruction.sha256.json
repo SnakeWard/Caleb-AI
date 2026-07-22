@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "source_commit": "afb7dd1c0bc37691c308c3f617194acc2c3c87af",
+  "source_commit": "LIVE-D1-PREP additive selection fields (null when absent)",
   "serialization": "JSON.stringify",
-  "byte_length": 3779,
-  "sha256": "sha256:1ca00993ee54ed54d40760d303e148af62be77a35783eea125bd0b31385bd56c"
+  "byte_length": 3931,
+  "sha256": "sha256:8cc3bde0c242f06acb1f7123a546133244b976c6c6dd79b4d587bd602a67e0a6"
 }

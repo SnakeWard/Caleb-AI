@@ -81,6 +81,10 @@ import {
   type LiveRotationPromptTemplate,
   type LiveRotationProviderInvoker
 } from "../logicEngine/liveRotationRuntimeAdapter.js";
+import {
+  resolveLiveDynamicSelection,
+  type LiveRotationFixtureFile
+} from "../logicEngine/liveDynamicSelectionSeam.js";
 import type {
   CliCommandName,
   CliCommandResult,
@@ -339,16 +343,6 @@ export async function handleExecuteRotationPlanCommand(
   );
 }
 
-interface LiveRotationFixtureFile {
-  readonly carrier: ContractValidatedTaskFrameRouteInput;
-  readonly runtime_rotation_plan: unknown;
-  readonly adapter_bindings: readonly {
-    readonly role_id: "planner" | "critic";
-    readonly adapter_id: string;
-    readonly adapter_kind: "live";
-  }[];
-}
-
 interface ScopedCredentialHandle {
   readonly provider: () => string | undefined;
   dispose(): void;
@@ -379,9 +373,28 @@ export async function handleExecuteLiveRotationCommand(
 
   const ledgerPath = stringFlag(parsed, "ledger_path") ?? DEFAULT_ROTATION_LEDGER_PATH;
   const ledger = new JsonlLedger(ledgerPath);
+
+  // LIVE-D1-PREP: optional decision-facing record activates classifier path before bridge.
+  const dynamic = await resolveLiveDynamicSelection({
+    fixture: fixtureResult.fixture,
+    append_ledger_entry: async (entry) => {
+      await ledger.append(entry);
+      return true;
+    }
+  });
+  if (!dynamic.ok) {
+    return errorResult(command, `Live dynamic selection refused: ${dynamic.code}.`, [
+      { code: dynamic.code, message: dynamic.message }
+    ], {
+      selection_path: null,
+      classification_ledger_id: dynamic.classification_ledger_entry?.ledger_id ?? null,
+      dynamic_path: true
+    });
+  }
+
   const bridge = await bridgeRuntimeRotationPlan({
     carrier: fixtureResult.fixture.carrier,
-    runtime_rotation_plan: fixtureResult.fixture.runtime_rotation_plan,
+    runtime_rotation_plan: dynamic.runtime_rotation_plan,
     adapter_bindings: fixtureResult.fixture.adapter_bindings,
     append_ledger_entry: async (entry) => {
       await ledger.append(entry);
@@ -491,7 +504,12 @@ export async function handleExecuteLiveRotationCommand(
       totals: state.totals,
       run_budget: evidence.run_budget,
       output_text_returned: false,
-      human_confirmed: true
+      human_confirmed: true,
+      selection_path: dynamic.selection_path,
+      table_version: dynamic.table_version,
+      role_sequence: dynamic.role_sequence,
+      dynamic_path: dynamic.path === "classifier",
+      classification_ledger_id: dynamic.classification_ledger_entry?.ledger_id ?? null
     };
     if (!result.ok) {
       const code = result.refusal_code ?? result.failure_code ?? "live_rotation_execution_failed";
@@ -598,10 +616,29 @@ async function readLiveRotationFixture(path: string): Promise<
       return { ok: false, errors: [{ code: "live_rotation_fixture_size", message: "Fixture must be a file no larger than 1 MB." }] };
     }
     const parsed = JSON.parse(await readFile(path, "utf8")) as unknown;
-    if (!isCliRecord(parsed) || !isCliRecord(parsed["carrier"]) || !Array.isArray(parsed["adapter_bindings"])) {
+    if (
+      !isCliRecord(parsed) ||
+      !isCliRecord(parsed["carrier"]) ||
+      !Array.isArray(parsed["adapter_bindings"]) ||
+      parsed["runtime_rotation_plan"] === undefined
+    ) {
       return { ok: false, errors: [{ code: "live_rotation_fixture_shape", message: "Fixture wrapper shape is invalid." }] };
     }
-    return { ok: true, fixture: parsed as unknown as LiveRotationFixtureFile };
+    // Optional lineage_resolved_decision_facing_record activates dynamic path (D1).
+    const fixture: LiveRotationFixtureFile = {
+      carrier: parsed["carrier"] as unknown as ContractValidatedTaskFrameRouteInput,
+      runtime_rotation_plan: parsed["runtime_rotation_plan"],
+      adapter_bindings: parsed[
+        "adapter_bindings"
+      ] as unknown as LiveRotationFixtureFile["adapter_bindings"],
+      ...(parsed["lineage_resolved_decision_facing_record"] === undefined
+        ? {}
+        : {
+            lineage_resolved_decision_facing_record:
+              parsed["lineage_resolved_decision_facing_record"]
+          })
+    };
+    return { ok: true, fixture };
   } catch (error) {
     return { ok: false, errors: [{
       code: "live_rotation_fixture_unreadable",

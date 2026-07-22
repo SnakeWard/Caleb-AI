@@ -1,0 +1,32 @@
+{
+  "pass_id": "LIVE-D1-PREP",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/LIVE_D1_PREP_REPORT.md",
+    "docs/protocols/PASS_PROTOCOL_LIVE_D1_PREP.md",
+    "examples/audit/live-d1-prep-pass-manifest.valid.json",
+    "examples/live-rotation/event-d1.dynamic.fixture.json",
+    "src/logicEngine/liveDynamicSelectionSeam.ts",
+    "tests/acceptance/liveD1PrepDynamicSelectionAcceptance.test.ts"
+  ],
+  "allowed_modify": [
+    ".caleb/ledger/ledger.jsonl",
+    "docs/STATUS_LOG.md",
+    "src/cli/commandHandlers.ts",
+    "src/logicEngine/index.ts",
+    "src/logicEngine/rotationExecutionSeam.ts",
+    "tests/fixtures/live-f8/pre-f8-success-reconstruction.sha256.json"
+  ],
+  "allowed_delete": [
+    "__no_deletes__/**"
+  ],
+  "forbidden": [
+    "src/logicEngine/routeClassificationTable.ts",
+    "src/roles/roleHandoffGate.ts",
+    "examples/live-rotation/prompts/**",
+    "examples/live-rotation/event-e1.anthropic.fixture.json",
+    "examples/live-rotation/event-e2.cross-family.fixture.json",
+    "package.json",
+    "package-lock.json"
+  ]
+}
