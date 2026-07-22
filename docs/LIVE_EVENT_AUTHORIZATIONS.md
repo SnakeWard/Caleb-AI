@@ -86,6 +86,15 @@ live-event runbook.
 - Evidence commit: 873276c767fa32783a820a69499d87215c82f798
 - Outcome: "completed"
 
+## LIVE-D1-A1
+- Authorization: "I authorize LIVE-D1-A1: first live dynamic rotation, classifier-selected single-cycle planner_critic (row 1), both roles on claude-haiku-4-5, budgets per the LIVE-R1 envelope. Proceed."
+- Stated by: Pat (T4)
+- Stated when: pre-run, 2026-07-22
+- Recorded where first: implementer session, registered immediately
+- Register entry created: 2026-07-22, SEAL-D1
+- Evidence commit: f52861a318db9b5d6d70b606a3b3f23fc7285cd3
+- Outcome: "completed"
+
 ## Corrections log (append-only)
 
 ### 2026-07-21 DEBT-1 — LIVE-R2-E2-A1 Recorded where first
@@ -94,3 +103,10 @@ live-event runbook.
 - Correct value: implementer session, registered immediately
 - Reason: pre-fill error; first durable record was the implementer session that registered the entry immediately (AUTH-3), not a reviewer conversation pre-fill
 - Mechanism: field corrected in place so the canonical entry reads true; this Corrections log line is the append-only audit of that field correction (event entries remain append-only; this is field-level provenance repair, not event invention)
+
+### 2026-07-22 SEAL-D1 — LIVE-D1-A1 register presence
+- Field: (entry presence)
+- Incorrect value previously recorded: expected pre-run entry at LIVE-D1-PREP commit fa83d03
+- Correct value: single canonical LIVE-D1-A1 entry appended at SEAL-D1 with Evidence commit f52861a318db9b5d6d70b606a3b3f23fc7285cd3 and Outcome "completed"
+- Reason: docs/LIVE_EVENT_AUTHORIZATIONS.md at fa83d03 and f52861a contained no LIVE-D1-A1 section; evidence commit f52861a already existed under subject prefix LIVE-D1-A1:
+- Mechanism: append one complete event entry (not dual create-then-complete); no second LIVE-D1-A1 heading. AUTH-2 detector remains LIVE-R2-E* labeled (unchanged this pass — docs/status only)

@@ -1229,3 +1229,18 @@ selection fields (null when absent). Fixture
 `examples/live-rotation/event-d1.dynamic.fixture.json`. Dress rehearsal T1
 green on mocks. Suite **213 files / 3,294 tests** exit 0; catalogs 14/9;
 no live call. Report: `docs/LIVE_D1_PREP_REPORT.md`.
+
+### 2026-07-22 — LIVE-D1-A1 — first live dynamic rotation (evidence)
+
+Classifier-selected single-cycle `planner_critic` (table `rax4.1.0`, features
+low/bounded/none). Both roles Anthropic `claude-haiku-4-5` completed; spend
+~$0.0127 under $0.05 / 8192 / 2-inv budget. Evidence commit
+`f52861a318db9b5d6d70b606a3b3f23fc7285cd3`. Register sealed under SEAL-D1.
+Report: `docs/LIVE_D1_A1_EVENT_REPORT.md`.
+
+### 2026-07-22 — SEAL-D1 — LIVE-D1 register + recap seal
+
+Docs/status only: complete LIVE-D1-A1 register entry (evidence + outcome),
+event report with production reconstruction quote, capability recap updated.
+No source/test/live changes. Report: `docs/LIVE_D1_A1_EVENT_REPORT.md`,
+`docs/CAPABILITY_RECAP_REPORT.md`.
