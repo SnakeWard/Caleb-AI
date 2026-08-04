@@ -3495,3 +3495,15 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Final Report:** `docs/implementors-reports/SYNC1_20260804_grok.md`.
 
+## ExecPlan - REC-1 Crown Event Reports
+
+**Objective:** Assemble A8 and E2-A1 crown acceptance reports from committed evidence; supersede stale early E1 report header-only; name authorization-after-the-fact defect class.
+
+**Source Authority:** Pat-relayed REC-1 protocol; ledger; LIVE_EVENT_AUTHORIZATIONS; AUTH-2/3; offline reconstruction.
+
+**Scope:** Docs only. No live execution, credentials, src/tests/catalogs.
+
+**Snapshot / Rollback Plan:** Prechange milestone named `rec1_crown_event_reports_prechange` verified on disk (full ID in STATUS_LOG/report only per DEBT-1).
+
+**Final Report:** `docs/implementors-reports/REC1_20260804_grok.md`.
+

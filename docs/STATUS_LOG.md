@@ -1293,3 +1293,13 @@ Deliverable: `docs/implementors-reports/SYNC1_20260804_grok.md`. Prechange
 `snap_20260804T020827108Z_000474_milestone` (`sync1_context_report_prechange`).
 Verdict: SYNC-1 Context Synchronization: Complete — the reviewer's picture is
 rebuilt from the record alone; gaps are named, not papered.
+
+### 2026-08-04 — REC-1 — Crown Event Reports
+
+Docs only. Assembles A8 and E2-A1 acceptance reports from ledger/register/
+reconstruction (no live re-run); supersession header on early E1 event report;
+names authorization-after-the-fact defect class in the operating contract.
+Reports: `docs/LIVE_R2_E1_A8_ACCEPTANCE_REPORT.md`,
+`docs/LIVE_R2_E2_A1_ACCEPTANCE_REPORT.md`. Prechange
+`snap_20260804T023242878Z_000476_milestone` (`rec1_crown_event_reports_prechange`).
+Implementer report: `docs/implementors-reports/REC1_20260804_grok.md`.

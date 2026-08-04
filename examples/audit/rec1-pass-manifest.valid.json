@@ -1,0 +1,27 @@
+{
+  "pass_id": "REC-1",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/protocols/PASS_PROTOCOL_REC1.md",
+    "docs/LIVE_R2_E1_A8_ACCEPTANCE_REPORT.md",
+    "docs/LIVE_R2_E2_A1_ACCEPTANCE_REPORT.md",
+    "docs/implementors-reports/REC1_20260804_grok.md",
+    "examples/audit/rec1-pass-manifest.valid.json"
+  ],
+  "allowed_modify": [
+    "docs/LIVE_R2_E1_EVENT_REPORT.md",
+    "docs/01_CODEX_OPERATING_CONTRACT.md",
+    "docs/STATUS_LOG.md",
+    "PLANS.md",
+    ".caleb/ledger/ledger.jsonl"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/**",
+    "tests/**",
+    "package.json",
+    "package-lock.json",
+    "vitest.config.ts",
+    "tsconfig.json"
+  ]
+}

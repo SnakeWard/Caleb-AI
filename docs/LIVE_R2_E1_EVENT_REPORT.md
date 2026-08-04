@@ -1,3 +1,6 @@
+> **Supersession notice (REC-1, 2026-08-04).** This document is an accurate historical record of the early LIVE-R2 E1 era (attempts **one through five**, with surrounding stop/failure narrative). It is **superseded for completion purposes** by `docs/LIVE_R2_E1_A8_ACCEPTANCE_REPORT.md` (first complete E1 rotation, evidence commit `e30e420`). Authoritative register outcomes for all E1 attempts (including A6–A8) live in `docs/LIVE_EVENT_AUTHORIZATIONS.md`. **Do not treat this file as the final E1 crown report.** The body below is intentionally unchanged from the pre-REC-1 commit.
+
+---
 # LIVE-R2 Event E1 Report
 
 ## Verdict
