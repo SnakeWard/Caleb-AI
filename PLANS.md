@@ -3481,3 +3481,17 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Final Report:** `docs/implementors-reports/REP1_20260804_grok.md`.
 
+## ExecPlan - SYNC-1 Reviewer Context Synchronization Report
+
+**Objective:** One record-only report bringing a reviewer last verified at LIVE-F6 (`46cf0c2`) current to HEAD, with every claim cited and gaps marked NOT IN RECORD.
+
+**Source Authority:** Pat-relayed SYNC-1 protocol (committed as `docs/protocols/PASS_PROTOCOL_SYNC1.md`); GVS-0/REP-1 already on `main`.
+
+**Scope:** Docs only — protocol, implementer report, STATUS_LOG one entry, PLANS one entry, snapshot Ledger append.
+
+**Out of Scope:** All code/tests/catalogs/config; any uncited narrative.
+
+**Snapshot / Rollback Plan:** Prechange milestone named `sync1_context_report_prechange` verified on disk (full ID in STATUS_LOG/report only per DEBT-1).
+
+**Final Report:** `docs/implementors-reports/SYNC1_20260804_grok.md`.
+

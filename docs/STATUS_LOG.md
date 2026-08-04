@@ -1284,3 +1284,12 @@ Inaugural files: `GVS0_20260804_grok.md`, `REP1_20260804_grok.md`. Protocol
 `docs/protocols/PASS_PROTOCOL_REP1.md`. Prechange
 `snap_20260804T012809490Z_000472_milestone` (`rep1_report_artifacts_prechange`)
 verified on disk. No src/tests/catalog/config/behavior changes.
+
+### 2026-08-04 — SYNC-1 — Reviewer Context Synchronization Report
+
+Docs only. Record-only report from `46cf0c2` (LIVE-F6) to HEAD covering AUTH,
+F7–F9, PRE-7, E1 A6–A8, E2-A1, DEBT-1, RA-X-1–5, LIVE-D1, SEAL-D1, GVS-0, REP-1.
+Deliverable: `docs/implementors-reports/SYNC1_20260804_grok.md`. Prechange
+`snap_20260804T020827108Z_000474_milestone` (`sync1_context_report_prechange`).
+Verdict: SYNC-1 Context Synchronization: Complete — the reviewer's picture is
+rebuilt from the record alone; gaps are named, not papered.
