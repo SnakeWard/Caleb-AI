@@ -172,3 +172,19 @@ Spindle separation (F: vs prior D:) appears to have removed the contention-timeo
 ## Verdict
 
 DEBT-1: migration complete on **F:** — byte-integrity locked for future clones, both migration-surfaced failures closed honestly, gate not weakened. **No live event authorized.** Road returns to Pat’s fork: RA-X or investor write-up.
+
+---
+
+## Addendum — PATH-1 reconciliation (2026-08-04)
+
+**This section is an annotation only.** Accepted DEBT-1 body above is not rewritten.
+
+| Topic | DEBT-1 record (2026-07-21) | Operational reality at PATH-1 (2026-08-04) |
+| --- | --- | --- |
+| Authoritative working copy | `F:\Caleb AI` (authoritative home) | `D:\Caleb AI` holds live history through REC-1 (`4d926ca` = `origin/main`) |
+| Other volume | “D: is cold backup; receives nothing further.” | `F:\Caleb AI` was a stale second clone at SEAL-D1 (`7002513`) with a dirty local ledger append |
+| Filesystem | NTFS F: cited for hygiene success | D: = **exFAT**; F: = **NTFS** |
+
+**Contradiction found:** yes. The migration record named F as home and D as cold backup; subsequent passes were committed on D without a recorded path flip. That silent divergence is the deeper cause of the wrong-tree incident that PATH-1 closes.
+
+**Resolution (PATH-1, Pat-approved):** Canonical path is **`D:\Caleb AI` (`exFAT`)**, despite the protocol’s NTFS preference. F’s working clone is non-canonical and must not receive passes; archival rename target is `F:\Caleb AI.ARCHIVED-20260804` (operator completes rename when no process holds `F:\Caleb AI`). No second working clone is authorized. Accepted DEBT-1 text remains historical truth of what was believed at migration time.

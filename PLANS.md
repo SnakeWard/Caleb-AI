@@ -3507,3 +3507,21 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Final Report:** `docs/implementors-reports/REC1_20260804_grok.md`.
 
+## ExecPlan - PATH-1 Canonical Repository Path
+
+**Objective:** Record one canonical working path, make wrong-tree work detectable at preflight, retire the stale second clone by archival rename, reconcile DEBT-1 vs operational reality by addendum, adopt bare-mirror backup (no second working tree).
+
+**Source Authority:** Pat-relayed PATH-1 protocol (`docs/protocols/PASS_PROTOCOL_PATH1.md`); Pat approval to keep canonical home on D despite exFAT (2026-08-04).
+
+**Current State:** Remote and D at REC-1 `4d926ca`; F was stale at SEAL-D1 with uncommitted local ledger snapshot append. DEBT-1 text still named F authoritative.
+
+**Scope:** Operating contract path/preflight/mirror rules; DEBT-1 addendum; STATUS_LOG/PLANS; implementer report; audit manifest; protocol; rename `F:\Caleb AI` → `F:\Caleb AI.ARCHIVED-20260804`.
+
+**Out of Scope:** src/tests/catalogs/config; SEG-C; deletion of archive; live execution; second working clone.
+
+**Snapshot / Rollback Plan:** Prechange milestone named `path1_canonical_repository_path_prechange` verified on disk (full ID in STATUS_LOG/report only per DEBT-1).
+
+**Decision Log:** Canonical = `D:\Caleb AI` (exFAT) per Pat; F unique ledger append disposition = preserved inside archive rename, not merged; mirror convention adopted (bare only).
+
+**Final Report:** `docs/implementors-reports/PATH1_20260804_grok.md`.
+

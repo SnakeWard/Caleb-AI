@@ -97,6 +97,7 @@ Codex MUST report:
 - Files changed
 - Files intentionally not changed
 - Validation run
+- **Working path** (absolute path of the repository this pass executed from — PATH-1 mandatory line; must match the Canonical repository path)
 - Known issues
 - Recommended next pass
 
@@ -125,12 +126,60 @@ work it authorizes, so the authorization chain is a repo query, not oral
 history. The protocol commit may precede the pass's pre-change snapshot,
 because it authorizes rather than implements.
 
-## Handoff Discipline (adopted post-G1/G2)
+## Canonical Repository Path (adopted Pass PATH-1, 2026-08-04)
+
+**Canonical repository path.** The single authoritative working copy of Caleb AI is `D:\Caleb AI` (`exFAT`, recorded PATH-1, 2026-08-04). All passes execute here. No second working clone may exist on this machine; a backup, if kept, is a bare mirror with no working tree (see Mirror backup). Any implementer finding itself outside this path STOPs and reports before touching anything — a wrong tree is a harder failure than a dirty one, because a dirty tree announces itself and a wrong tree does not.
+
+**Filesystem note (PATH-1, Pat-approved):** The protocol recommendation preferred NTFS for the canonical volume. Evidence showed live history on `D:` (`exFAT`) and a stale second clone on `F:` (`NTFS`). Pat authorized keeping the canonical home on `D:\Caleb AI` despite `exFAT`. A future migration to NTFS, if ordered, is a separate pass; it does not reopen a second working clone.
+
+**DEBT-1 reconciliation (PATH-1):** DEBT-1 (2026-07-21) recorded `F:\Caleb AI` as authoritative home and `D:` as cold backup. Operational reality after subsequent passes inverted that assignment without a recorded path flip. PATH-1 annotates the contradiction; accepted DEBT-1 text is not rewritten. See `docs/DEBT_1_MIGRATION_RECONCILIATION_REPORT.md` addendum and `docs/STATUS_LOG.md` PATH-1 entry.
+
+## Preflight Directory Assertion (adopted Pass PATH-1, 2026-08-04)
+
+The standing preflight sequence, in order, before any pass work:
+
+1. **Confirm working directory matches the canonical path** (first — a clean tree in the wrong repository looks like a clean tree in the right one).
+2. `git status --short` for tree cleanliness.
+3. `git log --oneline -3` and remote-sync state (`git status -sb` / comparison to `origin/main`).
+
+**PowerShell form (implementer):**
+
+```powershell
+$canonical = 'D:\Caleb AI'
+$here = (Get-Location).Path.TrimEnd('\')
+$toplevel = (git rev-parse --show-toplevel) -replace '/', '\'
+if ($here -ine $canonical -or $toplevel -ine $canonical) {
+  throw "PATH-1 STOP: not on canonical path. cwd=$here toplevel=$toplevel expected=$canonical"
+}
+git status --short
+git log --oneline -3
+git status -sb
+```
+
+Every pass completion report MUST include one **Working path** line (absolute path of the repository used). A wrong-tree pass must be visible in its own report even if preflight was skipped.
+
+## Handoff Discipline (adopted post-G1/G2; amended PATH-1)
 
 A handoff between implementing agents is complete only when the working tree
-is clean. An incoming agent MUST verify `git status` is clean before touching
-anything, and MUST stop and report if it is not clean and the uncommitted work
-is not its own.
+is clean **and** the working directory is the canonical repository path
+(`D:\Caleb AI`). An incoming agent MUST: (1) confirm the path matches the
+canonical path; (2) verify `git status` is clean before touching anything;
+(3) stop and report if the tree is dirty and the uncommitted work is not its
+own, or if the path is wrong.
+
+## Mirror Backup Convention (adopted Pass PATH-1, 2026-08-04)
+
+A local backup, if kept, MUST be a **bare mirror** with no working tree — so it cannot become a second source of truth or host an accidental pass:
+
+```
+git clone --mirror https://github.com/SnakeWard/Caleb-AI.git F:\caleb-ai-mirror.git
+# refresh after a pass:
+git --git-dir=F:\caleb-ai-mirror.git remote update --prune
+```
+
+**Adopted:** yes — bare mirror is the only sanctioned local redundancy form.
+
+**Forbidden sync:** File-copy or folder-sync mechanisms between working clones are **forbidden**. Two writers to an append-only ledger produce divergent tails, and a copy job cannot know whether it is mid-write. Git is the sync mechanism; the remote is the backup; a mirror is a redundancy, not a peer. No second working clone may be maintained on this machine.
 
 ## Credential Discipline (adopted Pass H8, 2026-07-06)
 

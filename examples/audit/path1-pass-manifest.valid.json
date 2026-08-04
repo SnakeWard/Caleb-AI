@@ -1,0 +1,25 @@
+{
+  "pass_id": "PATH-1",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/protocols/PASS_PROTOCOL_PATH1.md",
+    "docs/implementors-reports/PATH1_20260804_grok.md",
+    "examples/audit/path1-pass-manifest.valid.json"
+  ],
+  "allowed_modify": [
+    "docs/01_CODEX_OPERATING_CONTRACT.md",
+    "docs/DEBT_1_MIGRATION_RECONCILIATION_REPORT.md",
+    "docs/STATUS_LOG.md",
+    "PLANS.md",
+    ".caleb/ledger/ledger.jsonl"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/**",
+    "tests/**",
+    "package.json",
+    "package-lock.json",
+    "vitest.config.ts",
+    "tsconfig.json"
+  ]
+}

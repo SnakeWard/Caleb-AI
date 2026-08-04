@@ -1303,3 +1303,22 @@ Reports: `docs/LIVE_R2_E1_A8_ACCEPTANCE_REPORT.md`,
 `docs/LIVE_R2_E2_A1_ACCEPTANCE_REPORT.md`. Prechange
 `snap_20260804T023242878Z_000476_milestone` (`rec1_crown_event_reports_prechange`).
 Implementer report: `docs/implementors-reports/REC1_20260804_grok.md`.
+
+### 2026-08-04 — PATH-1 — Canonical Repository Path
+
+Docs/process only, plus one out-of-repo filesystem archival rename. Records
+`D:\Caleb AI` (`exFAT`) as the single canonical working copy (Pat-approved
+despite non-NTFS after evidence showed live history on D and a stale clone on
+NTFS F). Amends operating contract: canonical path, preflight directory
+assertion first, handoff path check, bare-mirror backup convention, forbidden
+file-copy sync. DEBT-1 contradiction annotated by addendum (F was recorded
+authoritative; D held live history). Stale F clone: unique local ledger snapshot append disposition =
+preserve-by-archive (not promoted to canonical); physical rename to
+`F:\Caleb AI.ARCHIVED-20260804` blocked in-session by host lock on F
+workspace — operator rename required after F-bound sessions close. No src/,
+tests/, catalogs, or behavior. Prechange
+`snap_20260804T054901409Z_000478_milestone`
+(`path1_canonical_repository_path_prechange`). Protocol
+`docs/protocols/PASS_PROTOCOL_PATH1.md`. Report:
+`docs/implementors-reports/PATH1_20260804_grok.md`. SEG-C remains a separate
+pass on the canonical path after PATH-1.
