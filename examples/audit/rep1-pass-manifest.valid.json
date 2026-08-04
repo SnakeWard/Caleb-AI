@@ -1,0 +1,24 @@
+{
+  "pass_id": "REP-1",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/protocols/PASS_PROTOCOL_REP1.md",
+    "docs/implementors-reports/**",
+    "examples/audit/rep1-pass-manifest.valid.json"
+  ],
+  "allowed_modify": [
+    "docs/01_CODEX_OPERATING_CONTRACT.md",
+    "docs/STATUS_LOG.md",
+    "PLANS.md",
+    ".caleb/ledger/ledger.jsonl"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/**",
+    "tests/**",
+    "package.json",
+    "package-lock.json",
+    "vitest.config.ts",
+    "tsconfig.json"
+  ]
+}

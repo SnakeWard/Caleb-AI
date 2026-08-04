@@ -1264,4 +1264,23 @@ verified on disk before recording. Canonical validation (docs-only baseline):
 typecheck exit 0; suite **213 files / 3,294 tests** (matches post-LIVE-D1-PREP
 baseline file/test counts); catalogs **14/9** (post-RA-X-4 V1 pin — protocol
 text said 13/9; actual baseline asserted). AUD-2 self-smoke recorded in GVS-0
-commit validation. No src/tests/catalog/config changes.
+commit validation. No src/tests/catalog/config changes. Full report:
+`docs/implementors-reports/GVS0_20260804_grok.md` (REP-1 inaugural artifact).
+
+### 2026-08-04 — REP-1 — Implementer Report Artifacts
+
+Docs/process only. Creates `docs/implementors-reports/` as the permanent home of
+pass completion reports. Naming convention
+`<PASS_ID>_<YYYYMMDD>_<implementer>.md` and three standing rules (commit with
+pass; deliver as file uploads never pastes; append-only after acceptance) plus
+standalone content standard bound into `docs/01_CODEX_OPERATING_CONTRACT.md`.
+
+**Convention start date: 2026-08-04.** Back-fill boundary: reports before this
+date live in session records and existing docs (acceptance reports under
+`docs/` remain authoritative where they exist); reports from this date forward
+live in `docs/implementors-reports/`. Chat-era reports are not reconstructed.
+
+Inaugural files: `GVS0_20260804_grok.md`, `REP1_20260804_grok.md`. Protocol
+`docs/protocols/PASS_PROTOCOL_REP1.md`. Prechange
+`snap_20260804T012809490Z_000472_milestone` (`rep1_report_artifacts_prechange`)
+verified on disk. No src/tests/catalog/config/behavior changes.

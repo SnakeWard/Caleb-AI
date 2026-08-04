@@ -3449,3 +3449,35 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 
 **Final Report:** GVS-0 completion report written under implementer-report convention when REP-1 lands; mandatory §8 lines are also carried in STATUS_LOG/validation for this pass.
 
+## ExecPlan - REP-1 Implementer Report Artifacts
+
+**Objective:** Establish `docs/implementors-reports/`, bind naming/delivery/append-only rules into the operating contract, write GVS-0 inaugural report and REP-1 self-report.
+
+**Source Authority:** Pat-authorized `docs/protocols/PASS_PROTOCOL_REP1.md`; GVS-0 already committed at `efcbb43`.
+
+**Current State:** Tree clean at GVS-0 tip; convention directory absent before this pass.
+
+**Scope:** Docs/process only: protocol, contract section, STATUS_LOG/PLANS, two report files, AUD-2 manifest, append-only snapshot Ledger.
+
+**Out of Scope:** src/, tests/, catalogs, config, back-filled historical reports, GVS integration.
+
+**Files Expected To Change:** `docs/protocols/PASS_PROTOCOL_REP1.md`; `docs/01_CODEX_OPERATING_CONTRACT.md`; `docs/implementors-reports/*`; `docs/STATUS_LOG.md`; `PLANS.md`; `examples/audit/rep1-pass-manifest.valid.json`; `.caleb/ledger/ledger.jsonl`.
+
+**Risk Level:** Low — process/documentation; must not invent chat-era history.
+
+**Snapshot / Rollback Plan:** Prechange milestone named `rep1_report_artifacts_prechange` verified on disk (Ledgered; full ID in STATUS_LOG/report only per DEBT-1).
+
+**Implementation Steps:** Snapshot; protocol; contract rules; GVS-0 + REP-1 reports; status/plans; validate; commit; push; STOP for Pat file-upload delivery.
+
+**Validation Commands:** typecheck; `npx vitest run`; catalogs; AUD-2; clean/sync.
+
+**Acceptance Criteria:** Both reports present with convention names; three rules verbatim in contract; GVS-0 report carries §8 mandatory lines; suite/catalog baseline green; no code changes.
+
+**Progress Log:** GVS-0 completed first (`efcbb43`). REP-1 prechange verified. Contract and reports drafted.
+
+**Decision Log:** Operative contract file is `docs/01_CODEX_OPERATING_CONTRACT.md`. Convention start date 2026-08-04 with explicit non-backfill boundary.
+
+**Surprises / Discoveries:** None beyond GVS-0 deviations already recorded in the inaugural report.
+
+**Final Report:** `docs/implementors-reports/REP1_20260804_grok.md`.
+

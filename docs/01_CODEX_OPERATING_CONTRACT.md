@@ -100,6 +100,18 @@ Codex MUST report:
 - Known issues
 - Recommended next pass
 
+## Implementer Report Artifacts (adopted Pass REP-1, 2026-08-04)
+
+**Naming convention:** `<PASS_ID>_<YYYYMMDD>_<implementer>.md` — e.g. `GVS0_20260708_grok.md`, `LIVE-F7_20260708_codex.md`. Reports sort chronologically within a pass and attribute their author at a glance. Date is the report's completion date; implementer is the seat that executed the pass (`grok`, `codex`, `gpt`, `claude`, `pat` for human-executed events).
+
+**Standing rules:**
+
+1. Every pass's completion report is written to `docs/implementors-reports/` and committed with the pass, or immediately upon acceptance for passes whose acceptance follows review.
+2. Reports are delivered to the reviewer as uploaded files, never pastes. Artifacts over testimony, in transport as in doctrine.
+3. A committed report is append-only: corrections and post-acceptance findings are dated addendum sections added below the original, never edits to accepted text. A report that can be quietly revised after acceptance is a draft, not a record.
+
+**Content standard:** a report file must contain the mandatory lines its governing protocol specifies — verdict verbatim, suite counts, catalogs, honest deviations — such that the report is reviewable standalone, with no chat context assumed.
+
 ## Honest Deviations (adopted Pass SEAT-E2-PREP, 2026-07-20)
 
 **Honest deviations.** Any departure from a governing protocol — scope, sequence, method, or outcome — is reported as a deviation in the pass report, plainly labeled, whether or not it was beneficial. "Honest deviations: none" is an affirmative mandatory line; silence is not equivalent to "none". A deviation honestly reported is reviewable material; a deviation discovered unreported is a contract violation regardless of the deviation's merit. Deviations that survive review become gates.
