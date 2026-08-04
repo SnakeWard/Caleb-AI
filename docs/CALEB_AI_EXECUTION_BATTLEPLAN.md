@@ -1147,6 +1147,16 @@ Add:
 - Slideshow Export Hollow
 - Vendor Comparator Hollow
 
+#### V2 studio layer — GVS (Gemini Voice Studio) [registered GVS-0; not integrated]
+
+GVS integration is assigned to the **V2 studio layer**, sequenced AFTER: (1) completion of the LIVE-R2 campaign (E1 + E2), (2) the near-term hardening phase, and (3) the side-effect gate machinery pass — the approval/snapshot gate infrastructure that LE-2 rejection code `bridge_rejected_ungated_capability` already anticipates. GVS produces persistent audio files, making it a side-effect-producing workload by definition; it is therefore a natural first tenant of the side-effect gates, and MUST NOT precede them.
+
+**Blocking preconditions (ladder):** (1) side-effect gate machinery; (2) M4 display boundary; (3) credential doctrine rebuild; (4) provider adapter work (Gemini third egress site + Kokoro zero-egress local-inference class); (5) Hollow candidates from the GVS normalization chain (own future pass); (6) INV-01–INV-08 detector mapping at integration time.
+
+**GVS-1 may not be protocolized until preconditions 1–3 are accepted.**
+
+Subsystem plan: `docs/subsystems/GVS_SUBSYSTEM_PLAN.md`. Reference (unmodified): `docs/reference/gvs/`. Nothing here authorizes integration.
+
 ### V3 — Role Router and Role Rotation
 
 Add:

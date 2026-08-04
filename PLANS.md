@@ -3416,3 +3416,36 @@ Section 2. Attempt seven still requires PRE-7 acceptance and fresh Pat authority
 **Surprises / Discoveries:** E2 budgets were still LIVE-R1 512/512; protocol text assumed Critic 1536. Nested PowerShell `$(...)` credential checks mangled in this host; single-quoted -Command succeeded.
 
 **Final Report:** `docs/SEAT_E2_PREP_REPORT.md`.
+
+## ExecPlan - GVS-0 Voice Studio Subsystem Roadmap Registration
+
+**Objective:** Register Gemini Voice Studio as a named future subsystem on the V2 studio layer with precondition ladder, reference provenance, and roadmap entry — documentation only; no integration.
+
+**Source Authority:** Pat-authorized GVS-0 protocol (committed as `docs/protocols/PASS_PROTOCOL_GVS0.md`); `docs/00_SOURCE_INDEX_AND_AUTHORITY.md`; `docs/01_CODEX_OPERATING_CONTRACT.md`.
+
+**Current State:** `main` at post-SEAL-D1 tip after authorized housekeeping ledger append; tree clean; GVS reference sources located on disk (`gemini_voice_studio.html`, user manual PDF); no GVS registration in repo prior to this pass.
+
+**Scope:** Docs only: protocol, subsystem plan, unmodified reference artifacts + provenance companion, battleplan V2 studio-layer entry, STATUS_LOG, PLANS.
+
+**Out of Scope:** src/, tests/, catalogs, package/config, adapters, UI, side-effect machinery, credentials, live calls, GVS-1 protocolization.
+
+**Files Expected To Change:** `docs/protocols/PASS_PROTOCOL_GVS0.md`; `docs/subsystems/GVS_SUBSYSTEM_PLAN.md`; `docs/reference/gvs/*`; `docs/CALEB_AI_EXECUTION_BATTLEPLAN.md`; `docs/STATUS_LOG.md`; `PLANS.md`; append-only `.caleb/ledger/ledger.jsonl` (snapshot).
+
+**Risk Level:** Low — documentation/registration only; reference HTML key-absence must be proven before commit.
+
+**Snapshot / Rollback Plan:** Prechange milestone named `gvs0_roadmap_registration_prechange` verified on disk under `.caleb/snapshots/` before doc mutation (Ledgered; full ID lives in STATUS_LOG/report only — not restated here as an active PLANS snap claim per DEBT-1). Rollback to pre-GVS-0 commit if authorized.
+
+**Implementation Steps:** Handoff/status; authorized ledger housekeeping if needed; locate and copy unmodified references; key-absence scan; write plan/protocol/roadmap/status; validate; commit GVS-0; push; STOP (or continue to REP-1 only if authorized in the same session).
+
+**Validation Commands:** `node ./node_modules/typescript/bin/tsc --noEmit`; `npx vitest run`; list-hollows / list-hollowcut-hollows; AUD-2 self-smoke; clean tree + remote sync.
+
+**Acceptance Criteria:** Subsystem plan carries slot, ladder, open questions, invariant obligation, origin; key-absence scan affirmative; reference digests match committed bytes; suite counts match baseline; catalogs asserted at current baseline; no code/catalog/behavior change.
+
+**Progress Log:** Prechange snapshot verified. Reference HTML and PDF copied byte-identical. Structural key scan: no live API key shapes; `const apiKey = ""` empty literal only. Docs written; validation pending.
+
+**Decision Log:** Operative roadmap file identified as `docs/CALEB_AI_EXECUTION_BATTLEPLAN.md` §25 V2 (future-version enumeration). Provenance header lives in companion `PROVENANCE.md` so reference bytes stay unmodified. Catalog pin in the protocol text says 13/9; post-RA-X-4 baseline is 14/9 — report actual counts as honest deviation from protocol wording, not a catalog change.
+
+**Surprises / Discoveries:** Initial handoff dirt was an auto-snapshot ledger append (authorized pre-session commit). Remote had advanced nine commits (RA-X / LIVE-D1 / SEAL-D1); local ledger commit rebased cleanly after append-only conflict resolution.
+
+**Final Report:** GVS-0 completion report written under implementer-report convention when REP-1 lands; mandatory §8 lines are also carried in STATUS_LOG/validation for this pass.
+

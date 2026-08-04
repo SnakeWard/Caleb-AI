@@ -1,0 +1,25 @@
+{
+  "pass_id": "GVS-0",
+  "schema_version": "1.0.0",
+  "allowed_create": [
+    "docs/protocols/PASS_PROTOCOL_GVS0.md",
+    "docs/subsystems/**",
+    "docs/reference/**",
+    "examples/audit/gvs-0-pass-manifest.valid.json"
+  ],
+  "allowed_modify": [
+    "docs/CALEB_AI_EXECUTION_BATTLEPLAN.md",
+    "docs/STATUS_LOG.md",
+    "PLANS.md",
+    ".caleb/ledger/ledger.jsonl"
+  ],
+  "allowed_delete": ["__no_deletes__/**"],
+  "forbidden": [
+    "src/**",
+    "tests/**",
+    "package.json",
+    "package-lock.json",
+    "vitest.config.ts",
+    "tsconfig.json"
+  ]
+}

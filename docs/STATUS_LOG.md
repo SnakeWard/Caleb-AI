@@ -1244,3 +1244,24 @@ Docs/status only: complete LIVE-D1-A1 register entry (evidence + outcome),
 event report with production reconstruction quote, capability recap updated.
 No source/test/live changes. Report: `docs/LIVE_D1_A1_EVENT_REPORT.md`,
 `docs/CAPABILITY_RECAP_REPORT.md`.
+
+### 2026-08-04 — GVS-0 — Voice Studio Subsystem Roadmap Registration
+
+Docs only. Registers Gemini Voice Studio (GVS, Multi-Engine Edition) as a named
+future subsystem on the **V2 studio layer**, sequenced after LIVE-R2 (E1+E2),
+near-term hardening, and side-effect gate machinery. Precondition ladder (6
+steps), open design questions (zero-egress provider class; display-adjacency of
+audio playback), and invariant-mapping obligation recorded in
+`docs/subsystems/GVS_SUBSYSTEM_PLAN.md`. Unmodified reference artifacts under
+`docs/reference/gvs/` with companion provenance (HTML and user manual; no live
+API key in committed HTML). Roadmap entry in
+`docs/CALEB_AI_EXECUTION_BATTLEPLAN.md` §25 V2. Protocol
+`docs/protocols/PASS_PROTOCOL_GVS0.md`. **GVS-1 may not be protocolized until
+preconditions 1–3 are accepted.** No src/, tests/, catalog, config, or
+integration work. Prechange snapshot
+`snap_20260804T011922826Z_000469_milestone` (`gvs0_roadmap_registration_prechange`)
+verified on disk before recording. Canonical validation (docs-only baseline):
+typecheck exit 0; suite **213 files / 3,294 tests** (matches post-LIVE-D1-PREP
+baseline file/test counts); catalogs **14/9** (post-RA-X-4 V1 pin — protocol
+text said 13/9; actual baseline asserted). AUD-2 self-smoke recorded in GVS-0
+commit validation. No src/tests/catalog/config changes.

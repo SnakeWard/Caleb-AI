@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini 3.1 Flash Text-to-Speech Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        slate: {
+                            850: '#131c2e',
+                            950: '#090d16'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar and glassmorphic utility classes */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.6);
+        }
+        .glass-panel {
+            background: rgba(19, 28, 46, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-panel-interactive {
+            transition: all 0.2s ease-in-out;
+        }
+        .glass-panel-interactive:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 8px 24px -6px rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+        }
+        .glow-button {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+        .glow-button:hover {
+            box-shadow: 0 0 28px rgba(99, 102, 241, 0.6);
+        }
+        .tag-chip {
+            transition: all 0.15s ease;
+        }
+        .tag-chip:hover {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-brand-500 selection:text-white antialiased">
+
+    <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
+                    <i class="fa-solid font-bold fa-waveform text-white text-xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-200 bg-clip-text text-transparent">Gemini TTS Studio</h1>
+                        <span class="px-2 py-0.5 text-[10px] font-semibold bg-gradient-to-r from-indigo-500/20 to-purple-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">v3.1 Flash Expressive</span>
+                    </div>
+                    <p class="text-xs text-slate-400 font-medium">Inline Audio Tags • Director Prompts • PCM Pipeline</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="hidden md:flex space-x-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+                <button onclick="switchTab('solo')" id="nav-solo" class="nav-tab px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all bg-brand-600 text-white shadow-sm">
+                    <i class="fa-solid fa-microphone"></i>
+                    <span>Solo Studio</span>
+                </button>
+                <button onclick="switchTab('dialogue')" id="nav-dialogue" class="nav-tab px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center space-x-2 transition-all">
+                    <i class="fa-solid fa-comments"></i>
+                    <span>Dialogue Builder</span>
+                </button>
+                <button onclick="switchTab('catalog')" id="nav-catalog" class="nav-tab px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center space-x-2 transition-all">
+                    <i class="fa-solid fa-id-card-clip"></i>
+                    <span>Voice Matrix</span>
+                    <span id="voice-count-badge" class="ml-1 px-1.5 py-0.2 text-[10px] rounded-md bg-slate-800 text-indigo-300 font-mono">30</span>
+                </button>
+                <button onclick="switchTab('history')" id="nav-history" class="nav-tab px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center space-x-2 transition-all">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Library</span>
+                    <span id="history-count-badge" class="ml-1 px-1.5 py-0.2 text-[10px] rounded-md bg-slate-800 text-slate-400 font-mono">0</span>
+                </button>
+            </nav>
+
+            <!-- Status Indicator -->
+            <div class="flex items-center space-x-3">
+                <div class="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Gemini 3.1 Flash Ready</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Sub-Bar -->
+        <div class="md:hidden flex overflow-x-auto px-4 py-2 border-t border-slate-800/60 space-x-2 text-xs">
+            <button onclick="switchTab('solo')" id="m-nav-solo" class="mobile-nav-tab px-3 py-1.5 rounded-lg bg-brand-600 text-white whitespace-nowrap">Solo Studio</button>
+            <button onclick="switchTab('dialogue')" id="m-nav-dialogue" class="mobile-nav-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 whitespace-nowrap">Dialogue Studio</button>
+            <button onclick="switchTab('catalog')" id="m-nav-catalog" class="mobile-nav-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 whitespace-nowrap">Voice Matrix</button>
+            <button onclick="switchTab('history')" id="m-nav-history" class="mobile-nav-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 whitespace-nowrap">Library</button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- TAB 1: SOLO STUDIO -->
+        <section id="tab-solo" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Left Panel: Text Script & Controls -->
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="glass-panel rounded-2xl p-6 space-y-5">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                            <div>
+                                <h2 class="text-base font-bold text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-pen-nib text-brand-400"></i>
+                                    <span>Script & Director Instructions</span>
+                                </h2>
+                                <p class="text-xs text-slate-400 mt-0.5">Use Gemini 3.1 Flash inline tags like <code class="text-indigo-300">[whispers]</code> or <code class="text-indigo-300">[laughs]</code> anywhere in your text. Auto-chunked at 2000-char sentence boundaries.</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span id="window-count-badge" class="px-2 py-0.5 text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">0 Smart Windows</span>
+                                <span id="char-counter" class="text-xs font-mono text-slate-400">0 chars</span>
+                            </div>
+                        </div>
+
+                        <!-- Gemini 3.1 Expressive Tags Palette -->
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                                    <span>Gemini 3.1 Expressive Audio Tags</span>
+                                </label>
+                                <span class="text-[10px] text-slate-500">Click tag to insert at cursor</span>
+                            </div>
+
+                            <!-- Emotional & Non-Verbal Inline Tags -->
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="insertDirective('[whispers] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border border-indigo-800/80 flex items-center">
+                                    <i class="fa-solid fa-wind text-indigo-400 mr-1.5 text-[10px]"></i>[whispers]
+                                </button>
+                                <button onclick="insertDirective('[laughs] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-amber-950/80 hover:bg-amber-900 text-amber-300 border border-amber-800/80 flex items-center">
+                                    <i class="fa-solid fa-face-laugh text-amber-400 mr-1.5 text-[10px]"></i>[laughs]
+                                </button>
+                                <button onclick="insertDirective('[gasp] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800/80 flex items-center">
+                                    <i class="fa-solid fa-lungs text-rose-400 mr-1.5 text-[10px]"></i>[gasp]
+                                </button>
+                                <button onclick="insertDirective('[sighs] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 flex items-center">
+                                    <i class="fa-solid fa-cloud text-slate-400 mr-1.5 text-[10px]"></i>[sighs]
+                                </button>
+                                <button onclick="insertDirective('[excited] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/80 flex items-center">
+                                    <i class="fa-solid fa-bolt text-emerald-400 mr-1.5 text-[10px]"></i>[excited]
+                                </button>
+                                <button onclick="insertDirective('[slow] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-blue-950/80 hover:bg-blue-900 text-blue-300 border border-blue-800/80 flex items-center">
+                                    <i class="fa-solid fa-hourglass-half text-blue-400 mr-1.5 text-[10px]"></i>[slow]
+                                </button>
+                                <button onclick="insertDirective('[short pause] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 flex items-center">
+                                    <i class="fa-solid fa-pause text-slate-400 mr-1.5 text-[10px]"></i>[short pause]
+                                </button>
+                                <button onclick="insertDirective('[long pause] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 flex items-center">
+                                    <i class="fa-solid fa-forward-step text-slate-400 mr-1.5 text-[10px]"></i>[long pause]
+                                </button>
+                                <button onclick="insertDirective('[sarcastically] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-purple-950/80 hover:bg-purple-900 text-purple-300 border border-purple-800/80 flex items-center">
+                                    <i class="fa-solid fa-masks-theater text-purple-400 mr-1.5 text-[10px]"></i>[sarcastically]
+                                </button>
+                                <button onclick="insertDirective('[asmr] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-pink-950/80 hover:bg-pink-900 text-pink-300 border border-pink-800/80 flex items-center">
+                                    <i class="fa-solid fa-ear-listen text-pink-400 mr-1.5 text-[10px]"></i>[asmr]
+                                </button>
+                                <button onclick="insertDirective('[shouting] ')" class="tag-chip text-xs px-2.5 py-1 rounded-lg bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-800/80 flex items-center">
+                                    <i class="fa-solid fa-bullhorn text-red-400 mr-1.5 text-[10px]"></i>[shouting]
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Director's Scene Prompt Collapsible -->
+                        <details class="group bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden">
+                            <summary class="px-4 py-2.5 text-xs font-semibold text-slate-300 cursor-pointer flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-clapperboard text-brand-400"></i>
+                                    <span>Director Scene & Persona Setup (Optional Context)</span>
+                                </span>
+                                <i class="fa-solid fa-chevron-down text-slate-500 group-open:rotate-180 transition-transform"></i>
+                            </summary>
+                            <div class="p-4 space-y-3 border-t border-slate-800 text-xs">
+                                <div>
+                                    <label class="block text-[10px] text-slate-400 uppercase font-semibold mb-1">Audio Profile & Character Persona</label>
+                                    <input id="director-profile" type="text" placeholder="e.g. Jaz, energetic radio host with high-octane infectious energy" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-[10px] text-slate-400 uppercase font-semibold mb-1">The Scene / Environment</label>
+                                        <input id="director-scene" type="text" placeholder="e.g. A bustling midnight recording booth in London" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] text-slate-400 uppercase font-semibold mb-1">Director's Notes (Pace & Accent)</label>
+                                        <input id="director-notes" type="text" placeholder="e.g. Bright vocal smile, crisp consonants, energetic pace" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Text Area -->
+                        <div class="relative">
+                            <textarea id="solo-text-input" rows="6" placeholder="Type or paste text script here... You can use Gemini 3.1 Flash audio tags like [laughs], [whispers], or [gasp] right inside your sentences for precise performance control!" class="w-full bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 font-sans resize-none transition-all"></textarea>
+                        </div>
+
+                        <!-- Sample Presets -->
+                        <div class="flex items-center space-x-2 overflow-x-auto pb-1 text-xs text-slate-400">
+                            <span class="font-medium text-slate-500 whitespace-nowrap">Expressive Samples:</span>
+                            <button onclick="loadSample('expressiveDemo')" class="px-2.5 py-1 rounded-md bg-brand-600/20 hover:bg-brand-600/40 text-brand-300 border border-brand-500/30 whitespace-nowrap font-medium">
+                                <i class="fa-solid fa-masks-theater mr-1"></i>3.1 Expressive Tags Demo
+                            </button>
+                            <button onclick="loadSample('tech')" class="px-2.5 py-1 rounded-md bg-slate-800/50 hover:bg-slate-800 text-slate-300 border border-slate-700/40 whitespace-nowrap">Tech Keynote</button>
+                            <button onclick="loadSample('story')" class="px-2.5 py-1 rounded-md bg-slate-800/50 hover:bg-slate-800 text-slate-300 border border-slate-700/40 whitespace-nowrap">Bedtime Story</button>
+                            <button onclick="loadSample('longArticle')" class="px-2.5 py-1 rounded-md bg-slate-800/50 hover:bg-slate-800 text-slate-300 border border-slate-700/40 whitespace-nowrap">Long Article (Multi-Window)</button>
+                        </div>
+
+                        <!-- Smart Windows & Pre-Buffer Queue Panel -->
+                        <div id="smart-windows-container" class="space-y-3 pt-3 border-t border-slate-800">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-layer-group text-brand-400 text-xs"></i>
+                                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">Smart Sentence Windows (2000 Chars Max / Window)</h3>
+                                </div>
+                                <span id="queue-status-text" class="text-[11px] font-mono text-slate-400">0 / 0 Buffered</span>
+                            </div>
+
+                            <!-- Windows Queue List -->
+                            <div id="smart-windows-list" class="space-y-2 max-h-52 overflow-y-auto pr-1">
+                                <!-- Dynamic Window Cards Rendered Here -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Right Panel: Voice Settings -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="glass-panel rounded-2xl p-6 space-y-5">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h2 class="text-base font-bold text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-sliders text-brand-400"></i>
+                                <span>Voice Configuration</span>
+                            </h2>
+                            <button onclick="switchTab('catalog')" class="text-xs text-brand-400 hover:text-brand-300 font-medium">Browse All (30)</button>
+                        </div>
+
+                        <!-- Voice Selector Dropdown -->
+                        <div class="space-y-2">
+                            <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">Active Speaker Voice</label>
+                            <select id="solo-voice-select" onchange="updateSoloVoicePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium">
+                                <!-- Populated dynamically by JS -->
+                            </select>
+                        </div>
+
+                        <!-- Active Voice Preview Card -->
+                        <div id="active-voice-card" class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span id="active-voice-name" class="font-bold text-white text-sm">Kore</span>
+                                    <span id="active-voice-gender" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-pink-500/20 text-pink-300 border border-pink-500/30">FEMALE</span>
+                                </div>
+                                <button onclick="auditionCurrentSoloVoice()" class="text-xs px-2.5 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 border border-indigo-500/40 flex items-center space-x-1 transition-all">
+                                    <i class="fa-solid fa-volume-high text-[10px]"></i>
+                                    <span>Audition</span>
+                                </button>
+                            </div>
+                            <p id="active-voice-desc" class="text-xs text-slate-400">Firm & Authoritative. Optimal for News, Documentaries, Professional Announcements.</p>
+                        </div>
+
+                        <!-- Action Button -->
+                        <button id="generate-btn" onclick="generateSoloAudio()" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-sm flex items-center justify-center space-x-2 glow-button transition-all transform active:scale-95">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span id="generate-btn-text">Synthesize 3.1 Flash Speech</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 2: MULTI-SPEAKER DIALOGUE STUDIO -->
+        <section id="tab-dialogue" class="tab-content space-y-6 hidden">
+            <div class="glass-panel rounded-2xl p-6 space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-users text-brand-400"></i>
+                            <span>Multi-Speaker Expressive Dialogue Builder</span>
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1">Construct multi-person audio scripts using Gemini 3.1 Flash TTS. Supports inline audio tags like <code class="text-purple-300">[laughs]</code> or <code class="text-indigo-300">[whispers]</code> per speaker.</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="loadDialoguePreset('interview')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-slate-700 font-medium">Template: Expressive Podcast</button>
+                        <button onclick="loadDialoguePreset('drama')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-slate-700 font-medium">Template: Dramatic Scene</button>
+                    </div>
+                </div>
+
+                <!-- Speaker Config Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Speaker A -->
+                    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Speaker 1 Config</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Role A</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-medium">Speaker Label</label>
+                                <input id="spk1-name" type="text" value="Joe" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-medium">Assigned Voice</label>
+                                <select id="spk1-voice" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Speaker B -->
+                    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Speaker 2 Config</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30">Role B</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-medium">Speaker Label</label>
+                                <input id="spk2-name" type="text" value="Jane" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 font-medium">Assigned Voice</label>
+                                <select id="spk2-voice" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversation Script Lines -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Conversation Flow & Inline Tags</label>
+                        <button onclick="addDialogueRow()" class="text-xs px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 flex items-center space-x-1">
+                            <i class="fa-solid fa-plus text-[10px]"></i>
+                            <span>Add Speech Line</span>
+                        </button>
+                    </div>
+
+                    <div id="dialogue-rows-container" class="space-y-3 max-h-[380px] overflow-y-auto pr-1">
+                        <!-- Dialogue Rows dynamically rendered -->
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="pt-2 border-t border-slate-800 flex justify-end">
+                    <button id="generate-dialogue-btn" onclick="generateDialogueAudio()" class="w-full md:w-auto py-3 px-8 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm flex items-center justify-center space-x-2 glow-button transition-all">
+                        <i class="fa-solid fa-comments"></i>
+                        <span id="dialogue-btn-text">Synthesize 3.1 Dialogue Audio</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: VOICE CATALOG MATRIX -->
+        <section id="tab-catalog" class="tab-content space-y-6 hidden">
+            <div class="glass-panel rounded-2xl p-6 space-y-6">
+                <!-- Header & Search Filters -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-id-card-clip text-brand-400"></i>
+                            <span>Prebuilt Voice Matrix & Audition Studio</span>
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Explore all 30 prebuilt Gemini neural voices categorized by timbre, style, and domain use case.</p>
+                    </div>
+
+                    <!-- Search & Gender Tabs -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-500"></i>
+                            <input id="voice-search-input" oninput="filterVoices()" type="text" placeholder="Search voice or style..." class="bg-slate-900 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 w-full sm:w-48">
+                        </div>
+
+                        <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+                            <button onclick="setGenderFilter('all')" id="filter-all" class="gender-filter-btn px-3 py-1 rounded-lg bg-brand-600 text-white font-semibold">All (30)</button>
+                            <button onclick="setGenderFilter('female')" id="filter-female" class="gender-filter-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white font-semibold">Female (12)</button>
+                            <button onclick="setGenderFilter('male')" id="filter-male" class="gender-filter-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white font-semibold">Male (15)</button>
+                            <button onclick="setGenderFilter('neutral')" id="filter-neutral" class="gender-filter-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white font-semibold">Versatile (3)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voice Card Grid -->
+                <div id="voice-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Dynamic Voice Cards rendered via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: AUDIO HISTORY LIBRARY -->
+        <section id="tab-history" class="tab-content space-y-6 hidden">
+            <div class="glass-panel rounded-2xl p-6 space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-folder-open text-brand-400"></i>
+                            <span>Generated Audio Clips Library</span>
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">All audio synthesized during your session is saved here. Download WAV files anytime.</p>
+                    </div>
+                    <button onclick="clearHistory()" class="text-xs px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition-all">
+                        <i class="fa-solid fa-trash-can mr-1"></i>Clear All
+                    </button>
+                </div>
+
+                <div id="history-list" class="space-y-3">
+                    <div id="empty-history-msg" class="text-center py-12 text-slate-500 space-y-2">
+                        <i class="fa-solid fa-box-open text-3xl"></i>
+                        <p class="text-sm">No audio generated yet. Synthesize speech in Solo Studio or Dialogue Builder to populate your library.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="audio-dock" class="fixed bottom-0 left-0 right-0 z-50 glass-panel border-t border-slate-800/90 shadow-2xl py-3 px-4 sm:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            <!-- Left: Current Track Info -->
+            <div class="flex items-center space-x-3 w-full md:w-1/4">
+                <div class="w-10 h-10 rounded-xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center text-brand-400">
+                    <i id="dock-icon" class="fa-solid fa-compact-disc text-lg animate-spin" style="animation-duration: 4s;"></i>
+                </div>
+                <div class="truncate">
+                    <h4 id="dock-title" class="text-xs font-bold text-white truncate">No Active Audio</h4>
+                    <p id="dock-subtitle" class="text-[10px] text-slate-400 truncate">Synthesize a phrase to inspect waveform & playback</p>
+                </div>
+            </div>
+
+            <!-- Center: Audio Controls & Visualizer Canvas -->
+            <div class="flex-1 w-full flex flex-col items-center space-y-1.5">
+                <div class="w-full max-w-xl h-10 bg-slate-900/90 rounded-lg border border-slate-800 overflow-hidden relative flex items-center px-2">
+                    <!-- Waveform Visualizer Canvas -->
+                    <canvas id="visualizer-canvas" class="w-full h-full block"></canvas>
+                </div>
+
+                <div class="flex items-center space-x-4 text-xs">
+                    <!-- Time Display -->
+                    <span id="audio-time" class="font-mono text-[10px] text-slate-400">00:00 / 00:00</span>
+
+                    <!-- Play / Pause Button -->
+                    <button id="dock-play-btn" onclick="togglePlayPause()" disabled class="w-8 h-8 rounded-full bg-brand-600 hover:bg-brand-500 text-white flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i id="dock-play-icon" class="fa-solid fa-play text-xs"></i>
+                    </button>
+
+                    <!-- Speed Toggle -->
+                    <button id="dock-speed-btn" onclick="cyclePlaybackSpeed()" class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px] border border-slate-700 hover:text-white">
+                        1.0x
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Export & Volume -->
+            <div class="flex items-center justify-end space-x-3 w-full md:w-1/4">
+                <a id="dock-download-btn" href="#" download="gemini_3.1_tts.wav" class="px-3 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-300 border border-emerald-500/30 text-xs font-medium flex items-center space-x-1.5 transition-all opacity-40 pointer-events-none">
+                    <i class="fa-solid fa-download text-xs"></i>
+                    <span>Export WAV</span>
+                </a>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           1. VOICE REGISTRY MATRIX (30 PREBUILT GEMINI VOICES)
+           ========================================================================== */
+        const VOICE_REGISTRY = [
+            // Female Voices (12)
+            { name: "Kore", gender: "female", char: "Firm & Authoritative", usage: "News, Documentaries, Professional Announcements" },
+            { name: "Aoede", gender: "female", char: "Breezy & Natural", usage: "Casual Chat, Vlogs, Storytelling" },
+            { name: "Callirrhoe", gender: "female", char: "Easy-going & Relaxed", usage: "Audiobooks, Podcasts, Relaxation Guides" },
+            { name: "Autonoe", gender: "female", char: "Bright & Energetic", usage: "Marketing, Upbeat Commercials" },
+            { name: "Leda", gender: "female", char: "Youthful & Dynamic", usage: "E-Learning, Youth Audiobooks, Animations" },
+            { name: "Algieba", gender: "female", char: "Smooth & Polished", usage: "Product Demos, Corporate Presentations" },
+            { name: "Despina", gender: "female", char: "Smooth & Warm", usage: "Customer Service, Virtual Assistants" },
+            { name: "Erinome", gender: "female", char: "Clear & Articulate", usage: "Instructional Content, Audio Guides" },
+            { name: "Vindemiatrix", gender: "female", char: "Gentle & Soft", usage: "Meditation, Bedtime Stories" },
+            { name: "Sadachbia", gender: "female", char: "Lively & Expressive", usage: "Interactive Gaming, Conversational Apps" },
+            { name: "Sulafat", gender: "female", char: "Warm & Inviting", usage: "Narrations, Personal Messages" },
+            { name: "Pulcherrima", gender: "female", char: "Forward & Crisp", usage: "Public Address, Clear Notifications" },
+
+            // Male Voices (15)
+            { name: "Charon", gender: "male", char: "Informative & Deep", usage: "Documentary Narration, Academic Content" },
+            { name: "Fenrir", gender: "male", char: "Excitable & Intense", usage: "Gaming, Action Trailers, Sports Commentary" },
+            { name: "Orus", gender: "male", char: "Firm & Resonant", usage: "Official Announcements, Trailers" },
+            { name: "Enceladus", gender: "male", char: "Breathy & Intimate", usage: "Drama, Expressive Monologues" },
+            { name: "Iapetus", gender: "male", char: "Clear & Standard", usage: "Tech Reviews, E-Learning Modules" },
+            { name: "Umbriel", gender: "male", char: "Easy-going & Conversational", usage: "Podcast Host, Friendly Explainer" },
+            { name: "Algenib", gender: "male", char: "Gravelly & Gritty", usage: "Character Acting, Vintage Narration" },
+            { name: "Rasalgethi", gender: "male", char: "Informative & Precise", usage: "Technical Tutorials, News Briefings" },
+            { name: "Achernar", gender: "male", char: "Soft & Calm", usage: "Poetry, Soothing Audiobooks" },
+            { name: "Alnilam", gender: "male", char: "Firm & Professional", usage: "Financial Reports, Executive Summaries" },
+            { name: "Schedar", gender: "male", char: "Even & Neutral", usage: "Standard Reading, Screen Reader Style" },
+            { name: "Gacrux", gender: "male", char: "Mature & Wise", usage: "Historical Documentaries, Storytelling" },
+            { name: "Achird", gender: "male", char: "Friendly & Approachable", usage: "Daily Briefings, Friendly Bots" },
+            { name: "Zubenelgenubi", gender: "male", char: "Casual & Relaxed", usage: "Unscripted Dialogue, Casual Audio" },
+            { name: "Sadaltager", gender: "male", char: "Knowledgeable & Engaging", usage: "Educational Podcasts, Lectures" },
+
+            // Versatile / Neutral Voices (3)
+            { name: "Zephyr", gender: "neutral", char: "Bright & Versatile", usage: "Assistive Technology, Upbeat Notifications" },
+            { name: "Puck", gender: "neutral", char: "Upbeat & Playful", usage: "Creative Content, Animated Characters" },
+            { name: "Aoede-Lite", gender: "neutral", char: "Breezy & Adaptive", usage: "General Purpose Assistants" }
+        ];
+
+        // Global State Variables
+        let currentTab = 'solo';
+        let currentGenderFilter = 'all';
+        let audioHistory = [];
+        let activeAudio = null;
+        let audioContext = null;
+        let analyserNode = null;
+        let visualizerAnimationId = null;
+        let playbackSpeedIndex = 0;
+        const playbackSpeeds = [1.0, 1.25, 1.5, 2.0, 0.75];
+
+        let currentSmartWindows = [];
+        let activeWindowIndex = -1;
+        let isSequentialPlaying = false;
+
+        // API Configuration - GEMINI 3.1 FLASH TTS PREVIEW MODEL
+        const apiKey = "";
+        const ttsApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent?key=${apiKey}`;
+
+        /* ==========================================================================
+           2. BINARY AUDIO CONVERSION UTILITY (PCM16 TO WAV CONTAINER)
+           ========================================================================== */
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcm16Array, sampleRate) {
+            const numChannels = 1;
+            const bitsPerSample = 16;
+            const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+            const blockAlign = numChannels * (bitsPerSample / 8);
+            const dataSize = pcm16Array.length * 2;
+            const chunkSize = 36 + dataSize;
+            
+            const buffer = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(buffer);
+            
+            function writeString(offset, string) {
+                for (let i = 0; i < string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            }
+            
+            /* Header */
+            writeString(0, 'RIFF');
+            view.setUint32(4, chunkSize, true);
+            writeString(8, 'WAVE');
+            
+            /* Subchunk 1 (fmt) */
+            writeString(12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true); // PCM
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, bitsPerSample, true);
+            
+            /* Subchunk 2 (data) */
+            writeString(36, 'data');
+            view.setUint32(40, dataSize, true);
+            
+            /* PCM Samples */
+            let offset = 44;
+            for (let i = 0; i < pcm16Array.length; i++, offset += 2) {
+                view.setInt16(offset, pcm16Array[i], true);
+            }
+            
+            return new Blob([buffer], { type: 'audio/wav' });
+        }
+
+        /* ==========================================================================
+           3. API FETCH & SYNTHESIS LOGIC WITH RETRIES (GEMINI 3.1 FLASH TTS)
+           ========================================================================== */
+        async function fetchWithRetry(url, options, maxRetries = 3) {
+            let delay = 1000;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) return response;
+                    if (response.status === 429 || response.status >= 500) {
+                        await new Promise(res => setTimeout(res, delay));
+                        delay *= 2;
+                        continue;
+                    }
+                    const errorText = await response.text();
+                    throw new Error(`API Error (${response.status}): ${errorText}`);
+                } catch (err) {
+                    if (i === maxRetries - 1) throw err;
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        function formatDirectorPrompt(rawText) {
+            const profile = document.getElementById('director-profile')?.value.trim();
+            const scene = document.getElementById('director-scene')?.value.trim();
+            const notes = document.getElementById('director-notes')?.value.trim();
+
+            if (!profile && !scene && !notes) {
+                return rawText;
+            }
+
+            let prompt = "";
+            if (profile) prompt += `# AUDIO PROFILE: ${profile}\n`;
+            if (scene) prompt += `## THE SCENE: ${scene}\n`;
+            if (notes) prompt += `### DIRECTOR'S NOTES: ${notes}\n`;
+            prompt += `### TRANSCRIPT:\n${rawText}`;
+            return prompt;
+        }
+
+        async function synthesizeSingleSpeaker(text, voiceName) {
+            const fullPromptText = formatDirectorPrompt(text);
+
+            const payload = {
+                contents: [{ parts: [{ text: fullPromptText }] }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: voiceName }
+                        }
+                    }
+                },
+                model: "gemini-3.1-flash-tts-preview"
+            };
+
+            const response = await fetchWithRetry(ttsApiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            const part = result?.candidates?.[0]?.content?.parts?.[0];
+
+            if (!part || !part.inlineData) {
+                throw new Error("No audio data returned from Gemini 3.1 Flash TTS API.");
+            }
+
+            const base64Data = part.inlineData.data;
+            const mimeType = part.inlineData.mimeType || "";
+
+            let sampleRate = 24000;
+            const rateMatch = mimeType.match(/rate=(\d+)/);
+            if (rateMatch && rateMatch[1]) {
+                sampleRate = parseInt(rateMatch[1], 10);
+            }
+
+            const pcmBuffer = base64ToArrayBuffer(base64Data);
+            const pcm16 = new Int16Array(pcmBuffer);
+            const wavBlob = pcmToWav(pcm16, sampleRate);
+            return URL.createObjectURL(wavBlob);
+        }
+
+        async function synthesizeMultiSpeaker(fullScript, spk1Name, spk1Voice, spk2Name, spk2Voice) {
+            const payload = {
+                contents: [{ parts: [{ text: fullScript }] }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        multiSpeakerVoiceConfig: {
+                            speakerVoiceConfigs: [
+                                { speaker: spk1Name, voiceConfig: { prebuiltVoiceConfig: { voiceName: spk1Voice } } },
+                                { speaker: spk2Name, voiceConfig: { prebuiltVoiceConfig: { voiceName: spk2Voice } } }
+                            ]
+                        }
+                    }
+                },
+                model: "gemini-3.1-flash-tts-preview"
+            };
+
+            const response = await fetchWithRetry(ttsApiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            const part = result?.candidates?.[0]?.content?.parts?.[0];
+
+            if (!part || !part.inlineData) {
+                throw new Error("No dialogue audio returned from Gemini 3.1 Flash TTS API.");
+            }
+
+            const base64Data = part.inlineData.data;
+            const mimeType = part.inlineData.mimeType || "";
+
+            let sampleRate = 24000;
+            const rateMatch = mimeType.match(/rate=(\d+)/);
+            if (rateMatch && rateMatch[1]) {
+                sampleRate = parseInt(rateMatch[1], 10);
+            }
+
+            const pcmBuffer = base64ToArrayBuffer(base64Data);
+            const pcm16 = new Int16Array(pcmBuffer);
+            const wavBlob = pcmToWav(pcm16, sampleRate);
+            return URL.createObjectURL(wavBlob);
+        }
+
+        /* ==========================================================================
+           4. UI SETUP & DOM INITIALIZERS
+           ========================================================================== */
+        window.addEventListener('DOMContentLoaded', () => {
+            populateVoiceSelects();
+            renderVoiceCatalog();
+            setupDialogueRowsDefault();
+            setupAudioVisualizer();
+            updateSoloVoicePreview();
+
+            // Textarea Input Listener for Real-Time Smart Window Calculation
+            const soloInput = document.getElementById('solo-text-input');
+            if (soloInput) {
+                soloInput.addEventListener('input', (e) => {
+                    recalculateSmartWindows(e.target.value);
+                });
+            }
+        });
+
+        function populateVoiceSelects() {
+            const soloSelect = document.getElementById('solo-voice-select');
+            const spk1Select = document.getElementById('spk1-voice');
+            const spk2Select = document.getElementById('spk2-voice');
+
+            if (!soloSelect || !spk1Select || !spk2Select) return;
+
+            soloSelect.innerHTML = '';
+            spk1Select.innerHTML = '';
+            spk2Select.innerHTML = '';
+
+            VOICE_REGISTRY.forEach(v => {
+                const optText = `${v.name} (${v.gender.toUpperCase()} - ${v.char})`;
+
+                const opt1 = new Option(optText, v.name);
+                const opt2 = new Option(optText, v.name);
+                const opt3 = new Option(optText, v.name);
+
+                soloSelect.add(opt1);
+                spk1Select.add(opt2);
+                spk2Select.add(opt3);
+            });
+
+            // Default choices
+            soloSelect.value = "Kore";
+            spk1Select.value = "Charon";
+            spk2Select.value = "Aoede";
+        }
+
+        function updateSoloVoicePreview() {
+            const selName = document.getElementById('solo-voice-select').value;
+            const voiceObj = VOICE_REGISTRY.find(v => v.name === selName);
+            
+            if (!voiceObj) return;
+
+            document.getElementById('active-voice-name').textContent = voiceObj.name;
+            
+            const genderBadge = document.getElementById('active-voice-gender');
+            genderBadge.textContent = voiceObj.gender.toUpperCase();
+            
+            if (voiceObj.gender === 'female') {
+                genderBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-semibold bg-pink-500/20 text-pink-300 border border-pink-500/30";
+            } else if (voiceObj.gender === 'male') {
+                genderBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30";
+            } else {
+                genderBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30";
+            }
+
+            document.getElementById('active-voice-desc').textContent = `${voiceObj.char}. Optimal for ${voiceObj.usage}.`;
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            // Desktop tabs styling
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.className = "nav-tab px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center space-x-2 transition-all";
+            });
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.className = "nav-tab px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all bg-brand-600 text-white shadow-sm";
+            }
+
+            // Mobile tabs styling
+            document.querySelectorAll('.mobile-nav-tab').forEach(btn => {
+                btn.className = "mobile-nav-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 whitespace-nowrap";
+            });
+            const activeMobileNav = document.getElementById(`m-nav-${tabId}`);
+            if (activeMobileNav) {
+                activeMobileNav.className = "mobile-nav-tab px-3 py-1.5 rounded-lg bg-brand-600 text-white whitespace-nowrap";
+            }
+        }
+
+        function auditionVoice(voiceName) {
+            const auditionText = `[excited] Hello! [whispers] I am ${voiceName}, [normal voice] a neural voice powered by Gemini 3.1 Flash Text to Speech.`;
+            synthesizeSingleSpeaker(auditionText, voiceName)
+                .then(audioUrl => {
+                    loadAudioToDock(audioUrl, `Audition: ${voiceName}`, auditionText);
+                })
+                .catch(err => alert(`Audition failed for ${voiceName}: ` + err.message));
+        }
+
+        function auditionCurrentSoloVoice() {
+            const voiceName = document.getElementById('solo-voice-select').value;
+            auditionVoice(voiceName);
+        }
+
+        function renderVoiceCatalog() {
+            const grid = document.getElementById('voice-grid');
+            if (!grid) return;
+
+            const query = (document.getElementById('voice-search-input')?.value || '').toLowerCase().trim();
+
+            const filtered = VOICE_REGISTRY.filter(v => {
+                const matchesGender = (currentGenderFilter === 'all') || (v.gender === currentGenderFilter);
+                const matchesSearch = !query || v.name.toLowerCase().includes(query) || v.char.toLowerCase().includes(query) || v.usage.toLowerCase().includes(query);
+                return matchesGender && matchesSearch;
+            });
+
+            grid.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-slate-500">
+                        <i class="fa-solid fa-microphone-slash text-3xl mb-2"></i>
+                        <p class="text-sm">No voices found matching your filter criteria.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(v => {
+                const card = document.createElement('div');
+                card.className = "glass-panel glass-panel-interactive rounded-xl p-5 flex flex-col justify-between space-y-4";
+                
+                let genderColor = "bg-purple-500/20 text-purple-300 border-purple-500/30";
+                if (v.gender === 'female') genderColor = "bg-pink-500/20 text-pink-300 border-pink-500/30";
+                if (v.gender === 'male') genderColor = "bg-blue-500/20 text-blue-300 border-blue-500/30";
+
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <h3 class="font-bold text-white text-base">${v.name}</h3>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border ${genderColor}">
+                                    ${v.gender.toUpperCase()}
+                                </span>
+                            </div>
+                        </div>
+                        <p class="text-xs font-semibold text-brand-300">${v.char}</p>
+                        <p class="text-xs text-slate-400 line-clamp-2">${v.usage}</p>
+                    </div>
+                    <div class="flex items-center space-x-2 pt-2 border-t border-slate-800/80">
+                        <button onclick="auditionVoice('${v.name}')" class="flex-1 py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700/80 flex items-center justify-center space-x-1.5 transition-all">
+                            <i class="fa-solid fa-volume-high text-[10px] text-indigo-400"></i>
+                            <span>Audition</span>
+                        </button>
+                        <button onclick="useVoiceInSolo('${v.name}')" class="flex-1 py-1.5 px-3 rounded-lg bg-brand-600/30 hover:bg-brand-600/50 text-indigo-200 text-xs font-medium border border-brand-500/40 flex items-center justify-center space-x-1.5 transition-all">
+                            <i class="fa-solid fa-check text-[10px]"></i>
+                            <span>Use Voice</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function setGenderFilter(filter) {
+            currentGenderFilter = filter;
+            document.querySelectorAll('.gender-filter-btn').forEach(btn => {
+                btn.className = "gender-filter-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white font-semibold";
+            });
+            const filterBtn = document.getElementById(`filter-${filter}`);
+            if (filterBtn) {
+                filterBtn.className = "gender-filter-btn px-3 py-1 rounded-lg bg-brand-600 text-white font-semibold";
+            }
+            renderVoiceCatalog();
+        }
+
+        function filterVoices() {
+            renderVoiceCatalog();
+        }
+
+        function useVoiceInSolo(voiceName) {
+            const soloSelect = document.getElementById('solo-voice-select');
+            if (soloSelect) {
+                soloSelect.value = voiceName;
+                updateSoloVoicePreview();
+            }
+            switchTab('solo');
+        }
+
+        function insertDirective(tagText) {
+            const textarea = document.getElementById('solo-text-input');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const currentVal = textarea.value;
+
+            textarea.value = currentVal.substring(0, start) + tagText + currentVal.substring(end);
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = start + tagText.length;
+            recalculateSmartWindows(textarea.value);
+        }
+
+        function loadSample(type) {
+            const textarea = document.getElementById('solo-text-input');
+            if (type === 'expressiveDemo') {
+                textarea.value = "Hey there! [excited] Welcome to Gemini 3.1 Flash Text-to-Speech! [whispers] Did you know I can perform inline audio tags? [short pause] [laughs] I can whisper, giggle, or [gasp] express dramatic surprise mid-sentence!";
+            } else if (type === 'tech') {
+                textarea.value = "[excited] The new quantum computing cluster architecture delivers a forty percent increase in clock efficiency! [short pause] [slow] All while reducing thermal dissipation across high-density server nodes.";
+            } else if (type === 'story') {
+                textarea.value = "[whispers] Deep within the ancient, whispering forest... [short pause] where moonlight danced upon emerald moss... [gasp] lived a tiny fallen star that glowed in the dark.";
+            } else if (type === 'longArticle') {
+                textarea.value = `[excited] Deep Space Navigation and Next-Generation Propulsion Systems represent the cornerstone of future interplanetary exploration. As humanity prepares for long-duration crewed missions to Mars and beyond, traditional chemical propulsion methods reach their theoretical limits regarding specific impulse and mass ratio efficiency. To overcome these constraints, propulsion scientists and aerospace engineers have accelerated development in high-power Solar Electric Propulsion and Nuclear Thermal Reactors.
+
+These advanced propulsion systems allow spacecraft to continuously accelerate over long durations, dramatically reducing transit times while increasing payload capacities. Concurrently, space navigation has evolved beyond traditional ground-based Deep Space Network telemetry. [slow] Autonomous navigation frameworks now utilize onboard optical sensors to track celestial bodies and pulsar signals in real time. Pulsar-based navigation acts as a galactic Positioning System, providing millimeter-level accuracy across millions of kilometers without relying on signal delay from Earth.
+
+Furthermore, autonomous trajectory correction algorithms allow spacecraft to calculate instantaneous orbital burns, optimizing fuel consumption during complex gravitational slingshot maneuvers around outer planets. These synergistic advancements in autonomous guidance, machine learning trajectory control, and continuous ion thrust engines pave the way for permanent deep-space infrastructure. [whispers] Scientists predict that within the next decade, autonomous cargo craft will establish supply corridors to lunar surface habitats and orbital stations, laying the foundation for permanent human presence across the solar system.`;
+            }
+            
+            recalculateSmartWindows(textarea.value);
+        }
+
+        /* ==========================================================================
+           5. SMART SENTENCE WINDOWING & BUFFER QUEUE
+           ========================================================================== */
+        function chunkTextSmartly(text, maxChars = 2000) {
+            if (!text || text.trim().length === 0) return [];
+            text = text.trim();
+            
+            if (text.length <= maxChars) {
+                return [{
+                    index: 0,
+                    id: 1,
+                    text: text,
+                    charCount: text.length,
+                    status: 'pending',
+                    audioUrl: null
+                }];
+            }
+
+            const chunks = [];
+            let remaining = text;
+            let windowIdx = 0;
+
+            while (remaining.length > 0) {
+                if (remaining.length <= maxChars) {
+                    chunks.push({
+                        index: windowIdx,
+                        id: windowIdx + 1,
+                        text: remaining.trim(),
+                        charCount: remaining.trim().length,
+                        status: 'pending',
+                        audioUrl: null
+                    });
+                    break;
+                }
+
+                const sub = remaining.substring(0, maxChars);
+                let cutIndex = -1;
+
+                const sentenceRegex = /[.!?]+[\s\r\n"']/g;
+                let match;
+                let lastMatchEnd = -1;
+                while ((match = sentenceRegex.exec(sub)) !== null) {
+                    lastMatchEnd = match.index + match[0].length;
+                }
+
+                if (lastMatchEnd > 200) {
+                    cutIndex = lastMatchEnd;
+                } else {
+                    const clauseRegex = /[,;:\n]+[\s]/g;
+                    let clauseMatch;
+                    let lastClauseEnd = -1;
+                    while ((clauseMatch = clauseRegex.exec(sub)) !== null) {
+                        lastClauseEnd = clauseMatch.index + clauseMatch[0].length;
+                    }
+                    if (lastClauseEnd > 200) {
+                        cutIndex = lastClauseEnd;
+                    } else {
+                        const lastSpace = sub.lastIndexOf(' ');
+                        cutIndex = lastSpace > 0 ? lastSpace + 1 : maxChars;
+                    }
+                }
+
+                const chunkText = remaining.substring(0, cutIndex).trim();
+                chunks.push({
+                    index: windowIdx,
+                    id: windowIdx + 1,
+                    text: chunkText,
+                    charCount: chunkText.length,
+                    status: 'pending',
+                    audioUrl: null
+                });
+
+                windowIdx++;
+                remaining = remaining.substring(cutIndex).trim();
+            }
+
+            return chunks;
+        }
+
+        function recalculateSmartWindows(rawText) {
+            const charCount = rawText.length;
+            document.getElementById('char-counter').textContent = `${charCount.toLocaleString()} chars`;
+
+            const newWindows = chunkTextSmartly(rawText, 2000);
+            
+            currentSmartWindows = newWindows.map((w, idx) => {
+                if (currentSmartWindows[idx] && currentSmartWindows[idx].text === w.text && currentSmartWindows[idx].audioUrl) {
+                    return currentSmartWindows[idx];
+                }
+                return w;
+            });
+
+            const windowBadge = document.getElementById('window-count-badge');
+            windowBadge.textContent = `${currentSmartWindows.length} ${currentSmartWindows.length === 1 ? 'Smart Window' : 'Smart Windows'}`;
+
+            renderSmartWindowsQueue();
+        }
+
+        function renderSmartWindowsQueue() {
+            const list = document.getElementById('smart-windows-list');
+            const queueStatusText = document.getElementById('queue-status-text');
+
+            if (!list || !queueStatusText) return;
+
+            if (currentSmartWindows.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-4 text-slate-500 text-xs border border-dashed border-slate-800 rounded-xl">
+                        Type text above to auto-generate smart sentence windows.
+                    </div>
+                `;
+                queueStatusText.textContent = `0 / 0 Buffered`;
+                return;
+            }
+
+            const readyCount = currentSmartWindows.filter(w => w.status === 'ready' || w.status === 'playing').length;
+            queueStatusText.textContent = `${readyCount} / ${currentSmartWindows.length} Windows Buffered`;
+
+            list.innerHTML = '';
+            currentSmartWindows.forEach((win, i) => {
+                const item = document.createElement('div');
+                
+                let statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400">Pending</span>`;
+                let borderColor = "border-slate-800";
+
+                if (win.status === 'buffering') {
+                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center space-x-1"><i class="fa-solid fa-spinner animate-spin text-[8px]"></i><span>Buffering PCM...</span></span>`;
+                    borderColor = "border-amber-500/40";
+                } else if (win.status === 'ready') {
+                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"><i class="fa-solid fa-check mr-1"></i>Buffered</span>`;
+                    borderColor = "border-emerald-500/30";
+                } else if (win.status === 'playing') {
+                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] bg-brand-500/20 text-brand-300 border border-brand-500/30 animate-pulse"><i class="fa-solid fa-volume-high mr-1"></i>Now Playing</span>`;
+                    borderColor = "border-brand-500";
+                }
+
+                item.className = `p-3 rounded-xl bg-slate-900/90 border ${borderColor} flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs transition-all`;
+                item.innerHTML = `
+                    <div class="flex items-start space-x-3 overflow-hidden">
+                        <span class="w-6 h-6 rounded-lg bg-slate-800 text-indigo-300 font-mono text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">W${win.id}</span>
+                        <div class="truncate">
+                            <div class="flex items-center space-x-2">
+                                <span class="font-bold text-slate-200">Window ${win.id}</span>
+                                <span class="text-[10px] font-mono text-slate-500">(${win.charCount} chars)</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 truncate italic">"${win.text.substring(0, 70)}..."</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 self-end sm:self-center">
+                        ${statusBadge}
+                        <button onclick="bufferAndPlaySingleWindow(${i})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-indigo-300 text-[11px] font-medium border border-slate-700 whitespace-nowrap">
+                            <i class="fa-solid fa-play text-[9px] mr-1"></i>Play Window
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        async function bufferWindow(windowIndex) {
+            const win = currentSmartWindows[windowIndex];
+            if (!win) return null;
+            if (win.audioUrl) return win.audioUrl;
+
+            const voiceName = document.getElementById('solo-voice-select').value;
+            win.status = 'buffering';
+            renderSmartWindowsQueue();
+
+            try {
+                const audioUrl = await synthesizeSingleSpeaker(win.text, voiceName);
+                win.audioUrl = audioUrl;
+                win.status = 'ready';
+                renderSmartWindowsQueue();
+                return audioUrl;
+            } catch (err) {
+                win.status = 'pending';
+                renderSmartWindowsQueue();
+                throw err;
+            }
+        }
+
+        async function bufferAndPlaySingleWindow(windowIndex) {
+            const win = currentSmartWindows[windowIndex];
+            if (!win) return;
+            
+            isSequentialPlaying = false;
+            activeWindowIndex = windowIndex;
+
+            try {
+                const audioUrl = await bufferWindow(windowIndex);
+                win.status = 'playing';
+                renderSmartWindowsQueue();
+                loadAudioToDock(audioUrl, `Window ${win.id} (${document.getElementById('solo-voice-select').value})`, win.text);
+            } catch (err) {
+                alert(`Error buffering Window ${win.id}: ` + err.message);
+            }
+        }
+
+        async function generateSoloAudio() {
+            const rawText = document.getElementById('solo-text-input').value.trim();
+            if (!rawText) {
+                alert("Please enter text script before synthesizing.");
+                return;
+            }
+
+            recalculateSmartWindows(rawText);
+            if (currentSmartWindows.length === 0) return;
+
+            const btn = document.getElementById('generate-btn');
+            const btnText = document.getElementById('generate-btn-text');
+
+            try {
+                btn.disabled = true;
+                btn.classList.add('opacity-70');
+                btnText.textContent = `Buffering Window 1 of ${currentSmartWindows.length}...`;
+
+                isSequentialPlaying = true;
+                activeWindowIndex = 0;
+
+                const firstUrl = await bufferWindow(0);
+                
+                currentSmartWindows[0].status = 'playing';
+                renderSmartWindowsQueue();
+                loadAudioToDock(firstUrl, `Window 1/${currentSmartWindows.length} (${document.getElementById('solo-voice-select').value})`, currentSmartWindows[0].text);
+
+                addToHistory(`Solo (${document.getElementById('solo-voice-select').value}) - ${currentSmartWindows.length} Windows`, rawText, firstUrl);
+
+                if (currentSmartWindows.length > 1) {
+                    bufferWindow(1).catch(() => {});
+                }
+
+            } catch (err) {
+                alert("Synthesis Failed: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = "Synthesize 3.1 Flash Speech";
+                btn.classList.remove('opacity-70');
+            }
+        }
+
+        /* ==========================================================================
+           6. MULTI-SPEAKER DIALOGUE BUILDER LOGIC
+           ========================================================================== */
+        function setupDialogueRowsDefault() {
+            const container = document.getElementById('dialogue-rows-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            addDialogueRow('spk1', '[excited] Hey Jane! Did you hear about Gemini 3.1 Flash TTS?');
+            addDialogueRow('spk2', 'I did! [whispers] The inline audio tags and performance controls are crazy.');
+            addDialogueRow('spk1', '[laughs] Exactly! We can build rich multi-speaker audio dramas now.');
+        }
+
+        function addDialogueRow(speakerVal = 'spk1', textVal = '') {
+            const container = document.getElementById('dialogue-rows-container');
+            if (!container) return;
+
+            const row = document.createElement('div');
+            row.className = "dialogue-row p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-start space-x-3 transition-all";
+
+            row.innerHTML = `
+                <div class="w-28 flex-shrink-0 space-y-1">
+                    <label class="text-[10px] text-slate-400 font-semibold uppercase">Speaker</label>
+                    <select class="dialogue-speaker-select w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-brand-500">
+                        <option value="spk1" ${speakerVal === 'spk1' ? 'selected' : ''}>Speaker 1</option>
+                        <option value="spk2" ${speakerVal === 'spk2' ? 'selected' : ''}>Speaker 2</option>
+                    </select>
+                </div>
+                <div class="flex-1 space-y-1">
+                    <label class="text-[10px] text-slate-400 font-semibold uppercase">Speech Line (Tags Allowed)</label>
+                    <textarea rows="2" placeholder="Type dialogue line... e.g. [whispers] Don't make a sound." class="dialogue-text-input w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500 font-sans resize-none">${textVal}</textarea>
+                </div>
+                <button onclick="this.closest('.dialogue-row').remove()" class="self-center p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs transition-all" title="Remove Line">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            `;
+
+            container.appendChild(row);
+        }
+
+        function loadDialoguePreset(preset) {
+            const spk1Name = document.getElementById('spk1-name');
+            const spk2Name = document.getElementById('spk2-name');
+            const spk1Voice = document.getElementById('spk1-voice');
+            const spk2Voice = document.getElementById('spk2-voice');
+
+            if (preset === 'interview') {
+                if (spk1Name) spk1Name.value = "Host";
+                if (spk2Name) spk2Name.value = "Guest";
+                if (spk1Voice) spk1Voice.value = "Kore";
+                if (spk2Voice) spk2Voice.value = "Umbriel";
+
+                const container = document.getElementById('dialogue-rows-container');
+                container.innerHTML = '';
+                addDialogueRow('spk1', '[excited] Welcome back everyone! Today we are testing Gemini 3.1 Flash expressive voice tags.');
+                addDialogueRow('spk2', 'Thanks for having me! [laughs] It is amazing how natural these audio tags sound.');
+                addDialogueRow('spk1', 'Could you demonstrate a whisper to shouting transition?');
+                addDialogueRow('spk2', '[whispers] First we whisper soft and low... [shouting] then turn up the energy!');
+            } else if (preset === 'drama') {
+                if (spk1Name) spk1Name.value = "Tom";
+                if (spk2Name) spk2Name.value = "Maya";
+                if (spk1Voice) spk1Voice.value = "Charon";
+                if (spk2Voice) spk2Voice.value = "Aoede";
+
+                const container = document.getElementById('dialogue-rows-container');
+                container.innerHTML = '';
+                addDialogueRow('spk1', '[whispers] Did you hear that noise coming from the hallway?');
+                addDialogueRow('spk2', '[gasp] I thought I was imagining it! [short pause] What do we do?');
+                addDialogueRow('spk1', '[slow] Stay right here. I will go check the door.');
+            }
+        }
+
+        async function generateDialogueAudio() {
+            const spk1Name = document.getElementById('spk1-name').value.trim() || "Speaker A";
+            const spk2Name = document.getElementById('spk2-name').value.trim() || "Speaker B";
+            const spk1Voice = document.getElementById('spk1-voice').value;
+            const spk2Voice = document.getElementById('spk2-voice').value;
+
+            const rows = document.querySelectorAll('.dialogue-row');
+            if (rows.length === 0) {
+                alert("Please add at least one dialogue line.");
+                return;
+            }
+
+            const scriptLines = [];
+            rows.forEach(row => {
+                const spkKey = row.querySelector('.dialogue-speaker-select').value;
+                const text = row.querySelector('.dialogue-text-input').value.trim();
+                if (text) {
+                    const speakerLabel = spkKey === 'spk1' ? spk1Name : spk2Name;
+                    scriptLines.push(`${speakerLabel}: ${text}`);
+                }
+            });
+
+            if (scriptLines.length === 0) {
+                alert("Please fill in dialogue lines before synthesizing.");
+                return;
+            }
+
+            const fullScript = scriptLines.join('\n');
+            const btn = document.getElementById('generate-dialogue-btn');
+            const btnText = document.getElementById('dialogue-btn-text');
+
+            try {
+                btn.disabled = true;
+                btn.classList.add('opacity-70');
+                btnText.textContent = "Synthesizing 3.1 Flash Dialogue...";
+
+                const audioUrl = await synthesizeMultiSpeaker(fullScript, spk1Name, spk1Voice, spk2Name, spk2Voice);
+                
+                loadAudioToDock(audioUrl, `Dialogue: ${spk1Name} & ${spk2Name}`, fullScript);
+                addToHistory(`Dialogue (${spk1Name} & ${spk2Name})`, fullScript, audioUrl);
+
+            } catch (err) {
+                alert("Dialogue Synthesis Failed: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = "Synthesize 3.1 Dialogue Audio";
+                btn.classList.remove('opacity-70');
+            }
+        }
+
+        /* ==========================================================================
+           7. AUDIO PLAYER DOCK & VISUALIZER ENGINE
+           ========================================================================== */
+        function setupAudioVisualizer() {
+            const canvas = document.getElementById('visualizer-canvas');
+            if (!canvas) return;
+            
+            function resizeCanvas() {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        }
+
+        function loadAudioToDock(url, title, textSnippet) {
+            if (activeAudio) {
+                activeAudio.pause();
+            }
+
+            activeAudio = new Audio(url);
+            activeAudio.playbackRate = playbackSpeeds[playbackSpeedIndex];
+
+            document.getElementById('dock-title').textContent = title;
+            document.getElementById('dock-subtitle').textContent = textSnippet;
+
+            const playBtn = document.getElementById('dock-play-btn');
+            playBtn.disabled = false;
+
+            const downloadBtn = document.getElementById('dock-download-btn');
+            downloadBtn.href = url;
+            downloadBtn.classList.remove('opacity-40', 'pointer-events-none');
+
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            try {
+                const source = audioContext.createMediaElementSource(activeAudio);
+                analyserNode = audioContext.createAnalyser();
+                analyserNode.fftSize = 64;
+                source.connect(analyserNode);
+                analyserNode.connect(audioContext.destination);
+            } catch (e) {
+                // Source already connected fallback
+            }
+
+            activeAudio.addEventListener('timeupdate', updateAudioTime);
+            
+            activeAudio.addEventListener('ended', async () => {
+                document.getElementById('dock-play-icon').className = "fa-solid fa-play text-xs";
+
+                if (isSequentialPlaying && activeWindowIndex >= 0 && activeWindowIndex < currentSmartWindows.length - 1) {
+                    const nextIndex = activeWindowIndex + 1;
+                    if (currentSmartWindows[activeWindowIndex]) {
+                        currentSmartWindows[activeWindowIndex].status = 'ready';
+                    }
+
+                    activeWindowIndex = nextIndex;
+                    const nextWin = currentSmartWindows[nextIndex];
+                    
+                    try {
+                        const nextUrl = await bufferWindow(nextIndex);
+                        nextWin.status = 'playing';
+                        renderSmartWindowsQueue();
+                        loadAudioToDock(nextUrl, `Window ${nextWin.id}/${currentSmartWindows.length} (${document.getElementById('solo-voice-select').value})`, nextWin.text);
+
+                        if (nextIndex + 1 < currentSmartWindows.length) {
+                            bufferWindow(nextIndex + 1).catch(() => {});
+                        }
+                    } catch (e) {
+                        console.error("Auto-advance buffering failed:", e);
+                    }
+                } else {
+                    if (activeWindowIndex >= 0 && currentSmartWindows[activeWindowIndex]) {
+                        currentSmartWindows[activeWindowIndex].status = 'ready';
+                        renderSmartWindowsQueue();
+                    }
+                }
+            });
+
+            activeAudio.play();
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            document.getElementById('dock-play-icon').className = "fa-solid fa-pause text-xs";
+
+            startVisualizerLoop();
+        }
+
+        function togglePlayPause() {
+            if (!activeAudio) return;
+
+            if (activeAudio.paused) {
+                activeAudio.play();
+                if (audioContext && audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                document.getElementById('dock-play-icon').className = "fa-solid fa-pause text-xs";
+            } else {
+                activeAudio.pause();
+                document.getElementById('dock-play-icon').className = "fa-solid fa-play text-xs";
+            }
+        }
+
+        function cyclePlaybackSpeed() {
+            playbackSpeedIndex = (playbackSpeedIndex + 1) % playbackSpeeds.length;
+            const speed = playbackSpeeds[playbackSpeedIndex];
+            document.getElementById('dock-speed-btn').textContent = `${speed}x`;
+            if (activeAudio) {
+                activeAudio.playbackRate = speed;
+            }
+        }
+
+        function updateAudioTime() {
+            if (!activeAudio) return;
+            const current = formatTime(activeAudio.currentTime);
+            const total = formatTime(activeAudio.duration || 0);
+            document.getElementById('audio-time').textContent = `${current} / ${total}`;
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function startVisualizerLoop() {
+            const canvas = document.getElementById('visualizer-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            if (visualizerAnimationId) {
+                cancelAnimationFrame(visualizerAnimationId);
+            }
+
+            function draw() {
+                visualizerAnimationId = requestAnimationFrame(draw);
+
+                const width = canvas.width;
+                const height = canvas.height;
+
+                ctx.clearRect(0, 0, width, height);
+
+                if (!analyserNode || (activeAudio && activeAudio.paused)) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = "rgba(99, 102, 241, 0.3)";
+                    ctx.lineWidth = 2;
+                    ctx.moveTo(0, height / 2);
+                    ctx.lineTo(width, height / 2);
+                    ctx.stroke();
+                    return;
+                }
+
+                const bufferLength = analyserNode.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                analyserNode.getByteFrequencyData(dataArray);
+
+                const barWidth = (width / bufferLength) * 1.8;
+                let x = 0;
+
+                for (let i = 0; i < bufferLength; i++) {
+                    const barHeight = (dataArray[i] / 255) * height;
+
+                    const gradient = ctx.createLinearGradient(0, height, 0, 0);
+                    gradient.addColorStop(0, 'rgba(99, 102, 241, 0.2)');
+                    gradient.addColorStop(0.5, 'rgba(129, 140, 248, 0.8)');
+                    gradient.addColorStop(1, 'rgba(192, 132, 252, 1)');
+
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(x, height - barHeight, barWidth - 1, barHeight);
+
+                    x += barWidth;
+                }
+            }
+
+            draw();
+        }
+
+        /* ==========================================================================
+           8. AUDIO HISTORY LIBRARY MANAGEMENT
+           ========================================================================== */
+        function addToHistory(title, snippet, url) {
+            const item = {
+                id: Date.now(),
+                title: title,
+                snippet: snippet.length > 80 ? snippet.substring(0, 80) + '...' : snippet,
+                url: url,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            audioHistory.unshift(item);
+            updateHistoryUI();
+        }
+
+        function updateHistoryUI() {
+            const list = document.getElementById('history-list');
+            const badge = document.getElementById('history-count-badge');
+            if (badge) badge.textContent = audioHistory.length;
+
+            if (!list) return;
+
+            if (audioHistory.length === 0) {
+                list.innerHTML = `
+                    <div id="empty-history-msg" class="text-center py-12 text-slate-500 space-y-2">
+                        <i class="fa-solid fa-box-open text-3xl"></i>
+                        <p class="text-sm">No audio generated yet. Synthesize speech in Solo Studio or Dialogue Builder to populate your library.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = '';
+            audioHistory.forEach(item => {
+                const el = document.createElement('div');
+                el.className = "p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-4";
+                el.innerHTML = `
+                    <div class="flex items-center space-x-3 overflow-hidden">
+                        <button onclick="playHistoryItem('${item.url}', '${item.title}')" class="w-9 h-9 rounded-xl bg-brand-600/20 hover:bg-brand-600/40 text-brand-300 flex items-center justify-center flex-shrink-0 transition-all">
+                            <i class="fa-solid fa-play text-xs"></i>
+                        </button>
+                        <div class="truncate">
+                            <div class="flex items-center space-x-2">
+                                <h4 class="text-xs font-bold text-white">${item.title}</h4>
+                                <span class="text-[10px] text-slate-500 font-mono">${item.timestamp}</span>
+                            </div>
+                            <p class="text-xs text-slate-400 truncate">${item.snippet}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <a href="${item.url}" download="gemini_3.1_${item.id}.wav" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-slate-700">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                        <button onclick="deleteHistoryItem(${item.id})" class="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(el);
+            });
+        }
+
+        function playHistoryItem(url, title) {
+            loadAudioToDock(url, title, "Playing from history library");
+        }
+
+        function deleteHistoryItem(id) {
+            audioHistory = audioHistory.filter(x => x.id !== id);
+            updateHistoryUI();
+        }
+
+        function clearHistory() {
+            audioHistory = [];
+            updateHistoryUI();
+        }
+    </script>
+</body>
+</html>
